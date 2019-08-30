@@ -17,7 +17,8 @@ class JwtUserAuthenticationConverter extends DefaultUserAuthenticationConverter 
     private static final String roles = "roles";
     private static final String USER_ID = "userID";
     private static final String RIDER_AUTHORITY = "RIDER";
-    private static final String CM_AUTHORITY = "CLINIC_MANAGER";
+    private static final String CM_AUTHORITY = "CLUSTER_MANAGER";
+    private static final String ADMIN = "ADMIN";
     private static final String SUPERUSER_AUTHORITY = "SUPERUSER";
 
     private Collection<? extends GrantedAuthority> defaultAuthorities;

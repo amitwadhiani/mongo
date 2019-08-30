@@ -21,9 +21,9 @@ public class AppUserDetailsService implements UserDetailsService {
     private UserDao userDao;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        co.arctern.rider.api.domain.User user = userDao.findByUsername(username).orElseThrow(() -> {
-            throw new UsernameNotFoundException(String.format("The username %username doesn't exist", username));
+    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
+        co.arctern.rider.api.domain.User user = userDao.findByPhone(phone).orElseThrow(() -> {
+            throw new UsernameNotFoundException(String.format("The contact %phone doesn't exist", phone));
         });
         List<GrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().forEach(role -> {
