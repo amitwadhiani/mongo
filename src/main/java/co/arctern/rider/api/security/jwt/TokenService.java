@@ -2,6 +2,7 @@ package co.arctern.rider.api.security.jwt;
 
 import co.arctern.rider.api.dao.UserDao;
 import co.arctern.rider.api.domain.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,7 +39,7 @@ public class TokenService {
         parameters.put("password", user.getPassword());
         parameters.put("username", user.getPhone());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRoles()));
+        authorities.add(new SimpleGrantedAuthority(StringUtils.join(",", user.getRoles())));
         Principal principal = new UsernamePasswordAuthenticationToken(clientID, secret, authorities);
         return new TokenEndpoint().postAccessToken(principal, parameters).getBody();
     }

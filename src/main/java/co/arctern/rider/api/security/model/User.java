@@ -13,6 +13,8 @@ public class User extends org.springframework.security.core.userdetails.User {
 
     private String username;
     private String phone;
+    private String name;
+    private String email;
     private Long id;
     private String roles;
 

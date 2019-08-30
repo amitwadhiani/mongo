@@ -55,7 +55,7 @@ public class User extends EncodingUtil {
     @OneToMany(mappedBy = "user")
     List<Area> areas;
 
-    private String roles;
+    private List<String> roles;
 
     public void setPassword(String password) {
         this.password = super.encodeString(password);
