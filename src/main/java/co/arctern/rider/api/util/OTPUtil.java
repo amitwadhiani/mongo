@@ -4,13 +4,15 @@ import co.arctern.rider.api.dao.LoginDao;
 import co.arctern.rider.api.dao.UserDao;
 import co.arctern.rider.api.domain.Login;
 import co.arctern.rider.api.domain.User;
-import co.arctern.rider.api.enums.OTPStatus;
-import co.arctern.rider.api.service.sms.SmsService;
+import co.arctern.rider.api.enums.OTPState;
+import co.arctern.rider.api.service.OTPService;
+import co.arctern.rider.api.sms.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -25,10 +27,15 @@ public class OTPUtil {
     @Autowired
     LoginDao loginDao;
 
+    @Autowired
+    OTPService otpService;
+
     private static final Integer OTP_LENGTH = 6;
 
     @Transactional
-    public String generatorOTP(String phone) throws Exception {
+    public String generateOTP(String phone) throws Exception {
+        User user = userDao.findByPhone(phone).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Invalid phone number."));
         String pool = "0123456789";
         Random random = new Random();
         char[] chars = new char[OTP_LENGTH];
@@ -39,21 +46,16 @@ public class OTPUtil {
         }
         String otp = new String(chars);
         if (smsService.sendSms(phone, otp) != null) {
-            Optional<User> user = userDao.findByPhone(phone);
-            Login login = new Login();
-            login.setContact(phone);
-            login.setGeneratedOTP(otp);
-            login.setStatus(OTPStatus.CREATED);
-            loginDao.save(login);
+            otpService.generateLogin(phone, otp, user);
         }
         return otp;
     }
 
     @Transactional
     public Login verifyOTP(String number, String otp) {
-        Login login = loginDao.findByGeneratedOTPAndStatusAndContact(otp, OTPStatus.GENERATED, number);
+        Login login = loginDao.findByGeneratedOTPAndStatusAndContact(otp, OTPState.GENERATED, number);
         if (login != null) {
-            login.setStatus(OTPStatus.USED);
+            login.setStatus(OTPState.USED);
             return loginDao.save(login);
         }
         return null;

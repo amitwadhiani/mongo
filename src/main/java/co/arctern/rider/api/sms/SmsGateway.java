@@ -1,4 +1,4 @@
-package co.arctern.rider.api.service.sms;
+package co.arctern.rider.api.sms;
 
 import javax.net.ssl.*;
 import java.io.BufferedReader;

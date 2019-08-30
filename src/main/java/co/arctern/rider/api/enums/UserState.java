@@ -1,6 +1,6 @@
 package co.arctern.rider.api.enums;
 
-public enum UserStatus {
+public enum UserState {
     NEW,
     EXISTING
 }

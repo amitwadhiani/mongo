@@ -17,6 +17,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "phone")})
 public class User extends EncodingUtil {
 
     @Id
@@ -44,11 +45,11 @@ public class User extends EncodingUtil {
     private Timestamp lastLoginTime;
 
     @LastModifiedDate
-    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModified;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -64,7 +65,7 @@ public class User extends EncodingUtil {
     @OneToMany
     List<Area> areas;
 
-    public void setPassword() {
+    public void setPassword(String password) {
         this.password = super.encodeString(password);
     }
 

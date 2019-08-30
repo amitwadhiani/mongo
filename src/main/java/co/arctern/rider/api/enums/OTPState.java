@@ -1,6 +1,6 @@
 package co.arctern.rider.api.enums;
 
-public enum OTPStatus {
+public enum OTPState {
     GENERATED,
     USED,
     CREATED

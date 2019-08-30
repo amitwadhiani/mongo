@@ -6,7 +6,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.Optional;
 
-@RepositoryRestResource
+@RepositoryRestResource(exported = false)
 public interface UserDao extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String userName);

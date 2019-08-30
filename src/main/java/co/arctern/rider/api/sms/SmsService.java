@@ -1,4 +1,4 @@
-package co.arctern.rider.api.service.sms;
+package co.arctern.rider.api.sms;
 
 
 import org.springframework.stereotype.Service;
