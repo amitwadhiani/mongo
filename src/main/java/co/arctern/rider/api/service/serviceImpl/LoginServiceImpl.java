@@ -9,7 +9,10 @@ import co.arctern.rider.api.service.LoginService;
 import co.arctern.rider.api.util.OTPUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 
@@ -43,11 +46,13 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
+    @SneakyThrows(HttpClientErrorException.BadRequest.class)
     public String verifyOTP(String phone, String otp) {
         Login login = loginDao.findByGeneratedOTPAndStatusAndContact(otp, OTPState.GENERATED, phone);
         if (login != null) {
+            login.setStatus(OTPState.USED);
             return "Successfully verified.";
         }
-        return "Wrong OTP entered.";
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong OTP. Please try again.");
     }
 }

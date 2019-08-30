@@ -28,6 +28,8 @@ public class User extends EncodingUtil {
 
     private Boolean isActive;
 
+    private Boolean isTest;
+
     @Size(min = 4, max = 30, message = "Minimum username length : 4")
     private String username;
 

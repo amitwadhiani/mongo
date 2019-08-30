@@ -35,7 +35,7 @@ public class OTPUtil {
     @Transactional
     public String generateOTPForLogin(String phone) throws Exception {
         User user = userDao.findByPhone(phone).orElseThrow(() -> new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Invalid phone number."));
+                HttpStatus.BAD_REQUEST, "User not registered in the system."));
         String otp = getOtpString();
         if (smsService.sendSms(phone, otp) != null) {
             loginService.generateLogin(phone, otp, user);
