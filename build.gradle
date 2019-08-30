@@ -1,0 +1,94 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.6.RELEASE'
+        gradleDockerVersion = '0.19.2'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:${gradleDockerVersion}"
+        classpath "io.freefair.gradle:lombok-plugin:4.0.1"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.palantir.docker"
+apply plugin: "io.freefair.lombok"
+
+
+group = 'co.arctern.rider'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+    maven { url "https://dl.bintray.com/arctern-internal-api/internal-api" }
+}
+
+docker {
+    name "${project.group}/${jar.baseName}"
+    files jar.archivePath
+    buildArgs(['JAR_FILE': "${jar.archiveName}"])
+    copySpec.with {
+        from('.') {
+            include 'newrelic/**'
+            into 'newrelic'
+        }
+    }
+}
+
+
+task pathingJar(type: Jar) {
+    dependsOn configurations.runtime
+    appendix = 'pathing'
+
+    doFirst {
+        manifest {
+            attributes "Class-Path": configurations.runtime.files.collect {
+                it.toURL().toString().replaceFirst(/file:\/+/, '/')
+            }.join(' ')
+        }
+    }
+}
+
+bootRun {
+    dependsOn pathingJar
+    doFirst {
+        classpath = files(sourceSets.main.output.files, pathingJar.archivePath)
+    }
+}
+
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter'
+    compile 'co.arctern.api:internal-api:0.0.99-RELEASE'
+    runtime 'mysql:mysql-connector-java:8.0.15'
+    compile('com.amazonaws:aws-java-sdk:1.11.324')
+    compile('org.projectlombok:lombok:1.18.2')
+    compile('com.zaxxer:HikariCP:3.3.1')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile("org.springframework.boot:spring-boot-starter-amqp")
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.3.RELEASE')
+    compile('org.springframework.boot:spring-boot-starter-data-rest') {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-undertow")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile('org.apache.commons:commons-lang3:3.5')
+    compile('javax.xml.bind:jaxb-api:2.2.11')
+    compile('com.sun.xml.bind:jaxb-core:2.2.11')
+    compile('com.sun.xml.bind:jaxb-impl:2.2.11')
+    compile('javax.activation:activation:1.1.1')
+    compile('org.springframework.security:spring-security-jwt:1.0.10.RELEASE')
+    compile('io.jsonwebtoken:jjwt:0.9.1')
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+
+
+}

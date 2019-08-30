@@ -1,0 +1,74 @@
+version: '3.1'
+
+services:
+
+  web:
+    image: co.arctern.api/rider
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database.emr.local.vpc:3306/rider?useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: example
+      JVM_OPTS: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Xms64M -Xmx512M
+    networks:
+      - emr
+    depends_on:
+      - db
+    ports:
+      - 8000:8089
+
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    hostname: "rabbitmq"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "test"
+      RABBITMQ_DEFAULT_PASS: "test"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    labels:
+      NAME: "rabbitmq"
+    networks:
+      - emr
+  #    volumes:
+  #        - rabbit1:/var/lib/rabbitmq
+  #        - ./conf/:/etc/rabbitmq/
+
+  db:
+    image: mysql:5
+    restart: always
+    networks:
+      emr:
+        aliases:
+          - database.emr.local.vpc
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8889:8080
+    networks:
+      - emr
+    depends_on:
+      - db
+
+
+  terracota:
+    image: terracotta/terracotta-server-oss:5.4.1
+    ports:
+      - 9410:9410
+    networks:
+      emr:
+        aliases:
+          - terracotta.emr.local.vpc
+
+
+networks:
+  emr:
+
