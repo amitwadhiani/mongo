@@ -13,7 +13,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * setting details in token (jwt) -> User security model
+ */
 @Component
 public class AppUserDetailsService implements UserDetailsService {
 
@@ -34,6 +38,7 @@ public class AppUserDetailsService implements UserDetailsService {
         userDetails.setName(user.getName());
         userDetails.setEmail(user.getEmail());
         userDetails.setPhone(user.getPhone());
+        userDetails.setAreaIds(StringUtils.join(",", user.getAreas().stream().map(a -> a.getId()).collect(Collectors.toList())));
         userDetails.setRoles(StringUtils.join(",", user.getRoles()));
         return userDetails;
     }

@@ -8,6 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * security model class for jwt token
+ */
 @Data
 public class User extends org.springframework.security.core.userdetails.User {
 
@@ -15,6 +18,7 @@ public class User extends org.springframework.security.core.userdetails.User {
     private String phone;
     private String name;
     private String email;
+    private String areaIds;
     private Long id;
     private String roles;
 

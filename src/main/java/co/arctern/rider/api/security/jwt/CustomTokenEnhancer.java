@@ -1,6 +1,5 @@
 package co.arctern.rider.api.security.jwt;
 
-
 import co.arctern.rider.api.security.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
@@ -13,21 +12,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * For Bearer token generation through oauth/token
+ */
 public class CustomTokenEnhancer implements TokenEnhancer {
 
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+
         Map<String, Object> additionalInfo = new HashMap<>();
-        List<String> roles = new ArrayList<>();
-        for (GrantedAuthority role : authentication.getAuthorities()) {
-            roles.add(role.getAuthority());
+
+        List<String> authorities = new ArrayList<>();
+        for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
+            authorities.add(grantedAuthority.getAuthority());
         }
-        User usr = (User) authentication.getPrincipal();
+
+        User user = (User) authentication.getPrincipal();
         Long userID = ((User) authentication.getPrincipal()).getId();
         additionalInfo.put("userID", userID);
-        additionalInfo.put("phone", usr.getPhone());
-        additionalInfo.put("username", usr.getUsername());
-        additionalInfo.put("authorities", roles);
+        additionalInfo.put("name", user.getName());
+        additionalInfo.put("email", user.getEmail());
+        additionalInfo.put("phone", user.getPhone());
+        additionalInfo.put("areaIds", user.getAreaIds());
+        if (authorities.contains("SUPERUSER")) {
+            // all area ids
+            //      additionalInfo.put("doctorInClinicIds", doctorAndClinicControllerApi.getActiveDicsUsingGET());
+        } else {
+            //        additionalInfo.put("doctorInClinicIds", doctorInClinicIds);
+        }
+        additionalInfo.put("authorities", authorities);
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
         return accessToken;
     }
