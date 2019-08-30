@@ -25,7 +25,7 @@ public class User extends EncodingUtil {
 
     private String name;
 
-    @ColumnDefault("tinyint(1) DEFAULT 1")
+    @ColumnDefault("'tinyint(1) DEFAULT 1'")
     private Boolean isActive;
 
     @Size(min = 4, max = 30, message = "Minimum username length : 4")
@@ -59,7 +59,7 @@ public class User extends EncodingUtil {
     private List<Role> roles;
 
     @OneToMany
-    List<RideStateFlow> riderStateFlows;
+    List<TaskStateFlow> taskStateFlows;
 
     @OneToMany
     List<Area> areas;

@@ -1,6 +1,7 @@
 package co.arctern.rider.api.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonBackReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -21,5 +22,6 @@ public class Area {
     private String pinCode;
 
     @ManyToOne
+    @JsonBackReference("user-area")
     User user;
 }
