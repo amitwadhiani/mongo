@@ -23,9 +23,6 @@ public class LoginServiceImpl implements LoginService {
     private OTPUtil otpGenerator;
 
     @Autowired
-    UserDao userDao;
-
-    @Autowired
     LoginDao loginDao;
 
     @SneakyThrows(Exception.class)

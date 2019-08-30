@@ -12,8 +12,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 
-/*
-Class picked from patient-api
+/**
+ * Class picked from patient-api gateway service
  */
 public class SmsGateway {
 

@@ -60,6 +60,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user found."));
     }
 
+    @Override
+    @SneakyThrows({HttpClientErrorException.BadRequest.class})
+    public User fetchUserByPhone(String phone) {
+        return userDao.findByPhone(phone)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user found."));
+    }
+
     public User createUser(UserRequestDto userDto) {
         return null;
     }
