@@ -38,7 +38,7 @@ public class TokenService {
         parameters.put("password", user.getPassword());
         parameters.put("username", user.getPhone());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(String.join(",", user.getRoles().stream().map(a -> a.getRole()).collect(Collectors.toList()))));
+        authorities.add(new SimpleGrantedAuthority(user.getRoles()));
         Principal principal = new UsernamePasswordAuthenticationToken(clientID, secret, authorities);
         return new TokenEndpoint().postAccessToken(principal, parameters).getBody();
     }

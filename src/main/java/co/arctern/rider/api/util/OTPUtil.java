@@ -5,7 +5,7 @@ import co.arctern.rider.api.dao.UserDao;
 import co.arctern.rider.api.domain.Login;
 import co.arctern.rider.api.domain.User;
 import co.arctern.rider.api.enums.OTPState;
-import co.arctern.rider.api.service.OTPService;
+import co.arctern.rider.api.service.LoginService;
 import co.arctern.rider.api.sms.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,14 +28,34 @@ public class OTPUtil {
     LoginDao loginDao;
 
     @Autowired
-    OTPService otpService;
+    LoginService loginService;
 
     private static final Integer OTP_LENGTH = 6;
 
     @Transactional
-    public String generateOTP(String phone) throws Exception {
+    public String generateOTPForLogin(String phone) throws Exception {
         User user = userDao.findByPhone(phone).orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Invalid phone number."));
+        String otp = getOtpString();
+        if (smsService.sendSms(phone, otp) != null) {
+            loginService.generateLogin(phone, otp, user);
+        }
+        return otp;
+    }
+
+    @Transactional
+    public String generateOTPForRating(String phone) throws Exception {
+        User user = userDao.findByPhone(phone).orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Invalid phone number."));
+        // TODO
+        // handle equal otps for yes and no
+        if (smsService.sendSmsForRating(phone, getOtpString(), getOtpString()) != null) {
+            return "Success";
+        }
+        return "Please try again";
+    }
+
+    public String getOtpString() {
         String pool = "0123456789";
         Random random = new Random();
         char[] chars = new char[OTP_LENGTH];
@@ -44,11 +64,7 @@ public class OTPUtil {
             chars[i] = pool.charAt(random.nextInt(pool.length()));
             i++;
         }
-        String otp = new String(chars);
-        if (smsService.sendSms(phone, otp) != null) {
-            otpService.generateLogin(phone, otp, user);
-        }
-        return otp;
+        return new String(chars);
     }
 
     @Transactional

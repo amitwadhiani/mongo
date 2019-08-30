@@ -17,7 +17,7 @@ public class TimeslotGroup {
 
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "timeslotGroup")
     private List<Timeslot> slots;
 
     Time start;

@@ -26,7 +26,6 @@ public class User extends EncodingUtil {
 
     private String name;
 
-    @ColumnDefault("'tinyint(1) DEFAULT 1'")
     private Boolean isActive;
 
     @Size(min = 4, max = 30, message = "Minimum username length : 4")
@@ -45,25 +44,18 @@ public class User extends EncodingUtil {
     private Timestamp lastLoginTime;
 
     @LastModifiedDate
-    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModified;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Size(min = 6, max = 30, message = "Minimum password length : 6")
     private String password;
 
-    @ManyToMany
-    private List<Role> roles;
-
-    @OneToMany
-    List<TaskStateFlow> taskStateFlows;
-
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     List<Area> areas;
+
+    private String roles;
 
     public void setPassword(String password) {
         this.password = super.encodeString(password);

@@ -27,10 +27,6 @@ public class TaskStateFlow {
     private Timestamp lastModifiedAt;
 
     @ManyToOne
-    @JsonBackReference("user-riderStateFlow")
-    private User user;
-
-    @ManyToOne
     @JsonBackReference("task-taskStateFlow")
     private Task task;
 }

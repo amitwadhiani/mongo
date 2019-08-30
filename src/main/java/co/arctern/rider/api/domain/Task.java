@@ -26,7 +26,7 @@ public class Task {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
-    @OneToMany
+    @OneToMany(mappedBy = "task")
     private List<TaskStateFlow> taskStateFlows;
 
 }

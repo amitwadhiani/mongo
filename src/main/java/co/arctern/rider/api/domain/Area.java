@@ -34,5 +34,5 @@ public class Area {
 
     @ManyToOne
     @JsonBackReference("user-area")
-    User user;
+    private User user;
 }

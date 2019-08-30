@@ -29,7 +29,7 @@ public class LoginServiceImpl implements LoginService {
     @Transactional
     @Override
     public String generateOTP(String phone) {
-        return otpGenerator.generateOTP(phone);
+        return otpGenerator.generateOTPForLogin(phone);
     }
 
     public void generateLogin(String phone, String otp, User user) {

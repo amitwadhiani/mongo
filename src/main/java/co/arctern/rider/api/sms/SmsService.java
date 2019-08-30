@@ -15,6 +15,10 @@ public class SmsService {
 
     public String sendSms(String mob, String otp) {
         String message = "Your MEDDO One Time Password (OTP) is " + otp + " for your Login.\nPlease enter the digits only";
+        return sendSmsViaGateway(mob, message);
+    }
+
+    public String sendSmsViaGateway(String mob, String message) {
         SmsGateway smsGateway = new SmsGateway();
         Map<String, String> map = new HashMap<>();
         smsGateway.setApiKey(API_KEY);
@@ -29,4 +33,12 @@ public class SmsService {
         }
         return str;
     }
+
+    public String sendSmsForRating(String mob, String otpYes, String otpNo) {
+        String message = "Thank you for using Meddo. Please use this code : " + otpYes + "(if satisfied)" + "and" +
+                ": " + otpNo + " (if unsatisfied) " +
+                "with our service.\nPlease enter the digits only";
+        return sendSmsViaGateway(mob, message);
+    }
+
 }
