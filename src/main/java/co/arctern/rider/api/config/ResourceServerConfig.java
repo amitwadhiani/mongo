@@ -9,6 +9,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 
+/**
+ * Resource server config to allow certain urls to be authenticated automatically.
+ */
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
@@ -28,11 +31,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-                http.cors().and()
+        http.cors().and()
                 .requestMatchers()
                 .and()
                 .authorizeRequests()
-                .antMatchers("**"+baseUrl+"/profile").permitAll()
-                .antMatchers("**"+baseUrl+"/" ).authenticated();
+                .antMatchers("**" + baseUrl + "/profile").permitAll()
+                .antMatchers("**" + baseUrl + "/").authenticated();
     }
 }

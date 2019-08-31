@@ -29,7 +29,6 @@ public class LoginController {
     public ResponseEntity<String> generateOTP(@RequestParam("phone") String phone)
             throws Exception {
         return ResponseEntity.ok(loginService.generateOTP(phone));
-
     }
 
     @GetMapping("/verify-otp")

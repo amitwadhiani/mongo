@@ -4,4 +4,5 @@ import org.springframework.data.rest.webmvc.BasePathAwareController;
 
 @BasePathAwareController
 public class UserController {
+
 }

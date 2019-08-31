@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Rest template config for external calls.
+ */
 @Configuration
 public class RestTemplateConfig {
 
@@ -13,11 +16,9 @@ public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
         requestFactory.setConnectTimeout(TIMEOUT);
         requestFactory.setReadTimeout(TIMEOUT);
-
         restTemplate.setRequestFactory(requestFactory);
         return restTemplate;
     }

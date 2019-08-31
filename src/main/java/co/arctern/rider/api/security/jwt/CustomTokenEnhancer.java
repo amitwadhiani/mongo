@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User details from security model ( Principal from security User model )
+ * Setting details to jwt token through Security User model.
  */
 public class CustomTokenEnhancer implements TokenEnhancer {
 

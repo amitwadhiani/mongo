@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Setting details in the jwt token through user entity
+ * Setting details in the User security model through user entity
  */
 @Component
 public class AppUserDetailsService implements UserDetailsService {

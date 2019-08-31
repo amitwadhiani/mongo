@@ -18,7 +18,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import java.util.Arrays;
 
 /**
- * Created by nydiarra on 06/05/17.
+ *  setting basic details to jwt token using Basic token, client_id and secret
+ *  Token expiry time can also be changed here
  */
 @Configuration
 @EnableAuthorizationServer
@@ -37,7 +38,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	private String scopeRead;
 
 	@Value("${security.jwt.scope-write}")
-	private String scopeWrite = "write";
+	private String scopeWrite;
 
 	@Value("${security.jwt.resource-ids}")
 	private String resourceIds;
@@ -52,7 +53,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
