@@ -1,6 +1,7 @@
 package co.arctern.rider.api.service;
 
 import co.arctern.rider.api.domain.User;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 public interface LoginService {
 
@@ -19,7 +20,7 @@ public interface LoginService {
      * @param otp
      * @return
      */
-    public String verifyOTP(String phone, String otp);
+    public OAuth2AccessToken verifyOTP(String phone, String otp);
 
     /**
      * to generate login using phone and otp for a user.

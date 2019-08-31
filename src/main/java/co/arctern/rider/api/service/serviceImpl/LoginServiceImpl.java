@@ -4,11 +4,13 @@ import co.arctern.rider.api.dao.LoginDao;
 import co.arctern.rider.api.domain.Login;
 import co.arctern.rider.api.domain.User;
 import co.arctern.rider.api.enums.OTPState;
+import co.arctern.rider.api.security.TokenService;
 import co.arctern.rider.api.service.LoginService;
 import co.arctern.rider.api.util.OTPUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,6 +25,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     LoginDao loginDao;
+
+    @Autowired
+    TokenService tokenService;
 
     @SneakyThrows(Exception.class)
     @Transactional
@@ -42,12 +47,13 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    @SneakyThrows(HttpClientErrorException.BadRequest.class)
-    public String verifyOTP(String phone, String otp) {
+    @SneakyThrows(Exception.class)
+    public OAuth2AccessToken verifyOTP(String phone, String otp) {
         Login login = loginDao.findByGeneratedOTPAndStatusAndContact(otp, OTPState.GENERATED, phone);
         if (login != null) {
             login.setStatus(OTPState.USED);
-            return "Successfully verified.";
+            loginDao.save(login);
+            return tokenService.retrieveToken(phone, otp);
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wrong OTP. Please try again.");
     }
