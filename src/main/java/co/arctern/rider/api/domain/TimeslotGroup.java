@@ -1,7 +1,6 @@
 package co.arctern.rider.api.domain;
 
 import lombok.Data;
-import lombok.Generated;
 
 import javax.persistence.*;
 import java.sql.Time;

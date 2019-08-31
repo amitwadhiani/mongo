@@ -2,8 +2,6 @@ package co.arctern.rider.api.service;
 
 import co.arctern.rider.api.domain.User;
 
-import javax.servlet.http.HttpServletRequest;
-
 public interface UserService {
 
     /**

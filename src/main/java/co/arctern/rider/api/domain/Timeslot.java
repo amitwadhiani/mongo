@@ -1,8 +1,6 @@
 package co.arctern.rider.api.domain;
 
-import co.arctern.api.internal.api.emr.model.NextAvailable;
 import lombok.Data;
-import lombok.Generated;
 import org.codehaus.jackson.annotate.JsonBackReference;
 
 import javax.persistence.*;

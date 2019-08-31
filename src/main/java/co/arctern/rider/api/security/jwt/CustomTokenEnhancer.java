@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * For Bearer token generation through oauth/token
+ * User details from security model ( Principal from security User model )
  */
 public class CustomTokenEnhancer implements TokenEnhancer {
 
@@ -21,12 +21,10 @@ public class CustomTokenEnhancer implements TokenEnhancer {
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
 
         Map<String, Object> additionalInfo = new HashMap<>();
-
-        List<String> authorities = new ArrayList<>();
-        for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
-            authorities.add(grantedAuthority.getAuthority());
+        List<String> lss = new ArrayList<>();
+        for (GrantedAuthority ga : authentication.getAuthorities()) {
+            lss.add(ga.getAuthority());
         }
-
         User user = (User) authentication.getPrincipal();
         Long userID = ((User) authentication.getPrincipal()).getId();
         additionalInfo.put("userID", userID);
@@ -34,13 +32,7 @@ public class CustomTokenEnhancer implements TokenEnhancer {
         additionalInfo.put("email", user.getEmail());
         additionalInfo.put("phone", user.getPhone());
         additionalInfo.put("areaIds", user.getAreaIds());
-        if (authorities.contains("SUPERUSER")) {
-            // all area ids
-            //      additionalInfo.put("doctorInClinicIds", doctorAndClinicControllerApi.getActiveDicsUsingGET());
-        } else {
-            //        additionalInfo.put("doctorInClinicIds", doctorInClinicIds);
-        }
-        additionalInfo.put("authorities", authorities);
+        additionalInfo.put("authorities", lss);
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
         return accessToken;
     }

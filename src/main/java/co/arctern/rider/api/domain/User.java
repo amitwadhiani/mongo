@@ -1,9 +1,7 @@
 package co.arctern.rider.api.domain;
 
 import co.arctern.rider.api.util.EncodingUtil;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -57,7 +55,10 @@ public class User extends EncodingUtil {
     @OneToMany(mappedBy = "user")
     List<Area> areas;
 
-    private List<String> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles;
 
     public void setPassword(String password) {
         this.password = super.encodeString(password);

@@ -1,12 +1,9 @@
 package co.arctern.rider.api.security.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * security model class for jwt token

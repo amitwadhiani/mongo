@@ -1,10 +1,11 @@
 package co.arctern.rider.api.controller;
 
-import co.arctern.rider.api.security.jwt.TokenService;
 import co.arctern.rider.api.service.LoginService;
+import co.arctern.rider.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.token.TokenService;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController {
 
     @Autowired
-    TokenService tokenService;
+    UserService userService;
 
     @Autowired
     LoginService loginService;
@@ -21,7 +22,7 @@ public class LoginController {
     @GetMapping("/generate-token")
     public ResponseEntity<OAuth2AccessToken> generateToken(@RequestParam("phone") String phone,
                                                            @RequestParam("otp") String password) throws Exception {
-        return ResponseEntity.ok(tokenService.retrieveToken(phone, password));
+        return null;
     }
 
     @GetMapping("/generate-otp")

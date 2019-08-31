@@ -1,6 +1,6 @@
 package co.arctern.rider.api.domain;
 
-import lombok.*;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -16,6 +16,8 @@ public class Role {
     private Long id;
 
     private String role;
+
+    private String description;
 
     @LastModifiedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")

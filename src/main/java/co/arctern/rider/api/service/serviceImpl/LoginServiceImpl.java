@@ -1,7 +1,6 @@
 package co.arctern.rider.api.service.serviceImpl;
 
 import co.arctern.rider.api.dao.LoginDao;
-import co.arctern.rider.api.dao.UserDao;
 import co.arctern.rider.api.domain.Login;
 import co.arctern.rider.api.domain.User;
 import co.arctern.rider.api.enums.OTPState;

@@ -1,17 +1,11 @@
 package co.arctern.rider.api.util;
 
-import co.arctern.rider.api.dao.LoginDao;
-import co.arctern.rider.api.dao.UserDao;
-import co.arctern.rider.api.domain.Login;
 import co.arctern.rider.api.domain.User;
-import co.arctern.rider.api.enums.OTPState;
 import co.arctern.rider.api.service.LoginService;
 import co.arctern.rider.api.service.UserService;
 import co.arctern.rider.api.sms.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.Random;
