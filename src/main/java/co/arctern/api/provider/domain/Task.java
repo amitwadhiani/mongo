@@ -34,4 +34,10 @@ public class Task {
     @JsonBackReference("user-task")
     private User user;
 
+    private Long diagnosticOrderId;
+
+    private Float amount;
+
+    private String paymentState;
+
 }

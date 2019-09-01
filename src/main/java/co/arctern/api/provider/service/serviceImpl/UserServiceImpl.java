@@ -61,6 +61,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User fetchUser(Long userId) {
+        return userDao.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user found."));
+    }
+
+    @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public User fetchUserByPhone(String phone) {
         return userDao.findByPhone(phone)

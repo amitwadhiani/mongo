@@ -55,6 +55,14 @@ public interface UserService {
     public User fetchUser(String username);
 
     /**
+     * to fetch user using username.
+     *
+     * @param userId
+     * @return
+     */
+    public User fetchUser(Long userId);
+
+    /**
      * to fetch user using phone.
      *
      * @param phone
