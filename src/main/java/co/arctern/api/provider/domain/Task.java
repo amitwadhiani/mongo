@@ -26,7 +26,7 @@ public class Task {
     @OneToMany(mappedBy = "task")
     private List<TaskStateFlow> taskStateFlows;
 
-    @OneToOne(mappedBy = "rating")
+    @OneToOne(mappedBy = "task")
     private Rating rating;
 
 }

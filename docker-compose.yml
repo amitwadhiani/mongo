@@ -3,9 +3,9 @@ version: '3.1'
 services:
 
   web:
-    image: co.arctern.api/rider
+    image: co.arctern.api/provider
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://database.emr.local.vpc:3306/rider?useSSL=false
+      SPRING_DATASOURCE_URL: jdbc:mysql://database.emr.local.vpc:3306/provider?useSSL=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: example
       JVM_OPTS: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Xms64M -Xmx512M
