@@ -25,6 +25,22 @@ public class TaskController {
     @CrossOrigin
     public ResponseEntity<StringBuilder> reassignTaskToUser(@RequestParam("taskId") Long taskId,
                                                             @RequestParam("userId") Long userId) {
-        return ResponseEntity.ok(taskService.reassignTask(taskId,userId));
+        return ResponseEntity.ok(taskService.reassignTask(taskId, userId));
     }
+
+    @PostMapping("/cancel-reassign")
+    @CrossOrigin
+    public ResponseEntity<StringBuilder> cancelTask(@RequestParam(value = "isCancelled", defaultValue = "true") Boolean isCancelled,
+                                                    @RequestParam("taskId") Long taskId,
+                                                    @RequestParam(value = "userId", required = false) Long userId) {
+        return ResponseEntity.ok(taskService.cancelTask(isCancelled, taskId, userId));
+    }
+
+    @PostMapping("/cancel-request")
+    @CrossOrigin
+    public ResponseEntity<StringBuilder> requestToCancelTask(@RequestParam(value = "cancelRequest", defaultValue = "true") Boolean cancelRequest,
+                                                             @RequestParam("taskId") Long taskId) {
+        return ResponseEntity.ok(taskService.requestCancellation(cancelRequest, taskId));
+    }
+
 }

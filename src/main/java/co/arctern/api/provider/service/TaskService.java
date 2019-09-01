@@ -12,4 +12,8 @@ public interface TaskService {
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto);
 
     public StringBuilder reassignTask(Long taskId, Long userId);
+
+    public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId);
+
+    public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId);
 }

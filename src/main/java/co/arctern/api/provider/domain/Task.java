@@ -40,4 +40,8 @@ public class Task {
 
     private String paymentState;
 
+    private Boolean isActive;
+
+    private Boolean cancellationRequested;
+
 }
