@@ -1,4 +1,6 @@
 package co.arctern.api.provider.service;
 
-public interface AreaService {
+import co.arctern.api.provider.util.MessageUtil;
+
+public interface AreaService  extends MessageUtil {
 }

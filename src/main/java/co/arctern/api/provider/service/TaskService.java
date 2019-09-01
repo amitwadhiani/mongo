@@ -2,10 +2,9 @@ package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
+import co.arctern.api.provider.util.MessageUtil;
 
-public interface TaskService {
-
-    public static final StringBuilder SUCCESS_MESSAGE = new StringBuilder("Success");
+public interface TaskService  extends MessageUtil {
 
     public Task fetchTask(Long taskId);
 

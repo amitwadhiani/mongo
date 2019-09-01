@@ -1,9 +1,10 @@
 package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
-public interface LoginService {
+public interface LoginService  extends MessageUtil {
 
     /**
      * to generate otp for a phone number.

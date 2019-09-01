@@ -1,4 +1,6 @@
 package co.arctern.api.provider.service;
 
-public interface AdminService {
+import co.arctern.api.provider.util.MessageUtil;
+
+public interface AdminService  extends MessageUtil {
 }

@@ -3,6 +3,7 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.LoginDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.constant.OTPState;
+import co.arctern.api.provider.service.OtpService;
 import co.arctern.api.provider.service.TokenService;
 import co.arctern.api.provider.util.OTPUtil;
 import co.arctern.api.provider.domain.Login;
@@ -20,7 +21,7 @@ import javax.transaction.Transactional;
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
-    private OTPUtil otpGenerator;
+    private OtpService otpService;
 
     @Autowired
     private LoginDao loginDao;
@@ -32,7 +33,7 @@ public class LoginServiceImpl implements LoginService {
     @Transactional
     @Override
     public String generateOTP(String phone) {
-        return otpGenerator.generateOTPForLogin(phone);
+        return otpService.generateOTPForLogin(phone);
     }
 
     public void generateLogin(String phone, String otp, User user) {

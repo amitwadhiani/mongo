@@ -44,7 +44,7 @@ public class OtpServiceImpl implements OtpService {
     }
 
     @Transactional
-    public String generateOTPForRating(Long taskId) {
+    public StringBuilder generateOTPForRating(Long taskId) {
         Task task = taskService.fetchTask(taskId);
         String otpYes = this.getOtpString();
         String otpNo = this.getOtpString();
@@ -56,9 +56,9 @@ public class OtpServiceImpl implements OtpService {
         }
         ratingService.createRating(task, otpNo, otpYes);
         if (smsService.sendSmsForRating(task.getUser().getPhone(), getOtpString(), getOtpString()) != null) {
-            return "Success";
+            return SUCCESS_MESSAGE;
         }
-        return "Please try again";
+        return TRY_AGAIN_MESSAGE;
     }
 
     public String getOtpString() {

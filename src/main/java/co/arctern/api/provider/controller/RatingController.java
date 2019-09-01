@@ -29,7 +29,7 @@ public class RatingController {
      */
     @GetMapping("/create")
     @CrossOrigin
-    public ResponseEntity<String> generateRating(@RequestParam("taskId") Long taskId) {
+    public ResponseEntity<StringBuilder> generateRating(@RequestParam("taskId") Long taskId) {
         return ResponseEntity.ok(otpService.generateOTPForRating(taskId));
     }
 
