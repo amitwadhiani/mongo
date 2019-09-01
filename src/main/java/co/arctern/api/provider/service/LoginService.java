@@ -4,7 +4,7 @@ import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
-public interface LoginService  extends MessageUtil {
+public interface LoginService extends MessageUtil {
 
     /**
      * to generate otp for a phone number.
@@ -31,4 +31,11 @@ public interface LoginService  extends MessageUtil {
      * @param user
      */
     public void generateLogin(String phone, String otp, User user);
+
+    /**
+     * to log out of the system for a user.
+     *
+     * @param userId
+     */
+    public StringBuilder logOut(Long userId);
 }

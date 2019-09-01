@@ -50,10 +50,10 @@ public interface UserService  extends MessageUtil {
     /**
      * to fetch user using username.
      *
-     * @param username
+     * @param phone
      * @return
      */
-    public User fetchUser(String username);
+    public User fetchUser(String phone);
 
     /**
      * to fetch user using username.
@@ -70,5 +70,7 @@ public interface UserService  extends MessageUtil {
      * @return
      */
     public User fetchUserByPhone(String phone);
+
+    public User save(User user);
 
 }

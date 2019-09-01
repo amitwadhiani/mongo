@@ -19,8 +19,11 @@ public class Role {
 
     private String description;
 
+    @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
+    private Boolean isActive;
+
     @LastModifiedDate
-    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp lastModified;
 
     @CreatedDate

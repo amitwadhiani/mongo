@@ -55,8 +55,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
-    public User fetchUser(String username) {
-        return userDao.findByUsername(username)
+    public User fetchUser(String phone) {
+        return userDao.findByPhone(phone)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user found."));
     }
 
@@ -74,5 +74,9 @@ public class UserServiceImpl implements UserService {
 
     public User createUser(UserRequestDto userDto) {
         return null;
+    }
+
+    public User save(User user) {
+        return userDao.save(user);
     }
 }
