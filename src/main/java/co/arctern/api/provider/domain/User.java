@@ -58,6 +58,9 @@ public class User extends EncodingUtil {
     @OneToMany(mappedBy = "user")
     List<Area> areas;
 
+    @OneToMany(mappedBy = "user")
+    List<Task> tasks;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

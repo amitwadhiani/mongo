@@ -1,5 +1,7 @@
 package co.arctern.api.provider.controller;
 
+import co.arctern.api.provider.domain.Rating;
+import co.arctern.api.provider.service.OtpService;
 import co.arctern.api.provider.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
@@ -14,18 +16,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RatingController {
 
     @Autowired
-    RatingService ratingService;
+    private OtpService otpService;
+
+    @Autowired
+    private RatingService ratingService;
 
     /**
      * to generate rating for a particular task.
      *
      * @param taskId
-     * @param otp
      * @return
      */
-    @GetMapping("/generate")
+    @GetMapping("/create")
     @CrossOrigin
-    public ResponseEntity<String> generateRating(@RequestParam("taskId") Long taskId, @RequestParam("otp") String otp) {
-        return ResponseEntity.ok(ratingService.postRatingForTask(taskId, otp));
+    public ResponseEntity<String> generateRating(@RequestParam("taskId") Long taskId) {
+        return ResponseEntity.ok(otpService.generateOTPForRating(taskId));
+    }
+
+    @GetMapping("/save")
+    @CrossOrigin
+    public ResponseEntity<String> saveRating(@RequestParam("taskId") Long taskId, @RequestParam("otp") String otp) {
+        return ResponseEntity.ok(ratingService.saveRating(taskId, otp));
     }
 }

@@ -1,6 +1,7 @@
 package co.arctern.api.provider.domain;
 
 import lombok.Data;
+import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -28,5 +29,9 @@ public class Task {
 
     @OneToOne(mappedBy = "task")
     private Rating rating;
+
+    @ManyToOne
+    @JsonBackReference("user-task")
+    private User user;
 
 }

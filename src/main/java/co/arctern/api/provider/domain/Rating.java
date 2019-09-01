@@ -37,6 +37,12 @@ public class Rating {
     @NotNull
     private Boolean isSatisfied;
 
+    @Size(min = 6, max = 6, message = "Invalid otp")
+    private String otpYes;
+
+    @Size(min = 6, max = 6, message = "Invalid otp")
+    private String otpNo;
+
     @PrePersist
     public void setValue() {
         if (this.isSatisfied)
