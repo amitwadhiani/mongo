@@ -1,6 +1,5 @@
 package co.arctern.api.provider.service.serviceImpl;
 
-import co.arctern.api.provider.domain.Rating;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.service.*;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Random;
 
 /**
  * otp Service to generate / use otp for various use cases in the api server.

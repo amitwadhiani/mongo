@@ -3,7 +3,6 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
-import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.TaskStateFlowService;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskService {

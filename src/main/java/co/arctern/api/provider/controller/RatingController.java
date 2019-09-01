@@ -1,6 +1,5 @@
 package co.arctern.api.provider.controller;
 
-import co.arctern.api.provider.domain.Rating;
 import co.arctern.api.provider.service.OtpService;
 import co.arctern.api.provider.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;

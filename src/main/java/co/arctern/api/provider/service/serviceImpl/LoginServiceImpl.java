@@ -1,11 +1,11 @@
 package co.arctern.api.provider.service.serviceImpl;
 
-import co.arctern.api.provider.dao.LoginDao;
-import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.constant.OTPState;
+import co.arctern.api.provider.dao.LoginDao;
+import co.arctern.api.provider.domain.Login;
+import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.event.LoginEventHandler;
 import co.arctern.api.provider.service.*;
-import co.arctern.api.provider.domain.Login;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
-import java.sql.Timestamp;
 import java.util.Date;
 
 @Service
