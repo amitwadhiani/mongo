@@ -27,12 +27,12 @@ pipeline:
       - 'cache'
   docker:
     image: plugins/ecr
-    repo: rider
-    registry: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/rider
+    repo: provider
+    registry: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/provider
     secrets: [ecr_region, ecr_access_key, ecr_secret_key]
     context: build/docker
     build_args:
-      - JAR_FILE=rider-0.0.1-SNAPSHOT.jar
+      - JAR_FILE=provider-0.0.1-SNAPSHOT.jar
     tags:
       - latest
       - tag-${DRONE_COMMIT_SHA:0:7}
@@ -41,12 +41,12 @@ pipeline:
 
   docker-staging:
      image: plugins/ecr
-     repo: rider-staging
-     registry: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/rider-staging
+     repo: provider-staging
+     registry: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/provider-staging
      secrets: [ecr_region, ecr_access_key, ecr_secret_key]
      context: build/docker
      build_args:
-        - JAR_FILE=rider-0.0.1-SNAPSHOT.jar
+        - JAR_FILE=provider-0.0.1-SNAPSHOT.jar
      tags:
         - latest
         - tag-${DRONE_COMMIT_SHA:0:7}
@@ -57,8 +57,8 @@ pipeline:
     image: quay.io/ipedrazas/drone-helm
     skip_tls_verify: true
     secrets: [kubernetes_token]
-    chart: ./infra/rider-api
-    release: rider-api
+    chart: ./infra/provider-api
+    release: provider-api
     tiller_ns: kube-system
     environment:
       - API_SERVER=https://kubernetes.default.svc.cluster.local/
@@ -70,8 +70,8 @@ pipeline:
     image: quay.io/ipedrazas/drone-helm
     skip_tls_verify: true
     secrets: [kubernetes_token]
-    chart: ./infra/rider-api-staging
-    release: rider-api-staging
+    chart: ./infra/provider-api-staging
+    release: provider-api-staging
     tiller_ns: kube-system
     environment:
     - API_SERVER=https://kubernetes.default.svc.cluster.local/

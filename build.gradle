@@ -21,8 +21,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: "com.palantir.docker"
 apply plugin: "io.freefair.lombok"
 
-
-group = 'co.arctern.rider'
+group = 'co.arctern.api'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
