@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import java.util.List;
+
 /**
  * user request dto for user entity.
  */
@@ -18,6 +20,7 @@ public class UserRequestDto {
     private String password;
     private String email;
     private String profilePic;
+    private List<Long> roleIds;
 
     public void toUserRequestDto(User user) {
         BeanUtils.copyProperties(user, this);

@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.util.MessageUtil;
 
 public interface UserService  extends MessageUtil {
@@ -72,5 +73,7 @@ public interface UserService  extends MessageUtil {
     public User fetchUserByPhone(String phone);
 
     public User save(User user);
+
+    public User createUser(UserRequestDto dto);
 
 }

@@ -1,8 +1,10 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dao.UserDao;
+import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
+import co.arctern.api.provider.service.RoleService;
 import co.arctern.api.provider.service.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    RoleService roleService;
 
     @Override
     public String signIn(String phone, String username, String password) {
@@ -73,11 +79,20 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user found."));
     }
 
-    public User createUser(UserRequestDto userDto) {
-        return null;
-    }
-
     public User save(User user) {
         return userDao.save(user);
     }
+
+    public User createUser(UserRequestDto dto) {
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setIsActive(true);
+        user.setName(dto.getName());
+        user.setPassword(dto.getPassword());
+        user.setPhone(dto.getPhone());
+        user.setRoles(roleService.fetchRoles(dto.getRoleIds()));
+        user.setUsername(dto.getUsername());
+        return userDao.save(user);
+    }
+
 }
