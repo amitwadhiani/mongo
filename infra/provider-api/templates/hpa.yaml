@@ -2,17 +2,17 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "order-api.fullname" . }}
+  name: {{ template "provider-api.fullname" . }}
   labels:
-    app: {{ template "order-api.name" . }}
-    chart: {{ template "order-api.chart" . }}
+    app: {{ template "provider-api.name" . }}
+    chart: {{ template "provider-api.chart" . }}
     release: {{ .Release.Name | quote }}
     heritage: {{ .Release.Service | quote }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ template "order-api.fullname" . }}
+    name: {{ template "provider-api.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

@@ -87,7 +87,7 @@ spring:
     username: "provider_service"
     password: "cVPcfcWjb5aChR8n"
   sqs:
-    consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/order-consumer-updates-simple"
+    consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/provider-consumer-updates-simple"
     accessKey: "AKIA2YRBSIDHAXCGRJ6T"
     secretKey: "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"
   rabbitmq:
@@ -95,15 +95,15 @@ spring:
     port: "5672"
     username: "test"
     password: "test"
-    queueName: "order-item-updates-simple"
-    orderConsumerName: "order-consumer-updates-simple"
+    queueName: "provider-item-updates-simple"
+    providerConsumerName: "provider-consumer-updates-simple"
     notification:
-      queueOrderItemName: "order-item-notification-updates-simple"
-      queueOrderName: "order-notification-updates-simple"
-      orderDiagnosticLabNotificationQueueName: "order-diagnostic-notification-updates-simple"
+      queueproviderItemName: "provider-item-notification-updates-simple"
+      queueproviderName: "provider-notification-updates-simple"
+      providerDiagnosticLabNotificationQueueName: "provider-diagnostic-notification-updates-simple"
     middleware:
-      orderDiagnosticLabQueueName: "order-diagnostic-updates-simple"
-      diagnosticOrderQueueName: "diagnostic-order-updates-simple"
+      providerDiagnosticLabQueueName: "provider-diagnostic-updates-simple"
+      diagnosticproviderQueueName: "diagnostic-provider-updates-simple"
   security:
     signingKey: MaYzkSjmkzPC57L
     encodingStrength: 256

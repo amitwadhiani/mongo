@@ -1,13 +1,13 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "order-api.fullname" . -}}
+{{- $fullName := include "provider-api.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    app: {{ template "order-api.name" . }}
-    chart: {{ template "order-api.chart" . }}
+    app: {{ template "provider-api.name" . }}
+    chart: {{ template "provider-api.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}
