@@ -2,7 +2,6 @@ package co.arctern.api.provider.security;
 
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
-import co.arctern.api.provider.domain.UserArea;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

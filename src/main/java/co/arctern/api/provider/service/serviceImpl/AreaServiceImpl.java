@@ -6,9 +6,7 @@ import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserArea;
 import co.arctern.api.provider.service.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
