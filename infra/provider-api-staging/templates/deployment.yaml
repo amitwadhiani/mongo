@@ -25,7 +25,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 8090
+              containerPort: 8097
               protocol: TCP
           env:
             - name: SPRING_DATASOURCE_URL

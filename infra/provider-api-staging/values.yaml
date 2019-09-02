@@ -1,11 +1,11 @@
-# Default values for order-api.
+# Default values for provider-api.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
 
 image:
-  repository: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/order
+  repository: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/provider
   tag: 0.0.9
   pullPolicy: Always
 
@@ -13,7 +13,7 @@ service:
   type: ClusterIP
   port: 80
 
-hostname: order.staging
+hostname: provider.staging
 domain: arctern.co
 
 ingress:
@@ -22,8 +22,8 @@ ingress:
     kubernetes.io/ingress.class: traefik
   path: /
   hosts:
-  - order.staging.arctern.co
-  - order.staging.meddo.in
+  - provider.staging.arctern.co
+  - provider.staging.meddo.in
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -59,8 +59,8 @@ spring:
     jcache:
       config: "classpath:ehcache/staging.xml"
   datasource:
-    url: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_order?useSSL=false"
-    slaveUrl: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_order?useSSL=false"
+    url: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_provider?useSSL=false"
+    slaveUrl: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_provider?useSSL=false"
     username: "root"
     password: "kZt3c5Fh4Y"
   sqs:
