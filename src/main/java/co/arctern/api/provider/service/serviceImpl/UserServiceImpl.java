@@ -1,7 +1,6 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dao.UserDao;
-import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.service.RoleService;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
