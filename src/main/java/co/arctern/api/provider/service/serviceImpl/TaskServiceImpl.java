@@ -6,13 +6,18 @@ import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.TaskStateFlow;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
+import co.arctern.api.provider.dto.response.projection.TasksForRider;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.TaskStateFlowService;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -25,6 +30,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ProjectionFactory projectionFactory;
 
     @Override
     public Task fetchTask(Long taskId) {
@@ -98,4 +106,27 @@ public class TaskServiceImpl implements TaskService {
         taskDao.save(task);
         return SUCCESS_MESSAGE;
     }
+
+    @Override
+    public List<TasksForRider> fetchCompletedTasksForUser(Long userId) {
+        return taskDao.findByTaskStateAndUserId(TaskState.COMPLETED, userId).stream()
+                .map(a -> projectionFactory.createProjection(TasksForRider.class, a))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TasksForRider> fetchAssignedTasksForUser(Long userId) {
+        return taskDao.findByTaskStateAndUserId(TaskState.ACCEPTED, userId).stream()
+                .map(a -> projectionFactory.createProjection(TasksForRider.class, a))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TasksForRider> fetchCancelledTasksForUser(Long userId) {
+        return taskDao.findByTaskStateAndUserId(TaskState.CANCELLED, userId).stream()
+                .map(a -> projectionFactory.createProjection(TasksForRider.class, a))
+                .collect(Collectors.toList());
+    }
+
+
 }

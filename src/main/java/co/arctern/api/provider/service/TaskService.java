@@ -4,7 +4,10 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
+import co.arctern.api.provider.dto.response.projection.TasksForRider;
 import co.arctern.api.provider.util.MessageUtil;
+
+import java.util.List;
 
 public interface TaskService extends MessageUtil {
 
@@ -19,4 +22,11 @@ public interface TaskService extends MessageUtil {
     public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId);
 
     public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskStateFlowState state);
+
+    public List<TasksForRider> fetchCompletedTasksForUser(Long userId);
+
+    public List<TasksForRider> fetchAssignedTasksForUser(Long userId);
+
+    public List<TasksForRider> fetchCancelledTasksForUser(Long userId);
+
 }
