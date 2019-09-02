@@ -1,6 +1,7 @@
 package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.OTPState;
+import co.arctern.api.provider.constant.UserState;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
@@ -27,10 +28,11 @@ public class Login {
     private Timestamp lastModifiedAt;
 
     @Enumerated
-    private OTPState status;
+    private OTPState otpState;
 
     private String generatedOTP;
     private String contact;
+    private UserState userState;
 
     @ManyToOne
     @JsonBackReference("user-login")
