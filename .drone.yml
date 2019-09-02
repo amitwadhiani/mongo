@@ -37,21 +37,8 @@ pipeline:
       - latest
       - tag-${DRONE_COMMIT_SHA:0:7}
     when:
-      branch: ['master']
+      branch: ['master','staging']
 
-  docker-staging:
-     image: plugins/ecr
-     repo: provider-staging
-     registry: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/provider-staging
-     secrets: [ecr_region, ecr_access_key, ecr_secret_key]
-     context: build/docker
-     build_args:
-        - JAR_FILE=provider-0.0.1-SNAPSHOT.jar
-     tags:
-        - latest
-        - tag-${DRONE_COMMIT_SHA:0:7}
-     when:
-        branch: ['staging']
 
   deploy:
     image: quay.io/ipedrazas/drone-helm
