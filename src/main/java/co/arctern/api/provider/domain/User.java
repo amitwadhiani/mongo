@@ -1,6 +1,8 @@
 package co.arctern.api.provider.domain;
 
+import co.arctern.api.provider.constant.UserType;
 import co.arctern.api.provider.util.EncodingUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -29,6 +31,8 @@ public class User extends EncodingUtil {
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 0", nullable = false)
     private Boolean loginState;
+
+    private UserType type;
 
     @LastModifiedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -64,7 +68,7 @@ public class User extends EncodingUtil {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    List<Area> areas;
+    List<UserArea> userAreas;
 
     @OneToMany(mappedBy = "user")
     List<Task> tasks;
@@ -77,6 +81,16 @@ public class User extends EncodingUtil {
     public void setPassword(String password) {
         this.password = super.encodeString(password);
     }
+
+    @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
+    @Version
+    @JsonIgnore
+    private Long version;
+
+    public User(Long version) {
+        this.version = version;
+    }
+
 
 }
 

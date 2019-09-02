@@ -1,5 +1,6 @@
 package co.arctern.api.provider.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
@@ -36,6 +37,16 @@ public class Timeslot {
     @ManyToOne
     @JsonBackReference("timeSlotGroup-timeSlot")
     TimeslotGroup timeSlotGroup;
+
+    @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
+    @Version
+    @JsonIgnore
+    private Long version;
+
+    public Timeslot(Long version) {
+        this.version = version;
+    }
+
 
 
 }

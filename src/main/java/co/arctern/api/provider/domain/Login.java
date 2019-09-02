@@ -2,6 +2,7 @@ package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.OTPState;
 import co.arctern.api.provider.constant.UserState;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
@@ -41,5 +42,15 @@ public class Login {
     @ManyToOne
     @JsonBackReference("user-login")
     User user;
+
+    @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
+    @Version
+    @JsonIgnore
+    private Long version;
+
+    public Login(Long version) {
+        this.version = version;
+    }
+
 
 }

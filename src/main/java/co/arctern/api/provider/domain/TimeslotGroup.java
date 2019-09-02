@@ -1,5 +1,6 @@
 package co.arctern.api.provider.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -37,6 +38,16 @@ public class TimeslotGroup {
     Time end;
 
     // can add days/months as well
+
+    @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
+    @Version
+    @JsonIgnore
+    private Long version;
+
+    public TimeslotGroup(Long version) {
+        this.version = version;
+    }
+
 
 
 }

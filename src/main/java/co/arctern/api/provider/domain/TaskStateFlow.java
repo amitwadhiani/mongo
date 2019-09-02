@@ -2,15 +2,13 @@ package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskStateFlowState;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -35,4 +33,14 @@ public class TaskStateFlow {
     private TaskStateFlowState state;
 
     private Long userId;
+
+    @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
+    @Version
+    @JsonIgnore
+    private Long version;
+
+    public TaskStateFlow(Long version) {
+        this.version = version;
+    }
+
 }

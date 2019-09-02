@@ -1,6 +1,8 @@
 package co.arctern.api.provider.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -9,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Entity
@@ -19,6 +22,9 @@ public class Area {
     private Long id;
 
     private String cluster;
+
+    private Double latitude;
+    private Double longitude;
 
     @Size(min = 6, max = 6, message = "Invalid pinCode")
     @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")
@@ -35,7 +41,16 @@ public class Area {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
-    @ManyToOne
-    @JsonBackReference("user-area")
-    private User user;
+    @OneToMany(mappedBy = "area")
+    private List<UserArea> areaUsers;
+
+    @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
+    @Version
+    @JsonIgnore
+    private Long version;
+
+    public Area(Long version) {
+        this.version = version;
+    }
+
 }
