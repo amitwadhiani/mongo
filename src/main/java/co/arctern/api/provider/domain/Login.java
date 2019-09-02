@@ -28,7 +28,7 @@ public class Login {
     private Timestamp lastModifiedAt;
 
     @Enumerated
-    private OTPState otpState;
+    private OTPState status;
 
     private String generatedOTP;
     private String contact;
