@@ -9,6 +9,7 @@ import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ public class RoleController {
 
     @PostMapping("/create")
     @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Role> createNewRole(@RequestBody RoleRequestDto dto) {
         return ResponseEntity.ok(roleService.createRole(dto));
     }

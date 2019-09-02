@@ -1,6 +1,7 @@
 package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import lombok.Data;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,5 +32,7 @@ public class TaskStateFlow {
     @JsonBackReference("task-taskStateFlow")
     private Task task;
 
-    private TaskState state;
+    private TaskStateFlowState state;
+
+    private Long userId;
 }
