@@ -9,6 +9,7 @@ import co.arctern.api.provider.dto.response.projection.TasksForRider;
 import co.arctern.api.provider.service.TaskEventService;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.UserService;
+import co.arctern.api.provider.service.UserTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     private TaskDao taskDao;
+
+    @Autowired
+    private UserTaskService userTaskService;
 
     @Autowired
     TaskEventService taskEventService;
@@ -44,19 +48,20 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
         Task task = new Task();
         Long userId = dto.getUserId();
-        task.setUser(userService.fetchUser(userId));
         task.setAmount(dto.getAmount());
         task.setPaymentState(dto.getPaymentState());
         task.setDiagnosticOrderId(dto.getDiagnosticOrderId());
-        taskEventService.createFlow(taskDao.save(task), TaskEventState.OPEN, userId);
-        taskEventService.createFlow(taskDao.save(task), TaskEventState.ACCEPTED, userId);
+        task = taskDao.save(task);
+        userTaskService.createUserTask(userService.fetchUser(userId), task);
+        taskEventService.createFlow(task, TaskEventState.OPEN, userId);
+        taskEventService.createFlow(task, TaskEventState.ACCEPTED, userId);
         return TASK_ACCEPT_MESSAGE;
     }
 
     @Override
     public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventState state) {
         Task task = fetchTask(taskId);
-        taskEventService.createFlow(task, state, task.getUser().getId());
+        taskEventService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
         task.setState((state.equals(TaskEventState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
         taskDao.save(task);
         return SUCCESS_MESSAGE;
@@ -65,13 +70,16 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public StringBuilder reassignTask(Long taskId, Long userId) {
         Task task = this.fetchTask(taskId);
-        task.setUser(userService.fetchUser(userId));
-        task.setIsActive(true);
-        task.setCancellationRequested(false);
+        markInactiveAndReassignTask(userId, task);
+        return TASK_REASSIGN_MESSAGE;
+    }
+
+    public void markInactiveAndReassignTask(Long userId, Task task) {
+        userTaskService.markInactive(task);
+        userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskEventService.createFlow(task, TaskEventState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
         taskDao.save(task);
-        return TASK_REASSIGN_MESSAGE;
     }
 
     @Override
@@ -82,7 +90,8 @@ public class TaskServiceImpl implements TaskService {
              *  cancel
              */
             task.setIsActive(false);
-            taskEventService.createFlow(task, TaskEventState.CANCELLED, task.getUser().getId());
+            taskEventService.createFlow(task, TaskEventState.CANCELLED,
+                    userTaskService.findActiveUserTask(taskId).getId());
             task.setState(TaskState.CANCELLED);
             taskDao.save(task);
             return TASK_CANCEL_MESSAGE;
@@ -90,10 +99,7 @@ public class TaskServiceImpl implements TaskService {
             /**
              * reassign
              */
-            task.setUser(userService.fetchUser(userId));
-            taskEventService.createFlow(task, TaskEventState.REASSIGNED, userId);
-            task.setState(TaskState.ASSIGNED);
-            taskDao.save(task);
+            markInactiveAndReassignTask(userId, task);
             return TASK_REASSIGN_MESSAGE;
         }
     }
@@ -108,22 +114,22 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TasksForRider> fetchCompletedTasksForUser(Long userId) {
-        return taskDao.findByStateAndUserId(TaskState.COMPLETED, userId).stream()
-                .map(a -> projectionFactory.createProjection(TasksForRider.class, a))
+        return userTaskService.fetchTasksForUser(userId, TaskState.COMPLETED).stream()
+                .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<TasksForRider> fetchAssignedTasksForUser(Long userId) {
-        return taskDao.findByStateAndUserId(TaskState.ACCEPTED, userId).stream()
-                .map(a -> projectionFactory.createProjection(TasksForRider.class, a))
+        return userTaskService.fetchTasksForUser(userId, TaskState.ASSIGNED).stream()
+                .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<TasksForRider> fetchCancelledTasksForUser(Long userId) {
-        return taskDao.findByStateAndUserId(TaskState.CANCELLED, userId).stream()
-                .map(a -> projectionFactory.createProjection(TasksForRider.class, a))
+        return userTaskService.fetchTasksForUser(userId, TaskState.CANCELLED).stream()
+                .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()))
                 .collect(Collectors.toList());
     }
 

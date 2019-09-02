@@ -28,4 +28,5 @@ public interface TaskService extends MessageUtil {
 
     public List<TasksForRider> fetchCancelledTasksForUser(Long userId);
 
+    public void markInactiveAndReassignTask(Long userId, Task task);
 }
