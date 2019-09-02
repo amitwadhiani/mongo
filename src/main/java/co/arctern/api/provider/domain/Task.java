@@ -10,6 +10,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -63,6 +66,11 @@ public class Task {
     @Version
     @JsonIgnore
     private Long version;
+
+    @NotEmpty
+    @Pattern(regexp = "(^$|[0-9]{10})")
+    @NotNull(message = "Patient Phone mandatory")
+    private String patientPhone;
 
     public Task(Long version) {
         this.version = version;
