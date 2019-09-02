@@ -85,7 +85,7 @@ spring:
     url: "jdbc:mysql://meddo-db.cluster-ciqusgcofpad.ap-south-1.rds.amazonaws.com:3306/arctern_provider?useSSL=false"
     slaveUrl: "jdbc:mysql://meddo-db.cluster-ciqusgcofpad.ap-south-1.rds.amazonaws.com:3306/arctern_provider?useSSL=false"
     username: "provider_service"
-    password: "cVPcfcWjb5aChR8n"
+    password: "Qu3AjY4qnzerbJnc"
   sqs:
     consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/provider-consumer-updates-simple"
     accessKey: "AKIA2YRBSIDHAXCGRJ6T"
