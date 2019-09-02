@@ -1,7 +1,6 @@
 package co.arctern.api.provider.service;
 
-import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.TaskStateFlowState;
+import co.arctern.api.provider.constant.TaskEventState;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForRider;
@@ -21,7 +20,7 @@ public interface TaskService extends MessageUtil {
 
     public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId);
 
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskStateFlowState state);
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventState state);
 
     public List<TasksForRider> fetchCompletedTasksForUser(Long userId);
 

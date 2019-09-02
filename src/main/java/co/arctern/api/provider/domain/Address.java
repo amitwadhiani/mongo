@@ -1,9 +1,8 @@
 package co.arctern.api.provider.domain;
 
-import com.amazonaws.services.simpleworkflow.model.TaskList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -12,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Address {
 
     @Id

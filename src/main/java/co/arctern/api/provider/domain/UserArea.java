@@ -2,12 +2,14 @@ package co.arctern.api.provider.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.codehaus.jackson.annotate.JsonBackReference;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class UserArea {
 
     @Id

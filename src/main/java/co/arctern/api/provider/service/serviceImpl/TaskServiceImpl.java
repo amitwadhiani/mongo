@@ -1,14 +1,13 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.TaskStateFlowState;
+import co.arctern.api.provider.constant.TaskEventState;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
-import co.arctern.api.provider.domain.TaskStateFlow;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForRider;
 import co.arctern.api.provider.service.TaskService;
-import co.arctern.api.provider.service.TaskStateFlowService;
+import co.arctern.api.provider.service.TaskEventService;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.projection.ProjectionFactory;
@@ -26,7 +25,7 @@ public class TaskServiceImpl implements TaskService {
     private TaskDao taskDao;
 
     @Autowired
-    TaskStateFlowService taskStateFlowService;
+    TaskEventService taskEventService;
 
     @Autowired
     private UserService userService;
@@ -49,16 +48,16 @@ public class TaskServiceImpl implements TaskService {
         task.setAmount(dto.getAmount());
         task.setPaymentState(dto.getPaymentState());
         task.setDiagnosticOrderId(dto.getDiagnosticOrderId());
-        taskStateFlowService.createFlow(taskDao.save(task), TaskStateFlowState.OPEN, userId);
-        taskStateFlowService.createFlow(taskDao.save(task), TaskStateFlowState.ACCEPTED, userId);
+        taskEventService.createFlow(taskDao.save(task), TaskEventState.OPEN, userId);
+        taskEventService.createFlow(taskDao.save(task), TaskEventState.ACCEPTED, userId);
         return TASK_ACCEPT_MESSAGE;
     }
 
     @Override
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskStateFlowState state) {
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventState state) {
         Task task = fetchTask(taskId);
-        taskStateFlowService.createFlow(task, state, task.getUser().getId());
-        task.setState((state.equals(TaskStateFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
+        taskEventService.createFlow(task, state, task.getUser().getId());
+        task.setState((state.equals(TaskEventState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
         taskDao.save(task);
         return SUCCESS_MESSAGE;
     }
@@ -69,7 +68,7 @@ public class TaskServiceImpl implements TaskService {
         task.setUser(userService.fetchUser(userId));
         task.setIsActive(true);
         task.setCancellationRequested(false);
-        taskStateFlowService.createFlow(task, TaskStateFlowState.REASSIGNED, userId);
+        taskEventService.createFlow(task, TaskEventState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
         taskDao.save(task);
         return TASK_REASSIGN_MESSAGE;
@@ -83,7 +82,7 @@ public class TaskServiceImpl implements TaskService {
              *  cancel
              */
             task.setIsActive(false);
-            taskStateFlowService.createFlow(task, TaskStateFlowState.CANCELLED, task.getUser().getId());
+            taskEventService.createFlow(task, TaskEventState.CANCELLED, task.getUser().getId());
             task.setState(TaskState.CANCELLED);
             taskDao.save(task);
             return TASK_CANCEL_MESSAGE;
@@ -92,7 +91,7 @@ public class TaskServiceImpl implements TaskService {
              * reassign
              */
             task.setUser(userService.fetchUser(userId));
-            taskStateFlowService.createFlow(task, TaskStateFlowState.REASSIGNED, userId);
+            taskEventService.createFlow(task, TaskEventState.REASSIGNED, userId);
             task.setState(TaskState.ASSIGNED);
             taskDao.save(task);
             return TASK_REASSIGN_MESSAGE;

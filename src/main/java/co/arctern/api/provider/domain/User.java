@@ -4,6 +4,7 @@ import co.arctern.api.provider.constant.UserType;
 import co.arctern.api.provider.util.EncodingUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "phone")})
+@NoArgsConstructor
 public class User extends EncodingUtil {
 
     @Id

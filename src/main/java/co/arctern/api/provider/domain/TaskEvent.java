@@ -1,9 +1,9 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.TaskStateFlowState;
+import co.arctern.api.provider.constant.TaskEventState;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,7 +13,8 @@ import java.sql.Timestamp;
 
 @Entity
 @Data
-public class TaskStateFlow {
+@NoArgsConstructor
+public class TaskEvent {
 
     @Id
     private Long id;
@@ -27,10 +28,10 @@ public class TaskStateFlow {
     private Timestamp lastModifiedAt;
 
     @ManyToOne
-    @JsonBackReference("task-taskStateFlow")
+    @JsonBackReference("task-taskEvent")
     private Task task;
 
-    private TaskStateFlowState state;
+    private TaskEventState state;
 
     private Long userId;
 
@@ -39,7 +40,7 @@ public class TaskStateFlow {
     @JsonIgnore
     private Long version;
 
-    public TaskStateFlow(Long version) {
+    public TaskEvent(Long version) {
         this.version = version;
     }
 

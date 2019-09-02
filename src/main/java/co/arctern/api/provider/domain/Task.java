@@ -4,6 +4,7 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Task {
 
     @Id
@@ -28,7 +30,7 @@ public class Task {
     private Timestamp lastModifiedAt;
 
     @OneToMany(mappedBy = "task")
-    private List<TaskStateFlow> taskStateFlows;
+    private List<TaskEvent> taskEvents;
 
     private TaskState state;
 
