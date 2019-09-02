@@ -16,6 +16,7 @@ import java.util.Optional;
 @PreAuthorize("isAuthenticated()")
 public interface LoginDao extends PagingAndSortingRepository<Login, Long> {
 
+    @PreAuthorize("permitAll()")
     Login findByGeneratedOTPAndStatusAndContact(String generatedOTP, OTPState status, String contact);
 
     Optional<Login> findByUserIdAndStatusAndContact(Long userId, OTPState status, String contact);

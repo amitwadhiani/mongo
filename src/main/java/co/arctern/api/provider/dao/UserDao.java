@@ -11,13 +11,13 @@ import java.util.Optional;
  * User entity repository layer
  */
 @RepositoryRestResource(exported = false)
-@PreAuthorize("isAuthenticated()")
 public interface UserDao extends PagingAndSortingRepository<User, Long> {
 
     Optional<User> findByUsername(String userName);
 
     Boolean existsByUsername(String userName);
 
+    @PreAuthorize("permitAll()")
     Optional<User> findByPhone(String phone);
 
     void deleteByUsername(String username);

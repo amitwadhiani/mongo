@@ -10,6 +10,5 @@ import org.springframework.security.access.prepost.PreAuthorize;
  * LoginStateFlow entity repository layer
  */
 @RepositoryRestResource(exported = false)
-@PreAuthorize("isAuthenticated()")
 public interface LoginStateFlowDao extends PagingAndSortingRepository<LoginStateFlow, Long> {
 }
