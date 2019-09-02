@@ -34,11 +34,12 @@ public class Login {
     private String contact;
     private UserState userState;
 
+    private Boolean loginState;
+
+    private Timestamp logoutTime;
+
     @ManyToOne
     @JsonBackReference("user-login")
     User user;
-
-    @OneToMany(mappedBy = "login")
-    List<LoginStateFlow> loginStateFlows;
 
 }

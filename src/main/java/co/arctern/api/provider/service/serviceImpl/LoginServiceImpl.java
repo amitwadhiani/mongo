@@ -7,6 +7,7 @@ import co.arctern.api.provider.domain.Login;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.event.LoginEventHandler;
 import co.arctern.api.provider.service.*;
+import co.arctern.api.provider.util.DateUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.Date;
 
 @Service
@@ -34,9 +36,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private LoginStateFlowService loginStateFlowService;
 
     @SneakyThrows(Exception.class)
     @Transactional
@@ -60,9 +59,10 @@ public class LoginServiceImpl implements LoginService {
     public OAuth2AccessToken verifyOTP(String phone, String otp) {
         Login login = loginDao.findByGeneratedOTPAndStatusAndContact(otp, OTPState.GENERATED, phone);
         if (login != null) {
-            if (login.getCreatedAt().getTime() - new Date(System.currentTimeMillis() - 1 * 60 * 1000).getTime() > 0) {
+            if (login.getCreatedAt().getTime() - DateUtil.fetchDifferenceFromCurrentDateInMs(1) > 0) {
                 login.setStatus(OTPState.USED);
-                loginStateFlowService.createLoginStateFlow(loginDao.save(login), true);
+                login.setLoginState(true);
+                loginDao.save(login);
                 loginEventHandler.markLoggedInStateForUser(userService.fetchUserByPhone(phone), true);
                 return tokenService.retrieveToken(phone, otp);
             } else {
@@ -78,7 +78,9 @@ public class LoginServiceImpl implements LoginService {
                 .orElseThrow(() -> {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not logged in.");
                 });
-        loginStateFlowService.createLoginStateFlow(login, false);
+        login.setLoginState(false);
+        login.setLogoutTime(DateUtil.CURRENT_TIMESTAMP);
+        loginDao.save(login);
         loginEventHandler.markLoggedInStateForUser(user, false);
         return SUCCESS_MESSAGE;
     }
