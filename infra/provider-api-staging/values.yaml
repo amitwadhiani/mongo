@@ -64,7 +64,7 @@ spring:
     username: "root"
     password: "kZt3c5Fh4Y"
   sqs:
-    consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/order-consumer-updates-simple-staging"
+    consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/provider-consumer-updates-simple-staging"
     accessKey: "AKIA2YRBSIDHAXCGRJ6T"
     secretKey: "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"
   rabbitmq:
@@ -72,16 +72,16 @@ spring:
     port: "5672"
     username: "test"
     password: "test"
-    queueName: "order-item-updates-simple-staging"
-    queueOrderName: "order-updates-simple-staging"
-    orderConsumerName: "order-consumer-updates-simple-staging"
+    queueName: "provider-item-updates-simple-staging"
+    queueproviderName: "provider-updates-simple-staging"
+    providerConsumerName: "provider-consumer-updates-simple-staging"
     notification:
-      queueOrderItemName: "order-item-staging-notification-updates-simple"
-      queueOrderName: "order-staging-notification-updates-simple"
-      orderDiagnosticLabNotificationQueueName: "order-staging-diagnostic-notification-updates-simple"
+      queueproviderItemName: "provider-item-staging-notification-updates-simple"
+      queueproviderName: "provider-staging-notification-updates-simple"
+      providerDiagnosticLabNotificationQueueName: "provider-staging-diagnostic-notification-updates-simple"
     middleware:
-      orderDiagnosticLabQueueName: "order-staging-diagnostic-updates-simple"
-      diagnosticOrderQueueName: "diagnostic-order-staging-updates-simple"
+      providerDiagnosticLabQueueName: "provider-staging-diagnostic-updates-simple"
+      diagnosticproviderQueueName: "diagnostic-provider-staging-updates-simple"
   security:
     signingKey: 4vvL2EefcZbBvUnJ
     encodingStrength: 512
