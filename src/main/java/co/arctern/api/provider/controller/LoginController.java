@@ -29,7 +29,6 @@ public class LoginController {
      * @throws Exception
      */
     @GetMapping("/generate-otp")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<String> generateOTP(@RequestParam("phone") String phone)
             throws Exception {
         return ResponseEntity.ok(loginService.generateOTP(phone));
@@ -60,6 +59,7 @@ public class LoginController {
      * @throws Exception
      */
     @GetMapping("/log-out")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> logOut(@RequestParam("userId") Long userId)
             throws Exception {
         return ResponseEntity.ok(loginService.logOut(userId));
