@@ -1,0 +1,112 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "provider-api.fullname" . }}
+  labels:
+    app: {{ template "provider-api.name" . }}
+    chart: {{ template "provider-api.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "provider-api.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "provider-api.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8090
+              protocol: TCP
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: {{default "jdbc:mysql://meddo.ciqusgcofpad.ap-south-1.rds.amazonaws.com:3306/arctern_provider?useSSL=false" .Values.spring.datasource.url}}
+            - name: SPRING_SLAVE_DATASOURCE_URL
+              value: {{default "jdbc:mysql://meddo.ciqusgcofpad.ap-south-1.rds.amazonaws.com:3306/arctern_provider?useSSL=false" .Values.spring.datasource.slaveUrl}}
+            - name: SPRING_DATASOURCE_USERNAME
+              value: {{default "root" .Values.spring.datasource.username}}
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: {{default "example" .Values.spring.datasource.password}}
+            - name: JVM_OPTS
+              value: {{default "-Xms64M -Xmx256M" .Values.jvmOpts}}
+            - name: SPRING_RABBITMQ_HOST
+              value: {{default "127.0.0.1" .Values.spring.rabbitmq.host}}
+            - name: SPRING_RABBITMQ_PORT
+              value: "{{default 5672 .Values.spring.rabbitmq.port}}"
+            - name: SPRING_RABBITMQ_USERNAME
+              value: {{default "test" .Values.spring.rabbitmq.username}}
+            - name: SPRING_RABBITMQ_PASSWORD
+              value: {{default "test" .Values.spring.rabbitmq.password}}
+            - name: SECURITY_SIGNING_KEY
+              value: {{default "MaYzkSjmkzPC57L" .Values.spring.security.signingKey}}
+#            - name: SECURITY_ENCODING_STRENTH
+#              value: {{default "256" .Values.spring.security.encodingStrenth}}
+            - name: SECURITY_REALM
+              value: {{default "Spring Boot JWT Example Realm" .Values.spring.securityRealm}}
+            - name: SECURITY_JWT_CLIENT_ID
+              value: {{default "testjwtclientid" .Values.spring.security.jwt.clientId}}
+            - name: SECURITY_JWT_CLIENT_SECRET
+              value: {{default "XY7kmzoNzl100" .Values.spring.security.jwt.clientSecret}}
+            - name: ARCTERN_AUTH_URL
+              value: {{default "http://auth-api-traefik.default.svc.cluster.local/oauth/token" .Values.spring.auth.apiUrl}}
+            - name: ARCTERN_AUTH_AUTHORIZATION
+              value: {{default "Basic dGVzdGp3dGNsaWVudGlkOlhZN2ttem9OemwxMDA=" .Values.spring.auth.authorization}}
+            - name: ARCTERN_AUTH_USERNAME
+              value: {{default "admin" .Values.spring.auth.username}}
+            - name: ARCTERN_AUTH_PASSWORD
+              value: {{default "admin@1c" .Values.spring.auth.password}}
+            - name: EMR_CLIENT_API_URL
+              value: {{default "http://emr-api.default.svc.cluster.local" .Values.spring.emr.apiUrl}}
+            - name: SPRING_CACHE_JCACHE_CONFIG
+              value: {{default "classpath:ehcache/production.xml" .Values.spring.cache.jcache.config}}
+            - name: SQS_ACCESS_KEY
+              value: {{default "AKIA2YRBSIDHAXCGRJ6T" .Values.spring.sqs.accessKey}}
+            - name: SQS_SECRET_KEY
+              value: {{default "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" .Values.spring.sqs.secretKey}}
+            - name: RAZORPAY_API_KEY
+              value: {{default "rzp_live_zcSNhEiRKKeg87" .Values.spring.razorpay.apiKey}}
+            - name: RAZORPAY_API_SECRET
+              value: {{default "KOAS810x3ZEqRYoElYknGDPB" .Values.spring.razorpay.apiSecret}}
+            - name: MEDDO_WALLET_DISCOUNT_PERCENTAGE
+              value: {{default "10" .Values.spring.meddo.wallet.discountPercentage | quote}}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 15
+            periodSeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 15
+            periodSeconds: 2
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
