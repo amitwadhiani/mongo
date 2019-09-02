@@ -15,5 +15,5 @@ import java.util.List;
 @PreAuthorize("isAuthenticated()")
 public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
-    List<Task> findByTaskStateAndUserId(TaskState taskState,Long userId);
+    List<Task> findByStateAndUserId(TaskState taskState,Long userId);
 }

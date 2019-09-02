@@ -109,21 +109,21 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TasksForRider> fetchCompletedTasksForUser(Long userId) {
-        return taskDao.findByTaskStateAndUserId(TaskState.COMPLETED, userId).stream()
+        return taskDao.findByStateAndUserId(TaskState.COMPLETED, userId).stream()
                 .map(a -> projectionFactory.createProjection(TasksForRider.class, a))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<TasksForRider> fetchAssignedTasksForUser(Long userId) {
-        return taskDao.findByTaskStateAndUserId(TaskState.ACCEPTED, userId).stream()
+        return taskDao.findByStateAndUserId(TaskState.ACCEPTED, userId).stream()
                 .map(a -> projectionFactory.createProjection(TasksForRider.class, a))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<TasksForRider> fetchCancelledTasksForUser(Long userId) {
-        return taskDao.findByTaskStateAndUserId(TaskState.CANCELLED, userId).stream()
+        return taskDao.findByStateAndUserId(TaskState.CANCELLED, userId).stream()
                 .map(a -> projectionFactory.createProjection(TasksForRider.class, a))
                 .collect(Collectors.toList());
     }
