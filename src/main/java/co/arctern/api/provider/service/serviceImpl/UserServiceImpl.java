@@ -3,6 +3,7 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
+import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.RoleService;
 import co.arctern.api.provider.service.UserService;
 import lombok.SneakyThrows;
@@ -22,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    AreaService areaService;
 
     @Override
     public String signIn(String phone, String username, String password) {
@@ -89,6 +93,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(dto.getPassword());
         user.setPhone(dto.getPhone());
         user.setRoles(roleService.fetchRoles(dto.getRoleIds()));
+        areaService.setAreasToUser(user, dto.getAreaIds());
         user.setUsername(dto.getUsername());
         return userDao.save(user);
     }

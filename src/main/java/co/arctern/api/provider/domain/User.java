@@ -73,7 +73,7 @@ public class User extends EncodingUtil {
     List<UserArea> userAreas;
 
     @OneToMany(mappedBy = "user")
-    List<Task> tasks;
+    private List<UserTask> userTasks;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",

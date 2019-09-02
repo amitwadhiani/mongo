@@ -41,9 +41,8 @@ public class Task {
     @OneToOne(mappedBy = "task")
     private Rating rating;
 
-    @ManyToOne
-    @JsonBackReference("user-task")
-    private User user;
+    @OneToMany(mappedBy = "task")
+    private List<UserTask> userTasks;
 
     private Long diagnosticOrderId;
 
