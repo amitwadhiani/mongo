@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.OTPState;
+import co.arctern.api.provider.constant.UserState;
 import co.arctern.api.provider.dao.LoginDao;
 import co.arctern.api.provider.domain.Login;
 import co.arctern.api.provider.domain.User;
@@ -50,6 +51,7 @@ public class LoginServiceImpl implements LoginService {
         login.setUser(user);
         login.setStatus(OTPState.GENERATED);
         login.setGeneratedOTP(otp);
+        login.setUserState(UserState.NEW);
         loginDao.save(login);
     }
 

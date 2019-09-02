@@ -57,7 +57,8 @@ public class UserServiceImpl implements UserService {
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public User fetchUser(String phone) {
         return userDao.findByPhone(phone)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user found."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user found. Ask admin " +
+                        "for new sign up. "));
     }
 
     @Override

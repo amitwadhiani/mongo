@@ -21,7 +21,6 @@ public class TaskController {
         return ResponseEntity.ok(taskService.createTaskAndAssignUser(dto));
     }
 
-
     @PostMapping("/reassign")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
