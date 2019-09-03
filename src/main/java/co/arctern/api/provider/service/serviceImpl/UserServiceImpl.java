@@ -110,5 +110,4 @@ public class UserServiceImpl implements UserService {
         areaService.setAreasToUser(user, dto.getAreaIds());
         return user;
     }
-
 }
