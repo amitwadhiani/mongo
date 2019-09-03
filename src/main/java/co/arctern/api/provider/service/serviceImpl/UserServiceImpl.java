@@ -99,6 +99,8 @@ public class UserServiceImpl implements UserService {
         user.setIsActive(true);
         user.setName(dto.getName());
         user.setIsTest(false);
+        user.setAge(dto.getAge());
+        user.setGender(dto.getGender());
         user.setLoginState(false);
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setPhone(dto.getPhone());

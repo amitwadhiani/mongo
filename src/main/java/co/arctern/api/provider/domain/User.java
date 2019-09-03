@@ -1,6 +1,7 @@
 package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.UserType;
+import com.amazonaws.services.polly.model.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -60,6 +61,10 @@ public class User {
     @Pattern(regexp = "(^$|[0-9]{10})")
     @NotNull(message = "Phone mandatory")
     private String phone;
+
+    private Gender gender;
+
+    private Integer age;
 
     private Timestamp lastLoginTime;
 
