@@ -1,7 +1,6 @@
 package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.TaskEventState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.codehaus.jackson.annotate.JsonBackReference;

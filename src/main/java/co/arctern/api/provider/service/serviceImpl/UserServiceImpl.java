@@ -24,16 +24,16 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Autowired
-    RoleService roleService;
+    private RoleService roleService;
 
     @Autowired
-    AreaService areaService;
+    private AreaService areaService;
 
     @Autowired
-    UserRoleService userRoleService;
+    private UserRoleService userRoleService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public String signIn(String phone, String username, String password) {
