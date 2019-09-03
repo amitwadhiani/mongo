@@ -63,5 +63,4 @@ public class Rating {
         this.version = version;
     }
 
-
 }
