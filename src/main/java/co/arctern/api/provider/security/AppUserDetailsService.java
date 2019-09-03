@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ public class AppUserDetailsService implements UserDetailsService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
         User user = userDao.findByPhone(phone)
@@ -31,15 +35,16 @@ public class AppUserDetailsService implements UserDetailsService {
                     throw new UsernameNotFoundException(String.format("The contact %phone doesn't exist", phone));
                 });
         List<GrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getRole()));
+        user.getUserRoles().stream().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getRole().getRole()));
         });
         co.arctern.api.provider.security.model.User userDetails = new co.arctern.api.provider.security.model.User(user.getUsername(), user.getPassword(), authorities);
         userDetails.setId(user.getId());
         userDetails.setName(user.getName());
         userDetails.setEmail(user.getEmail());
+        userDetails.setPassword(passwordEncoder.encode(user.getPassword()));
         userDetails.setPhone(user.getPhone());
-        userDetails.setAreaIds(StringUtils.join(",", user.getUserAreas().stream().map(a -> a.getArea().getId()).collect(Collectors.toList())));
+        userDetails.setAreaIds(StringUtils.join(user.getUserAreas().stream().map(a -> a.getArea().getId()).collect(Collectors.toList()), ","));
         return userDetails;
     }
 }

@@ -63,9 +63,10 @@ public class LoginServiceImpl implements LoginService {
             if (login.getCreatedAt().getTime() - DateUtil.fetchDifferenceFromCurrentDateInMs(1) > 0) {
                 login.setStatus(OTPState.USED);
                 login.setLoginState(true);
-                loginDao.save(login);
                 loginEventHandler.markLoggedInStateForUser(userService.fetchUserByPhone(phone), true);
-                return tokenService.retrieveToken(phone, otp);
+                OAuth2AccessToken oAuth2AccessToken = tokenService.retrieveToken(phone, otp);
+                loginDao.save(login);
+                return oAuth2AccessToken;
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "OTP expired. Please request an OTP again.");
             }

@@ -1,7 +1,6 @@
 package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.UserType;
-import co.arctern.api.provider.util.EncodingUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ import java.util.List;
 @Data
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "phone")})
 @NoArgsConstructor
-public class User extends EncodingUtil {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,9 +63,9 @@ public class User extends EncodingUtil {
 
     private Timestamp lastLoginTime;
 
-    @Size(min = 6, max = 30, message = "Minimum password length : 6")
     @NotNull
     @NotEmpty
+    @Lob
     private String password;
 
     @OneToMany(mappedBy = "user")
@@ -75,14 +74,8 @@ public class User extends EncodingUtil {
     @OneToMany(mappedBy = "user")
     private List<UserTask> userTasks;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
-
-    public void setPassword(String password) {
-        this.password = super.encodeString(password);
-    }
+    @OneToMany(mappedBy = "user")
+    private List<UserRole> userRoles;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

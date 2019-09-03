@@ -5,10 +5,12 @@ import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.RoleService;
+import co.arctern.api.provider.service.UserRoleService;
 import co.arctern.api.provider.service.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,6 +28,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     AreaService areaService;
+
+    @Autowired
+    UserRoleService userRoleService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public String signIn(String phone, String username, String password) {
@@ -90,12 +98,15 @@ public class UserServiceImpl implements UserService {
         user.setEmail(dto.getEmail());
         user.setIsActive(true);
         user.setName(dto.getName());
-        user.setPassword(dto.getPassword());
+        user.setIsTest(false);
+        user.setLoginState(false);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setPhone(dto.getPhone());
-        user.setRoles(roleService.fetchRoles(dto.getRoleIds()));
-        areaService.setAreasToUser(user, dto.getAreaIds());
         user.setUsername(dto.getUsername());
-        return userDao.save(user);
+        user = userDao.save(user);
+        userRoleService.createUserRoles(user, dto.getRoleIds());
+        areaService.setAreasToUser(user, dto.getAreaIds());
+        return user;
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Data
@@ -37,6 +38,9 @@ public class Role {
     @Version
     @JsonIgnore
     private Long version;
+
+    @OneToMany(mappedBy = "role")
+    List<UserRole> userRoles;
 
     public Role(Long version) {
         this.version = version;

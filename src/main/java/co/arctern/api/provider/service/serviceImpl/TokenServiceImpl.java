@@ -15,10 +15,8 @@ import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TokenServiceImpl implements TokenService {
@@ -44,7 +42,8 @@ public class TokenServiceImpl implements TokenService {
         parameters.put("password", user.getPassword());
         parameters.put("username", user.getPhone());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : user.getRoles()) {
+        List<Role> roles = user.getUserRoles().stream().map(a -> a.getRole()).collect(Collectors.toList());
+        for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getRole()));
         }
         Principal principal = new UsernamePasswordAuthenticationToken(clientID, secret, authorities);
