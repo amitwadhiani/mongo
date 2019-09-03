@@ -6,7 +6,8 @@ package co.arctern.api.provider.constant;
 public enum TaskEventState {
     OPEN,
     ASSIGNED,
-    ACCEPTED,REJECTED,
+    ACCEPTED,
+    REJECTED,
     REASSIGNED,
     OUT_FOR_PICKUP,
     CANCELLED,

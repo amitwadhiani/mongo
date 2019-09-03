@@ -20,24 +20,24 @@ public class TaskEvent {
     private Long id;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ")
     private Timestamp createdAt;
 
     @LastModifiedDate
-    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
     @ManyToOne
     @JsonBackReference("task-taskEvent")
     private Task task;
 
+    @Enumerated
     private TaskEventState state;
 
     private Long userId;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
-    @JsonIgnore
     private Long version;
 
     public TaskEvent(Long version) {
