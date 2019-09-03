@@ -26,9 +26,6 @@ public class AppUserDetailsService implements UserDetailsService {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
         User user = userDao.findByPhone(phone)

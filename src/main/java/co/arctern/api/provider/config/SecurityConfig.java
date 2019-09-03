@@ -58,7 +58,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * @deprecated
      */
     @Bean
-    @Qualifier(value = "encoder")
     public PasswordEncoder passwordEncoder() {
         DelegatingPasswordEncoder passwordEncoder = (DelegatingPasswordEncoder) PasswordEncoderFactories.createDelegatingPasswordEncoder();
         passwordEncoder.setDefaultPasswordEncoderForMatches(NoOpPasswordEncoder.getInstance());
