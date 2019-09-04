@@ -41,7 +41,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task fetchTask(Long taskId) {
         return taskDao.findById(taskId).orElseThrow(() -> {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid taskId");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TASK_ID_MESSAGE);
         });
     }
 

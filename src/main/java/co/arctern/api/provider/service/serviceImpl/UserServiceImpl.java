@@ -4,7 +4,6 @@ import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.service.AreaService;
-import co.arctern.api.provider.service.RoleService;
 import co.arctern.api.provider.service.UserRoleService;
 import co.arctern.api.provider.service.UserService;
 import lombok.SneakyThrows;
@@ -24,9 +23,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
-
-    @Autowired
-    private RoleService roleService;
 
     @Autowired
     private AreaService areaService;
@@ -68,27 +64,26 @@ public class UserServiceImpl implements UserService {
             userDao.save(user);
             return "Success";
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid username.");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE);
     }
 
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public User fetchUser(String phone) {
         return userDao.findByPhone(phone)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user found. Ask admin " +
-                        "for new sign up. "));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, REGISTER_USER_MESSAGE));
     }
 
     @Override
     public User fetchUser(Long userId) {
-        return userDao.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user found."));
+        return userDao.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE));
     }
 
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public User fetchUserByPhone(String phone) {
         return userDao.findByPhone(phone)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No user found."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE));
     }
 
     public User save(User user) {
@@ -117,7 +112,7 @@ public class UserServiceImpl implements UserService {
     public void saveLastLoginTime(String phone, Timestamp loginTime) {
         User user = userDao.findByPhone(phone).orElseThrow(() -> {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "User not found.");
+                    USER_NOT_FOUND_MESSAGE);
         });
         user.setLastLoginTime(loginTime);
         user.setLoginState(true);

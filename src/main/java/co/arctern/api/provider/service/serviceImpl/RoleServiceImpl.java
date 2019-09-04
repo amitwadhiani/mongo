@@ -29,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> fetchRoles(List<Long> roleIds) {
         return roleIds.stream().map(a -> roleDao.findById(a).orElseThrow(() ->
         {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role id.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ROLE_ID_MESSAGE);
         })).collect(Collectors.toList());
 
     }

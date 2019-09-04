@@ -2,7 +2,6 @@ package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.TasksForRiderResponse;
-import co.arctern.api.provider.dto.response.projection.TasksForRider;
 import co.arctern.api.provider.service.RiderService;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.util.PaginationUtil;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 public class RiderServiceImpl implements RiderService {

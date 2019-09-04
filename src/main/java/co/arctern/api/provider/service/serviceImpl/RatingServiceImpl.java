@@ -31,7 +31,7 @@ public class RatingServiceImpl implements RatingService {
         } else if (otp.equals(rating.getOtpYes())) {
             rating.setIsSatisfied(true);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid otp entered.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE);
         }
         rating.setTask(task);
         ratingDao.save(rating);

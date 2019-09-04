@@ -7,8 +7,6 @@ import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 public interface UserTaskService extends MessageUtil {
 
     /**
