@@ -10,6 +10,7 @@ public enum TaskEventState {
     REJECTED,
     REASSIGNED,
     OUT_FOR_PICKUP,
+    OUT_FOR_DELIVERY,
     CANCELLED,
     COMPLETED,
 

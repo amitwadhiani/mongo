@@ -1,5 +1,7 @@
 package co.arctern.api.provider.constant;
 
 public enum UserType {
-    RIDER
+
+    RIDER,
+    SERVICE
 }
