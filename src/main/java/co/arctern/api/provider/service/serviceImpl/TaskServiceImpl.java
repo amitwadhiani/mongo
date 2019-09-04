@@ -11,6 +11,7 @@ import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.UserService;
 import co.arctern.api.provider.service.UserTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -113,17 +114,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TasksForRider> fetchCompletedTasksForUser(Long userId) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.COMPLETED).stream()
-                .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()))
-                .collect(Collectors.toList());
+    public Page<TasksForRider> fetchCompletedTasksForUser(Long userId) {
+        return userTaskService.fetchTasksForUser(userId, TaskState.COMPLETED)
+                .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()));
     }
 
     @Override
-    public List<TasksForRider> fetchAssignedTasksForUser(Long userId) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.ASSIGNED).stream()
-                .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()))
-                .collect(Collectors.toList());
+    public Page<TasksForRider> fetchAssignedTasksForUser(Long userId) {
+        return userTaskService.fetchTasksForUser(userId, TaskState.ASSIGNED)
+                .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()));
     }
 
     @Override

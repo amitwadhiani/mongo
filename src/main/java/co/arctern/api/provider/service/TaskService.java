@@ -5,6 +5,7 @@ import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForRider;
 import co.arctern.api.provider.util.MessageUtil;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -69,7 +70,7 @@ public interface TaskService extends MessageUtil {
      * @param userId
      * @return
      */
-    public List<TasksForRider> fetchCompletedTasksForUser(Long userId);
+    public Page<TasksForRider> fetchCompletedTasksForUser(Long userId);
 
     /**
      * fetch assigned tasks for user.
@@ -77,7 +78,7 @@ public interface TaskService extends MessageUtil {
      * @param userId
      * @return
      */
-    public List<TasksForRider> fetchAssignedTasksForUser(Long userId);
+    public Page<TasksForRider> fetchAssignedTasksForUser(Long userId);
 
     /**
      * fetch cancelled tasks for user.

@@ -1,9 +1,12 @@
 package co.arctern.api.provider.controller;
 
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.TasksForRiderResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForRider;
 import co.arctern.api.provider.service.RiderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +28,7 @@ public class RiderController {
 
     /**
      * fetch all tasks for a rider.
+     *
      * @param userId
      * @return
      */
@@ -36,25 +40,28 @@ public class RiderController {
 
     /**
      * fetch assigned tasks for a rider.
+     *
      * @param userId
      * @return
      */
     @CrossOrigin
     @GetMapping("/task/assigned")
-    public ResponseEntity<List<TasksForRider>> fetchAssignedTasksForRider(@RequestParam("userId") Long userId) {
-        return ResponseEntity.ok(riderService.fetchAssignedTasksForRider(userId));
+    public ResponseEntity<PaginatedResponse> fetchAssignedTasksForRider(@RequestParam("userId") Long userId,
+                                                                        Pageable pageable) {
+        return ResponseEntity.ok(riderService.fetchAssignedTasksForRider(userId, pageable));
     }
 
     /**
      * fetch completed tasks for a rider.
+     *
      * @param userId
      * @return
      */
     @CrossOrigin
     @GetMapping("/task/completed")
-    public ResponseEntity<List<TasksForRider>> fetchCompletedTasksForRider(@RequestParam("userId") Long userId) {
-        return ResponseEntity.ok(riderService.fetchCompletedTasksForRider(userId));
+    public ResponseEntity<PaginatedResponse> fetchCompletedTasksForRider(@RequestParam("userId") Long userId,
+                                                                         Pageable pageable) {
+        return ResponseEntity.ok(riderService.fetchCompletedTasksForRider(userId, pageable));
     }
-
 
 }

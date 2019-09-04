@@ -3,6 +3,7 @@ package co.arctern.api.provider.dto.response;
 import co.arctern.api.provider.dto.response.projection.TasksForRider;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -13,8 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TasksForRiderResponse {
 
-    public List<TasksForRider> completedTasks;
-    public List<TasksForRider> assignedTasks;
-    public List<TasksForRider> cancelledTasks;
+    public Page<TasksForRider> completedTasks;
+    public Page<TasksForRider> assignedTasks;
 
 }

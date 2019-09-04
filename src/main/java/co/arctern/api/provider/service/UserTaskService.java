@@ -5,6 +5,7 @@ import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.util.MessageUtil;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public interface UserTaskService extends MessageUtil {
      * @param state
      * @return
      */
-    public List<UserTask> fetchTasksForUser(Long userId, TaskState state);
+    public Page<UserTask> fetchTasksForUser(Long userId, TaskState state);
 
     /**
      * find active user-task ( only one possible at a time for particular task ).

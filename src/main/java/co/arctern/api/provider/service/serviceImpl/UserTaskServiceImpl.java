@@ -7,6 +7,7 @@ import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.service.UserTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +32,8 @@ public class UserTaskServiceImpl implements UserTaskService {
         userTaskDao.save(userTask);
     }
 
-    public List<UserTask> fetchTasksForUser(Long userId, TaskState state) {
-        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskState(userId, state);
+    public Page<UserTask> fetchTasksForUser(Long userId, TaskState state) {
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateOrderByCreatedAtDesc(userId, state);
     }
 
     public UserTask findActiveUserTask(Long taskId) {

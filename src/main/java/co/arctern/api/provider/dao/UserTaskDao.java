@@ -2,6 +2,7 @@ package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.domain.UserTask;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -20,7 +21,7 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      * @param state
      * @return
      */
-    List<UserTask> findByIsActiveTrueAndUserIdAndTaskState(Long userId, TaskState state);
+    Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateOrderByCreatedAtDesc(Long userId, TaskState state);
 
     /**
      * find user_task for task_id.
