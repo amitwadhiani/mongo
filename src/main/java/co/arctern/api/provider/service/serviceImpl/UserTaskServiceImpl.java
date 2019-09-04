@@ -17,6 +17,7 @@ public class UserTaskServiceImpl implements UserTaskService {
     @Autowired
     private UserTaskDao userTaskDao;
 
+    @Override
     public void createUserTask(User user, Task task) {
         UserTask userTask = new UserTask();
         userTask.setTask(task);
@@ -25,16 +26,19 @@ public class UserTaskServiceImpl implements UserTaskService {
         userTaskDao.save(userTask);
     }
 
+    @Override
     public void markInactive(Task task) {
         UserTask userTask = userTaskDao.findByIsActiveTrueAndTaskId(task.getId());
         userTask.setIsActive(false);
         userTaskDao.save(userTask);
     }
 
+    @Override
     public Page<UserTask> fetchTasksForUser(Long userId, TaskState state, Pageable pageable) {
         return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateOrderByTaskCreatedAtDesc(userId, state, pageable);
     }
 
+    @Override
     public UserTask findActiveUserTask(Long taskId) {
         return userTaskDao.findByIsActiveTrueAndTaskId(taskId);
     }

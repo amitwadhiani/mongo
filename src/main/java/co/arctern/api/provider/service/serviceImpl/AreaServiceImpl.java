@@ -20,6 +20,7 @@ public class AreaServiceImpl implements AreaService {
     @Autowired
     UserAreaDao userAreaDao;
 
+    @Override
     public void setAreasToUser(User user, List<Long> areaIds) {
         List<UserArea> userAreas = new ArrayList<>();
         areaDao.findByIdIn(areaIds)

@@ -20,6 +20,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Autowired
     private RoleDao roleDao;
 
+    @Override
     public void createUserRoles(User user, List<Long> roleIds) {
         List<UserRole> userRoles = new ArrayList<>();
         roleDao.findByIdIn(roleIds)

@@ -76,6 +76,7 @@ public class TaskServiceImpl implements TaskService {
         return TASK_REASSIGN_MESSAGE;
     }
 
+    @Override
     public void markInactiveAndReassignTask(Long userId, Task task) {
         userTaskService.markInactive(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);

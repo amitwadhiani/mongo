@@ -33,6 +33,7 @@ public class TokenServiceImpl implements TokenService {
     @Autowired
     UserDao userDao;
 
+    @Override
     @SneakyThrows(Exception.class)
     public OAuth2AccessToken retrieveToken(String phone, String otp) {
         User user = userDao.findByPhone(phone).get();

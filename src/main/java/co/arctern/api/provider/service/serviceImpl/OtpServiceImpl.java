@@ -32,6 +32,7 @@ public class OtpServiceImpl implements OtpService {
     private TaskService taskService;
 
     @Transactional
+    @Override
     public String generateOTPForLogin(String phone) {
         User user = userService.fetchUser(phone);
         String otp = getOtpString();
@@ -42,6 +43,7 @@ public class OtpServiceImpl implements OtpService {
     }
 
     @Transactional
+    @Override
     public StringBuilder generateOTPForRating(Long taskId) {
         Task task = taskService.fetchTask(taskId);
         String otpYes = this.getOtpString();
@@ -59,6 +61,7 @@ public class OtpServiceImpl implements OtpService {
         return TRY_AGAIN_MESSAGE;
     }
 
+    @Override
     public String getOtpString() {
         return OTPUtil.generateOtp();
     }

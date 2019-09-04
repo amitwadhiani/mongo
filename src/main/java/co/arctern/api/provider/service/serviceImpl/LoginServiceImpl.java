@@ -45,6 +45,7 @@ public class LoginServiceImpl implements LoginService {
         return otpService.generateOTPForLogin(phone);
     }
 
+    @Override
     public void generateLogin(String phone, String otp, User user) {
         Login login = new Login();
         login.setContact(phone);
@@ -75,6 +76,7 @@ public class LoginServiceImpl implements LoginService {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE);
     }
 
+    @Override
     public StringBuilder logOut(Long userId) {
         User user = userService.fetchUser(userId);
         Login login = loginDao.findByUserIdAndStatusAndContact(userId, OTPState.USED, user.getPhone())

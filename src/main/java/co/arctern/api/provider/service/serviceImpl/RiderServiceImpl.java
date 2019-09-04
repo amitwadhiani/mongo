@@ -18,6 +18,7 @@ public class RiderServiceImpl implements RiderService {
     TaskService taskService;
 
     @Transactional
+    @Override
     public TasksForRiderResponse fetchTasksForRider(Long userId,Pageable pageable) {
         TasksForRiderResponse response = new TasksForRiderResponse();
         response.setCompletedTasks(taskService.fetchCompletedTasksForUser(userId,pageable));
@@ -25,10 +26,12 @@ public class RiderServiceImpl implements RiderService {
         return response;
     }
 
+    @Override
     public PaginatedResponse fetchCompletedTasksForRider(Long userId, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(taskService.fetchCompletedTasksForUser(userId,pageable), pageable);
     }
 
+    @Override
     public PaginatedResponse fetchAssignedTasksForRider(Long userId, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(taskService.fetchAssignedTasksForUser(userId,pageable), pageable);
     }

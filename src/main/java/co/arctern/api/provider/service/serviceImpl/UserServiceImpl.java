@@ -86,10 +86,12 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE));
     }
 
+    @Override
     public User save(User user) {
         return userDao.save(user);
     }
 
+    @Override
     public User createUser(UserRequestDto dto) {
         User user = new User();
         user.setEmail(dto.getEmail());
@@ -109,6 +111,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
+    @Override
     public void saveLastLoginTime(String phone, Timestamp loginTime) {
         User user = userDao.findByPhone(phone).orElseThrow(() -> {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,

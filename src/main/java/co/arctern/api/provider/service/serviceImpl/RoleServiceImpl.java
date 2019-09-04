@@ -18,6 +18,7 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     RoleDao roleDao;
 
+    @Override
     public Role createRole(RoleRequestDto dto) {
         Role role = new Role();
         role.setIsActive(true);
@@ -26,6 +27,7 @@ public class RoleServiceImpl implements RoleService {
         return roleDao.save(role);
     }
 
+    @Override
     public List<Role> fetchRoles(List<Long> roleIds) {
         return roleIds.stream().map(a -> roleDao.findById(a).orElseThrow(() ->
         {
