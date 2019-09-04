@@ -7,5 +7,13 @@ import co.arctern.api.provider.util.MessageUtil;
 
 public interface TaskEventService extends MessageUtil {
 
+    /**
+     * flow creation for a particular task.
+     *
+     * @param task
+     * @param state
+     * @param userId
+     * @return
+     */
     public TaskEvent createFlow(Task task, TaskEventState state, Long userId);
 }

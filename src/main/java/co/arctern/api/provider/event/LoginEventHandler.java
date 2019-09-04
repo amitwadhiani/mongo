@@ -5,6 +5,9 @@ import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * handler for changes in user entity after login/logout .
+ */
 @Service
 public class LoginEventHandler {
 

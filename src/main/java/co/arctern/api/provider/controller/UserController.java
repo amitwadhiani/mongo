@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * apis for user creation.
+ */
 @BasePathAwareController
 @RequestMapping("/user")
 public class UserController {
@@ -19,6 +22,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    /**
+     * to create new user -> allowed for Admin only.
+     *
+     * @param dto
+     * @return
+     */
     @PostMapping("/create")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

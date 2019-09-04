@@ -7,5 +7,10 @@ import java.util.List;
 
 public interface AreaService extends MessageUtil {
 
+    /**
+     * assign areas to user.
+     * @param user
+     * @param areaIds
+     */
     public void setAreasToUser(User user, List<Long> areaIds);
 }

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * apis for rating flow after task completion.
+ */
 @BasePathAwareController
 @RequestMapping("/rating")
 public class RatingController {
@@ -32,6 +35,13 @@ public class RatingController {
         return ResponseEntity.ok(otpService.generateOTPForRating(taskId));
     }
 
+    /**
+     * to save rating based on task_id and otp.
+     *
+     * @param taskId
+     * @param otp
+     * @return
+     */
     @GetMapping("/save")
     @CrossOrigin
     public ResponseEntity<String> saveRating(@RequestParam("taskId") Long taskId, @RequestParam("otp") String otp) {

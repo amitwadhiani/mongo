@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * response for tasks of a rider.
+ */
 @Data
 @NoArgsConstructor
 public class TasksForRiderResponse {

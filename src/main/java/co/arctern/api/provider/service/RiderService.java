@@ -8,10 +8,25 @@ import java.util.List;
 
 public interface RiderService extends MessageUtil {
 
+    /**
+     * fetch all tasks for rider.
+     * @param userId
+     * @return
+     */
     TasksForRiderResponse fetchTasksForRider(Long userId);
 
+    /**
+     * fetch completed tasks for rider.
+     * @param userId
+     * @return
+     */
     List<TasksForRider> fetchCompletedTasksForRider(Long userId);
 
+    /**
+     * fetch assigned tasks for rider.
+     * @param userId
+     * @return
+     */
     List<TasksForRider> fetchAssignedTasksForRider(Long userId);
 
 }

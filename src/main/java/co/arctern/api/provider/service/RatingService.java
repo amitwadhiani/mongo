@@ -4,9 +4,24 @@ import co.arctern.api.provider.domain.Rating;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.util.MessageUtil;
 
-public interface RatingService  extends MessageUtil {
+public interface RatingService extends MessageUtil {
 
-    public String saveRating(Long taskId,String otp);
+    /**
+     * save rating value for a Task.
+     *
+     * @param taskId
+     * @param otp
+     * @return
+     */
+    public String saveRating(Long taskId, String otp);
 
-    public Rating createRating(Task task,String otpNo,String otpYes);
+    /**
+     * creating rating object for a task.
+     *
+     * @param task
+     * @param otpNo
+     * @param otpYes
+     * @return
+     */
+    public Rating createRating(Task task, String otpNo, String otpYes);
 }

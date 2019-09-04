@@ -9,7 +9,7 @@ import org.springframework.beans.BeanUtils;
 import java.util.List;
 
 /**
- * user request dto for user entity.
+ * user request body for user creation by Admin.
  */
 @Data
 @NoArgsConstructor

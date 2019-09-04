@@ -74,10 +74,28 @@ public interface UserService extends MessageUtil {
      */
     public User fetchUserByPhone(String phone);
 
+    /**
+     * save user.
+     *
+     * @param user
+     * @return
+     */
     public User save(User user);
 
+    /**
+     * new user creation.
+     *
+     * @param dto
+     * @return
+     */
     public User createUser(UserRequestDto dto);
 
+    /**
+     * save last login time based on login.
+     *
+     * @param phone
+     * @param loginTime
+     */
     public void saveLastLoginTime(String phone, Timestamp loginTime);
 
 }

@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+/**
+ * apis for rider's tasks.
+ */
 @BasePathAwareController
 @RequestMapping("/rider")
 public class RiderController {
@@ -20,18 +23,33 @@ public class RiderController {
     @Autowired
     private RiderService riderService;
 
+    /**
+     * fetch all tasks for a rider.
+     * @param userId
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/task/all")
     public ResponseEntity<TasksForRiderResponse> fetchTasksForRider(@RequestParam("userId") Long userId) {
         return ResponseEntity.ok(riderService.fetchTasksForRider(userId));
     }
 
+    /**
+     * fetch assigned tasks for a rider.
+     * @param userId
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/task/assigned")
     public ResponseEntity<List<TasksForRider>> fetchAssignedTasksForRider(@RequestParam("userId") Long userId) {
         return ResponseEntity.ok(riderService.fetchAssignedTasksForRider(userId));
     }
 
+    /**
+     * fetch completed tasks for a rider.
+     * @param userId
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/task/completed")
     public ResponseEntity<List<TasksForRider>> fetchCompletedTasksForRider(@RequestParam("userId") Long userId) {

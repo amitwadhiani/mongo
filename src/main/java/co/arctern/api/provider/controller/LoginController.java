@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * apis for login/logout flow.
+ */
 @BasePathAwareController
 @RequestMapping("/login")
 public class LoginController {

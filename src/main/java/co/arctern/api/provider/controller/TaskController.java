@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * apis for handling, assigning, reassigning and cancelling tasks by Admin / Rider.
+ */
 @BasePathAwareController
 @RequestMapping("/task")
 public class TaskController {
@@ -15,6 +18,12 @@ public class TaskController {
     @Autowired
     TaskService taskService;
 
+    /**
+     * assign tasks to user.
+     *
+     * @param dto
+     * @return
+     */
     @PostMapping("/assign")
     @CrossOrigin
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_RIDER')")
@@ -22,6 +31,13 @@ public class TaskController {
         return ResponseEntity.ok(taskService.createTaskAndAssignUser(dto));
     }
 
+    /**
+     * re-assign tasks to user.
+     *
+     * @param taskId
+     * @param userId
+     * @return
+     */
     @PostMapping("/reassign")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -30,6 +46,14 @@ public class TaskController {
         return ResponseEntity.ok(taskService.reassignTask(taskId, userId));
     }
 
+    /**
+     * cancel task / reassign task.
+     *
+     * @param isCancelled
+     * @param taskId
+     * @param userId
+     * @return
+     */
     @PostMapping("/cancel-reassign")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -39,6 +63,13 @@ public class TaskController {
         return ResponseEntity.ok(taskService.cancelTask(isCancelled, taskId, userId));
     }
 
+    /**
+     * request cancellation for a task by user.
+     *
+     * @param cancelRequest
+     * @param taskId
+     * @return
+     */
     @PostMapping("/cancel-request")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_RIDER')")

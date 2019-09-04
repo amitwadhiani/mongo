@@ -8,5 +8,11 @@ import java.util.List;
 @Service
 public interface UserRoleService {
 
+    /**
+     * map user with different roles.
+     *
+     * @param user
+     * @param roleIds
+     */
     public void createUserRoles(User user, List<Long> roleIds);
 }

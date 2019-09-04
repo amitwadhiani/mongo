@@ -7,10 +7,26 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
+/**
+ * UserTask entity repository layer
+ */
 @RepositoryRestResource(exported = false)
 public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> {
 
+    /**
+     * find active task for user .
+     *
+     * @param userId
+     * @param state
+     * @return
+     */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskState(Long userId, TaskState state);
 
+    /**
+     * find user_task for task_id.
+     *
+     * @param taskId
+     * @return
+     */
     UserTask findByIsActiveTrueAndTaskId(Long taskId);
 }

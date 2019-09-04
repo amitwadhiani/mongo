@@ -2,6 +2,9 @@ package co.arctern.api.provider.util;
 
 import java.util.Random;
 
+/**
+ * otp generation utility.
+ */
 public interface OTPUtil {
 
     public static final Integer OTP_LENGTH = 6;

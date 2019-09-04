@@ -14,5 +14,10 @@ import java.util.List;
 @PreAuthorize("isAuthenticated()")
 public interface RoleDao extends PagingAndSortingRepository<Role, Long> {
 
+    /**
+     * fetch roles through ids.
+     * @param roleIds
+     * @return
+     */
     List<Role> findByIdIn(List<Long> roleIds);
 }
