@@ -32,7 +32,7 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     public Page<UserTask> fetchTasksForUser(Long userId, TaskState state, Pageable pageable) {
-        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateOrderByCreatedAtDesc(userId, state, pageable);
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateOrderByTaskCreatedAtDesc(userId, state, pageable);
     }
 
     public UserTask findActiveUserTask(Long taskId) {
