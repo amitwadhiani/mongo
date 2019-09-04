@@ -18,16 +18,24 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+
     private String line;
 
     @Size(min = 6, max = 6, message = "Invalid pinCode")
     @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")
     private String pinCode;
 
+    @Column(nullable = false)
     private String city;
+
     private String locality;
+
+    @Column(nullable = false)
     private String houseNumber;
+
+    @Column(nullable = false)
     private String state;
 
     private String patientId;

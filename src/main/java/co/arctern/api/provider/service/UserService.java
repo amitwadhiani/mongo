@@ -4,7 +4,9 @@ import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.util.MessageUtil;
 
-public interface UserService  extends MessageUtil {
+import java.sql.Timestamp;
+
+public interface UserService extends MessageUtil {
 
     /**
      * to generate sign in
@@ -75,5 +77,7 @@ public interface UserService  extends MessageUtil {
     public User save(User user);
 
     public User createUser(UserRequestDto dto);
+
+    public void saveLastLoginTime(String phone, Timestamp loginTime);
 
 }

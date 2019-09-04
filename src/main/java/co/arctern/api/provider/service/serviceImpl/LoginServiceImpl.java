@@ -66,6 +66,7 @@ public class LoginServiceImpl implements LoginService {
                 loginEventHandler.markLoggedInStateForUser(userService.fetchUserByPhone(phone), true);
                 OAuth2AccessToken oAuth2AccessToken = tokenService.retrieveToken(phone, otp);
                 loginDao.save(login);
+                userService.saveLastLoginTime(phone, login.getCreatedAt());
                 return oAuth2AccessToken;
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "OTP expired. Please request an OTP again.");

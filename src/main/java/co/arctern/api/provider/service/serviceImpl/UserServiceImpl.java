@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
@@ -109,6 +111,17 @@ public class UserServiceImpl implements UserService {
         userRoleService.createUserRoles(user, dto.getRoleIds());
         areaService.setAreasToUser(user, dto.getAreaIds());
         return user;
+    }
+
+    @Transactional
+    public void saveLastLoginTime(String phone, Timestamp loginTime) {
+        User user = userDao.findByPhone(phone).orElseThrow(() -> {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "User not found.");
+        });
+        user.setLastLoginTime(loginTime);
+        user.setLoginState(true);
+        userDao.save(user);
     }
 
 }

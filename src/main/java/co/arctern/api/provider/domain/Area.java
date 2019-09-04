@@ -21,9 +21,11 @@ public class Area {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String cluster;
 
     private Double latitude;
+
     private Double longitude;
 
     @Size(min = 6, max = 6, message = "Invalid pinCode")

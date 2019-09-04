@@ -21,8 +21,10 @@ public class Timeslot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    Time start;
-    Time end;
+    Timestamp start;
+    Timestamp end;
+
+    @Enumerated(EnumType.STRING)
     DayOfWeek day;
 
     @LastModifiedDate
@@ -48,7 +50,6 @@ public class Timeslot {
     public Timeslot(Long version) {
         this.version = version;
     }
-
 
 
 }

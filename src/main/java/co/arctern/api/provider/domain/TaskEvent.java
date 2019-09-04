@@ -30,7 +30,7 @@ public class TaskEvent {
     @JsonBackReference("task-taskEvent")
     private Task task;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private TaskEventState state;
 
     private Long userId;

@@ -45,7 +45,7 @@ public class User {
     private Timestamp createdAt;
 
 
-    @Size(min = 4, max = 30, message = "Minimum username length : 4")
+    @Size(min = 3, max = 30, message = "Minimum username length : 3")
     @Column(unique = true)
     @NotNull(message = "Username mandatory")
     private String username;
@@ -60,8 +60,10 @@ public class User {
     @NotEmpty
     @Pattern(regexp = "(^$|[0-9]{10})")
     @NotNull(message = "Phone mandatory")
+    @Column(unique = true)
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private Integer age;

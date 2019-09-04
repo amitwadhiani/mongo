@@ -35,8 +35,10 @@ public class Task {
     @OneToMany(mappedBy = "task")
     private List<TaskEvent> taskEvents;
 
+    @Enumerated(EnumType.STRING)
     private TaskState state;
 
+    @Enumerated(EnumType.STRING)
     private TaskType type;
 
     private Boolean isPrepaid;

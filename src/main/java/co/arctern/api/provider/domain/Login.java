@@ -29,11 +29,13 @@ public class Login {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private OTPState status;
 
     private String generatedOTP;
     private String contact;
+
+    @Enumerated(EnumType.STRING)
     private UserState userState;
 
     private Boolean loginState;
