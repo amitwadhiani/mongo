@@ -4,6 +4,7 @@ import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.TasksForRiderResponse;
 import co.arctern.api.provider.service.RiderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,9 @@ public class RiderController {
      */
     @CrossOrigin
     @GetMapping("/task/all")
-    public ResponseEntity<TasksForRiderResponse> fetchTasksForRider(@RequestParam("userId") Long userId) {
-        return ResponseEntity.ok(riderService.fetchTasksForRider(userId));
+    public ResponseEntity<TasksForRiderResponse> fetchTasksForRider(@RequestParam("userId") Long userId,
+                                                                    Pageable pageable) {
+        return ResponseEntity.ok(riderService.fetchTasksForRider(userId, pageable));
     }
 
     /**

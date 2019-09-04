@@ -13,7 +13,7 @@ public interface RiderService extends MessageUtil {
      * @param userId
      * @return
      */
-    TasksForRiderResponse fetchTasksForRider(Long userId);
+    TasksForRiderResponse fetchTasksForRider(Long userId, Pageable pageable);
 
     /**
      * fetch completed tasks for rider.

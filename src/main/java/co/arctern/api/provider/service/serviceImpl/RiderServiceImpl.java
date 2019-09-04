@@ -18,18 +18,18 @@ public class RiderServiceImpl implements RiderService {
     TaskService taskService;
 
     @Transactional
-    public TasksForRiderResponse fetchTasksForRider(Long userId) {
+    public TasksForRiderResponse fetchTasksForRider(Long userId,Pageable pageable) {
         TasksForRiderResponse response = new TasksForRiderResponse();
-        response.setCompletedTasks(taskService.fetchCompletedTasksForUser(userId));
-        response.setAssignedTasks(taskService.fetchAssignedTasksForUser(userId));
+        response.setCompletedTasks(taskService.fetchCompletedTasksForUser(userId,pageable));
+        response.setAssignedTasks(taskService.fetchAssignedTasksForUser(userId,pageable));
         return response;
     }
 
     public PaginatedResponse fetchCompletedTasksForRider(Long userId, Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(taskService.fetchCompletedTasksForUser(userId), pageable);
+        return PaginationUtil.returnPaginatedBody(taskService.fetchCompletedTasksForUser(userId,pageable), pageable);
     }
 
     public PaginatedResponse fetchAssignedTasksForRider(Long userId, Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(taskService.fetchAssignedTasksForUser(userId), pageable);
+        return PaginationUtil.returnPaginatedBody(taskService.fetchAssignedTasksForUser(userId,pageable), pageable);
     }
 }

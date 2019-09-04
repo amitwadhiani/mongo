@@ -12,6 +12,7 @@ import co.arctern.api.provider.service.UserService;
 import co.arctern.api.provider.service.UserTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -114,20 +115,20 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<TasksForRider> fetchCompletedTasksForUser(Long userId) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.COMPLETED)
+    public Page<TasksForRider> fetchCompletedTasksForUser(Long userId, Pageable pageable) {
+        return userTaskService.fetchTasksForUser(userId, TaskState.COMPLETED, pageable)
                 .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()));
     }
 
     @Override
-    public Page<TasksForRider> fetchAssignedTasksForUser(Long userId) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.ASSIGNED)
+    public Page<TasksForRider> fetchAssignedTasksForUser(Long userId, Pageable pageable) {
+        return userTaskService.fetchTasksForUser(userId, TaskState.ASSIGNED, pageable)
                 .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()));
     }
 
     @Override
-    public List<TasksForRider> fetchCancelledTasksForUser(Long userId) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.CANCELLED).stream()
+    public List<TasksForRider> fetchCancelledTasksForUser(Long userId, Pageable pageable) {
+        return userTaskService.fetchTasksForUser(userId, TaskState.CANCELLED, pageable).stream()
                 .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()))
                 .collect(Collectors.toList());
     }

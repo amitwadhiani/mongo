@@ -6,6 +6,7 @@ import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserTaskService extends MessageUtil {
 
@@ -31,7 +32,7 @@ public interface UserTaskService extends MessageUtil {
      * @param state
      * @return
      */
-    public Page<UserTask> fetchTasksForUser(Long userId, TaskState state);
+    public Page<UserTask> fetchTasksForUser(Long userId, TaskState state, Pageable pageable);
 
     /**
      * find active user-task ( only one possible at a time for particular task ).
