@@ -24,6 +24,14 @@ public interface PaginationUtil {
         return sourceList.subList(fromIndex, Math.min(fromIndex + pageSize, sourceList.size()));
     }
 
+    /**
+     * return paginated response from list.
+     *
+     * @param sourceList
+     * @param page
+     * @param pageSize
+     * @return
+     */
     public static PaginatedResponse returnPaginatedBody(List<?> sourceList, int page, int pageSize) {
         PaginatedResponse response = new PaginatedResponse();
         response.setContent(paginateList(sourceList, page, pageSize));
@@ -35,6 +43,13 @@ public interface PaginationUtil {
         return response;
     }
 
+    /**
+     * creating a paginated response from repo page call.
+     *
+     * @param page
+     * @param pageable
+     * @return
+     */
     public static PaginatedResponse returnPaginatedBody(Page<?> page, Pageable pageable) {
         PaginatedResponse response = new PaginatedResponse();
         response.setContent(page.getContent());

@@ -7,8 +7,16 @@ import java.util.Random;
  */
 public interface OTPUtil {
 
+    /**
+     * standard OTP length.
+     */
     public static final Integer OTP_LENGTH = 6;
 
+    /**
+     * otp generation method.
+     *
+     * @return
+     */
     public static String generateOtp() {
         String pool = "0123456789";
         Random random = new Random();

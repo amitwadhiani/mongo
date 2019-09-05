@@ -32,18 +32,39 @@ public interface MessageUtil {
      */
     public static final StringBuilder TASK_CANCEL_MESSAGE = new StringBuilder("Task cancelled.");
 
+    /**
+     * wrong otp message.
+     */
     public static final String WRONG_OTP_MESSAGE = "Wrong OTP entered. Please Try again.";
 
+    /**
+     * otp expired message.
+     */
     public static final String EXPIRED_OTP_MESSAGE = "OTP expired. Please request an OTP again.";
 
+    /**
+     * user not logged in message.
+     */
     public static final String USER_NOT_LOGGED_IN_MESSAGE = "User not logged in.";
 
+    /**
+     * invalid role id message.
+     */
     public static final String INVALID_ROLE_ID_MESSAGE = "Invalid role id.";
 
+    /**
+     * user not found message.
+     */
     public static final String USER_NOT_FOUND_MESSAGE = "User not found .";
 
+    /**
+     * invalid task id message.
+     */
     public static final String INVALID_TASK_ID_MESSAGE = "User not found .";
 
+    /**
+     * request user creation message.
+     */
     public static final String REGISTER_USER_MESSAGE = "No user found. Ask admin for new sign up. ";
 
 }
