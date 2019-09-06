@@ -7,7 +7,9 @@ import co.arctern.api.provider.service.AddressService;
 import io.undertow.util.BadRequestException;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -16,12 +18,12 @@ public class AddressServiceImpl implements AddressService {
     AddressDao addressDao;
 
     @Override
-    @SneakyThrows(BadRequestException.class)
+    @SneakyThrows(Exception.class)
     public Address createOrFetchAddress(TaskAssignDto dto) {
         Long addressId = dto.getAddressId();
         if (addressId != null) {
             return addressDao.findById(addressId).orElseThrow(() -> {
-                        throw new BadRequestException("Invalid address id.");
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid address id.");
                     }
             );
         }
