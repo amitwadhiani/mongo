@@ -2,12 +2,9 @@ package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
-import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.util.MessageUtil;
-import org.springframework.data.domain.Page;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 public interface UserService extends MessageUtil {
 

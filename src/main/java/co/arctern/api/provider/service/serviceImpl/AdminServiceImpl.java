@@ -2,7 +2,6 @@ package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.service.AdminService;
-import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.TokenService;
 import co.arctern.api.provider.service.UserAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
