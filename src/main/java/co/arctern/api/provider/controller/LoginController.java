@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -31,7 +32,7 @@ public class LoginController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/generate-otp")
+    @PostMapping("/generate-otp")
     public ResponseEntity<String> generateOTP(@RequestParam("phone") String phone)
             throws Exception {
         return ResponseEntity.ok(loginService.generateOTP(phone));
@@ -45,7 +46,7 @@ public class LoginController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/verify-otp")
+    @PostMapping("/verify-otp")
     public ResponseEntity<OAuth2AccessToken> verifyOTP(@RequestParam("phone") String phone,
                                                        @RequestParam("otp") String otp)
             throws Exception {
@@ -61,7 +62,7 @@ public class LoginController {
      * @return
      * @throws Exception
      */
-    @GetMapping("/log-out")
+    @PostMapping("/log-out")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> logOut(@RequestParam("userId") Long userId)
             throws Exception {

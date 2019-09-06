@@ -5,10 +5,7 @@ import co.arctern.api.provider.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * apis for rating flow after task completion.
@@ -29,7 +26,7 @@ public class RatingController {
      * @param taskId
      * @return
      */
-    @GetMapping("/create")
+    @PostMapping("/create")
     @CrossOrigin
     public ResponseEntity<StringBuilder> generateRating(@RequestParam("taskId") Long taskId) {
         return ResponseEntity.ok(otpService.generateOTPForRating(taskId));
@@ -42,7 +39,7 @@ public class RatingController {
      * @param otp
      * @return
      */
-    @GetMapping("/save")
+    @PatchMapping("/save")
     @CrossOrigin
     public ResponseEntity<String> saveRating(@RequestParam("taskId") Long taskId, @RequestParam("otp") String otp) {
         return ResponseEntity.ok(ratingService.saveRating(taskId, otp));

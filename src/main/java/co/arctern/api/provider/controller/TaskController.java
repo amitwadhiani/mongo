@@ -19,7 +19,7 @@ public class TaskController {
     TaskService taskService;
 
     /**
-     * assign tasks to user.
+     * assign tasks to user ( automatic task creation and assignment for a particular diagnosticOrder ) .
      *
      * @param dto
      * @return
