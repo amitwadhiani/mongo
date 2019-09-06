@@ -5,7 +5,7 @@ import co.arctern.api.provider.constant.UserState;
 import co.arctern.api.provider.dao.LoginDao;
 import co.arctern.api.provider.domain.Login;
 import co.arctern.api.provider.domain.User;
-import co.arctern.api.provider.event.LoginEventHandler;
+import co.arctern.api.provider.eventhandler.LoginEventHandler;
 import co.arctern.api.provider.service.LoginService;
 import co.arctern.api.provider.service.OtpService;
 import co.arctern.api.provider.service.TokenService;

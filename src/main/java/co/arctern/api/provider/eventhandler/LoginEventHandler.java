@@ -1,4 +1,4 @@
-package co.arctern.api.provider.event;
+package co.arctern.api.provider.eventhandler;
 
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.service.UserService;
@@ -18,6 +18,4 @@ public class LoginEventHandler {
         user.setLoginState(status);
         userService.save(user);
     }
-
-
 }
