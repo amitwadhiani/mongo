@@ -26,7 +26,7 @@ public class TaskController {
      */
     @PostMapping("/assign")
     @CrossOrigin
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_RIDER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<StringBuilder> assignTaskToUser(@RequestBody TaskAssignDto dto) {
         return ResponseEntity.ok(taskService.createTaskAndAssignUser(dto));
     }
@@ -72,7 +72,7 @@ public class TaskController {
      */
     @PostMapping("/cancel-request")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_RIDER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> requestToCancelTask(@RequestParam(value = "cancelRequest", defaultValue = "true") Boolean cancelRequest,
                                                              @RequestParam("taskId") Long taskId) {
         return ResponseEntity.ok(taskService.requestCancellation(cancelRequest, taskId));

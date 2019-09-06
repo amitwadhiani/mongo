@@ -3,6 +3,7 @@ package co.arctern.api.provider.service;
 import co.arctern.api.provider.constant.TaskEventFlowState;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForRider;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
@@ -97,4 +98,5 @@ public interface TaskService extends MessageUtil {
      * @param task
      */
     public void markInactiveAndReassignTask(Long userId, Task task);
+
 }

@@ -4,7 +4,6 @@ import co.arctern.api.provider.dao.AddressDao;
 import co.arctern.api.provider.domain.Address;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.service.AddressService;
-import io.undertow.util.BadRequestException;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

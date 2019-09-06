@@ -10,6 +10,9 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
+/**
+ * Roles can be ROLE_ADMIN, ROLE_PROVIDER, ROLE_AREA_MANAGER
+ */
 @Entity
 @Data
 @NoArgsConstructor
