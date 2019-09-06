@@ -10,7 +10,7 @@ public interface OTPUtil {
     /**
      * standard OTP length.
      */
-    public static final Integer OTP_LENGTH = 6;
+    public static final Integer OTP_LENGTH = 4;
 
     /**
      * otp generation method.
@@ -22,7 +22,7 @@ public interface OTPUtil {
         Random random = new Random();
         char[] chars = new char[OTP_LENGTH];
         int i = 0;
-        while (i < 6) {
+        while (i < OTP_LENGTH) {
             chars[i] = pool.charAt(random.nextInt(pool.length()));
             i++;
         }
