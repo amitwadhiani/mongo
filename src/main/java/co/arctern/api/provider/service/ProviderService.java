@@ -5,7 +5,7 @@ import co.arctern.api.provider.dto.response.TasksForRiderResponse;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Pageable;
 
-public interface RiderService extends MessageUtil {
+public interface ProviderService extends MessageUtil {
 
     /**
      * fetch all tasks for rider.

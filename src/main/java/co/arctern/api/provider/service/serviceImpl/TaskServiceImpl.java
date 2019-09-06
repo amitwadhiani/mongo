@@ -1,15 +1,12 @@
 package co.arctern.api.provider.service.serviceImpl;
 
-import co.arctern.api.provider.constant.TaskEventState;
+import co.arctern.api.provider.constant.TaskEventFlowState;
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForRider;
-import co.arctern.api.provider.service.TaskEventService;
-import co.arctern.api.provider.service.TaskService;
-import co.arctern.api.provider.service.UserService;
-import co.arctern.api.provider.service.UserTaskService;
+import co.arctern.api.provider.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,10 +28,13 @@ public class TaskServiceImpl implements TaskService {
     private UserTaskService userTaskService;
 
     @Autowired
-    TaskEventService taskEventService;
+    TaskEventFlowService taskEventFlowService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AddressService addressService;
 
     @Autowired
     private ProjectionFactory projectionFactory;
@@ -52,19 +52,25 @@ public class TaskServiceImpl implements TaskService {
         Long userId = dto.getUserId();
         task.setAmount(dto.getAmount());
         task.setPaymentState(dto.getPaymentState());
-        task.setDiagnosticOrderId(dto.getDiagnosticOrderId());
+        task.setRefId(dto.getRefId());
+        task.setOrderId(dto.getOrderId());
+        task.setIsPrepaid(dto.getIsPrepaid());
+        task.setPatientPhone(dto.getPatientPhone());
+        task.setType(dto.getType());
+        task.setAddress(addressService.createOrFetchAddress(dto));
+        task.setState(TaskState.ASSIGNED);
         task = taskDao.save(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskEventService.createFlow(task, TaskEventState.OPEN, userId);
-        taskEventService.createFlow(task, TaskEventState.ACCEPTED, userId);
+        taskEventFlowService.createFlow(task, TaskEventFlowState.OPEN, userId);
+        taskEventFlowService.createFlow(task, TaskEventFlowState.ACCEPTED, userId);
         return TASK_ACCEPT_MESSAGE;
     }
 
     @Override
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventState state) {
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventFlowState state) {
         Task task = fetchTask(taskId);
-        taskEventService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
-        task.setState((state.equals(TaskEventState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
+        taskEventFlowService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
+        task.setState((state.equals(TaskEventFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
         taskDao.save(task);
         return SUCCESS_MESSAGE;
     }
@@ -80,7 +86,7 @@ public class TaskServiceImpl implements TaskService {
     public void markInactiveAndReassignTask(Long userId, Task task) {
         userTaskService.markInactive(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskEventService.createFlow(task, TaskEventState.REASSIGNED, userId);
+        taskEventFlowService.createFlow(task, TaskEventFlowState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
         taskDao.save(task);
     }
@@ -93,7 +99,7 @@ public class TaskServiceImpl implements TaskService {
              *  cancel
              */
             task.setIsActive(false);
-            taskEventService.createFlow(task, TaskEventState.CANCELLED,
+            taskEventFlowService.createFlow(task, TaskEventFlowState.CANCELLED,
                     userTaskService.findActiveUserTask(taskId).getId());
             task.setState(TaskState.CANCELLED);
             taskDao.save(task);

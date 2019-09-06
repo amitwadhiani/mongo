@@ -22,6 +22,7 @@ import java.util.List;
 public class Task {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreatedDate
@@ -33,7 +34,7 @@ public class Task {
     private Timestamp lastModifiedAt;
 
     @OneToMany(mappedBy = "task")
-    private List<TaskEvent> taskEvents;
+    private List<TaskEventFlow> taskEventFlows;
 
     @Enumerated(EnumType.STRING)
     private TaskState state;
@@ -49,7 +50,17 @@ public class Task {
     @OneToMany(mappedBy = "task")
     private List<UserTask> userTasks;
 
-    private Long diagnosticOrderId;
+    /**
+     * diagnosticOrderId in case of DiagnosticOrders.
+     * orderItemId in case of medicines.
+     * orderItemId in case of services.
+     */
+    private Long refId;
+
+    /**
+     * orderId linked with the item.
+     */
+    private Long orderId;
 
     private Float amount;
 
@@ -62,6 +73,7 @@ public class Task {
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
     private Boolean isActive;
 
+    @Column(columnDefinition = "tinyint(1) DEFAULT 0")
     private Boolean cancellationRequested;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")

@@ -18,6 +18,7 @@ import java.sql.Timestamp;
 public class Rating {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreatedDate

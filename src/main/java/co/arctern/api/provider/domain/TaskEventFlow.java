@@ -1,6 +1,6 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.TaskEventState;
+import co.arctern.api.provider.constant.TaskEventFlowState;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.codehaus.jackson.annotate.JsonBackReference;
@@ -13,9 +13,10 @@ import java.sql.Timestamp;
 @Entity
 @Data
 @NoArgsConstructor
-public class TaskEvent {
+public class TaskEventFlow {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreatedDate
@@ -31,7 +32,7 @@ public class TaskEvent {
     private Task task;
 
     @Enumerated(EnumType.STRING)
-    private TaskEventState state;
+    private TaskEventFlowState state;
 
     private Long userId;
 
@@ -39,7 +40,7 @@ public class TaskEvent {
     @Version
     private Long version;
 
-    public TaskEvent(Long version) {
+    public TaskEventFlow(Long version) {
         this.version = version;
     }
 
