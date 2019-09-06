@@ -70,6 +70,8 @@ public class User {
 
     private Timestamp lastLoginTime;
 
+    private Double incentive;
+
     @NotNull
     @NotEmpty
     @Lob

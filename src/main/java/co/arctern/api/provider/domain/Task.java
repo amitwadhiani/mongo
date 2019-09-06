@@ -47,6 +47,9 @@ public class Task {
     @OneToOne(mappedBy = "task")
     private Rating rating;
 
+    /**
+     * record of users working on/have worked upon a task.
+     */
     @OneToMany(mappedBy = "task")
     private List<UserTask> userTasks;
 
@@ -62,8 +65,14 @@ public class Task {
      */
     private Long orderId;
 
+    /**
+     * amount for the item.
+     */
     private Float amount;
 
+    /**
+     * payment state.
+     */
     private String paymentState;
 
     @ManyToOne
