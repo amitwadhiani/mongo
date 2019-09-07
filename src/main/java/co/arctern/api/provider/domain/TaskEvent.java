@@ -1,19 +1,18 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.TaskEventFlowState;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity
 @Data
 @NoArgsConstructor
-public class TaskEventFlow {
+@Entity
+public class TaskEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,20 +26,20 @@ public class TaskEventFlow {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
-    @OneToOne
-    @JsonBackReference("taskEvent-taskEventFlow")
-    private TaskEvent taskEvent;
+    @OneToOne(mappedBy = "taskEvent")
+    private TaskEventFlow taskEventFlow;
 
-    @Enumerated(EnumType.STRING)
-    private TaskEventFlowState state;
+    @ManyToOne
+    @JsonBackReference("task-taskEvent")
+    private Task task;
 
-    private Long userId;
+    private String description;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
     private Long version;
 
-    public TaskEventFlow(Long version) {
+    public TaskEvent(Long version) {
         this.version = version;
     }
 

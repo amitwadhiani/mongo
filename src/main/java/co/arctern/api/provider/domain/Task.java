@@ -34,7 +34,10 @@ public class Task {
     private Timestamp lastModifiedAt;
 
     @OneToMany(mappedBy = "task")
-    private List<TaskEventFlow> taskEventFlows;
+    private List<TaskEvent> taskEvents;
+
+    @OneToMany(mappedBy = "task")
+    private List<Payment> payments;
 
     @Enumerated(EnumType.STRING)
     private TaskState state;
@@ -54,11 +57,9 @@ public class Task {
     private List<UserTask> userTasks;
 
     /**
-     * diagnosticOrderId in case of DiagnosticOrders.
-     * orderItemId in case of medicines.
-     * orderItemId in case of services.
+     * orderItemIds separated by comma.
      */
-    private Long refId;
+    private String itemIds;
 
     /**
      * orderId linked with the item.
@@ -76,8 +77,12 @@ public class Task {
     private String paymentState;
 
     @ManyToOne
-    @JsonBackReference("address-task")
-    Address address;
+    @JsonBackReference("sourceAddress-task")
+    Address sourceAddress;
+
+    @ManyToOne
+    @JsonBackReference("destinationAddress-task")
+    Address destinationAddress;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
     private Boolean isActive;

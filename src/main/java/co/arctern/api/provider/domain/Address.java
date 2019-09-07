@@ -40,8 +40,11 @@ public class Address {
 
     private String patientId;
 
-    @OneToMany(mappedBy = "address")
-    List<Task> tasks;
+    @OneToMany(mappedBy = "sourceAddress")
+    List<Task> tasksForSourceAddress;
+
+    @OneToMany(mappedBy = "destinationAddress")
+    List<Task> tasksForDestinationAddress;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

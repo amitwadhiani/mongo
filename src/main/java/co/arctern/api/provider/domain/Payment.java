@@ -1,21 +1,21 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.OTPState;
-import co.arctern.api.provider.constant.UserState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import co.arctern.api.internal.api.order.model.PaymentStateFlow;
+import co.arctern.api.provider.constant.PaymentMode;
+import co.arctern.api.provider.constant.PaymentState;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity
 @Data
 @NoArgsConstructor
-public class Login {
+@Entity
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,37 +29,23 @@ public class Login {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
-    @Enumerated(EnumType.STRING)
-    private OTPState status;
-
-    @Column(columnDefinition = "TEXT")
-    private String picture1;
-
-    @Column(columnDefinition = "TEXT")
-    private String picture2;
-
-    private String generatedOTP;
-    private String contact;
-
-    @Enumerated(EnumType.STRING)
-    private UserState userState;
-
-    private Boolean loginState;
-
-    private Timestamp logoutTime;
-
     @ManyToOne
-    @JsonBackReference("user-login")
-    User user;
+    @JsonBackReference("task-payment")
+    private Task task;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
-    @JsonIgnore
     private Long version;
 
-    public Login(Long version) {
+    private Double amount;
+
+    private PaymentState state;
+
+    private PaymentMode mode;
+
+    private Boolean isPrepaid;
+
+    public Payment(Long version) {
         this.version = version;
     }
-
-
 }

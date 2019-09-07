@@ -1,5 +1,6 @@
 package co.arctern.api.provider.domain;
 
+import co.arctern.api.provider.constant.ServiceType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;

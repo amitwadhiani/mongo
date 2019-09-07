@@ -81,6 +81,9 @@ public class User {
     List<UserArea> userAreas;
 
     @OneToMany(mappedBy = "user")
+    List<UserOffering> userOfferings;
+
+    @OneToMany(mappedBy = "user")
     private List<UserTask> userTasks;
 
     @OneToMany(mappedBy = "user")
