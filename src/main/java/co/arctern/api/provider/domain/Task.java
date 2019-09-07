@@ -11,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.List;
@@ -40,9 +39,11 @@ public class Task {
     private List<Payment> payments;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'OPEN'")
     private TaskState state;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PICKUP'")
     private TaskType type;
 
     private Boolean isPrepaid;
@@ -57,24 +58,15 @@ public class Task {
     private List<UserTask> userTasks;
 
     /**
-     * orderItemIds separated by comma.
+     * record of status flows for a task.
      */
-    private String itemIds;
+    @OneToMany(mappedBy = "task")
+    private List<TaskStateFlow> taskStateFlows;
 
     /**
      * orderId linked with the item.
      */
-    private Long orderId;
-
-    /**
-     * amount for the item.
-     */
-    private Float amount;
-
-    /**
-     * payment state.
-     */
-    private String paymentState;
+    private Long refId;
 
     @ManyToOne
     @JsonBackReference("sourceAddress-task")
@@ -87,8 +79,11 @@ public class Task {
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
     private Boolean isActive;
 
-    @Column(columnDefinition = "tinyint(1) DEFAULT 0")
+    @Column(columnDefinition = "tinyint(1) DEFAULT 0", nullable = false)
     private Boolean cancellationRequested;
+
+    @Column
+    private String reason;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
@@ -97,7 +92,7 @@ public class Task {
 
     @NotEmpty
     @Pattern(regexp = "(^$|[0-9]{10})")
-    @NotNull(message = "Patient Phone mandatory")
+    @Column(nullable = false)
     private String patientPhone;
 
     private String patientName;

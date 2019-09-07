@@ -5,7 +5,7 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
-import co.arctern.api.provider.dto.response.projection.TasksForRider;
+import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,9 +50,7 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
         Task task = new Task();
         Long userId = dto.getUserId();
-        task.setAmount(dto.getAmount());
-        task.setPaymentState(dto.getPaymentState());
-        task.setOrderId(dto.getOrderId());
+// payment
         task.setIsPrepaid(dto.getIsPrepaid());
         task.setPatientPhone(dto.getPatientPhone());
         task.setPatientAge(dto.getPatientAge());
@@ -126,21 +124,21 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<TasksForRider> fetchCompletedTasksForUser(Long userId, Pageable pageable) {
+    public Page<TasksForProvider> fetchCompletedTasksForUser(Long userId, Pageable pageable) {
         return userTaskService.fetchTasksForUser(userId, TaskState.COMPLETED, pageable)
-                .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()));
+                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()));
     }
 
     @Override
-    public Page<TasksForRider> fetchAssignedTasksForUser(Long userId, Pageable pageable) {
+    public Page<TasksForProvider> fetchAssignedTasksForUser(Long userId, Pageable pageable) {
         return userTaskService.fetchTasksForUser(userId, TaskState.ASSIGNED, pageable)
-                .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()));
+                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()));
     }
 
     @Override
-    public List<TasksForRider> fetchCancelledTasksForUser(Long userId, Pageable pageable) {
+    public List<TasksForProvider> fetchCancelledTasksForUser(Long userId, Pageable pageable) {
         return userTaskService.fetchTasksForUser(userId, TaskState.CANCELLED, pageable).stream()
-                .map(a -> projectionFactory.createProjection(TasksForRider.class, a.getTask()))
+                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()))
                 .collect(Collectors.toList());
     }
 

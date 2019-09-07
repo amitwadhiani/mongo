@@ -29,6 +29,8 @@ public class Offering {
 
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'SAMPLE_PICKUP'")
     private OfferingType type;
 
     @OneToMany(mappedBy = "offering")

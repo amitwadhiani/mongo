@@ -1,7 +1,8 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.constant.TaskState;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,14 +32,15 @@ public class TaskStateFlow {
     @JsonBackReference("task-taskStateFlow")
     private Task task;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'OPEN' ")
-    private TaskEventFlowState state;
-
     private Long userId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'OPEN'", nullable = false)
+    private TaskState state;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
+    @JsonIgnore
     private Long version;
 
     public TaskStateFlow(Long version) {

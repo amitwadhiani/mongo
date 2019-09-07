@@ -10,10 +10,10 @@ public interface TaskEventFlowService extends MessageUtil {
     /**
      * flow creation for a particular taskEvent.
      *
-     * @param task
+     * @param taskEvent
      * @param state
      * @param userId
      * @return
      */
-    public TaskEventFlow createFlow(TaskEvent task, TaskEventFlowState state, Long userId);
+    public TaskEventFlow createFlow(TaskEvent taskEvent, TaskEventFlowState state, Long userId);
 }

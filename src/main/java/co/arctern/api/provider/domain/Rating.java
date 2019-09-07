@@ -35,6 +35,7 @@ public class Rating {
     private Task task;
 
     @Size(min = 1, max = 5, message = "Invalid rating value")
+    @Column
     private Integer value;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1")
@@ -42,9 +43,11 @@ public class Rating {
     private Boolean isSatisfied;
 
     @Size(min = 6, max = 6, message = "Invalid otp")
+    @Column(nullable = false)
     private String otpYes;
 
     @Size(min = 6, max = 6, message = "Invalid otp")
+    @Column(nullable = false)
     private String otpNo;
 
     @PrePersist

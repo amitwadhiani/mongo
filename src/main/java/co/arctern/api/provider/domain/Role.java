@@ -22,8 +22,10 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String role;
 
+    @Column
     private String description;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)

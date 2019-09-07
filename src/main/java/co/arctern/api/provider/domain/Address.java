@@ -22,10 +22,12 @@ public class Address {
     @Column(nullable = false)
     private String name;
 
+    @Column
     private String line;
 
     @Size(min = 6, max = 6, message = "Invalid pinCode")
     @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")
+    @Column
     private String pinCode;
 
     @Column(nullable = false)
@@ -39,6 +41,7 @@ public class Address {
     @Column(nullable = false)
     private String state;
 
+    @Column
     private String patientId;
 
     @OneToMany(mappedBy = "sourceAddress")

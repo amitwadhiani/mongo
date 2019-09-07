@@ -36,12 +36,18 @@ public class Payment {
     @Version
     private Long version;
 
+    @Column(nullable = false)
     private Double amount;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PAID'")
+    @Enumerated(EnumType.STRING)
     private PaymentState state;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PAID'")
     private PaymentMode mode;
 
+    @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
     private Boolean isPrepaid;
 
     public Payment(Long version) {

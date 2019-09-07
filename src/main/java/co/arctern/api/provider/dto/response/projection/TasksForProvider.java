@@ -4,10 +4,10 @@ import co.arctern.api.provider.domain.Task;
 import org.springframework.data.rest.core.config.Projection;
 
 /**
- * tasks of a rider response body.
+ * tasks of a provider response body.
  */
 @Projection(types = {Task.class})
-public interface TasksForRider {
+public interface TasksForProvider {
 
     Long getId();
 }

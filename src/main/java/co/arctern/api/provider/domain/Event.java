@@ -1,6 +1,6 @@
 package co.arctern.api.provider.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,7 +8,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,22 +19,25 @@ public class Event {
     private Long id;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ")
     private Timestamp createdAt;
 
     @LastModifiedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
+    @OneToOne(mappedBy = "taskEvent")
+    private TaskEventFlow taskEventFlow;
+
+    @ManyToOne
+    @JsonBackReference("task-taskEvent")
+    private Task task;
+
     @Column(nullable = false)
     private String description;
 
-    @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
-    private Boolean isActive;
-
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
-    @JsonIgnore
     private Long version;
 
     public Event(Long version) {

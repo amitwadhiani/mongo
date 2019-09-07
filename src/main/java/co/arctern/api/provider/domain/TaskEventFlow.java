@@ -32,8 +32,10 @@ public class TaskEventFlow {
     private TaskEvent taskEvent;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'OPEN'")
     private TaskEventFlowState state;
 
+    @Column
     private Long userId;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
