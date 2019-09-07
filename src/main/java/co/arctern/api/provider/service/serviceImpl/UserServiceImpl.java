@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         user.setIsTest(false);
         user.setAge(dto.getAge());
         user.setGender(dto.getGender());
-        user.setLoginState(false);
+        user.setIsLoggedIn(false);
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setPhone(dto.getPhone());
         user.setUsername(dto.getUsername());
@@ -118,8 +118,9 @@ public class UserServiceImpl implements UserService {
                     USER_NOT_FOUND_MESSAGE);
         });
         user.setLastLoginTime(loginTime);
-        user.setLoginState(true);
+        user.setIsLoggedIn(true);
         userDao.save(user);
     }
+
 
 }

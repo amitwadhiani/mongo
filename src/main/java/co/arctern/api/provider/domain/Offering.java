@@ -1,7 +1,6 @@
 package co.arctern.api.provider.domain;
 
-import com.amazonaws.services.devicefarm.model.OfferingType;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import co.arctern.api.provider.constant.OfferingType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -30,6 +29,8 @@ public class Offering {
 
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'SAMPLE_PICKUP'")
     private OfferingType type;
 
     @OneToMany(mappedBy = "offering")

@@ -1,6 +1,6 @@
 package co.arctern.api.provider.constant;
 
-public enum ServiceType {
+public enum OfferingType {
 
     MEDICINE_DELIVERY,
     SAMPLE_PICKUP,

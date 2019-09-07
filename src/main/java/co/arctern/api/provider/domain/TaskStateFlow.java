@@ -1,8 +1,8 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.PaymentMode;
-import co.arctern.api.provider.constant.PaymentState;
+import co.arctern.api.provider.constant.TaskState;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,14 +14,14 @@ import java.sql.Timestamp;
 @Data
 @NoArgsConstructor
 @Entity
-public class Payment {
+public class TaskStateFlow {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ")
     private Timestamp createdAt;
 
     @LastModifiedDate
@@ -29,28 +29,19 @@ public class Payment {
     private Timestamp lastModifiedAt;
 
     @ManyToOne
-    @JsonBackReference("task-payment")
+    @JsonBackReference("task-taskStateFlow")
     private Task task;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'OPEN'", nullable = false)
+    private TaskState state;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
+    @JsonIgnore
     private Long version;
 
-    @Column(nullable = false)
-    private Double amount;
-
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PAID'")
-    @Enumerated(EnumType.STRING)
-    private PaymentState state;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PAID'")
-    private PaymentMode mode;
-
-    @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
-    private Boolean isPrepaid;
-
-    public Payment(Long version) {
+    public TaskStateFlow(Long version) {
         this.version = version;
     }
 }

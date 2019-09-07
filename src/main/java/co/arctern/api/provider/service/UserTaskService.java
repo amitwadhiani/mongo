@@ -8,6 +8,8 @@ import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.Timestamp;
+
 public interface UserTaskService extends MessageUtil {
 
     /**
@@ -41,5 +43,8 @@ public interface UserTaskService extends MessageUtil {
      * @return
      */
     public UserTask findActiveUserTask(Long taskId);
+
+    public Long countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(
+            Long userId, TaskState state, Timestamp start, Timestamp end);
 
 }

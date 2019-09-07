@@ -1,6 +1,5 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.UserType;
 import com.amazonaws.services.polly.model.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -23,6 +22,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
@@ -32,9 +32,7 @@ public class User {
     private Boolean isTest;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 0", nullable = false)
-    private Boolean loginState;
-
-    private UserType type;
+    private Boolean isLoggedIn;
 
     @LastModifiedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -44,10 +42,8 @@ public class User {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
-
     @Size(min = 3, max = 30, message = "Minimum username length : 3")
-    @Column(unique = true)
-    @NotNull(message = "Username mandatory")
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Email
@@ -59,29 +55,33 @@ public class User {
 
     @NotEmpty
     @Pattern(regexp = "(^$|[0-9]{10})")
-    @NotNull(message = "Phone mandatory")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String phone;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Gender gender;
 
+    @Column
     private Integer age;
 
+    @Column
     private Timestamp lastLoginTime;
 
+    @Column
     private Double incentive;
 
     @NotNull
     @NotEmpty
     @Lob
+    @Column
     private String password;
 
     @OneToMany(mappedBy = "user")
-    List<UserArea> userAreas;
+    private List<UserArea> userAreas;
 
     @OneToMany(mappedBy = "user")
-    List<UserOffering> userOfferings;
+    private List<UserOffering> userOfferings;
 
     @OneToMany(mappedBy = "user")
     private List<UserTask> userTasks;

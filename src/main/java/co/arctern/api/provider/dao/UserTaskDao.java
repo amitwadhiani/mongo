@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+
 /**
  * UserTask entity repository layer
  */
@@ -29,4 +31,17 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      * @return
      */
     UserTask findByIsActiveTrueAndTaskId(Long taskId);
+
+    /**
+     * fetch count of tasks for a user filtered by task creation time.
+     *
+     * @param userId
+     * @param state
+     * @param start
+     * @param end
+     * @return
+     */
+    Long countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(
+            Long userId, TaskState state, Timestamp start, Timestamp end);
+
 }

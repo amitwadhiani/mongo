@@ -2,8 +2,10 @@ package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dao.AreaDao;
 import co.arctern.api.provider.dao.UserAreaDao;
+import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserArea;
+import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.service.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,4 +35,22 @@ public class AreaServiceImpl implements AreaService {
                 });
         userAreaDao.saveAll(userAreas);
     }
+
+    @Override
+    public StringBuilder createAreas(List<AreaRequestDto> dtos) {
+        List<Area> areas = new ArrayList<>();
+        dtos.stream().forEach(dto ->
+        {
+            Area area = new Area();
+            area.setCluster(dto.getCluster());
+            area.setIsActive(true);
+            area.setLatitude(dto.getLatitude());
+            area.setLongitude(dto.getLongitude());
+            area.setPinCode(dto.getPinCode());
+            areas.add(area);
+        });
+        areaDao.saveAll(areas);
+        return SUCCESS_MESSAGE;
+    }
+
 }

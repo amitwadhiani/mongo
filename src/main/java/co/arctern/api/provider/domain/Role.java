@@ -1,6 +1,5 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.ServiceType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,8 +22,10 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String role;
 
+    @Column
     private String description;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)

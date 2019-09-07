@@ -52,7 +52,7 @@ public class LoginServiceImpl implements LoginService {
         login.setUser(user);
         login.setStatus(OTPState.GENERATED);
         login.setGeneratedOTP(otp);
-        login.setUserState(UserState.NEW);
+        login.setUserState(UserState.EXISTING);
         loginDao.save(login);
     }
 
