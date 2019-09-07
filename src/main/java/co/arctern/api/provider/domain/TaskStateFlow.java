@@ -1,5 +1,6 @@
 package co.arctern.api.provider.domain;
 
+import co.arctern.api.provider.constant.TaskFlowState;
 import co.arctern.api.provider.constant.TaskState;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,7 +35,7 @@ public class TaskStateFlow {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(255) DEFAULT 'OPEN'", nullable = false)
-    private TaskState state;
+    private TaskFlowState state;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

@@ -1,6 +1,6 @@
 package co.arctern.api.provider.service.serviceImpl;
 
-import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.constant.TaskFlowState;
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
@@ -64,10 +64,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventFlowState state) {
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskFlowState state) {
         Task task = fetchTask(taskId);
 //        taskEventFlowService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
-        task.setState((state.equals(TaskEventFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
+        task.setState((state.equals(TaskFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
         taskDao.save(task);
         return SUCCESS_MESSAGE;
     }
