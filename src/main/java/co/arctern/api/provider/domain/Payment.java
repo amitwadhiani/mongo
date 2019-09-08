@@ -1,6 +1,5 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.internal.api.order.model.PaymentStateFlow;
 import co.arctern.api.provider.constant.PaymentMode;
 import co.arctern.api.provider.constant.PaymentState;
 import com.fasterxml.jackson.annotation.JsonBackReference;

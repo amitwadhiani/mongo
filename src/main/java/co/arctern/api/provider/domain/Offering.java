@@ -1,7 +1,6 @@
 package co.arctern.api.provider.domain;
 
 import com.amazonaws.services.devicefarm.model.OfferingType;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
