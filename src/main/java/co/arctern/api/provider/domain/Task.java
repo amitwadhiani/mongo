@@ -82,8 +82,8 @@ public class Task {
     @Column(columnDefinition = "tinyint(1) DEFAULT 0", nullable = false)
     private Boolean cancellationRequested;
 
-    @Column
-    private String reason;
+    @OneToMany(mappedBy = "task")
+    private List<TaskReason> taskReasons;
 
     @Column
     private String patientName;

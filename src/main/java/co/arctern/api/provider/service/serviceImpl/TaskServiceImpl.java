@@ -3,7 +3,9 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.constant.TaskFlowState;
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.ServiceType;
+import co.arctern.api.provider.dao.ReasonDao;
 import co.arctern.api.provider.dao.TaskDao;
+import co.arctern.api.provider.domain.Reason;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
@@ -40,6 +42,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     PaymentService paymentService;
+
+    @Autowired
+    ReasonService reasonService;
 
     @Autowired
     private ProjectionFactory projectionFactory;
@@ -118,10 +123,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId) {
+    public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         task.setCancellationRequested(cancelRequest);
-        taskDao.save(task);
+        reasonService.assignReasons(task, reasonIds);
         return SUCCESS_MESSAGE;
     }
 

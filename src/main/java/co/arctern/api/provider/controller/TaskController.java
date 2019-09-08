@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * apis for handling, assigning, reassigning and cancelling tasks by Admin / Rider.
  */
@@ -74,8 +76,9 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> requestToCancelTask(@RequestParam(value = "cancelRequest", defaultValue = "true") Boolean cancelRequest,
-                                                             @RequestParam("taskId") Long taskId) {
-        return ResponseEntity.ok(taskService.requestCancellation(cancelRequest, taskId));
+                                                             @RequestParam("taskId") Long taskId,
+                                                             @RequestParam("reasonIds") List<Long> reasonIds) {
+        return ResponseEntity.ok(taskService.requestCancellation(cancelRequest, taskId, reasonIds));
     }
 
 }
