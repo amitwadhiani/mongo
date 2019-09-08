@@ -13,6 +13,11 @@ public interface MessageUtil {
     public static final StringBuilder TASK_ACCEPT_MESSAGE = new StringBuilder("Task accepted.");
 
     /**
+     * task assigned message.
+     */
+    public static final StringBuilder TASK_ASSIGNED_MESSAGE = new StringBuilder("Task assigned.");
+
+    /**
      * retry request message.
      */
     public static final StringBuilder TRY_AGAIN_MESSAGE = new StringBuilder("Please try again.");

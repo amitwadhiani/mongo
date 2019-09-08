@@ -19,7 +19,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     @SneakyThrows(Exception.class)
     public Address createOrFetchAddress(TaskAssignDto dto) {
-        Long addressId = dto.getAddressId();
+        Long addressId = (dto.getDestAddressId() == null) ? dto.getSourceAddressId() : dto.getDestAddressId();
         if (addressId != null) {
             return addressDao.findById(addressId).orElseThrow(() -> {
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid address id.");

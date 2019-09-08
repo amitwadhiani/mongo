@@ -2,9 +2,13 @@ package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.util.MessageUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public interface UserService extends MessageUtil {
 
@@ -98,4 +102,5 @@ public interface UserService extends MessageUtil {
      */
     public void saveLastLoginTime(String phone, Timestamp loginTime);
 
+    public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable);
 }

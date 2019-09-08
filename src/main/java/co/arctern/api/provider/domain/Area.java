@@ -49,6 +49,9 @@ public class Area {
     @OneToMany(mappedBy = "area")
     private List<UserArea> areaUsers;
 
+    @OneToMany(mappedBy = "area")
+    private List<Area> area;
+
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
     @JsonIgnore

@@ -3,9 +3,9 @@ package co.arctern.api.provider.constant;
 /**
  * Type of tasks.
  */
-public enum TaskType {
+public enum ServiceType {
 
     DELIVERY,
-    PICKUP,
+    SAMPLE_PICKUP,
     SERVICE
 }

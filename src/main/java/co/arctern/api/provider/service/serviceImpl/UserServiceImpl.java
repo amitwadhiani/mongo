@@ -3,11 +3,14 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.UserRoleService;
 import co.arctern.api.provider.service.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -120,6 +124,11 @@ public class UserServiceImpl implements UserService {
         user.setLastLoginTime(loginTime);
         user.setIsLoggedIn(true);
         userDao.save(user);
+    }
+
+    @Override
+    public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable) {
+        return userDao.findByUserOfferingOfferingIdIn(offeringIds, pageable);
     }
 
 
