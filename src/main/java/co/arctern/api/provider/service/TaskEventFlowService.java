@@ -1,7 +1,6 @@
 package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.constant.TaskEventFlowState;
-import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.TaskEvent;
 import co.arctern.api.provider.domain.TaskEventFlow;
 import co.arctern.api.provider.util.MessageUtil;
