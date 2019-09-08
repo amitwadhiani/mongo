@@ -54,9 +54,10 @@ public interface TaskService extends MessageUtil {
      *
      * @param cancelRequest
      * @param taskId
+     * @param reasonIds
      * @return
      */
-    public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId);
+    public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId, List<Long> reasonIds);
 
     /**
      * accept/reject assigned task -> By rider.
