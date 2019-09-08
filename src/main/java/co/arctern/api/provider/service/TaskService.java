@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service;
 
-import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.constant.TaskFlowState;
+import co.arctern.api.provider.constant.ServiceType;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
@@ -8,6 +9,7 @@ import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface TaskService extends MessageUtil {
@@ -63,7 +65,7 @@ public interface TaskService extends MessageUtil {
      * @param state
      * @return
      */
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventFlowState state);
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskFlowState state);
 
     /**
      * fetch completed tasks for user.
@@ -98,4 +100,11 @@ public interface TaskService extends MessageUtil {
      */
     public void markInactiveAndReassignTask(Long userId, Task task);
 
+    public Page<TasksForProvider> fetchTasksByType(ServiceType type, Pageable pageable);
+
+    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Pageable pageable);
+
+    public Page<TasksForProvider> fetchTasksByType(ServiceType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
 }
