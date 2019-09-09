@@ -58,5 +58,4 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
     @PreAuthorize("permitAll()")
     Optional<User> findById(Long id);
 
-    Page<User> findByUserOfferingOfferingIdIn(List<Long> offeringIds, Pageable pageable);
 }

@@ -1,5 +1,7 @@
 package co.arctern.api.provider.dto.request;
 
+import co.arctern.api.provider.constant.PaymentMode;
+import co.arctern.api.provider.constant.PaymentState;
 import co.arctern.api.provider.constant.TaskType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,8 +26,9 @@ public class TaskAssignDto {
     private String patientPhone;
     private String patientName;
     private String patientAge;
-    private String paymentState;
-    private Float amount;
+    private PaymentState paymentState;
+    private PaymentMode paymentMode;
+    private Double amount;
 
     /**
      * address related detail.

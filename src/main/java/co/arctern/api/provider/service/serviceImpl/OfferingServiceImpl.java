@@ -8,6 +8,8 @@ import co.arctern.api.provider.domain.UserOffering;
 import co.arctern.api.provider.dto.request.OfferingRequestDto;
 import co.arctern.api.provider.service.OfferingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,5 +49,9 @@ public class OfferingServiceImpl implements OfferingService {
         return SUCCESS_MESSAGE;
     }
 
+    @Override
+    public Page<UserOffering> fetchUserOfferings(List<Long> offeringIds, Pageable pageable) {
+        return userOfferingDao.findByOfferingIdInAndIsActiveTrue(offeringIds, pageable);
+    }
 
 }

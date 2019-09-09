@@ -3,7 +3,6 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
-import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.OfferingService;
 import co.arctern.api.provider.service.UserRoleService;
@@ -133,7 +132,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable) {
-        return userDao.findByUserOfferingOfferingIdIn(offeringIds, pageable);
+        return offeringService.fetchUserOfferings(offeringIds, pageable).map(a -> a.getUser());
     }
 
 
