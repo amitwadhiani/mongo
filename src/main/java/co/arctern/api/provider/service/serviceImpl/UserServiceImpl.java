@@ -4,6 +4,7 @@ import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.service.AreaService;
+import co.arctern.api.provider.service.OfferingService;
 import co.arctern.api.provider.service.UserRoleService;
 import co.arctern.api.provider.service.UserService;
 import lombok.SneakyThrows;
@@ -23,6 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private OfferingService offeringService;
 
     @Autowired
     private AreaService areaService;
@@ -107,6 +111,7 @@ public class UserServiceImpl implements UserService {
         user = userDao.save(user);
         userRoleService.createUserRoles(user, dto.getRoleIds());
         areaService.setAreasToUser(user, dto.getAreaIds());
+        offeringService.setOfferingsToUser(user, dto.getOfferingIds());
         return user;
     }
 

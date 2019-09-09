@@ -25,6 +25,7 @@ public class UserRequestDto {
     private String profilePic;
     private List<Long> roleIds;
     private List<Long> areaIds;
+    private List<Long> offeringIds;
 
     public void toUserRequestDto(User user) {
         BeanUtils.copyProperties(user, this);
