@@ -2,8 +2,10 @@ package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dao.OfferingDao;
 import co.arctern.api.provider.dao.UserOfferingDao;
+import co.arctern.api.provider.domain.Offering;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserOffering;
+import co.arctern.api.provider.dto.request.OfferingRequestDto;
 import co.arctern.api.provider.service.OfferingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,4 +34,18 @@ public class OfferingServiceImpl implements OfferingService {
         });
         userOfferingDao.saveAll(userOfferings);
     }
+
+    @Override
+    public StringBuilder create(List<OfferingRequestDto> dtos) {
+        dtos.stream().forEach(
+                dto -> {
+                    Offering offering = new Offering();
+                    offering.setDescription(dto.getDescription());
+                    offering.setType(dto.getType());
+                    offeringDao.save(offering);
+                });
+        return SUCCESS_MESSAGE;
+    }
+
+
 }

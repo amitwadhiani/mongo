@@ -1,6 +1,6 @@
 package co.arctern.api.provider.domain;
 
-import com.amazonaws.services.devicefarm.model.OfferingType;
+import co.arctern.api.provider.constant.OfferingType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
