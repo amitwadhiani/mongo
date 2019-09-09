@@ -13,17 +13,14 @@ service:
   type: ClusterIP
   port: 80
 
-hostname: provider.api
-domain: arctern.co
-
 ingress:
   enabled: true
   annotations:
     kubernetes.io/ingress.class: traefik
   path: /
   hosts:
-    - provider.api.arctern.co
-    - provider.api.meddo.in
+    - provider.api.meddo.tech
+    - provider.api.meddo.tech
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

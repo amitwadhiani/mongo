@@ -13,8 +13,6 @@ service:
   type: ClusterIP
   port: 80
 
-hostname: provider.staging
-domain: arctern.co
 
 ingress:
   enabled: true
@@ -22,8 +20,8 @@ ingress:
     kubernetes.io/ingress.class: traefik
   path: /
   hosts:
-  - provider.staging.arctern.co
-  - provider.staging.meddo.in
+  - provider.staging.meddo.tech
+  - provider.staging.meddo.tech
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
