@@ -30,7 +30,8 @@ public class TaskAssignDto {
     /**
      * address related detail.
      */
-    private Long addressId;
+    private Long destAddressId;
+    private Long sourceAddressId;
     private String city;
     private String houseNumber;
     private String line;

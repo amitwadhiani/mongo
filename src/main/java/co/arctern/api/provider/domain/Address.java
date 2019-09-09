@@ -54,10 +54,6 @@ public class Address {
     @OneToMany(mappedBy = "destinationAddress")
     List<Task> tasksForDestinationAddress;
 
-    @ManyToOne
-    @JsonBackReference("area-address")
-    private Area area;
-
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
     @JsonIgnore
