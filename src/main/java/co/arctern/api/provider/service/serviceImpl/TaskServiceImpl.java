@@ -28,7 +28,7 @@ public class TaskServiceImpl implements TaskService {
     private UserTaskService userTaskService;
 
     @Autowired
-    private TaskEventFlowService taskEventFlowService;
+    private TaskStateFlowService taskStateFlowService;
 
     @Autowired
     private UserService userService;
@@ -55,20 +55,25 @@ public class TaskServiceImpl implements TaskService {
         task.setOrderId(dto.getOrderId());
         task.setIsPrepaid(dto.getIsPrepaid());
         task.setPatientPhone(dto.getPatientPhone());
+        task.setPatientAge(dto.getPatientAge());
+        task.setPatientName(dto.getPatientName());
         task.setType(dto.getType());
         task.setDestinationAddress(addressService.createOrFetchAddress(dto));
         task.setState(TaskState.ASSIGNED);
         task = taskDao.save(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
-//        taskEventFlowService.createFlow(task, TaskEventFlowState.OPEN, userId);
-//        taskEventFlowService.createFlow(task, TaskEventFlowState.ACCEPTED, userId);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, null);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.ACCEPTED, userId);
         return TASK_ACCEPT_MESSAGE;
     }
 
     @Override
     public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventFlowState state) {
         Task task = fetchTask(taskId);
-//        taskEventFlowService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
+        taskStateFlowService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
+        if (state.equals(TaskEventFlowState.REJECTED)) {
+            taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, null);
+        }
         task.setState((state.equals(TaskEventFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
         taskDao.save(task);
         return SUCCESS_MESSAGE;
@@ -85,7 +90,7 @@ public class TaskServiceImpl implements TaskService {
     public void markInactiveAndReassignTask(Long userId, Task task) {
         userTaskService.markInactive(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
-//        taskEventFlowService.createFlow(task, TaskEventFlowState.REASSIGNED, userId);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
         taskDao.save(task);
     }
@@ -98,8 +103,8 @@ public class TaskServiceImpl implements TaskService {
              *  cancel
              */
             task.setIsActive(false);
-//            taskEventFlowService.createFlow(task, TaskEventFlowState.CANCELLED,
-//                    userTaskService.findActiveUserTask(taskId).getId());
+            taskStateFlowService.createFlow(task, TaskEventFlowState.CANCELLED,
+                    userTaskService.findActiveUserTask(taskId).getId());
             task.setState(TaskState.CANCELLED);
             taskDao.save(task);
             return TASK_CANCEL_MESSAGE;

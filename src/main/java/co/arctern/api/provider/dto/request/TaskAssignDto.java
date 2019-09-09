@@ -22,6 +22,8 @@ public class TaskAssignDto {
     private Boolean isPrepaid;
     private TaskType type;
     private String patientPhone;
+    private String patientName;
+    private String patientAge;
     private String paymentState;
     private Float amount;
 

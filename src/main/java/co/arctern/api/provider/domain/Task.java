@@ -100,6 +100,10 @@ public class Task {
     @NotNull(message = "Patient Phone mandatory")
     private String patientPhone;
 
+    private String patientName;
+
+    private String patientAge;
+
     public Task(Long version) {
         this.version = version;
     }
