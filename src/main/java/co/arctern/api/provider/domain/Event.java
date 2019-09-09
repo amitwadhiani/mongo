@@ -7,33 +7,17 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
 
 @Data
-@Entity
 @NoArgsConstructor
-public class Area {
+@Entity
+public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private String cluster;
-
-    private Double latitude;
-
-    private Double longitude;
-
-    @Size(min = 6, max = 6, message = "Invalid pinCode")
-    @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")
-    private String pinCode;
-
-    @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
-    private Boolean isActive;
 
     @CreatedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -43,18 +27,18 @@ public class Area {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
-    @OneToMany(mappedBy = "area")
-    private List<UserArea> areaUsers;
+    @Column(nullable = false)
+    private String description;
 
-    @OneToMany(mappedBy = "area")
-    private List<Address> addresses;
+    @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
+    private Boolean isActive;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
     @JsonIgnore
     private Long version;
 
-    public Area(Long version) {
+    public Event(Long version) {
         this.version = version;
     }
 

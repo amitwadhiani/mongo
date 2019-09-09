@@ -1,5 +1,6 @@
 package co.arctern.api.provider.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,10 @@ public class Address {
 
     @OneToMany(mappedBy = "destinationAddress")
     List<Task> tasksForDestinationAddress;
+
+    @ManyToOne
+    @JsonBackReference("area-address")
+    private Area area;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
