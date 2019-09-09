@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository;
  * Rating entity repository layer
  */
 @Repository
-@PreAuthorize("isAuthenticated()")
 public interface RatingDao extends PagingAndSortingRepository<Rating, Long> {
 }

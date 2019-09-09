@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@PreAuthorize("isAuthenticated()")
 public interface UserOfferingDao extends PagingAndSortingRepository<UserOffering, Long> {
 
     Page<UserOffering> findByOfferingIdInAndIsActiveTrue(List<Long>offeringIds, Pageable pageable);

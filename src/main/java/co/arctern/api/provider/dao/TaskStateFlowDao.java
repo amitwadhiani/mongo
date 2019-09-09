@@ -6,6 +6,5 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@PreAuthorize(("isAuthenticated()"))
 public interface TaskStateFlowDao extends PagingAndSortingRepository<TaskStateFlow, Long> {
 }

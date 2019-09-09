@@ -13,7 +13,6 @@ import java.util.Optional;
  * Login entity repository layer
  */
 @Repository
-@PreAuthorize("isAuthenticated()")
 public interface LoginDao extends PagingAndSortingRepository<Login, Long> {
 
     /**

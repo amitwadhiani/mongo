@@ -15,7 +15,6 @@ import java.util.List;
  * Task entity repository layer
  */
 @Repository
-@PreAuthorize("isAuthenticated()")
 public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
     Page<Task> findByType(OfferingType type, Pageable pageable);

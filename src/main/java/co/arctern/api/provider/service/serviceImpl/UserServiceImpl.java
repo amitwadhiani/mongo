@@ -101,18 +101,21 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User createUser(UserRequestDto dto) {
-        User user = new User();
-        user.setEmail(dto.getEmail());
-        user.setIsActive(true);
-        user.setName(dto.getName());
-        user.setIsTest(false);
-        user.setAge(dto.getAge());
-        user.setGender(dto.getGender());
-        user.setIsLoggedIn(false);
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setPhone(dto.getPhone());
-        user.setUsername(dto.getUsername());
-        user = userDao.save(user);
+        Long userId = dto.getUserId();
+        User user = (userId == null) ? new User() : userDao.findById(userId).get();
+        if (userId == null) {
+            user.setEmail(dto.getEmail());
+            user.setIsActive(true);
+            user.setName(dto.getName());
+            user.setIsTest(false);
+            user.setAge(dto.getAge());
+            user.setGender(dto.getGender());
+            user.setIsLoggedIn(false);
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+            user.setPhone(dto.getPhone());
+            user.setUsername(dto.getUsername());
+            user = userDao.save(user);
+        }
         userRoleService.createUserRoles(user, dto.getRoleIds());
         areaService.setAreasToUser(user, dto.getAreaIds());
         offeringService.setOfferingsToUser(user, dto.getOfferingIds());

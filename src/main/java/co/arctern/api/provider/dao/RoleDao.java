@@ -11,7 +11,6 @@ import java.util.List;
  * Role entity repository layer
  */
 @Repository
-@PreAuthorize("isAuthenticated()")
 public interface RoleDao extends PagingAndSortingRepository<Role, Long> {
 
     /**

@@ -11,7 +11,6 @@ import java.util.List;
  * Area entity repository layer
  */
 @Repository
-@PreAuthorize("isAuthenticated()")
 public interface AreaDao extends PagingAndSortingRepository<Area, Long> {
 
     List<Area> findByIdIn(List<Long> areaIds);

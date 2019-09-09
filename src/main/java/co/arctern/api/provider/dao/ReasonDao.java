@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Repository
-@PreAuthorize(("isAuthenticated()"))
 public interface ReasonDao extends PagingAndSortingRepository<Reason, Long> {
 
     List<Reason> findByIdIn(List<Long> reasonIds);

@@ -9,6 +9,5 @@ import org.springframework.stereotype.Repository;
  * TaskEventFlow entity repository layer
  */
 @Repository
-@PreAuthorize("isAuthenticated()")
 public interface TaskEventFlowDao extends PagingAndSortingRepository<TaskEventFlow, Long> {
 }

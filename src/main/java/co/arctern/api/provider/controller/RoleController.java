@@ -30,7 +30,6 @@ public class RoleController {
      */
     @PostMapping("/create")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Role> createNewRole(@RequestBody RoleRequestDto dto) {
         return ResponseEntity.ok(roleService.createRole(dto));
     }
