@@ -1,76 +1,85 @@
-pipeline:
-  restore-gradle-cache:
-    image: meltwater/drone-cache
-    pull: true
-    # backend: "s3" (default)
-    restore: true
-    bucket: meddo-drone-cache-bucket
-    region: ap-south-1
-    cache_key: "{{ .Repo.Name }}_{{ .Commit.Branch }}"
-    secrets: [aws_access_key_id, aws_secret_access_key]
-    mount:
-      - 'cache'
-  build:
+kind: pipeline
+name: default
+
+steps:
+  - name: build
     image: openjdk:11-stretch
     commands:
       # - gradle test
       - ./gradlew clean build dockerPrepare --info --gradle-user-home=cache
-  rebuild-gradle-cache:
-    image: meltwater/drone-cache
-    pull: true
-    rebuild: true
-    bucket: meddo-drone-cache-bucket
-    region: ap-south-1
-    cache_key: "{{ .Repo.Name }}_{{ .Commit.Branch }}"
-    secrets: [aws_access_key_id, aws_secret_access_key]
-    mount:
-      - 'cache'
-  docker:
-    image: plugins/ecr
-    repo: provider
-    registry: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/provider
-    secrets: [ecr_region, ecr_access_key, ecr_secret_key]
-    context: build/docker
-    build_args:
-      - JAR_FILE=provider-0.0.1-SNAPSHOT.jar
-    tags:
-      - latest
-      - tag-${DRONE_COMMIT_SHA:0:7}
-    when:
-      branch: ['master','staging']
-
-
-  deploy:
-    image: quay.io/ipedrazas/drone-helm
-    skip_tls_verify: true
-    secrets: [kubernetes_token]
-    chart: ./infra/provider-api
-    release: provider-api
-    tiller_ns: kube-system
-    environment:
-      - API_SERVER=https://kubernetes.default.svc.cluster.local/
-    values: image.tag=tag-${DRONE_COMMIT_SHA:0:7}
-    wait: true
+  - name: docker
+    image: plugins/docker
+    settings:
+      registry: meddo.azurecr.io
+      repo: meddo.azurecr.io/provider
+      context: build/docker
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      build_args:
+        - JAR_FILE=provider-0.0.1-SNAPSHOT.jar
+      tags:
+        - latest
+        - tag-${DRONE_COMMIT_SHA:0:7}
     when:
       branch: ['master']
-  staging-deploy:
-    image: quay.io/ipedrazas/drone-helm
-    skip_tls_verify: true
-    secrets: [kubernetes_token]
-    chart: ./infra/provider-api-staging
-    release: provider-api-staging
-    tiller_ns: kube-system
-    environment:
-    - API_SERVER=https://kubernetes.default.svc.cluster.local/
-    values: image.tag=tag-${DRONE_COMMIT_SHA:0:7}
-    wait: true
-    #    debug: true
+
+  - name: docker-staging
+    image: plugins/docker
+    settings:
+      registry: meddo.azurecr.io
+      repo: meddo.azurecr.io/provider-staging
+      context: build/docker
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      build_args:
+        - JAR_FILE=provider-0.0.1-SNAPSHOT.jar
+      tags:
+        - latest
+        - tag-${DRONE_COMMIT_SHA:0:7}
     when:
       branch: ['staging']
 
-  notification:
+  - name: deploy
+    image: quay.io/ipedrazas/drone-helm
+    environment:
+      API_SERVER: https://kubernetes.default.svc.cluster.local/
+      KUBERNETES_TOKEN:
+        from_secret: kubernetes_token
+    settings:
+      skip_tls_verify: true
+      chart: ./infra/provider-api
+      release: provider-api
+      tiller_ns: kube-system
+      values: image.tag=tag-${DRONE_COMMIT_SHA:0:7}
+      wait: true
+    when:
+      branch: ['master']
+
+  - name:  staging-deploy
+    image: quay.io/ipedrazas/drone-helm
+    environment:
+      API_SERVER: https://kubernetes.default.svc.cluster.local/
+      KUBERNETES_TOKEN:
+        from_secret: kubernetes_token
+    settings:
+      skip_tls_verify: true
+      chart: ./infra/provider-api-staging
+      release: provider-api-staging
+      tiller_ns: kube-system
+      values: image.tag=tag-${DRONE_COMMIT_SHA:0:7}
+      wait: true
+      # debug: true
+    when:
+      branch: ['staging']
+
+  - name:  notification
     image: plugins/slack
-    webhook: https://hooks.slack.com/services/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
-    channel: releases
+    settings:
+      webhook: https://hooks.slack.com/services/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
+      channel: releases
     when:
       status: [ success, failure ]

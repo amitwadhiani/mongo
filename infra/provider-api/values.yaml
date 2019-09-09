@@ -5,8 +5,8 @@
 replicaCount: 2
 
 image:
-  repository: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/provider
-  tag: 0.0.9
+  repository: meddo.azurecr.io/provider
+  tag: latest
   pullPolicy: Always
 
 service:
@@ -19,7 +19,6 @@ ingress:
     kubernetes.io/ingress.class: traefik
   path: /
   hosts:
-    - provider.api.meddo.tech
     - provider.api.meddo.tech
   tls: []
   #  - secretName: chart-example-tls
