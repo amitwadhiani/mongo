@@ -8,6 +8,7 @@ import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.OfferingService;
 import co.arctern.api.provider.service.UserRoleService;
 import co.arctern.api.provider.service.UserService;
+import com.amazonaws.util.CollectionUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -108,6 +109,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public StringBuilder createUser(UserRequestDto dto) {
         Long userId = dto.getUserId();
+        List<Long> roleIds = dto.getRoleIds();
+        List<Long> areaIds = dto.getAreaIds();
+        List<Long> offeringIds = dto.getOfferingIds();
         User user = (userId == null) ? new User() : userDao.findById(userId).get();
         if (userId == null) {
             user.setEmail(dto.getEmail());
@@ -122,9 +126,9 @@ public class UserServiceImpl implements UserService {
             user.setUsername(dto.getUsername());
             user = userDao.save(user);
         }
-        userRoleService.createUserRoles(user, dto.getRoleIds());
-        areaService.setAreasToUser(user, dto.getAreaIds());
-        offeringService.setOfferingsToUser(user, dto.getOfferingIds());
+        if (!CollectionUtils.isNullOrEmpty(roleIds)) userRoleService.createUserRoles(user, roleIds);
+        if (!CollectionUtils.isNullOrEmpty(areaIds)) areaService.setAreasToUser(user, areaIds);
+        if (!CollectionUtils.isNullOrEmpty(offeringIds)) offeringService.setOfferingsToUser(user, offeringIds);
         return SUCCESS_MESSAGE;
     }
 

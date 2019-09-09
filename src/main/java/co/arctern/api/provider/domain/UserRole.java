@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @NoArgsConstructor
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user", "role"})})
 public class UserRole {
 
     @Id
