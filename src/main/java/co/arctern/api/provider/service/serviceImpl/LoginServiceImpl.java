@@ -58,15 +58,16 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     @SneakyThrows(Exception.class)
+    @Transactional
     public OAuth2AccessToken verifyOTP(String phone, String otp) {
         Login login = loginDao.findByGeneratedOTPAndStatusAndContact(otp, OTPState.GENERATED, phone);
         if (login != null) {
             if (login.getCreatedAt().getTime() - DateUtil.fetchDifferenceFromCurrentDateInMs(1) > 0) {
                 login.setStatus(OTPState.USED);
                 login.setLoginState(true);
-                loginEventHandler.markLoggedInStateForUser(userService.fetchUserByPhone(phone), true);
                 OAuth2AccessToken oAuth2AccessToken = tokenService.retrieveToken(phone, otp);
                 loginDao.save(login);
+                loginEventHandler.markLoggedInStateForUser(userService.fetchUserByPhone(phone), true);
                 userService.saveLastLoginTime(phone, login.getCreatedAt());
                 return oAuth2AccessToken;
             } else {

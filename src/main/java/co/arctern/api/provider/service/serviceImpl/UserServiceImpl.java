@@ -99,6 +99,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User createUser(UserRequestDto dto) {
         User user = new User();
         user.setEmail(dto.getEmail());
