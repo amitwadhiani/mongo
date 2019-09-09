@@ -1,6 +1,6 @@
 package co.arctern.api.provider.domain;
 
-import com.amazonaws.services.polly.model.Gender;
+import co.arctern.api.provider.constant.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -59,7 +59,7 @@ public class User {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'Male'")
     private Gender gender;
 
     @Column
