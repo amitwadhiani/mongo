@@ -36,6 +36,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.fetchProvidersByArea(areaIds, pageable));
     }
 
+
     /**
      * view tasks for admin's / particular areas.
      */
