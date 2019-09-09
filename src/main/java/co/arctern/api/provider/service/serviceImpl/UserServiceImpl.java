@@ -113,19 +113,17 @@ public class UserServiceImpl implements UserService {
         List<Long> areaIds = dto.getAreaIds();
         List<Long> offeringIds = dto.getOfferingIds();
         User user = (userId == null) ? new User() : userDao.findById(userId).get();
-        if (userId == null) {
-            user.setEmail(dto.getEmail());
-            user.setIsActive(true);
-            user.setName(dto.getName());
-            user.setIsTest(false);
-            user.setAge(dto.getAge());
-            user.setGender(dto.getGender());
-            user.setIsLoggedIn(false);
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
-            user.setPhone(dto.getPhone());
-            user.setUsername(dto.getUsername());
-            user = userDao.save(user);
-        }
+        user.setEmail(dto.getEmail());
+        user.setIsActive(true);
+        user.setName(dto.getName());
+        user.setIsTest(false);
+        user.setAge(dto.getAge());
+        user.setGender(dto.getGender());
+        user.setIsLoggedIn(false);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setPhone(dto.getPhone());
+        user.setUsername(dto.getUsername());
+        user = userDao.save(user);
         if (!CollectionUtils.isNullOrEmpty(roleIds)) userRoleService.createUserRoles(user, roleIds);
         if (!CollectionUtils.isNullOrEmpty(areaIds)) areaService.setAreasToUser(user, areaIds);
         if (!CollectionUtils.isNullOrEmpty(offeringIds)) offeringService.setOfferingsToUser(user, offeringIds);
