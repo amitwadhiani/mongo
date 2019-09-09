@@ -3,6 +3,7 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
+import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.OfferingService;
 import co.arctern.api.provider.service.UserRoleService;
@@ -11,6 +12,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private ProjectionFactory projectionFactory;
 
     @Autowired
     private OfferingService offeringService;
@@ -100,7 +106,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User createUser(UserRequestDto dto) {
+    public StringBuilder createUser(UserRequestDto dto) {
         Long userId = dto.getUserId();
         User user = (userId == null) ? new User() : userDao.findById(userId).get();
         if (userId == null) {
@@ -119,7 +125,7 @@ public class UserServiceImpl implements UserService {
         userRoleService.createUserRoles(user, dto.getRoleIds());
         areaService.setAreasToUser(user, dto.getAreaIds());
         offeringService.setOfferingsToUser(user, dto.getOfferingIds());
-        return user;
+        return SUCCESS_MESSAGE;
     }
 
     @Transactional
@@ -132,6 +138,13 @@ public class UserServiceImpl implements UserService {
         user.setLastLoginTime(loginTime);
         user.setIsLoggedIn(true);
         userDao.save(user);
+    }
+
+    @Override
+    public List<Users> fetchAll() {
+        List<Users> users = new ArrayList<>();
+        userDao.findAll().forEach(a -> users.add(projectionFactory.createProjection(Users.class, a)));
+        return users;
     }
 
     @Override

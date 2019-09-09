@@ -2,6 +2,7 @@ package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
+import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 /**
  * apis for user creation.
@@ -30,8 +33,14 @@ public class UserController {
      */
     @PostMapping("/create")
     @CrossOrigin
-    public ResponseEntity<User> createNewUser(@RequestBody UserRequestDto dto) {
+    public ResponseEntity<StringBuilder> createNewUser(@RequestBody UserRequestDto dto) {
         return ResponseEntity.ok(userService.createUser(dto));
+    }
+
+    @PostMapping("/fetch/all")
+    @CrossOrigin
+    public ResponseEntity<List<Users>> fetchAll() {
+        return ResponseEntity.ok(userService.fetchAll());
     }
 
 }
