@@ -1,7 +1,7 @@
 package co.arctern.api.provider.dto.request;
 
+import co.arctern.api.provider.constant.Gender;
 import co.arctern.api.provider.domain.User;
-import com.amazonaws.services.polly.model.Gender;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
