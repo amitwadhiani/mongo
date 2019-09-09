@@ -1,11 +1,9 @@
 package co.arctern.api.provider.service.serviceImpl;
 
-import co.arctern.api.provider.constant.TaskFlowState;
+import co.arctern.api.provider.constant.TaskEventFlowState;
 import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.ServiceType;
-import co.arctern.api.provider.dao.ReasonDao;
+import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.dao.TaskDao;
-import co.arctern.api.provider.domain.Reason;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
@@ -70,16 +68,16 @@ public class TaskServiceImpl implements TaskService {
         task = taskDao.save(task);
         paymentService.create(task, dto);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskStateFlowService.createFlow(task, TaskFlowState.OPEN, userId);
-        taskStateFlowService.createFlow(task, TaskFlowState.ASSIGNED, userId);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, userId);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.ASSIGNED, userId);
         return TASK_ASSIGNED_MESSAGE;
     }
 
     @Override
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskFlowState state) {
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventFlowState state) {
         Task task = fetchTask(taskId);
         taskStateFlowService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
-        task.setState((state.equals(TaskFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
+        task.setState((state.equals(TaskEventFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
         taskDao.save(task);
         return SUCCESS_MESSAGE;
     }
@@ -95,7 +93,7 @@ public class TaskServiceImpl implements TaskService {
     public void markInactiveAndReassignTask(Long userId, Task task) {
         userTaskService.markInactive(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskStateFlowService.createFlow(task, TaskFlowState.REASSIGNED, userId);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
         taskDao.save(task);
     }
@@ -108,7 +106,7 @@ public class TaskServiceImpl implements TaskService {
              *  cancel
              */
             task.setIsActive(false);
-            taskStateFlowService.createFlow(task, TaskFlowState.CANCELLED,
+            taskStateFlowService.createFlow(task, TaskEventFlowState.CANCELLED,
                     userTaskService.findActiveUserTask(taskId).getId());
             task.setState(TaskState.CANCELLED);
             taskDao.save(task);
@@ -150,7 +148,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<TasksForProvider> fetchTasksByType(ServiceType type, Pageable pageable) {
+    public Page<TasksForProvider> fetchTasksByType(OfferingType type, Pageable pageable) {
         return taskDao.findByType(type, pageable).map(
                 a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }
@@ -162,7 +160,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<TasksForProvider> fetchTasksByType(ServiceType type, Timestamp start, Timestamp end, Pageable pageable) {
+    public Page<TasksForProvider> fetchTasksByType(OfferingType type, Timestamp start, Timestamp end, Pageable pageable) {
         return taskDao.findByTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(type, start, end, pageable).map(
                 a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }

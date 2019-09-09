@@ -1,7 +1,7 @@
 package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.ServiceType;
+import co.arctern.api.provider.constant.TaskType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,8 +43,8 @@ public class Task {
     private TaskState state;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PICKUP'")
-    private ServiceType type;
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'SAMPLE_PICKUP'")
+    private TaskType type;
 
     private Boolean isPrepaid;
 
@@ -98,8 +98,7 @@ public class Task {
     @Column(nullable = false)
     private String patientPhone;
 
-    private String patientName;
-
+    @Column
     private String patientAge;
 
     public Task(Long version) {

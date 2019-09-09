@@ -1,6 +1,6 @@
 package co.arctern.api.provider.controller;
 
-import co.arctern.api.provider.constant.ServiceType;
+import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.AdminService;
@@ -62,7 +62,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/task/by-offering")
-    public ResponseEntity<Page<TasksForProvider>> fetchTasksByOffering(@RequestParam("type") ServiceType type,
+    public ResponseEntity<Page<TasksForProvider>> fetchTasksByOffering(@RequestParam("type") OfferingType type,
                                                                        @RequestParam("start") Timestamp start,
                                                                        @RequestParam("end") Timestamp end,
                                                                        Pageable pageable) {

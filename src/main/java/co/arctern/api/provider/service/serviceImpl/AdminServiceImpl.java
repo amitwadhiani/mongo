@@ -1,6 +1,6 @@
 package co.arctern.api.provider.service.serviceImpl;
 
-import co.arctern.api.provider.constant.ServiceType;
+import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.*;
@@ -68,7 +68,7 @@ public class AdminServiceImpl implements AdminService {
      * @return
      */
     @Override
-    public Page<TasksForProvider> fetchTasksByOffering(ServiceType type, Timestamp start, Timestamp end, Pageable pageable) {
+    public Page<TasksForProvider> fetchTasksByOffering(OfferingType type, Timestamp start, Timestamp end, Pageable pageable) {
         return (start == null && end == null) ? taskService.fetchTasksByType(type, pageable)
                 : taskService.fetchTasksByType(type, start, end, pageable);
     }

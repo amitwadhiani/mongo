@@ -38,8 +38,6 @@ resources:
     cpu: 2
     memory: 2304Mi
 
-nodeSelector: 
-  "node-role.kubernetes.io/spot-worker": "true"
 
 tolerations: []
 
