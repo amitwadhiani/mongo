@@ -32,6 +32,9 @@ public class Task {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
+    @Column(nullable = true)
+    private Timestamp expectedArrivalTime;
+
     @OneToMany(mappedBy = "task")
     private List<TaskEvent> taskEvents;
 
