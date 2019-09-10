@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -62,8 +63,12 @@ public class User {
     @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'Male'")
     private Gender gender;
 
-    @Column
+    @Column(nullable = true)
     private Integer age;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
 
     @Column
     private Timestamp lastLoginTime;

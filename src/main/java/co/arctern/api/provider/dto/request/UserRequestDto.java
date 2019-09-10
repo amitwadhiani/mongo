@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ public class UserRequestDto {
     private String username;
     private String phone;
     private Integer age;
+    private Date dateOfBirth;
     private String password;
     private String email;
     private Gender gender;

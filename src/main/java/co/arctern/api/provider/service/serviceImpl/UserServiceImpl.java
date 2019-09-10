@@ -112,6 +112,7 @@ public class UserServiceImpl implements UserService {
         user.setIsActive(true);
         user.setName(dto.getName());
         user.setIsTest(false);
+        user.setDateOfBirth(dto.getDateOfBirth());
         user.setAge(dto.getAge());
         user.setGender(dto.getGender());
         user.setIsLoggedIn(false);
