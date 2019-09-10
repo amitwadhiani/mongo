@@ -1,7 +1,7 @@
 package co.arctern.api.provider.service;
 
-import co.arctern.api.provider.constant.TaskEventFlowState;
 import co.arctern.api.provider.constant.OfferingType;
+import co.arctern.api.provider.constant.TaskEventFlowState;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
@@ -100,6 +100,10 @@ public interface TaskService extends MessageUtil {
      * @param task
      */
     public void markInactiveAndReassignTask(Long userId, Task task);
+
+    public StringBuilder startTask(Long taskId,Long userId);
+
+    public StringBuilder rescheduleTask(Long taskId,Long userId,Timestamp time);
 
     public Page<TasksForProvider> fetchTasksByType(OfferingType type, Pageable pageable);
 

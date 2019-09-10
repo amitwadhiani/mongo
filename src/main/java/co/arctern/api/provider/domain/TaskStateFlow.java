@@ -1,7 +1,6 @@
 package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.TaskEventFlowState;
-import co.arctern.api.provider.constant.TaskState;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

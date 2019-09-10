@@ -1,8 +1,8 @@
 package co.arctern.api.provider.service.serviceImpl;
 
+import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.constant.TaskEventFlowState;
 import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -96,6 +97,27 @@ public class TaskServiceImpl implements TaskService {
         taskStateFlowService.createFlow(task, TaskEventFlowState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
         taskDao.save(task);
+    }
+
+    @Override
+    @Transactional
+    public StringBuilder startTask(Long taskId, Long userId) {
+        Task task = fetchTask(taskId);
+        task.setState(TaskState.STARTED);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.STARTED, userId);
+        taskDao.save(task);
+        return SUCCESS_MESSAGE;
+    }
+
+    @Override
+    public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time) {
+        Task task = fetchTask(taskId);
+        task.setState(TaskState.OPEN);
+        task.setExpectedArrivalTime(time);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.RESCHEDULED, userId);
+        taskDao.save(task);
+        return SUCCESS_MESSAGE;
+
     }
 
     @Override

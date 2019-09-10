@@ -1,11 +1,8 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.TaskEventFlowState;
-import co.arctern.api.provider.dao.TaskEventFlowDao;
 import co.arctern.api.provider.dao.TaskStateFlowDao;
 import co.arctern.api.provider.domain.Task;
-import co.arctern.api.provider.domain.TaskEvent;
-import co.arctern.api.provider.domain.TaskEventFlow;
 import co.arctern.api.provider.domain.TaskStateFlow;
 import co.arctern.api.provider.service.TaskStateFlowService;
 import org.springframework.beans.factory.annotation.Autowired;

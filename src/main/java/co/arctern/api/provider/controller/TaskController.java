@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -47,6 +48,31 @@ public class TaskController {
                                                             @RequestParam("userId") Long userId) {
         return ResponseEntity.ok(taskService.reassignTask(taskId, userId));
     }
+
+    @PostMapping("/reschedule")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<StringBuilder> rescheduleTask(@RequestParam("taskId") Long taskId,
+                                                        @RequestParam("userId") Long userId,
+                                                        @RequestParam("time") Timestamp time) {
+        return ResponseEntity.ok(taskService.rescheduleTask(taskId, userId, time));
+    }
+
+    /**
+     * start a task.
+     *
+     * @param taskId
+     * @param userId
+     * @return
+     */
+    @PostMapping("/start")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<StringBuilder> startTaskToUser(@RequestParam("taskId") Long taskId,
+                                                         @RequestParam("userId") Long userId) {
+        return ResponseEntity.ok(taskService.startTask(taskId, userId));
+    }
+
 
     /**
      * cancel task / reassign task.
