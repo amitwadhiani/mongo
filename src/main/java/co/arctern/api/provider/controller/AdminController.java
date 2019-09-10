@@ -4,6 +4,7 @@ import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.AdminService;
+import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,9 @@ public class AdminController {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    UserService userService;
 
     /**
      * view providers for admin's / particular areas.
@@ -74,5 +78,17 @@ public class AdminController {
                                                                        Pageable pageable) {
         return ResponseEntity.ok(adminService.fetchTasksByOffering(type, start, end, pageable));
     }
+
+    /**
+     * mark user active/inactive
+     */
+    @CrossOrigin
+    @GetMapping("/user/state")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<StringBuilder> markUserStatus(@RequestParam("state") Boolean state,
+                                                        @RequestParam("userId") Long userId) {
+        return ResponseEntity.ok(userService.markUserInactive(userId, state));
+    }
+
 
 }

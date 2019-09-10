@@ -24,7 +24,6 @@ import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -70,15 +69,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
-    public String markUserInactive(String username, Boolean status) {
-        Optional<User> userOptional = userDao.findByUsername(username);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setIsActive(status);
-            userDao.save(user);
-            return "Success";
-        }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE);
+    public StringBuilder markUserInactive(Long userId, Boolean status) {
+        User user = fetchUser(userId);
+        user.setIsActive(status);
+        userDao.save(user);
+        return SUCCESS_MESSAGE;
     }
 
     @Override

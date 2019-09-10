@@ -4,6 +4,7 @@ import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.util.MessageUtil;
+import com.amazonaws.services.dynamodbv2.xspec.L;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -46,13 +47,13 @@ public interface UserService extends MessageUtil {
     public void deleteUser(String username);
 
     /**
-     * to mark user as active/inactive using username.
+     * to mark user as active/inactive using userId.
      *
-     * @param username
+     * @param userId
      * @param status
      * @return
      */
-    public String markUserInactive(String username, Boolean status);
+    public StringBuilder markUserInactive(Long userId, Boolean status);
 
     /**
      * to fetch user using username.
