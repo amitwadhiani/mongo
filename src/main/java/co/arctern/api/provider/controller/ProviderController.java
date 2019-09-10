@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ public class ProviderController {
      */
     @CrossOrigin
     @GetMapping("/task/all")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<TasksForProviderResponse> fetchTasksForProvider(@RequestParam("userId") Long userId,
                                                                           Pageable pageable) {
         return ResponseEntity.ok(providerService.fetchTasksForProvider(userId, pageable));
@@ -46,6 +48,7 @@ public class ProviderController {
      */
     @CrossOrigin
     @GetMapping("/task/assigned")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<PaginatedResponse> fetchAssignedTasksForProvider(@RequestParam("userId") Long userId,
                                                                            Pageable pageable) {
         return ResponseEntity.ok(providerService.fetchAssignedTasksForProvider(userId, pageable));
@@ -59,6 +62,7 @@ public class ProviderController {
      */
     @CrossOrigin
     @GetMapping("/task/completed")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<PaginatedResponse> fetchCompletedTasksForProvider(@RequestParam("userId") Long userId,
                                                                             Pageable pageable) {
         return ResponseEntity.ok(providerService.fetchCompletedTasksForProvider(userId, pageable));
@@ -75,6 +79,7 @@ public class ProviderController {
      */
     @CrossOrigin
     @GetMapping("/task/count")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Long> fetchCountOfTasksForProvider(@RequestParam("userId") Long userId,
                                                              @RequestParam("state") TaskState state,
                                                              @RequestParam("start") Timestamp start,

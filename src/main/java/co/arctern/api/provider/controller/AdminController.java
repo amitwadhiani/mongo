@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/provider/by-area")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<PaginatedResponse> fetchProvidersByArea(@RequestParam("areaIds") List<Long> areaIds, Pageable pageable) {
         return ResponseEntity.ok(adminService.fetchProvidersByArea(areaIds, pageable));
     }
@@ -42,6 +44,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/task/by-area")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Page<TasksForProvider>> fetchTasksByArea(@RequestParam("areaIds") List<Long> areaIds,
                                                                    @RequestParam("start") Timestamp start,
                                                                    @RequestParam("end") Timestamp end,
@@ -54,6 +57,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/provider/by-offering")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<PaginatedResponse> fetchProvidersByOffering(@RequestParam("offeringIds") List<Long> offeringIds, Pageable pageable) {
         return ResponseEntity.ok(adminService.fetchProvidersByOffering(offeringIds, pageable));
     }
@@ -63,6 +67,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/task/by-offering")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Page<TasksForProvider>> fetchTasksByOffering(@RequestParam("type") OfferingType type,
                                                                        @RequestParam("start") Timestamp start,
                                                                        @RequestParam("end") Timestamp end,

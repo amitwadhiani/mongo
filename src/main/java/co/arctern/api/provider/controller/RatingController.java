@@ -5,6 +5,7 @@ import co.arctern.api.provider.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -28,6 +29,7 @@ public class RatingController {
      */
     @PostMapping("/create")
     @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> generateRating(@RequestParam("taskId") Long taskId) {
         return ResponseEntity.ok(otpService.generateOTPForRating(taskId));
     }
@@ -41,6 +43,7 @@ public class RatingController {
      */
     @PatchMapping("/save")
     @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<String> saveRating(@RequestParam("taskId") Long taskId, @RequestParam("otp") String otp) {
         return ResponseEntity.ok(ratingService.saveRating(taskId, otp));
     }
