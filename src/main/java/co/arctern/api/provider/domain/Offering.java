@@ -27,6 +27,9 @@ public class Offering {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
+    @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
+    private Boolean isActive;
+
     private String description;
 
     @Enumerated(EnumType.STRING)

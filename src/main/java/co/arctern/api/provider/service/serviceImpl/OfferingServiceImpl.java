@@ -6,14 +6,20 @@ import co.arctern.api.provider.domain.Offering;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserOffering;
 import co.arctern.api.provider.dto.request.OfferingRequestDto;
+import co.arctern.api.provider.dto.response.projection.Offerings;
 import co.arctern.api.provider.service.OfferingService;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OfferingServiceImpl implements OfferingService {
@@ -23,6 +29,9 @@ public class OfferingServiceImpl implements OfferingService {
 
     @Autowired
     UserOfferingDao userOfferingDao;
+
+    @Autowired
+    ProjectionFactory projectionFactory;
 
     @Override
     public void setOfferingsToUser(User user, List<Long> offeringIds) {
@@ -42,19 +51,34 @@ public class OfferingServiceImpl implements OfferingService {
 
     @Override
     public StringBuilder create(List<OfferingRequestDto> dtos) {
+        List<Offering> offerings = new ArrayList<>();
         dtos.stream().forEach(
                 dto -> {
                     Offering offering = new Offering();
                     offering.setDescription(dto.getDescription());
                     offering.setType(dto.getType());
-                    offeringDao.save(offering);
+                    offering.setIsActive(true);
+                    offerings.add(offering);
                 });
+        offeringDao.saveAll(offerings);
         return SUCCESS_MESSAGE;
     }
 
     @Override
     public Page<UserOffering> fetchUserOfferings(List<Long> offeringIds, Pageable pageable) {
         return userOfferingDao.findByOfferingIdInAndIsActiveTrue(offeringIds, pageable);
+    }
+
+    @Override
+    public List<Offerings> fetchAll() {
+        return Lists.newArrayList(offeringDao.findAll()).stream().map(a -> projectionFactory.createProjection(Offerings.class, a))
+                .collect(Collectors.toList());
+    }
+
+    public Offerings fetchById(Long id) {
+        return projectionFactory.createProjection(Offerings.class, offeringDao.findById(id).orElseThrow(() -> {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid id");
+        }));
     }
 
 }
