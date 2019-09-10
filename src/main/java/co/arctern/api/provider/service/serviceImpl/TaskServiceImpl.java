@@ -56,6 +56,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
         Task task = new Task();
         Long userId = dto.getUserId();
@@ -75,6 +76,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventFlowState state) {
         Task task = fetchTask(taskId);
         taskStateFlowService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
@@ -84,6 +86,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public StringBuilder reassignTask(Long taskId, Long userId) {
         Task task = this.fetchTask(taskId);
         markInactiveAndReassignTask(userId, task);
@@ -91,6 +94,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void markInactiveAndReassignTask(Long userId, Task task) {
         userTaskService.markInactive(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
@@ -110,6 +114,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time) {
         Task task = fetchTask(taskId);
         task.setState(TaskState.OPEN);
@@ -121,6 +126,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId) {
         Task task = this.fetchTask(taskId);
         if (isCancelled) {
@@ -143,6 +149,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         task.setCancellationRequested(cancelRequest);

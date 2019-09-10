@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,6 +51,7 @@ public class OfferingServiceImpl implements OfferingService {
     }
 
     @Override
+    @Transactional
     public StringBuilder create(List<OfferingRequestDto> dtos) {
         List<Offering> offerings = new ArrayList<>();
         dtos.stream().forEach(

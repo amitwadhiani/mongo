@@ -10,6 +10,7 @@ import co.arctern.api.provider.service.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
+    @Transactional
     public StringBuilder createAreas(List<AreaRequestDto> dtos) {
         List<Area> areas = new ArrayList<>();
         dtos.stream().forEach(dto ->
