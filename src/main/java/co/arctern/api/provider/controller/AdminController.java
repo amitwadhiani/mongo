@@ -4,6 +4,7 @@ import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.AdminService;
+import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,9 @@ public class AdminController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    TaskService taskService;
 
     /**
      * view providers for admin's / particular areas.
@@ -88,6 +92,16 @@ public class AdminController {
     public ResponseEntity<StringBuilder> markUserStatus(@RequestParam("state") Boolean state,
                                                         @RequestParam("userId") Long userId) {
         return ResponseEntity.ok(userService.markUserInactive(userId, state));
+    }
+
+    /**
+     * cancel requests
+     */
+    @CrossOrigin
+    @GetMapping("/task/cancel-requests")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<PaginatedResponse> seeCancelRequests(Pageable pageable) {
+        return ResponseEntity.ok(taskService.seeCancelRequests(pageable));
     }
 
 }

@@ -4,6 +4,7 @@ import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.constant.TaskEventFlowState;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
@@ -101,9 +102,9 @@ public interface TaskService extends MessageUtil {
      */
     public void markInactiveAndReassignTask(Long userId, Task task);
 
-    public StringBuilder startTask(Long taskId,Long userId);
+    public StringBuilder startTask(Long taskId, Long userId);
 
-    public StringBuilder rescheduleTask(Long taskId,Long userId,Timestamp time);
+    public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time);
 
     public Page<TasksForProvider> fetchTasksByType(OfferingType type, Pageable pageable);
 
@@ -112,4 +113,6 @@ public interface TaskService extends MessageUtil {
     public Page<TasksForProvider> fetchTasksByType(OfferingType type, Timestamp start, Timestamp end, Pageable pageable);
 
     public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
+
+    public PaginatedResponse seeCancelRequests(Pageable pageable);
 }

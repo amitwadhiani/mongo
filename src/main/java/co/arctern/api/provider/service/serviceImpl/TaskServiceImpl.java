@@ -6,8 +6,10 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.*;
+import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -116,6 +118,9 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public StringBuilder startTask(Long taskId, Long userId) {
         Task task = fetchTask(taskId);
+        if (task.getUserTasks().stream().filter(a -> a.getIsActive()).findFirst().get().getUser().getId().longValue() != userId) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not assigned/active for this user.");
+        }
         task.setState(TaskState.STARTED);
         taskStateFlowService.createFlow(task, TaskEventFlowState.STARTED, userId);
         taskDao.save(task);
@@ -128,6 +133,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = fetchTask(taskId);
         task.setState(TaskState.OPEN);
         task.setExpectedArrivalTime(time);
+        userTaskService.markInactive(task);
         taskStateFlowService.createFlow(task, TaskEventFlowState.RESCHEDULED, userId);
         taskDao.save(task);
         return SUCCESS_MESSAGE;
@@ -208,5 +214,11 @@ public class TaskServiceImpl implements TaskService {
         return taskDao.findByDestinationAddressAreaIdInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, start, end, pageable).map(
                 a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }
+
+    @Override
+    public PaginatedResponse seeCancelRequests(Pageable pageable) {
+        return PaginationUtil.returnPaginatedBody(taskDao.findByCancellationRequestedTrue(pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a)), pageable);
+    }
+
 
 }

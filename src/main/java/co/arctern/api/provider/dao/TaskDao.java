@@ -23,4 +23,6 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     Page<Task> findByDestinationAddressAreaIdIn(List<Long> areaIds, Pageable pageable);
 
     Page<Task> findByDestinationAddressAreaIdInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
+
+    Page<Task> findByCancellationRequestedTrue(Pageable pageable);
 }
