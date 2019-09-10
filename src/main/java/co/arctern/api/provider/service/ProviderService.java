@@ -35,11 +35,19 @@ public interface ProviderService extends MessageUtil {
     PaginatedResponse fetchAssignedTasksForProvider(Long userId, Pageable pageable);
 
     /**
+     * fetch filtered tasks for provider.
+     *
+     * @param userId
+     * @return
+     */
+    PaginatedResponse fetchFilteredTasksForProvider(Long userId, TaskState state, Pageable pageable);
+
+    /**
      * fetch count of tasks by state for provider.
      *
      * @param userId
      * @return
      */
-    Long fetchCountOfTasksForProvider(Long userId, TaskState state, Timestamp start,Timestamp end);
+    Long fetchCountOfTasksForProvider(Long userId, TaskState state, Timestamp start, Timestamp end);
 
 }

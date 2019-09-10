@@ -86,4 +86,19 @@ public class ProviderController {
         return ResponseEntity.ok(providerService.fetchCountOfTasksForProvider(userId, state, start, end));
     }
 
+    /**
+     * fetch filtered tasks for a provider.
+     *
+     * @param userId
+     * @return
+     */
+    @CrossOrigin
+    @GetMapping("/task/filter")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<PaginatedResponse> fetchAssignedTasksForProvider(@RequestParam("userId") Long userId,
+                                                                           @RequestParam("state") TaskState state,
+                                                                           Pageable pageable) {
+        return ResponseEntity.ok(providerService.fetchFilteredTasksForProvider(userId, state, pageable));
+    }
+
 }
