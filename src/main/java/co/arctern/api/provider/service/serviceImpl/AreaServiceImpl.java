@@ -25,6 +25,9 @@ public class AreaServiceImpl implements AreaService {
     @Override
     public void setAreasToUser(User user, List<Long> areaIds) {
         List<UserArea> userAreas = new ArrayList<>();
+        List<UserArea> existingUserAreas = user.getUserAreas();
+        existingUserAreas.stream().forEach(a -> a.setIsActive(false));
+        userAreaDao.saveAll(existingUserAreas);
         areaDao.findByIdIn(areaIds)
                 .forEach(a -> {
                     UserArea userArea = new UserArea();

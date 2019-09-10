@@ -23,6 +23,9 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public void createUserRoles(User user, List<Long> roleIds) {
         List<UserRole> userRoles = new ArrayList<>();
+        List<UserRole> existingUserRoles = user.getUserRoles();
+        existingUserRoles.stream().forEach(a -> a.setIsActive(false));
+        userRoleDao.saveAll(existingUserRoles);
         roleDao.findByIdIn(roleIds)
                 .forEach(a -> {
                     UserRole userRole = new UserRole();

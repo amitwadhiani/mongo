@@ -27,6 +27,9 @@ public class OfferingServiceImpl implements OfferingService {
     @Override
     public void setOfferingsToUser(User user, List<Long> offeringIds) {
         List<UserOffering> userOfferings = new ArrayList<>();
+        List<UserOffering> existingUserOfferings = user.getUserOfferings();
+        existingUserOfferings.stream().forEach(a -> a.setIsActive(false));
+        userOfferingDao.saveAll(existingUserOfferings);
         offeringDao.findAllById(offeringIds).forEach(offering -> {
             UserOffering userOffering = new UserOffering();
             userOffering.setUser(user);
