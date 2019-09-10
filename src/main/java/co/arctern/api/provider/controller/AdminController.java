@@ -90,5 +90,4 @@ public class AdminController {
         return ResponseEntity.ok(userService.markUserInactive(userId, state));
     }
 
-
 }

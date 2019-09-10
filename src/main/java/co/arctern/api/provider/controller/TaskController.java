@@ -27,7 +27,7 @@ public class TaskController {
      * @param dto
      * @return
      */
-    @PostMapping("/assign")
+    @PostMapping("/create-assign")
     @CrossOrigin
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<StringBuilder> assignTaskToUser(@RequestBody TaskAssignDto dto) {

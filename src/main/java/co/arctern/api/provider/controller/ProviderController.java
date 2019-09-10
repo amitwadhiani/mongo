@@ -79,7 +79,6 @@ public class ProviderController {
      */
     @CrossOrigin
     @GetMapping("/task/count")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Long> fetchCountOfTasksForProvider(@RequestParam("userId") Long userId,
                                                              @RequestParam("state") TaskState state,
                                                              @RequestParam("start") Timestamp start,

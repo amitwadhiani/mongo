@@ -66,7 +66,6 @@ public class User {
     @Column(nullable = true)
     private Integer age;
 
-    @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 

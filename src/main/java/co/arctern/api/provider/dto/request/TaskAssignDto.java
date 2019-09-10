@@ -6,6 +6,8 @@ import co.arctern.api.provider.constant.TaskType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 /**
  * Task assigning request body for Admin.
  */
@@ -19,8 +21,8 @@ public class TaskAssignDto {
      *
      */
     private Long refId;
+    private Long taskId;
 
-    private Long orderId;
     private Boolean isPrepaid;
     private TaskType type;
     private String patientPhone;
@@ -29,10 +31,12 @@ public class TaskAssignDto {
     private PaymentState paymentState;
     private PaymentMode paymentMode;
     private Double amount;
+    private Timestamp expectedArrivalTime;
 
     /**
      * address related detail.
      */
+    private String addressName;
     private Long destAddressId;
     private Long sourceAddressId;
     private String city;

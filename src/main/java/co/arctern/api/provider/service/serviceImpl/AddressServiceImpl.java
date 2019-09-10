@@ -18,14 +18,11 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @SneakyThrows(Exception.class)
-    public Address createOrFetchAddress(TaskAssignDto dto) {
-        Long addressId = (dto.getDestAddressId() == null) ? dto.getSourceAddressId() : dto.getDestAddressId();
-        if (addressId != null) {
-            return addressDao.findById(addressId).orElseThrow(() -> {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid address id.");
-                    }
-            );
-        }
+    public Address createOrFetchAddress(TaskAssignDto dto, Long addressId) {
+        if (addressId != null) return addressDao.findById(addressId).orElseThrow(() ->
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role id.");
+        });
         return saveAddress(dto);
     }
 
@@ -33,6 +30,7 @@ public class AddressServiceImpl implements AddressService {
     public Address saveAddress(TaskAssignDto dto) {
         Address address = new Address();
         address.setCity(dto.getCity());
+        address.setName(dto.getAddressName());
         address.setHouseNumber(dto.getHouseNumber());
         address.setLine(dto.getLine());
         address.setLocality(dto.getLocality());

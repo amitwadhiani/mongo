@@ -58,14 +58,23 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
-        Task task = new Task();
+        Long taskId = dto.getTaskId();
+        Task task = (taskId == null) ? new Task() : taskDao.findById(taskId).orElseThrow(() ->
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid task Id.");
+        });
         Long userId = dto.getUserId();
         task.setIsPrepaid(dto.getIsPrepaid());
         task.setPatientPhone(dto.getPatientPhone());
         task.setPatientName(dto.getPatientName());
+        task.setPatientAge(dto.getPatientAge());
         task.setType(dto.getType());
-        task.setDestinationAddress(addressService.createOrFetchAddress(dto));
-        task.setSourceAddress(addressService.createOrFetchAddress(dto));
+        task.setRefId(dto.getRefId());
+        task.setCancellationRequested(false);
+        task.setIsActive(true);
+        task.setExpectedArrivalTime(dto.getExpectedArrivalTime());
+        task.setDestinationAddress(addressService.createOrFetchAddress(dto, null));
+        task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
         task.setState(TaskState.ASSIGNED);
         task = taskDao.save(task);
         paymentService.create(task, dto);

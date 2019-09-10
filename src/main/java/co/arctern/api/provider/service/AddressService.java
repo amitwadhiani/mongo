@@ -6,7 +6,7 @@ import co.arctern.api.provider.util.MessageUtil;
 
 public interface AddressService extends MessageUtil {
 
-    Address createOrFetchAddress(TaskAssignDto dto);
+    Address createOrFetchAddress(TaskAssignDto dto, Long addressId);
 
     Address saveAddress(TaskAssignDto dto);
 
