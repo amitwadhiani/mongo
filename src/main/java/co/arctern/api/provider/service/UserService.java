@@ -4,7 +4,6 @@ import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.util.MessageUtil;
-import com.amazonaws.services.dynamodbv2.xspec.L;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
