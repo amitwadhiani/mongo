@@ -1,6 +1,7 @@
 package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.dto.request.TaskAssignDto;
+import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
@@ -107,4 +108,10 @@ public class TaskController {
         return ResponseEntity.ok(taskService.requestCancellation(cancelRequest, taskId, reasonIds));
     }
 
+    @PostMapping("/create")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_ORDERAPI')")
+    public ResponseEntity<TasksForProvider> createTask(@RequestBody TaskAssignDto dto) {
+        return ResponseEntity.ok(taskService.fetchProjectedResponseFromPost(dto));
+    }
 }

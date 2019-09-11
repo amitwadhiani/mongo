@@ -115,4 +115,9 @@ public interface TaskService extends MessageUtil {
     public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
 
     public PaginatedResponse seeCancelRequests(Pageable pageable);
+
+    public Task createTask(TaskAssignDto dto);
+
+    public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto);
+
 }

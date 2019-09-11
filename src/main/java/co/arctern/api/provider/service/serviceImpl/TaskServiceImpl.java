@@ -60,25 +60,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
-        Long taskId = dto.getTaskId();
-        Task task = (taskId == null) ? new Task() : taskDao.findById(taskId).orElseThrow(() ->
-        {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid task Id.");
-        });
         Long userId = dto.getUserId();
-        task.setIsPrepaid(dto.getIsPrepaid());
-        task.setPatientPhone(dto.getPatientPhone());
-        task.setPatientName(dto.getPatientName());
-        task.setPatientAge(dto.getPatientAge());
-        task.setType(dto.getType());
-        task.setRefId(dto.getRefId());
-        task.setCancellationRequested(false);
-        task.setIsActive(true);
-        task.setExpectedArrivalTime(dto.getExpectedArrivalTime());
-        task.setDestinationAddress(addressService.createOrFetchAddress(dto, null));
-        task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
-        task.setState(TaskState.ASSIGNED);
-        task = taskDao.save(task);
+        Task task = createTask(dto);
         paymentService.create(task, dto);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, userId);
@@ -218,6 +201,34 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public PaginatedResponse seeCancelRequests(Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(taskDao.findByCancellationRequestedTrue(pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a)), pageable);
+    }
+
+
+    @Override
+    public Task createTask(TaskAssignDto dto) {
+        Long taskId = dto.getTaskId();
+        Task task = (taskId == null) ? new Task() : taskDao.findById(taskId).orElseThrow(() ->
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid task Id.");
+        });
+        task.setIsPrepaid(dto.getIsPrepaid());
+        task.setPatientPhone(dto.getPatientPhone());
+        task.setPatientName(dto.getPatientName());
+        task.setPatientAge(dto.getPatientAge());
+        task.setType(dto.getType());
+        task.setRefId(dto.getRefId());
+        task.setCancellationRequested(false);
+        task.setIsActive(true);
+        task.setExpectedArrivalTime(dto.getExpectedArrivalTime());
+        task.setDestinationAddress(addressService.createOrFetchAddress(dto, null));
+        task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
+        task.setState(TaskState.ASSIGNED);
+        return taskDao.save(task);
+    }
+
+    @Override
+    public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto) {
+        return projectionFactory.createProjection(TasksForProvider.class, createTask(dto));
     }
 
 
