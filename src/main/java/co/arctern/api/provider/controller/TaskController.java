@@ -114,4 +114,5 @@ public class TaskController {
     public ResponseEntity<TasksForProvider> createTask(@RequestBody TaskAssignDto dto) {
         return ResponseEntity.ok(taskService.fetchProjectedResponseFromPost(dto));
     }
+
 }
