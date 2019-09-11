@@ -108,11 +108,16 @@ public class TaskController {
         return ResponseEntity.ok(taskService.requestCancellation(cancelRequest, taskId, reasonIds));
     }
 
+    /**
+     * create new task.
+     *
+     * @param dto
+     * @return
+     */
     @PostMapping("/create")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ORDERAPI')")
+    @PreAuthorize("hasAuthority('ROLE_ORDER_API')")
     public ResponseEntity<TasksForProvider> createTask(@RequestBody TaskAssignDto dto) {
         return ResponseEntity.ok(taskService.fetchProjectedResponseFromPost(dto));
     }
-
 }

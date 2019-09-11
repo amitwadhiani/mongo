@@ -120,4 +120,6 @@ public interface TaskService extends MessageUtil {
 
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto);
 
+    public List<TasksForProvider> fetchAssignedTasksForUser(Long userId, Timestamp start, Timestamp end);
+
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public interface UserTaskService extends MessageUtil {
 
@@ -46,5 +47,8 @@ public interface UserTaskService extends MessageUtil {
 
     public Long countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(
             Long userId, TaskState state, Timestamp start, Timestamp end);
+
+    public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end);
+
 
 }

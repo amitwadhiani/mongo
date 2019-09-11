@@ -62,7 +62,6 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
         Long userId = dto.getUserId();
         Task task = createTask(dto);
-        paymentService.create(task, dto);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, userId);
         taskStateFlowService.createFlow(task, TaskEventFlowState.ASSIGNED, userId);
@@ -223,12 +222,20 @@ public class TaskServiceImpl implements TaskService {
         task.setDestinationAddress(addressService.createOrFetchAddress(dto, null));
         task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
         task.setState(TaskState.ASSIGNED);
-        return taskDao.save(task);
+        task = taskDao.save(task);
+        paymentService.create(task, dto);
+        return task;
+
     }
 
     @Override
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto) {
         return projectionFactory.createProjection(TasksForProvider.class, createTask(dto));
+    }
+
+    @Override
+    public List<TasksForProvider> fetchAssignedTasksForUser(Long userId, Timestamp start, Timestamp end) {
+        return userTaskService.
     }
 
 

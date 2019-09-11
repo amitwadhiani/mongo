@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 public class UserTaskServiceImpl implements UserTaskService {
@@ -50,4 +51,10 @@ public class UserTaskServiceImpl implements UserTaskService {
         return userTaskDao.countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(userId,
                 state, start, end);
     }
+
+    @Override
+    public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end) {
+
+    }
+
 }
