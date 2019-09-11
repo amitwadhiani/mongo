@@ -47,7 +47,7 @@ public class ProviderController {
      * @return
      */
     @CrossOrigin
-    @GetMapping("/task/assigned")
+    @GetMapping("/task/fetch/assigned")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<PaginatedResponse> fetchAssignedTasksForProvider(@RequestParam("userId") Long userId,
                                                                            Pageable pageable) {
@@ -61,7 +61,7 @@ public class ProviderController {
      * @return
      */
     @CrossOrigin
-    @GetMapping("/task/completed")
+    @GetMapping("/task/fetch/completed")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<PaginatedResponse> fetchCompletedTasksForProvider(@RequestParam("userId") Long userId,
                                                                             Pageable pageable) {
@@ -93,12 +93,14 @@ public class ProviderController {
      * @return
      */
     @CrossOrigin
-    @GetMapping("/task/filter")
+    @GetMapping("/task/{state}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<PaginatedResponse> fetchAssignedTasksForProvider(@RequestParam("userId") Long userId,
                                                                            @RequestParam("state") TaskState state,
                                                                            Pageable pageable) {
         return ResponseEntity.ok(providerService.fetchFilteredTasksForProvider(userId, state, pageable));
     }
+
+
 
 }
