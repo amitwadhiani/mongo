@@ -54,7 +54,7 @@ public class UserTaskServiceImpl implements UserTaskService {
 
     @Override
     public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end) {
-
+        return null;
     }
 
 }

@@ -21,9 +21,9 @@ public class HomePageServiceImpl implements HomePageService {
     @Override
     public HomePageResponse fetchHomePage(Long userId, ZonedDateTime start, ZonedDateTime end) {
         HomePageResponse response = new HomePageResponse();
-        response.setAssignedTasks(taskService.);
-        response.setCompletedTasks();
-        response.setUpcomingTasks();
+//        response.setAssignedTasks(taskService.);
+//        response.setCompletedTasks();
+//        response.setUpcomingTasks();
         return response;
     }
 }

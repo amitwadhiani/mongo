@@ -235,7 +235,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TasksForProvider> fetchAssignedTasksForUser(Long userId, Timestamp start, Timestamp end) {
-        return userTaskService.
+        return null;
     }
 
 
