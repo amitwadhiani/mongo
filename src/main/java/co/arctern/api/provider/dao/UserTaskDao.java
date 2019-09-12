@@ -1,7 +1,6 @@
 package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.UserTask;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
