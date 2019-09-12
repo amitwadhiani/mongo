@@ -38,7 +38,6 @@ public class UserController {
 
     @PostMapping("/fetch/all")
     @CrossOrigin
-    @PreAuthorize(("hasAuthority('ROLE_ADMIN')"))
     public ResponseEntity<List<Users>> fetchAll() {
         return ResponseEntity.ok(userService.fetchAll());
     }
