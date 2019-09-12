@@ -101,6 +101,4 @@ public class ProviderController {
         return ResponseEntity.ok(providerService.fetchFilteredTasksForProvider(userId, state, pageable));
     }
 
-
-
 }

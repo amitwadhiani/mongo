@@ -50,5 +50,7 @@ public interface UserTaskService extends MessageUtil {
 
     public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end);
 
+    public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start);
+
 
 }

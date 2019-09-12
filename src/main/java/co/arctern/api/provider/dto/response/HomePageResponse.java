@@ -10,8 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 public class HomePageResponse {
 
-    List<TasksForProvider> upcomingTasks;
-    Long assignedTasks;
-    Long completedTasks;
-
+    List<TasksForProvider> assignedTasks;
+    Integer assignedTasksCount;
+    Integer completedTasksCount;
+    Integer startedTasksCount;
+    Integer allTasksCount;
 }

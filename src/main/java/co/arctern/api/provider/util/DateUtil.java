@@ -1,6 +1,7 @@
 package co.arctern.api.provider.util;
 
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
@@ -13,4 +14,9 @@ public interface DateUtil {
     public static Long fetchDifferenceFromCurrentDateInMs(Integer minutes) {
         return new Date(System.currentTimeMillis() - minutes * 60 * 1000).getTime();
     }
+
+    public static Timestamp zonedDateTimeToTimestampConversion(ZonedDateTime value) {
+        return Timestamp.valueOf(value.toLocalDateTime());
+    }
+
 }

@@ -2,6 +2,7 @@ package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
@@ -120,6 +121,7 @@ public interface TaskService extends MessageUtil {
 
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto);
 
-    public List<TasksForProvider> fetchAssignedTasksForUser(Long userId, Timestamp start, Timestamp end);
+    public List<TasksForProvider> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end);
 
+    public List<TasksForProvider> fetchUpcomingTasksForUser(Long userId, TaskState state, Timestamp start);
 }

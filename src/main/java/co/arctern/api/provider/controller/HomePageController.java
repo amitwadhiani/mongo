@@ -2,6 +2,7 @@ package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.dto.response.HomePageResponse;
 import co.arctern.api.provider.service.HomePageService;
+import co.arctern.api.provider.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,8 +24,10 @@ public class HomePageController {
     @CrossOrigin
     @GetMapping("/tasks")
     public ResponseEntity<HomePageResponse> fetchHomePage(@RequestParam("userId") Long userId,
-                                                          @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
-                                                          @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end) {
-        return ResponseEntity.ok(homePageService.fetchHomePage(userId, start, end));
+                                                          @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
+                                                          @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end) {
+        if (start == null) start = ZonedDateTime.now();
+        if (end == null) end = start.plusDays(2);
+        return ResponseEntity.ok(homePageService.fetchHomePage(userId, DateUtil.zonedDateTimeToTimestampConversion(start), DateUtil.zonedDateTimeToTimestampConversion(end)));
     }
 }

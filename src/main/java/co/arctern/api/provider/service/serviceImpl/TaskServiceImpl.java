@@ -234,9 +234,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TasksForProvider> fetchAssignedTasksForUser(Long userId, Timestamp start, Timestamp end) {
-        return null;
+    public List<TasksForProvider> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end) {
+        return userTaskService.fetchTasksForUser(userId, state, start, end)
+                .stream()
+                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()))
+                .collect(Collectors.toList());
     }
 
+    @Override
+    public List<TasksForProvider> fetchUpcomingTasksForUser(Long userId, TaskState state, Timestamp start) {
+        return userTaskService.fetchTasksForUser(userId, state, start)
+                .stream()
+                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()))
+                .collect(Collectors.toList());
+    }
 
 }
