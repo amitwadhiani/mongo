@@ -8,6 +8,7 @@ import co.arctern.api.provider.domain.UserOffering;
 import co.arctern.api.provider.dto.request.OfferingRequestDto;
 import co.arctern.api.provider.dto.response.projection.Offerings;
 import co.arctern.api.provider.service.OfferingService;
+import com.amazonaws.util.CollectionUtils;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,8 +39,10 @@ public class OfferingServiceImpl implements OfferingService {
     public void setOfferingsToUser(User user, List<Long> offeringIds) {
         List<UserOffering> userOfferings = new ArrayList<>();
         List<UserOffering> existingUserOfferings = user.getUserOfferings();
-        existingUserOfferings.stream().forEach(a -> a.setIsActive(false));
-        userOfferingDao.saveAll(existingUserOfferings);
+        if (!CollectionUtils.isNullOrEmpty(existingUserOfferings)) {
+            existingUserOfferings.stream().forEach(a -> a.setIsActive(false));
+            userOfferingDao.saveAll(existingUserOfferings);
+        }
         offeringDao.findAllById(offeringIds).forEach(offering -> {
             UserOffering userOffering = new UserOffering();
             userOffering.setUser(user);
