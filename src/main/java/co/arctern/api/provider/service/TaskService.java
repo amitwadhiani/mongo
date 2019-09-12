@@ -42,6 +42,15 @@ public interface TaskService extends MessageUtil {
     public StringBuilder reassignTask(Long taskId, Long userId);
 
     /**
+     * assign task to user.
+     *
+     * @param taskId
+     * @param userId
+     * @return
+     */
+    public StringBuilder assignTask(Long taskId, Long userId);
+
+    /**
      * cancel task and mark inactive -> By Admin.
      *
      * @param isCancelled

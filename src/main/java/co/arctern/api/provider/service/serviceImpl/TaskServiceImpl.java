@@ -86,6 +86,23 @@ public class TaskServiceImpl implements TaskService {
         return TASK_REASSIGN_MESSAGE;
     }
 
+    /**
+     * assign task to user.
+     *
+     * @param taskId
+     * @param userId
+     * @return
+     */
+    @Override
+    public StringBuilder assignTask(Long taskId, Long userId) {
+        Task task = this.fetchTask(taskId);
+        task.setState(TaskState.ASSIGNED);
+        task = taskDao.save(task);
+        userTaskService.createUserTask(userService.fetchUser(userId), task);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.ASSIGNED, userId);
+        return TASK_ASSIGNED_MESSAGE;
+    }
+
     @Override
     @Transactional
     public void markInactiveAndReassignTask(Long userId, Task task) {

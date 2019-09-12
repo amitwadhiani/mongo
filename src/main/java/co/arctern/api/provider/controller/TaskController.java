@@ -50,6 +50,15 @@ public class TaskController {
         return ResponseEntity.ok(taskService.reassignTask(taskId, userId));
     }
 
+    @PostMapping("/assign")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<StringBuilder> assignTaskToUser(@RequestParam("taskId") Long taskId,
+                                                          @RequestParam("userId") Long userId) {
+        return ResponseEntity.ok(taskService.assignTask(taskId, userId));
+    }
+
+
     @PostMapping("/reschedule")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
