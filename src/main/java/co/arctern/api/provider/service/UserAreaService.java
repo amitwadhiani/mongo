@@ -8,5 +8,11 @@ import java.util.List;
 
 public interface UserAreaService extends MessageUtil {
 
+    /**
+     *
+     * @param areaIds
+     * @param pageable
+     * @return
+     */
     PaginatedResponse fetchUsersByArea(List<Long> areaIds, Pageable pageable);
 }

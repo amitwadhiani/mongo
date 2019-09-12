@@ -22,6 +22,11 @@ public interface RoleService extends MessageUtil {
      */
     public List<Roles> fetchRoles();
 
+    /**
+     * fetch role through id.
+     * @param id
+     * @return
+     */
     public Roles fetchRoleById(Long id);
 
 

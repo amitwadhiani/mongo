@@ -16,5 +16,11 @@ public interface AreaService extends MessageUtil {
      */
     public void setAreasToUser(User user, List<Long> areaIds);
 
+    /**
+     * create areas.
+     *
+     * @param dtos
+     * @return
+     */
     public StringBuilder createAreas(List<AreaRequestDto> dtos);
 }

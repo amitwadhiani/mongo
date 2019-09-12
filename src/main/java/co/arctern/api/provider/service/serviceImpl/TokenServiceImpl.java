@@ -63,11 +63,6 @@ public class TokenServiceImpl implements TokenService {
         return tokenEndpoint.postAccessToken(principal, parameters).getBody();
     }
 
-    /**
-     * fetch user id from token.
-     *
-     * @return
-     */
     @Override
     public Long fetchUserId() {
         Map<String, Object> stringObjectMap = this.extractAccessToken();
@@ -76,11 +71,6 @@ public class TokenServiceImpl implements TokenService {
         return Long.parseLong(String.valueOf(userID));
     }
 
-    /**
-     * fetch areas from token.
-     *
-     * @return
-     */
     @Override
     public List<Area> fetchAreasFromToken() {
         if (this.fetchAreaIds() != null)
@@ -88,11 +78,6 @@ public class TokenServiceImpl implements TokenService {
         return null;
     }
 
-    /**
-     * to fetch area ids from token.
-     *
-     * @return
-     */
     @Override
     public List<Long> fetchAreaIds() {
         List<Long> areaIds = new ArrayList<>();
@@ -105,11 +90,6 @@ public class TokenServiceImpl implements TokenService {
         return areaIds;
     }
 
-    /**
-     * to fetch authorities from token.
-     *
-     * @return
-     */
     @Override
     public List<String> fetchAuthorities() {
         List<String> authorities = new ArrayList<>();
@@ -122,11 +102,6 @@ public class TokenServiceImpl implements TokenService {
         return authorities;
     }
 
-    /**
-     * to extract access token.
-     *
-     * @return
-     */
     @Override
     public Map<String, Object> extractAccessToken() {
         Authentication authentication1 = SecurityContextHolder.getContext().getAuthentication();

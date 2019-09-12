@@ -112,25 +112,96 @@ public interface TaskService extends MessageUtil {
      */
     public void markInactiveAndReassignTask(Long userId, Task task);
 
+    /**
+     * start an assigned task.
+     * @param taskId
+     * @param userId
+     * @return
+     */
     public StringBuilder startTask(Long taskId, Long userId);
 
+    /**
+     * reschedule task and mark OPEN.
+     * @param taskId
+     * @param userId
+     * @param time
+     * @return
+     */
     public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time);
 
+    /**
+     * fetch tasks by their offering type.
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<TasksForProvider> fetchTasksByType(OfferingType type, Pageable pageable);
 
+    /**
+     * fetch tasks filtered by area.
+     * @param areaIds
+     * @param pageable
+     * @return
+     */
     public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Pageable pageable);
 
+    /**
+     * fetch tasks by offering type within a time range.
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     public Page<TasksForProvider> fetchTasksByType(OfferingType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * fetch tasks filtered by area within a time range.
+     * @param areaIds
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * see cancellation requests for Admin.
+     * @param pageable
+     * @return
+     */
     public PaginatedResponse seeCancelRequests(Pageable pageable);
 
+    /**
+     * create a new task .
+     * @param dto
+     * @return
+     */
     public Task createTask(TaskAssignDto dto);
 
+    /**
+     * fetch projected response after save call (task) .
+     * @param dto
+     * @return
+     */
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto);
 
+    /**
+     * fetch tasks with given state within a time range.
+     * @param userId
+     * @param state
+     * @param start
+     * @param end
+     * @return
+     */
     public List<TasksForProvider> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end);
 
+    /**
+     *  fetch upcoming tasks for a user filtered by state.
+     * @param userId
+     * @param state
+     * @param start
+     * @return
+     */
     public List<TasksForProvider> fetchUpcomingTasksForUser(Long userId, TaskState state, Timestamp start);
 }

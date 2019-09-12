@@ -4,6 +4,9 @@ import co.arctern.api.provider.constant.OfferingType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * offering creation request body.
+ */
 @Data
 @NoArgsConstructor
 public class OfferingRequestDto {

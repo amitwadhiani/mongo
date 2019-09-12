@@ -23,7 +23,7 @@ public class TaskController {
     TaskService taskService;
 
     /**
-     * assign tasks to user ( automatic task creation and assignment for a particular diagnosticOrder ) .
+     * assign tasks to user ( automatic task creation and assignment for a particular diagnosticOrder ) api.
      *
      * @param dto
      * @return
@@ -36,7 +36,7 @@ public class TaskController {
     }
 
     /**
-     * re-assign tasks to user.
+     * re-assign tasks to user api.
      *
      * @param taskId
      * @param userId
@@ -50,6 +50,13 @@ public class TaskController {
         return ResponseEntity.ok(taskService.reassignTask(taskId, userId));
     }
 
+    /**
+     * assign tasks to user api.
+     *
+     * @param taskId
+     * @param userId
+     * @return
+     */
     @PostMapping("/assign")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -58,7 +65,13 @@ public class TaskController {
         return ResponseEntity.ok(taskService.assignTask(taskId, userId));
     }
 
-
+    /**
+     * reschedule a task api.
+     * @param taskId
+     * @param userId
+     * @param time
+     * @return
+     */
     @PostMapping("/reschedule")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -69,7 +82,7 @@ public class TaskController {
     }
 
     /**
-     * start a task.
+     * start a task api.
      *
      * @param taskId
      * @param userId
@@ -85,7 +98,7 @@ public class TaskController {
 
 
     /**
-     * cancel task / reassign task.
+     * cancel task / reassign task api.
      *
      * @param isCancelled
      * @param taskId
@@ -102,7 +115,7 @@ public class TaskController {
     }
 
     /**
-     * request cancellation for a task by user.
+     * request cancellation for a task by user api.
      *
      * @param cancelRequest
      * @param taskId
@@ -118,7 +131,7 @@ public class TaskController {
     }
 
     /**
-     * create new task.
+     * create new task api.
      *
      * @param dto
      * @return

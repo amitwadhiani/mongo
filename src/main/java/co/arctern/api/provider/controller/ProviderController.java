@@ -27,7 +27,7 @@ public class ProviderController {
     private ProviderService providerService;
 
     /**
-     * fetch all tasks for a provider.
+     * fetch all tasks for a provider api.
      *
      * @param userId
      * @return
@@ -41,7 +41,7 @@ public class ProviderController {
     }
 
     /**
-     * fetch assigned tasks for a provider.
+     * fetch assigned tasks for a provider api.
      *
      * @param userId
      * @return
@@ -55,7 +55,7 @@ public class ProviderController {
     }
 
     /**
-     * fetch completed tasks for a provider.
+     * fetch completed tasks for a provider api.
      *
      * @param userId
      * @return
@@ -69,7 +69,7 @@ public class ProviderController {
     }
 
     /**
-     * fetch count of tasks (by state) for a provider.
+     * fetch count of tasks (by state) for a provider api.
      *
      * @param userId
      * @param state
@@ -87,7 +87,7 @@ public class ProviderController {
     }
 
     /**
-     * fetch filtered tasks for a provider.
+     * fetch filtered tasks for a provider api.
      *
      * @param userId
      * @return

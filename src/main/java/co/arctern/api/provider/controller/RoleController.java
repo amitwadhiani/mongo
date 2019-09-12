@@ -23,7 +23,7 @@ public class RoleController {
     RoleService roleService;
 
     /**
-     * create new roles.
+     * create new roles api.
      *
      * @param dto
      * @return
@@ -35,6 +35,10 @@ public class RoleController {
         return ResponseEntity.ok(roleService.createRole(dto));
     }
 
+    /**
+     * fetch all roles api.
+     * @return
+     */
     @PostMapping("/fetch/all")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -42,6 +46,11 @@ public class RoleController {
         return ResponseEntity.ok(roleService.fetchRoles());
     }
 
+    /**
+     * fetch role by id api.
+     * @param id
+     * @return
+     */
     @PostMapping("/fetch/{id}")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

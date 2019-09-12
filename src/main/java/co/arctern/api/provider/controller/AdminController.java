@@ -45,7 +45,7 @@ public class AdminController {
     HomePageService homePageService;
 
     /**
-     * view providers for admin's / particular areas.
+     * view providers for admin's / particular areas api.
      */
     @CrossOrigin
     @GetMapping("/provider/by-area")
@@ -56,7 +56,7 @@ public class AdminController {
 
 
     /**
-     * view tasks for admin's / particular areas.
+     * view tasks for admin's / particular areas api.
      */
     @CrossOrigin
     @GetMapping("/task/by-area")
@@ -69,7 +69,7 @@ public class AdminController {
     }
 
     /**
-     * view providers for admin's / particular offerings.
+     * view providers for admin's / particular offerings api.
      */
     @CrossOrigin
     @GetMapping("/provider/by-offering")
@@ -79,7 +79,7 @@ public class AdminController {
     }
 
     /**
-     * view tasks for admin's / particular offerings.
+     * view tasks for admin's / particular offerings api.
      */
     @CrossOrigin
     @GetMapping("/task/by-offering")
@@ -92,7 +92,7 @@ public class AdminController {
     }
 
     /**
-     * mark user active/inactive
+     * mark user active/inactive api.
      */
     @CrossOrigin
     @GetMapping("/user/state")
@@ -112,6 +112,14 @@ public class AdminController {
         return ResponseEntity.ok(taskService.seeCancelRequests(pageable));
     }
 
+    /**
+     * admin homepage api.
+     * @param states
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/home")
     @PreAuthorize(("hasAuthority('ROLE_ADMIN')"))

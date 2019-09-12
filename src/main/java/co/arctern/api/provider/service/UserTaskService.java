@@ -46,13 +46,44 @@ public interface UserTaskService extends MessageUtil {
      */
     public UserTask findActiveUserTask(Long taskId);
 
+    /**
+     * fetch count of tasks for a user filtered by state within a range.
+     * @param userId
+     * @param state
+     * @param start
+     * @param end
+     * @return
+     */
     public Long countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(
             Long userId, TaskState state, Timestamp start, Timestamp end);
 
+    /**
+     * fetch tasks for a user within a time range.
+     * @param userId
+     * @param state
+     * @param start
+     * @param end
+     * @return
+     */
     public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end);
 
+    /**
+     * fetch tasks for user filtered by state greater than a given time.
+     * @param userId
+     * @param state
+     * @param start
+     * @return
+     */
     public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start);
 
+    /**
+     * fetch tasks filtered by states within a range.
+     * @param states
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     public PaginatedResponse fetchTasks(TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
 
     }

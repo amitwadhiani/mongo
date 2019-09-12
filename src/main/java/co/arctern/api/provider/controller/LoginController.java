@@ -25,7 +25,7 @@ public class LoginController {
     LoginService loginService;
 
     /**
-     * to generate otp for login using phone number.
+     * to generate otp for login using phone number api.
      *
      * @param phone
      * @return
@@ -38,7 +38,7 @@ public class LoginController {
     }
 
     /**
-     * to verify the given otp with the otp and phone in otp.
+     * to verify the given otp with the otp and phone in otp api.
      *
      * @param phone
      * @param otp
@@ -54,7 +54,7 @@ public class LoginController {
     }
 
     /**
-     * to log out of the system
+     * to log out of the system api.
      *
      * @param userId
      * @param

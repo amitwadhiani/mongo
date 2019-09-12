@@ -19,6 +19,11 @@ public class AreaController {
     @Autowired
     AreaService areaService;
 
+    /**
+     * create new area api.
+     * @param dtos
+     * @return
+     */
     @PostMapping("/create")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

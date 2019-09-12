@@ -33,9 +33,24 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      */
     UserTask findByIsActiveTrueAndTaskId(Long taskId);
 
+    /**
+     * fetch users filtered by task state and within a time range.
+     * @param userId
+     * @param state
+     * @param start
+     * @param end
+     * @return
+     */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(Long userId, TaskState state,
                                                                                                                    Timestamp start, Timestamp end);
 
+    /**
+     * fetch users through task state and greater than a time.
+     * @param userId
+     * @param state
+     * @param start
+     * @return
+     */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqual(Long userId, TaskState state, Timestamp start);
 
     /**
@@ -50,6 +65,14 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
     Long countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(
             Long userId, TaskState state, Timestamp start, Timestamp end);
 
+    /**
+     * fetch tasks filtered by task states and within a time range.
+     * @param states
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     Page<UserTask> findByIsActiveTrueAndTaskStateInAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(TaskState[] states, Timestamp start,
                                                                                                       Timestamp end,Pageable pageable);
 

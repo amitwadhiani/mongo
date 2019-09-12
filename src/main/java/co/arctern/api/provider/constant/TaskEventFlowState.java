@@ -1,7 +1,7 @@
 package co.arctern.api.provider.constant;
 
 /**
- * Rider states for flows for particular tasks.
+ * task states for flows for particular tasks.
  */
 public enum TaskEventFlowState {
     OPEN,

@@ -12,13 +12,38 @@ import java.util.List;
 
 public interface OfferingService extends MessageUtil {
 
+    /**
+     * map offering with user.
+     * @param user
+     * @param offeringIds
+     */
     public void setOfferingsToUser(User user, List<Long> offeringIds);
 
+    /**
+     * create a new offering.
+     * @param dtos
+     * @return
+     */
     public StringBuilder create(List<OfferingRequestDto> dtos);
 
+    /**
+     * fetch offerings for a user.
+     * @param offeringIds
+     * @param pageable
+     * @return
+     */
     public Page<UserOffering> fetchUserOfferings(List<Long> offeringIds, Pageable pageable);
 
+    /**
+     * fetch all offerings.
+     * @return
+     */
     public List<Offerings> fetchAll();
 
+    /**
+     * fetch by id.
+     * @param id
+     * @return
+     */
     public Offerings fetchById(Long id);
 }

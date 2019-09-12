@@ -16,6 +16,11 @@ public class ReasonController {
     @Autowired
     ReasonService reasonService;
 
+    /**
+     * create new reasons api.
+     * @param reasons
+     * @return
+     */
     @CrossOrigin
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -23,6 +28,10 @@ public class ReasonController {
         return ResponseEntity.ok(reasonService.create(reasons));
     }
 
+    /**
+     * fetch all reasons api.
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/fetch/all")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

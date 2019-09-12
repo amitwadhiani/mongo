@@ -12,5 +12,10 @@ import java.util.List;
 @Repository
 public interface AreaDao extends PagingAndSortingRepository<Area, Long> {
 
+    /**
+     * fetch areas through ids.
+     * @param areaIds
+     * @return
+     */
     List<Area> findByIdIn(List<Long> areaIds);
 }

@@ -8,8 +8,17 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * UserOffering entity repository layer
+ */
 @Repository
 public interface UserOfferingDao extends PagingAndSortingRepository<UserOffering, Long> {
 
+    /**
+     * fetch users by filtered offerings.
+     * @param offeringIds
+     * @param pageable
+     * @return
+     */
     Page<UserOffering> findByOfferingIdInAndIsActiveTrue(List<Long>offeringIds, Pageable pageable);
 }

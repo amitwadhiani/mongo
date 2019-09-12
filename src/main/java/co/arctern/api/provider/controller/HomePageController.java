@@ -21,6 +21,13 @@ public class HomePageController {
     @Autowired
     HomePageService homePageService;
 
+    /**
+     * fetch tasks filtered by user and time range api.
+     * @param userId
+     * @param start
+     * @param end
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/tasks")
     public ResponseEntity<HomePageResponse> fetchHomePage(@RequestParam("userId") Long userId,

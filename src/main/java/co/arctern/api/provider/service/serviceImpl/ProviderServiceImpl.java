@@ -50,15 +50,6 @@ public class ProviderServiceImpl implements ProviderService {
         return PaginationUtil.returnPaginatedBody(taskService.fetchAssignedTasksForUser(userId, pageable), pageable);
     }
 
-    /**
-     * fetch count of tasks by state for provider.
-     *
-     * @param userId
-     * @param state
-     * @param start
-     * @param end
-     * @return
-     */
     @Override
     public Long fetchCountOfTasksForProvider(Long userId, TaskState state, Timestamp start, Timestamp end) {
         return userTaskService.countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(

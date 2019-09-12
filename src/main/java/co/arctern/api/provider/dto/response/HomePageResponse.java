@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * response body for app homepage.
+ */
 @Data
 @NoArgsConstructor
 public class HomePageResponse {

@@ -16,13 +16,46 @@ import java.util.List;
 @Repository
 public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
+    /**
+     * fetch tasks filtered by type.
+     * @param type
+     * @param pageable
+     * @return
+     */
     Page<Task> findByType(OfferingType type, Pageable pageable);
 
+    /**
+     * fetch tasks filtered by type and within a time range.
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     Page<Task> findByTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(OfferingType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * fetch tasks for a particular area.
+     * @param areaIds
+     * @param pageable
+     * @return
+     */
     Page<Task> findByDestinationAddressAreaIdIn(List<Long> areaIds, Pageable pageable);
 
+    /**
+     * fetch tasks for a particular area within a time range.
+     * @param areaIds
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     Page<Task> findByDestinationAddressAreaIdInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * fetch cancellation requested tasks.
+     * @param pageable
+     * @return
+     */
     Page<Task> findByCancellationRequestedTrue(Pageable pageable);
 }

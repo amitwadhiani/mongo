@@ -22,7 +22,7 @@ public class RatingController {
     private RatingService ratingService;
 
     /**
-     * to generate rating for a particular task.
+     * to generate rating for a particular task api.
      *
      * @param taskId
      * @return
@@ -35,7 +35,7 @@ public class RatingController {
     }
 
     /**
-     * to save rating based on task_id and otp.
+     * to save rating based on task_id and otp api.
      *
      * @param taskId
      * @param otp

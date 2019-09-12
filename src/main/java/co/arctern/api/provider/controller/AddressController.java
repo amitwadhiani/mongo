@@ -19,6 +19,11 @@ public class AddressController {
     @Autowired
     AddressService addressService;
 
+    /**
+     * create new address api.
+     * @param dto
+     * @return
+     */
     @CrossOrigin
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")

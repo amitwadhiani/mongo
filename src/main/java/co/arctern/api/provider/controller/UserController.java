@@ -21,7 +21,7 @@ public class UserController {
     UserService userService;
 
     /**
-     * to create new user -> allowed for Admin only.
+     * to create new user api-> allowed for Admin only .
      *
      * @param dto
      * @return
@@ -32,6 +32,10 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(dto));
     }
 
+    /**
+     * fetch all users api.
+     * @return
+     */
     @GetMapping("/fetch/all")
     @CrossOrigin
     public ResponseEntity<List<Users>> fetchAll() {

@@ -7,5 +7,11 @@ import co.arctern.api.provider.util.MessageUtil;
 
 public interface PaymentService extends MessageUtil {
 
+    /**
+     * create payment for a task.
+     * @param task
+     * @param dto
+     * @return
+     */
     Payment create(Task task, TaskAssignDto dto);
 }

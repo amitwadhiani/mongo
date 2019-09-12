@@ -18,6 +18,11 @@ public class OfferingController {
     @Autowired
     OfferingService offeringService;
 
+    /**
+     * create new offering api.
+     * @param dtos
+     * @return
+     */
     @CrossOrigin
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -25,6 +30,10 @@ public class OfferingController {
         return ResponseEntity.ok(offeringService.create(dtos));
     }
 
+    /**
+     * fetch all offerings api.
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/fetch/all")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -32,6 +41,11 @@ public class OfferingController {
         return ResponseEntity.ok(offeringService.fetchAll());
     }
 
+    /**
+     * fetch offering by id api.
+     * @param id
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/fetch/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

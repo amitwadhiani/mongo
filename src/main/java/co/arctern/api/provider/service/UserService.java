@@ -102,7 +102,17 @@ public interface UserService extends MessageUtil {
      */
     public void saveLastLoginTime(String phone, Timestamp loginTime);
 
+    /**
+     * fetch all users.
+     * @return
+     */
     public List<Users> fetchAll();
 
+    /**
+     * fetch users filtered by offerings.
+     * @param offeringIds
+     * @param pageable
+     * @return
+     */
     public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable);
 }

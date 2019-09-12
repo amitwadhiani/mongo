@@ -33,41 +33,18 @@ public class AdminServiceImpl implements AdminService {
         return userAreaService.fetchUsersByArea(areaIds, pageable);
     }
 
-    /**
-     * fetch tasks through areaIds
-     *
-     * @param areaIds
-     * @param start
-     * @param end
-     * @param pageable
-     * @return
-     */
     @Override
     public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable) {
         return (start == null && end == null) ? taskService.fetchTasksByArea(areaIds, pageable)
                 : taskService.fetchTasksByArea(areaIds, start, end, pageable);
     }
 
-    /**
-     * fetch providers through offeringIds
-     *
-     * @param offeringIds
-     * @param pageable
-     * @return
-     */
     @Override
     public PaginatedResponse fetchProvidersByOffering(List<Long> offeringIds, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(userService.fetchUsersByOffering(offeringIds, pageable), pageable);
     }
 
-    /**
-     * fetch tasks through offeringIds
-     *
-     * @param type
-     * @param pageable
-     * @return
-     */
-    @Override
+   @Override
     public Page<TasksForProvider> fetchTasksByOffering(OfferingType type, Timestamp start, Timestamp end, Pageable pageable) {
         return (start == null && end == null) ? taskService.fetchTasksByType(type, pageable)
                 : taskService.fetchTasksByType(type, start, end, pageable);

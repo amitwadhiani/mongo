@@ -14,5 +14,11 @@ import java.util.List;
 @Repository
 public interface UserAreaDao extends PagingAndSortingRepository<UserArea, Long> {
 
+    /**
+     * fetch users active in given areas.
+     * @param areaIds
+     * @param pageable
+     * @return
+     */
     Page<UserArea> findByAreaIdInAndIsActiveTrue(List<Long> areaIds, Pageable pageable);
 }
