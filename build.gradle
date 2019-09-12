@@ -27,6 +27,7 @@ sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
+    maven { url 'https://dl.bintray.com/ninformations/maven-repo' }
     maven { url "https://dl.bintray.com/arctern-internal-api/internal-api" }
 }
 
@@ -79,6 +80,12 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-rest') {
         exclude module: "spring-boot-starter-tomcat"
     }
+    compile('io.springfox:springfox-swagger2:2.9.0-RELEASE') //TODO: 2.9.0 will support spring 5
+    compile('io.springfox:springfox-data-rest:2.9.0-RELEASE') //@see https://github.com/springfox/springfox/issues/1773
+    compile('io.springfox:springfox-swagger-ui:2.9.0-RELEASE')
+    compile('io.springfox:springfox-bean-validators:2.9.0-RELEASE')
+    compile "io.swagger:swagger-annotations"
+
     compile("org.springframework.boot:spring-boot-starter-undertow")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile('org.apache.commons:commons-lang3:3.5')
