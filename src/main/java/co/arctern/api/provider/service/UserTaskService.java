@@ -4,6 +4,7 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,5 +53,6 @@ public interface UserTaskService extends MessageUtil {
 
     public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start);
 
+    public PaginatedResponse fetchTasks(TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
 
-}
+    }

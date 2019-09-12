@@ -5,7 +5,9 @@ import co.arctern.api.provider.dao.UserTaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.service.UserTaskService;
+import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -60,6 +62,15 @@ public class UserTaskServiceImpl implements UserTaskService {
     @Override
     public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start) {
         return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqual(userId, state, start);
+    }
+
+    @Override
+    public PaginatedResponse fetchTasks(TaskState[] states, Timestamp start, Timestamp end, Pageable pageable) {
+        if (states == null)
+            states = new TaskState[]{TaskState.OPEN, TaskState.ASSIGNED, TaskState.STARTED, TaskState.COMPLETED,
+                    TaskState.ACCEPTED, TaskState.CANCELLED};
+        return PaginationUtil.returnPaginatedBody(userTaskDao.findByIsActiveTrueAndTaskStateInAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(
+                states, start, end, pageable), pageable);
     }
 
 

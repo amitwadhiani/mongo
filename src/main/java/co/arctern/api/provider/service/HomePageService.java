@@ -1,13 +1,16 @@
 package co.arctern.api.provider.service;
 
+import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dto.response.HomePageResponse;
+import co.arctern.api.provider.dto.response.HomePageResponseForAdmin;
+import org.springframework.data.domain.Pageable;
 
 import java.sql.Timestamp;
-import java.time.ZonedDateTime;
 
 public interface HomePageService {
 
     public HomePageResponse fetchHomePage(Long userId, Timestamp start, Timestamp end);
 
+    public HomePageResponseForAdmin fetchHomePageForAdmin(TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
 
 }

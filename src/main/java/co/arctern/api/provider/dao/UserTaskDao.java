@@ -1,6 +1,7 @@
 package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.UserTask;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,5 +50,8 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      */
     Long countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(
             Long userId, TaskState state, Timestamp start, Timestamp end);
+
+    Page<UserTask> findByIsActiveTrueAndTaskStateInAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(TaskState[] states, Timestamp start,
+                                                                                                      Timestamp end,Pageable pageable);
 
 }

@@ -1,15 +1,19 @@
 package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.constant.OfferingType;
+import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.AdminService;
+import co.arctern.api.provider.service.HomePageService;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.UserService;
+import co.arctern.api.provider.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -35,6 +40,9 @@ public class AdminController {
 
     @Autowired
     TaskService taskService;
+
+    @Autowired
+    HomePageService homePageService;
 
     /**
      * view providers for admin's / particular areas.
@@ -102,6 +110,18 @@ public class AdminController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<PaginatedResponse> seeCancelRequests(Pageable pageable) {
         return ResponseEntity.ok(taskService.seeCancelRequests(pageable));
+    }
+
+    @CrossOrigin
+    @GetMapping("/home")
+    @PreAuthorize(("hasAuthority('ROLE_ADMIN')"))
+    public ResponseEntity<?> fetchHomepage(@RequestParam(value = "states", required = false) TaskState[] states,
+                                           @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
+                                           @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end,
+                                           Pageable pageable) {
+        if (start == null) start = ZonedDateTime.now();
+        if (end == null) end = start.plusDays(2);
+        return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, DateUtil.zonedDateTimeToTimestampConversion(start), DateUtil.zonedDateTimeToTimestampConversion(end), pageable));
     }
 
 }
