@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.ZonedDateTime;
 
+/**
+ * homepage apis for app ONLY.
+ */
 @BasePathAwareController
 @RequestMapping("/home")
 public class HomePageController {
@@ -23,6 +26,7 @@ public class HomePageController {
 
     /**
      * fetch tasks filtered by user and time range api.
+     *
      * @param userId
      * @param start
      * @param end
