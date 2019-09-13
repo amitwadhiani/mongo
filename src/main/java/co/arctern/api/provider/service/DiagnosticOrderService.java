@@ -15,7 +15,7 @@ public class DiagnosticOrderService {
         this.patientEntityApi = patientEntityApi;
     }
 
-    public  ResourcesPatient searchPatient(String phone, String name, Pageable pageable) {
+    public ResourcesPatient searchPatient(String phone, String name, Pageable pageable) {
         return patientEntityApi.findDistinctByNameContainingOrPhoneContainingPatientUsingGET(name, pageable.getPageNumber(), phone, pageable.getPageSize(), pageable.getSort().toString());
     }
 }
