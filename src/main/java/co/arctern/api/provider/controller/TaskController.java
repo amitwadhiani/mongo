@@ -138,7 +138,7 @@ public class TaskController {
      */
     @PostMapping("/create")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ORDER_API')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<TasksForProvider> createTask(@RequestBody TaskAssignDto dto) {
         return ResponseEntity.ok(taskService.fetchProjectedResponseFromPost(dto));
     }

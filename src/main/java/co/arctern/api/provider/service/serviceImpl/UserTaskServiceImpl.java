@@ -1,12 +1,14 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.dao.UserTaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
+import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.UserTaskService;
 import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class UserTaskServiceImpl implements UserTaskService {
 
     @Autowired
     private UserTaskDao userTaskDao;
+
+    @Autowired
+    TaskService taskService;
 
     @Autowired
     ProjectionFactory projectionFactory;
@@ -74,8 +79,8 @@ public class UserTaskServiceImpl implements UserTaskService {
         if (states == null)
             states = new TaskState[]{TaskState.OPEN, TaskState.ASSIGNED, TaskState.STARTED, TaskState.COMPLETED,
                     TaskState.ACCEPTED, TaskState.CANCELLED};
-        return PaginationUtil.returnPaginatedBody(userTaskDao.findByIsActiveTrueAndTaskStateInAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(
-                states, start, end, pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask())), pageable);
+        return PaginationUtil.returnPaginatedBody(taskService.findByIsActiveTrueAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+                states, start, end, pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a)), pageable);
     }
 
 

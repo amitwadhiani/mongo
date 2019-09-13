@@ -1,6 +1,7 @@
 package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.constant.OfferingType;
+import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.domain.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
     /**
      * fetch tasks filtered by type.
+     *
      * @param type
      * @param pageable
      * @return
@@ -26,6 +28,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
     /**
      * fetch tasks filtered by type and within a time range.
+     *
      * @param type
      * @param start
      * @param end
@@ -36,6 +39,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
     /**
      * fetch tasks for a particular area.
+     *
      * @param areaIds
      * @param pageable
      * @return
@@ -44,6 +48,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
     /**
      * fetch tasks for a particular area within a time range.
+     *
      * @param areaIds
      * @param start
      * @param end
@@ -54,8 +59,13 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
     /**
      * fetch cancellation requested tasks.
+     *
      * @param pageable
      * @return
      */
     Page<Task> findByCancellationRequestedTrue(Pageable pageable);
+
+
+    Page<Task> findByIsActiveTrueAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
 }

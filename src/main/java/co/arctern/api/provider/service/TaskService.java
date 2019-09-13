@@ -114,6 +114,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * start an assigned task.
+     *
      * @param taskId
      * @param userId
      * @return
@@ -122,6 +123,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * reschedule task and mark OPEN.
+     *
      * @param taskId
      * @param userId
      * @param time
@@ -131,6 +133,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * fetch tasks by their offering type.
+     *
      * @param type
      * @param pageable
      * @return
@@ -139,6 +142,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * fetch tasks filtered by area.
+     *
      * @param areaIds
      * @param pageable
      * @return
@@ -147,6 +151,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * fetch tasks by offering type within a time range.
+     *
      * @param type
      * @param start
      * @param end
@@ -157,6 +162,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * fetch tasks filtered by area within a time range.
+     *
      * @param areaIds
      * @param start
      * @param end
@@ -167,6 +173,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * see cancellation requests for Admin.
+     *
      * @param pageable
      * @return
      */
@@ -174,6 +181,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * create a new task .
+     *
      * @param dto
      * @return
      */
@@ -181,6 +189,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * fetch projected response after save call (task) .
+     *
      * @param dto
      * @return
      */
@@ -188,6 +197,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * fetch tasks with given state within a time range.
+     *
      * @param userId
      * @param state
      * @param start
@@ -197,11 +207,15 @@ public interface TaskService extends MessageUtil {
     public List<TasksForProvider> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end);
 
     /**
-     *  fetch upcoming tasks for a user filtered by state.
+     * fetch upcoming tasks for a user filtered by state.
+     *
      * @param userId
      * @param state
      * @param start
      * @return
      */
     public List<TasksForProvider> fetchUpcomingTasksForUser(Long userId, TaskState state, Timestamp start);
+
+    public Page<Task> findByIsActiveTrueAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
 }

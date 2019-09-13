@@ -236,10 +236,11 @@ public class TaskServiceImpl implements TaskService {
         task.setCancellationRequested(false);
         task.setIsActive(true);
         task.setExpectedArrivalTime(dto.getExpectedArrivalTime());
-        task.setDestinationAddressId(dto.getDestAddressId());
+        task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
         task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
-        task.setState(TaskState.ASSIGNED);
+        task.setState(TaskState.OPEN);
         task = taskDao.save(task);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, null);
         paymentService.create(task, dto);
         return task;
 
@@ -264,6 +265,12 @@ public class TaskServiceImpl implements TaskService {
                 .stream()
                 .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Task> findByIsActiveTrueAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            TaskState[] states, Timestamp start, Timestamp end, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, start, end, pageable);
     }
 
 }

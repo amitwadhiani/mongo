@@ -29,5 +29,9 @@ public interface TasksForProvider {
 
     Boolean getIsPrepaid();
 
+    Addresses getSourceAddress();
+
+    Addresses getDestinationAddress();
+
 
 }

@@ -127,8 +127,8 @@ public class AdminController {
                                            @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
                                            @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end,
                                            Pageable pageable) {
-        if (start == null) start = ZonedDateTime.now();
-        if (end == null) end = start.plusDays(2);
+        if (start == null) start = ZonedDateTime.now().minusDays(1);
+        if (end == null) end = start.plusDays(3);
         return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, DateUtil.zonedDateTimeToTimestampConversion(start), DateUtil.zonedDateTimeToTimestampConversion(end), pageable));
     }
 
