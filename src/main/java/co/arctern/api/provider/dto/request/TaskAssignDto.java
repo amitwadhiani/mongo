@@ -38,6 +38,8 @@ public class TaskAssignDto {
      */
     private String addressName;
     private Long destAddressId;
+    private Double latitude;
+    private Double longitude;
     private Long sourceAddressId;
     private String city;
     private String houseNumber;

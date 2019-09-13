@@ -33,6 +33,8 @@ public class AddressServiceImpl implements AddressService {
         address.setName(dto.getAddressName());
         address.setHouseNumber(dto.getHouseNumber());
         address.setLine(dto.getLine());
+        address.setLatitude(dto.getLatitude());
+        address.setLongitude(dto.getLongitude());
         address.setLocality(dto.getLocality());
         address.setPinCode(dto.getPinCode());
         address.setPatientId(dto.getPatientId());

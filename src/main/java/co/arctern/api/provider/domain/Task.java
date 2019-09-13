@@ -73,11 +73,10 @@ public class Task {
 
     @ManyToOne
     @JsonBackReference("sourceAddress-task")
-    Address sourceAddress;
+    private Address sourceAddress;
 
-    @ManyToOne
-    @JsonBackReference("destinationAddress-task")
-    Address destinationAddress;
+    @Column(nullable = false)
+    private Long destinationAddressId;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
     private Boolean isActive;
