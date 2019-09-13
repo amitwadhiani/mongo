@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsBootstrapper;
 
+/**
+ * swagger generation controller.
+ */
 @BasePathAwareController
 public class SwaggerGenController {
 

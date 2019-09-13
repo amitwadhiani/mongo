@@ -11,6 +11,9 @@ import springfox.documentation.spring.data.rest.configuration.SpringDataRestConf
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * swagger config file.
+ */
 @Configuration
 @EnableSwagger2
 @Import({SpringDataRestConfiguration.class, BeanValidatorPluginsConfiguration.class})
