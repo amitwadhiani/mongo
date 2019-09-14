@@ -15,7 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
@@ -42,9 +42,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRoleService userRoleService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public String signIn(String phone, String username, String password) {
@@ -116,7 +113,7 @@ public class UserServiceImpl implements UserService {
         user.setAge(dto.getAge());
         user.setGender(dto.getGender());
         user.setIsLoggedIn(false);
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
         user.setPhone(dto.getPhone());
         user.setUsername(dto.getUsername());
         user = userDao.save(user);
