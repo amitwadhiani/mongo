@@ -102,8 +102,8 @@ spring:
     encodingStrength: 256
     securityRealm: Spring Boot JWT Example Realm
     jwt:
-      clientId: "LRL6ZCEt5Ag7whaa"
-      clientSecret: "LwprrjdLzMc9zSq4XY4jWCz3hNWYMVV6"
+      clientId: "testjwtclientid"
+      clientSecret: "XY7kmzoNzl100"
   emr:
     apiUrl: "http://emr-api.default.svc.cluster.local"
   auth:
