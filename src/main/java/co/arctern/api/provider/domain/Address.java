@@ -52,6 +52,12 @@ public class Address {
     private Double longitude;
 
     @Column
+    private String addressTag;
+
+    @Column
+    private String landmark;
+
+    @Column
     private String patientId;
 
     @OneToMany(mappedBy = "sourceAddress")
