@@ -26,9 +26,6 @@ public class AppUserDetailsService implements UserDetailsService {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
         User user = userDao.findByPhone(phone)
@@ -39,7 +36,7 @@ public class AppUserDetailsService implements UserDetailsService {
         user.getUserRoles().stream().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getRole().getRole()));
         });
-        co.arctern.api.provider.security.model.User userDetails = new co.arctern.api.provider.security.model.User(user.getUsername(), passwordEncoder.encode(user.getPassword()), authorities);
+        co.arctern.api.provider.security.model.User userDetails = new co.arctern.api.provider.security.model.User(user.getUsername(), user.getPassword(), authorities);
         userDetails.setId(user.getId());
         userDetails.setName(user.getName());
         userDetails.setEmail(user.getEmail());
