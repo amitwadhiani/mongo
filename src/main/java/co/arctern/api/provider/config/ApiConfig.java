@@ -16,4 +16,5 @@ public class ApiConfig {
     public SpelAwareProxyProjectionFactory projectionFactory() {
         return new SpelAwareProxyProjectionFactory();
     }
+
 }
