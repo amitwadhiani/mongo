@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
@@ -39,8 +40,14 @@ public class TokenServiceImpl implements TokenService {
     @Value("${security.jwt.client-secret}")
     private String secret;
 
+    @Value("${security.jwt.grant-type}")
+    private String grantType;
+
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     AreaDao areaDao;
@@ -51,8 +58,8 @@ public class TokenServiceImpl implements TokenService {
         User user = userDao.findByPhone(phone).get();
         Map<String, String> parameters = new HashMap<>();
         parameters.put("client_id", clientID);
-        parameters.put("grant_type", "password");
-        parameters.put("password", user.getPassword());
+        parameters.put("grant_type", grantType);
+        parameters.put("password", passwordEncoder.encode(user.getPassword()));
         parameters.put("username", user.getPhone());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         List<Role> roles = user.getUserRoles().stream().map(a -> a.getRole()).collect(Collectors.toList());
