@@ -47,9 +47,6 @@ public class TokenServiceImpl implements TokenService {
     UserDao userDao;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
     AreaDao areaDao;
 
     @Override
@@ -59,7 +56,7 @@ public class TokenServiceImpl implements TokenService {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("client_id", clientID);
         parameters.put("grant_type", grantType);
-        parameters.put("password", passwordEncoder.encode(user.getPassword()));
+        parameters.put("password", user.getPassword());
         parameters.put("username", user.getPhone());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         List<Role> roles = user.getUserRoles().stream().map(a -> a.getRole()).collect(Collectors.toList());

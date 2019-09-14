@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -24,6 +25,9 @@ public class AppUserDetailsService implements UserDetailsService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
         User user = userDao.findByPhone(phone)
@@ -34,7 +38,7 @@ public class AppUserDetailsService implements UserDetailsService {
         user.getUserRoles().stream().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getRole().getRole()));
         });
-        co.arctern.api.provider.security.model.User userDetails = new co.arctern.api.provider.security.model.User(user.getUsername(), user.getPassword(), authorities);
+        co.arctern.api.provider.security.model.User userDetails = new co.arctern.api.provider.security.model.User(user.getUsername(), passwordEncoder.encode(user.getPassword()), authorities);
         userDetails.setId(user.getId());
         userDetails.setName(user.getName());
         userDetails.setEmail(user.getEmail());
