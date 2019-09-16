@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class UserAreaServiceImpl implements UserAreaService {
@@ -20,5 +22,11 @@ public class UserAreaServiceImpl implements UserAreaService {
     public PaginatedResponse fetchUsersByArea(List<Long> areaIds, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(userAreaDao.findByAreaIdInAndIsActiveTrue(areaIds, pageable).map(
                 a -> a.getUser()), pageable);
+    }
+
+    @Override
+    public  Map<Long, List<Long>> fetchUsersByArea(Pageable pageable) {
+       return userAreaDao.findByIsActiveTrue(pageable).stream()
+                .collect(Collectors.groupingBy(a -> a.getArea().getId(), Collectors.mapping(a -> a.getUser().getId(), Collectors.toList())));
     }
 }

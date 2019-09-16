@@ -4,10 +4,7 @@ import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.projection.Users;
-import co.arctern.api.provider.service.AreaService;
-import co.arctern.api.provider.service.OfferingService;
-import co.arctern.api.provider.service.UserRoleService;
-import co.arctern.api.provider.service.UserService;
+import co.arctern.api.provider.service.*;
 import com.amazonaws.util.CollectionUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +21,7 @@ import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,7 +36,13 @@ public class UserServiceImpl implements UserService {
     private OfferingService offeringService;
 
     @Autowired
+    private UserOfferingService userOfferingService;
+
+    @Autowired
     private AreaService areaService;
+
+    @Autowired
+    UserAreaService userAreaService;
 
     @Autowired
     private UserRoleService userRoleService;
@@ -147,5 +151,11 @@ public class UserServiceImpl implements UserService {
         return offeringService.fetchUserOfferings(offeringIds, pageable).map(a -> a.getUser());
     }
 
-
+    @Override
+    public Map<Long, List<Long>> fetchAllByAreaOrOffering(String type, Pageable pageable) {
+        if (type.equalsIgnoreCase("offering")) {
+            return userAreaService.fetchUsersByArea(pageable);
+        }
+        return userOfferingService.fetchUsersByOffering(pageable);
+    }
 }

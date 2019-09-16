@@ -21,4 +21,6 @@ public interface UserAreaDao extends PagingAndSortingRepository<UserArea, Long> 
      * @return
      */
     Page<UserArea> findByAreaIdInAndIsActiveTrue(List<Long> areaIds, Pageable pageable);
+
+    Page<UserArea> findByIsActiveTrue(Pageable pageable);
 }

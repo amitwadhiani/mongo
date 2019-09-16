@@ -21,4 +21,6 @@ public interface UserOfferingDao extends PagingAndSortingRepository<UserOffering
      * @return
      */
     Page<UserOffering> findByOfferingIdInAndIsActiveTrue(List<Long>offeringIds, Pageable pageable);
+
+    Page<UserOffering>  findByIsActiveTrue(Pageable pageable);
 }

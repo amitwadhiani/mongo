@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * apis for admin dashboard.
@@ -114,6 +115,7 @@ public class AdminController {
 
     /**
      * admin homepage api.
+     *
      * @param states
      * @param start
      * @param end
@@ -131,5 +133,14 @@ public class AdminController {
         if (end == null) end = start.plusDays(3);
         return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, DateUtil.zonedDateTimeToTimestampConversion(start), DateUtil.zonedDateTimeToTimestampConversion(end), pageable));
     }
+
+    @GetMapping("/fetch/group-by")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<Map<Long, List<Long>>> fetchUsersByAreaOrOffering(@RequestParam("type") String type,
+                                                                            Pageable pageable) {
+        return ResponseEntity.ok(userService.fetchAllByAreaOrOffering(type, pageable));
+    }
+
 
 }

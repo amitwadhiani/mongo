@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 public interface UserService extends MessageUtil {
 
@@ -115,4 +116,6 @@ public interface UserService extends MessageUtil {
      * @return
      */
     public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable);
+
+    public Map<Long, List<Long>> fetchAllByAreaOrOffering(String type, Pageable pageable);
 }

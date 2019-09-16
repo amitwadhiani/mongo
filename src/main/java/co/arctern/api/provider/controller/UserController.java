@@ -6,6 +6,7 @@ import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class UserController {
 
     /**
      * fetch all users api.
+     *
      * @return
      */
     @GetMapping("/fetch/all")
@@ -41,5 +43,6 @@ public class UserController {
     public ResponseEntity<List<Users>> fetchAll() {
         return ResponseEntity.ok(userService.fetchAll());
     }
+
 
 }
