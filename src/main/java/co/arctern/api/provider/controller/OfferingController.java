@@ -25,7 +25,7 @@ public class OfferingController {
      */
     @CrossOrigin
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> postOfferings(@RequestBody List<OfferingRequestDto> dtos) {
         return ResponseEntity.ok(offeringService.create(dtos));
     }
