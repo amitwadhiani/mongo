@@ -2,10 +2,13 @@ package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dao.UserAreaDao;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.Areas;
+import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.UserAreaService;
 import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,9 @@ public class UserAreaServiceImpl implements UserAreaService {
     @Autowired
     private UserAreaDao userAreaDao;
 
+    @Autowired
+    private ProjectionFactory projectionFactory;
+
     @Override
     public PaginatedResponse fetchUsersByArea(List<Long> areaIds, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(userAreaDao.findByAreaIdInAndIsActiveTrue(areaIds, pageable).map(
@@ -25,8 +31,9 @@ public class UserAreaServiceImpl implements UserAreaService {
     }
 
     @Override
-    public  Map<Long, List<Long>> fetchUsersByArea(Pageable pageable) {
+    public Map<Object, List<Users>> fetchUsersByArea(Pageable pageable) {
        return userAreaDao.findByIsActiveTrue(pageable).stream()
-                .collect(Collectors.groupingBy(a -> a.getArea().getId(), Collectors.mapping(a -> a.getUser().getId(), Collectors.toList())));
+                .collect(Collectors.groupingBy(a -> projectionFactory.createProjection(Areas.class, a.getArea()), Collectors.mapping(a -> projectionFactory.createProjection(Users.class, a.getUser()), Collectors.toList())));
+
     }
 }

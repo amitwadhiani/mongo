@@ -3,6 +3,7 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
+import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import com.amazonaws.util.CollectionUtils;
@@ -152,8 +153,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<Long, List<Long>> fetchAllByAreaOrOffering(String type, Pageable pageable) {
-        if (type.equalsIgnoreCase("offering")) {
+    public Map<Object, List<Users>> fetchAllByAreaOrOffering(String type, Pageable pageable) {
+        if (type.equalsIgnoreCase("area")) {
             return userAreaService.fetchUsersByArea(pageable);
         }
         return userOfferingService.fetchUsersByOffering(pageable);

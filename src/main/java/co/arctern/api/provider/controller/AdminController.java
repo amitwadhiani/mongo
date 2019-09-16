@@ -4,6 +4,7 @@ import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
+import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.AdminService;
 import co.arctern.api.provider.service.HomePageService;
 import co.arctern.api.provider.service.TaskService;
@@ -16,10 +17,7 @@ import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
@@ -134,11 +132,11 @@ public class AdminController {
         return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, DateUtil.zonedDateTimeToTimestampConversion(start), DateUtil.zonedDateTimeToTimestampConversion(end), pageable));
     }
 
-    @GetMapping("/fetch/group-by")
+    @GetMapping("/fetch//user/group-by/{type}")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Map<Long, List<Long>>> fetchUsersByAreaOrOffering(@RequestParam("type") String type,
-                                                                            Pageable pageable) {
+    public ResponseEntity<Map<Object, List<Users>>> fetchUsersByAreaOrOffering(@PathVariable(value = "type", required = false,
+            name = "area") String type, Pageable pageable) {
         return ResponseEntity.ok(userService.fetchAllByAreaOrOffering(type, pageable));
     }
 
