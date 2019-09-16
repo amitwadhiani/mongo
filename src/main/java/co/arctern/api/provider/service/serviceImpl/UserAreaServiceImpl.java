@@ -30,10 +30,4 @@ public class UserAreaServiceImpl implements UserAreaService {
                 a -> a.getUser()), pageable);
     }
 
-    @Override
-    public Map<Object, List<Users>> fetchUsersByArea(Pageable pageable) {
-       return userAreaDao.findByIsActiveTrue(pageable).stream()
-                .collect(Collectors.groupingBy(a -> projectionFactory.createProjection(Areas.class, a.getArea()), Collectors.mapping(a -> projectionFactory.createProjection(Users.class, a.getUser()), Collectors.toList())));
-
-    }
 }
