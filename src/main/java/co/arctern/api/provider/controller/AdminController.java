@@ -135,8 +135,7 @@ public class AdminController {
     @GetMapping("/fetch//user/group-by/{type}")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Map<Object, List<Users>>> fetchUsersByAreaOrOffering(@PathVariable(value = "type", required = false,
-            name = "area") String type, Pageable pageable) {
+    public ResponseEntity<Map<Object, List<Users>>> fetchUsersByAreaOrOffering(@PathVariable(value = "type") String type, Pageable pageable) {
         return ResponseEntity.ok(userService.fetchAllByAreaOrOffering(type, pageable));
     }
 

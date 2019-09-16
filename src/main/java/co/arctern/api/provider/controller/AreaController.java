@@ -26,7 +26,7 @@ public class AreaController {
      */
     @PostMapping("/create")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> createAreas(List<AreaRequestDto> dtos) {
         return ResponseEntity.ok(areaService.createAreas(dtos));
     }
