@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class AreaController {
     @PostMapping("/create")
     @CrossOrigin
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<StringBuilder> createAreas(List<AreaRequestDto> dtos) {
+    public ResponseEntity<StringBuilder> createAreas(@RequestBody List<AreaRequestDto> dtos) {
         return ResponseEntity.ok(areaService.createAreas(dtos));
     }
 }
