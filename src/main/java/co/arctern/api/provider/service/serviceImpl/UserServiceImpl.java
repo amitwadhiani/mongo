@@ -152,11 +152,4 @@ public class UserServiceImpl implements UserService {
         return offeringService.fetchUserOfferings(offeringIds, pageable).map(a -> a.getUser());
     }
 
-    @Override
-    public Map<Object, List<Users>> fetchAllByAreaOrOffering(String type, Pageable pageable) {
-        if (type.equalsIgnoreCase("area")) {
-            return userAreaService.fetchUsersByArea(pageable);
-        }
-        return userOfferingService.fetchUsersByOffering(pageable);
-    }
 }

@@ -132,12 +132,4 @@ public class AdminController {
         return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, DateUtil.zonedDateTimeToTimestampConversion(start), DateUtil.zonedDateTimeToTimestampConversion(end), pageable));
     }
 
-    @GetMapping("/fetch//user/group-by/{type}")
-    @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Map<Object, List<Users>>> fetchUsersByAreaOrOffering(@PathVariable(value = "type") String type, Pageable pageable) {
-        return ResponseEntity.ok(userService.fetchAllByAreaOrOffering(type, pageable));
-    }
-
-
 }

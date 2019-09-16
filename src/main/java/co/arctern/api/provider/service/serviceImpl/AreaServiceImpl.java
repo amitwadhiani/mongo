@@ -6,9 +6,13 @@ import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserArea;
 import co.arctern.api.provider.dto.request.AreaRequestDto;
+import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.service.AreaService;
 import com.amazonaws.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,6 +27,9 @@ public class AreaServiceImpl implements AreaService {
 
     @Autowired
     UserAreaDao userAreaDao;
+
+    @Autowired
+    ProjectionFactory projectionFactory;
 
     @Override
     public void setAreasToUser(User user, List<Long> areaIds) {
@@ -59,6 +66,11 @@ public class AreaServiceImpl implements AreaService {
         });
         areaDao.saveAll(areas);
         return SUCCESS_MESSAGE;
+    }
+
+    @Override
+    public Page<Areas> fetchAreas(Pageable pageable) {
+        return areaDao.findByIsActiveTrue(pageable).map(area -> projectionFactory.createProjection(Areas.class,area));
     }
 
 }

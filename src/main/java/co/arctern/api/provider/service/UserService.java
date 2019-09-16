@@ -117,5 +117,4 @@ public interface UserService extends MessageUtil {
      */
     public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable);
 
-    public Map<Object, List<Users>> fetchAllByAreaOrOffering(String type, Pageable pageable);
 }

@@ -18,6 +18,4 @@ public interface UserAreaService extends MessageUtil {
      */
     PaginatedResponse fetchUsersByArea(List<Long> areaIds, Pageable pageable);
 
-    public Map<Object, List<Users>> fetchUsersByArea(Pageable pageable);
-
 }
