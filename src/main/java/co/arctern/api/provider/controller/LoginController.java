@@ -32,9 +32,10 @@ public class LoginController {
      * @throws Exception
      */
     @PostMapping("/generate-otp")
-    public ResponseEntity<String> generateOTP(@RequestParam("phone") String phone)
+    public ResponseEntity<String> generateOTP(@RequestParam("phone") String phone,
+                                              @RequestParam(value = "isAdmin", required = false, defaultValue = "false") Boolean isAdmin)
             throws Exception {
-        return ResponseEntity.ok(loginService.generateOTP(phone));
+        return ResponseEntity.ok(loginService.generateOTP(phone,isAdmin));
     }
 
     /**

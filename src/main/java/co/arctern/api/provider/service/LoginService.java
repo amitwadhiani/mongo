@@ -10,9 +10,10 @@ public interface LoginService extends MessageUtil {
      * to generate otp for a phone number.
      *
      * @param phone
+     * @param isAdmin
      * @return
      */
-    public String generateOTP(String phone);
+    public String generateOTP(String phone,Boolean isAdmin);
 
     /**
      * to verify otp from db with provided otp using phone number.
