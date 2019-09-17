@@ -17,6 +17,8 @@ public interface TasksForProvider {
 
     TaskState getState();
 
+    String getCode();
+
     Timestamp getExpectedArrivalTime();
 
     Timestamp getCreatedAt();

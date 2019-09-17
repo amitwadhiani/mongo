@@ -2,8 +2,10 @@ package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskType;
+import co.arctern.api.provider.util.CodeGeneratorUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,11 +20,15 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class Task {
+public class Task extends CodeGeneratorUtil {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true, length = 20)
+    @Getter
+    private String code;
 
     @CreatedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -103,6 +109,11 @@ public class Task {
 
     @Column
     private String patientAge;
+
+    @PostPersist
+    public void setCode() {
+        this.code = generateTaskCode(this.id, this.patientName, this.type);
+    }
 
     public Task(Long version) {
         this.version = version;

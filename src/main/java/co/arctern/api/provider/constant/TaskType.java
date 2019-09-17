@@ -5,7 +5,13 @@ package co.arctern.api.provider.constant;
  */
 public enum TaskType {
 
-    DELIVERY,
-    SAMPLE_PICKUP,
-    SERVICE
+    DELIVERY("DLR"),
+    SAMPLE_PICKUP("SP"),
+    SERVICE("SVC");
+
+    String value;
+
+    TaskType(String value) {
+        this.value = value;
+    }
 }
