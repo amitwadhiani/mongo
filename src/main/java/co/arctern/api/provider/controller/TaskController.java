@@ -3,6 +3,7 @@ package co.arctern.api.provider.controller;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.TaskService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @BasePathAwareController
 @RequestMapping("/task")
+@Slf4j
 public class TaskController {
 
     @Autowired
@@ -139,6 +141,7 @@ public class TaskController {
     @PostMapping("/create")
     @CrossOrigin
     public ResponseEntity<TasksForProvider> createTask(@RequestBody TaskAssignDto dto) {
+        log.info("Call from order-api");
         return ResponseEntity.ok(taskService.fetchProjectedResponseFromPost(dto));
     }
 }
