@@ -9,10 +9,10 @@ public class CodeGeneratorUtil {
 
     public String generateTaskCode(Long id, String patientName, TaskType type) {
         return STATIC_TASK_PREFIX
+                + ":"
                 + type.getValue()
                 + patientName.substring(0, 3)
-                + ":"
-                + RandomStringUtils.randomAlphanumeric(5).toLowerCase();
+                + RandomStringUtils.randomAlphanumeric(5).toUpperCase();
     }
 
 }
