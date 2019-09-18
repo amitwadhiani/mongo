@@ -26,7 +26,7 @@ public class Task extends CodeGeneratorUtil {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 20)
+    @Column(nullable = false, unique = true, length = 64)
     @Getter
     private String code;
 
