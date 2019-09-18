@@ -11,7 +11,6 @@ public class CodeGeneratorUtil {
         return STATIC_TASK_PREFIX
                 + type.name()
                 + patientName.substring(0, 1)
-                + id.toString()
                 + ":"
                 + RandomStringUtils.randomAlphanumeric(5).toLowerCase();
     }
