@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
@@ -80,7 +81,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.createdAt >= (:start) " +
             "AND task.createdAt < (:end) " +
             "ORDER BY task.createdAt DESC")
-    public Page<Task> filterByAreaIdsAndPatientDetails(List<Long> areaIds, TaskState[] states, TaskType type, String value, Timestamp start, Timestamp end, Pageable pageable);
+    public Page<Task> filterByAreaIdsAndPatientDetails(@Param("areaIds") List<Long> areaIds, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
@@ -90,7 +91,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.createdAt >= (:start) " +
             "AND task.createdAt < (:end) " +
             "ORDER BY task.createdAt DESC")
-    public Page<Task> filterByPatientDetails(TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+    public Page<Task> filterByPatientDetails(@Param("states") TaskState[] states, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
