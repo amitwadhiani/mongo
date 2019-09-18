@@ -112,7 +112,7 @@ public class Task extends CodeGeneratorUtil {
 
     @PrePersist
     public void setCode() {
-        this.code = generateTaskCode(this.id, this.patientName, this.type);
+        this.code = generateTaskCode(this.id, this.refId, this.type);
     }
 
     public Task(Long version) {

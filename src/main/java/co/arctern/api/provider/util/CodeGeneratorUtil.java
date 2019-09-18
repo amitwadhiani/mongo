@@ -7,11 +7,11 @@ public class CodeGeneratorUtil {
 
     private static final String STATIC_TASK_PREFIX = "TA";
 
-    public String generateTaskCode(Long id, String patientName, TaskType type) {
+    public String generateTaskCode(Long id, Long orderId, TaskType type) {
         return STATIC_TASK_PREFIX
                 + ":"
                 + type.getValue()
-                + patientName.substring(0, 3)
+                + orderId.toString()
                 + RandomStringUtils.randomAlphanumeric(5).toUpperCase();
     }
 
