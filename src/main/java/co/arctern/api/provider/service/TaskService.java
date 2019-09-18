@@ -3,6 +3,7 @@ package co.arctern.api.provider.service;
 import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.constant.TaskEventFlowState;
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
@@ -216,6 +217,12 @@ public interface TaskService extends MessageUtil {
      */
     public List<TasksForProvider> fetchUpcomingTasksForUser(Long userId, TaskState state, Timestamp start);
 
-    public Page<Task> findByIsActiveTrueAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
+    public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    public Page<Task> filterByPatientDetailsWoAreaIds(
+            TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
 }

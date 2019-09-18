@@ -5,9 +5,9 @@ import co.arctern.api.provider.dao.UserRoleDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserRole;
 import co.arctern.api.provider.service.UserRoleService;
-import com.amazonaws.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public void createUserRoles(User user, List<Long> roleIds) {
         List<UserRole> userRoles = new ArrayList<>();
         List<UserRole> existingUserRoles = user.getUserRoles();
-        if (!CollectionUtils.isNullOrEmpty(userRoles)) {
+        if (!CollectionUtils.isEmpty(userRoles)) {
             existingUserRoles.stream().forEach(a -> a.setIsActive(false));
             userRoleDao.saveAll(existingUserRoles);
         }

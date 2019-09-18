@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
@@ -48,6 +49,7 @@ public interface UserTaskService extends MessageUtil {
 
     /**
      * fetch count of tasks for a user filtered by state within a range.
+     *
      * @param userId
      * @param state
      * @param start
@@ -59,6 +61,7 @@ public interface UserTaskService extends MessageUtil {
 
     /**
      * fetch tasks for a user within a time range.
+     *
      * @param userId
      * @param state
      * @param start
@@ -69,6 +72,7 @@ public interface UserTaskService extends MessageUtil {
 
     /**
      * fetch tasks for user filtered by state greater than a given time.
+     *
      * @param userId
      * @param state
      * @param start
@@ -78,12 +82,15 @@ public interface UserTaskService extends MessageUtil {
 
     /**
      * fetch tasks filtered by states within a range.
+     *
      * @param states
      * @param start
      * @param end
      * @param pageable
      * @return
      */
-    public PaginatedResponse fetchTasks(TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
+    public PaginatedResponse fetchTasks(TaskState[] states, Timestamp start, Timestamp end,
+                                        List<Long> areaIds, TaskType taskType, String patientFilterValue,
+                                        Pageable pageable);
 
-    }
+}

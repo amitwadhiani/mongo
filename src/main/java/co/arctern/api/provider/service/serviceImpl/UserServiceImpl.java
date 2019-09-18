@@ -6,7 +6,6 @@ import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
-import com.amazonaws.util.CollectionUtils;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +14,7 @@ import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -122,9 +122,9 @@ public class UserServiceImpl implements UserService {
         user.setPhone(dto.getPhone());
         user.setUsername(dto.getUsername());
         user = userDao.save(user);
-        if (!CollectionUtils.isNullOrEmpty(roleIds)) userRoleService.createUserRoles(user, roleIds);
-        if (!CollectionUtils.isNullOrEmpty(areaIds)) areaService.setAreasToUser(user, areaIds);
-        if (!CollectionUtils.isNullOrEmpty(offeringIds)) offeringService.setOfferingsToUser(user, offeringIds);
+        if (!org.springframework.util.CollectionUtils.isEmpty(roleIds)) userRoleService.createUserRoles(user, roleIds);
+        if (!org.springframework.util.CollectionUtils.isEmpty(areaIds)) areaService.setAreasToUser(user, areaIds);
+        if (!CollectionUtils.isEmpty(offeringIds)) offeringService.setOfferingsToUser(user, offeringIds);
         return SUCCESS_MESSAGE;
     }
 

@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.HomePageResponse;
 import co.arctern.api.provider.dto.response.HomePageResponseForAdmin;
 import co.arctern.api.provider.service.HomePageService;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 public class HomePageServiceImpl implements HomePageService {
@@ -39,9 +41,11 @@ public class HomePageServiceImpl implements HomePageService {
     }
 
     @Override
-    public HomePageResponseForAdmin fetchHomePageForAdmin(TaskState[] states, Timestamp start, Timestamp end, Pageable pageable) {
+    public HomePageResponseForAdmin fetchHomePageForAdmin(TaskState[] states, Timestamp start, Timestamp end,
+                                                          List<Long> areaIds, TaskType taskType, String patientFilterValue,
+                                                          Pageable pageable) {
         HomePageResponseForAdmin adminResponse = new HomePageResponseForAdmin();
-        adminResponse.setTasks(userTaskService.fetchTasks(states, start, end, pageable));
+        adminResponse.setTasks(userTaskService.fetchTasks(states, start, end, areaIds, taskType, patientFilterValue, pageable));
         return adminResponse;
     }
 }

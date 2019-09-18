@@ -2,9 +2,9 @@ package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
-import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.AdminService;
 import co.arctern.api.provider.service.HomePageService;
 import co.arctern.api.provider.service.TaskService;
@@ -17,12 +17,14 @@ import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * apis for admin dashboard.
@@ -126,10 +128,19 @@ public class AdminController {
     public ResponseEntity<?> fetchHomepage(@RequestParam(value = "states", required = false) TaskState[] states,
                                            @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
                                            @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end,
+                                           @RequestParam(value = "areaIds", required = false) List<Long> areaIds,
+                                           @RequestParam(value = "taskType", required = false, defaultValue = "SAMPLE_PICKUP") TaskType taskType,
+                                           @RequestParam(value = "patientFilterValue", required = false) String patientFilterValue,
                                            Pageable pageable) {
         if (start == null) start = ZonedDateTime.now().minusDays(1);
-        if (end == null) end = start.plusDays(3);
-        return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, DateUtil.zonedDateTimeToTimestampConversion(start), DateUtil.zonedDateTimeToTimestampConversion(end), pageable));
+        if (end == null) end = start.plusDays(5);
+        return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states,
+                DateUtil.zonedDateTimeToTimestampConversion(start),
+                DateUtil.zonedDateTimeToTimestampConversion(end),
+                areaIds,
+                taskType,
+                patientFilterValue,
+                pageable));
     }
 
 }

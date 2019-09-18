@@ -2,9 +2,11 @@ package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.Task;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -66,6 +68,31 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     Page<Task> findByCancellationRequestedTrue(Pageable pageable);
 
 
-    Page<Task> findByIsActiveTrueAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
+    Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    @Query("FROM Task task " +
+            "WHERE task.isActive = 1" +
+            "AND task.destinationAddress.area.id IN (:areaIds) " +
+            "AND (task.patientName = (:value) OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
+            "AND task.type = (:type) " +
+            "AND task.state IN (:states) " +
+            "AND task.createdAt >= (:start) " +
+            "AND task.createdAt < (:end) " +
+            "ORDER BY task.createdAt DESC")
+    public Page<Task> filterByAreaIdsAndPatientDetails(List<Long> areaIds, TaskState[] states, TaskType type, String value, Timestamp start, Timestamp end, Pageable pageable);
+
+    @Query("FROM Task task " +
+            "WHERE task.isActive = 1" +
+            "AND task.state IN (:states) " +
+            "AND (task.patientName = (:value) OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
+            "AND task.type = (:type) " +
+            "AND task.createdAt >= (start) " +
+            "AND task.createdAt < (:end) " +
+            "ORDER BY task.createdAt DESC")
+    public Page<Task> filterByPatientDetails(TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            List<Long> areaIds, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
 }

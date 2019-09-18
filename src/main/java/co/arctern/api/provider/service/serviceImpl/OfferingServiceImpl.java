@@ -8,7 +8,6 @@ import co.arctern.api.provider.domain.UserOffering;
 import co.arctern.api.provider.dto.request.OfferingRequestDto;
 import co.arctern.api.provider.dto.response.projection.Offerings;
 import co.arctern.api.provider.service.OfferingService;
-import com.amazonaws.util.CollectionUtils;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
@@ -39,7 +39,7 @@ public class OfferingServiceImpl implements OfferingService {
     public void setOfferingsToUser(User user, List<Long> offeringIds) {
         List<UserOffering> userOfferings = new ArrayList<>();
         List<UserOffering> existingUserOfferings = user.getUserOfferings();
-        if (!CollectionUtils.isNullOrEmpty(existingUserOfferings)) {
+        if (!CollectionUtils.isEmpty(existingUserOfferings)) {
             existingUserOfferings.stream().forEach(a -> a.setIsActive(false));
             userOfferingDao.saveAll(existingUserOfferings);
         }

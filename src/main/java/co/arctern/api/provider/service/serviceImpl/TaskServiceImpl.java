@@ -3,6 +3,7 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.constant.TaskEventFlowState;
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
@@ -268,9 +269,20 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<Task> findByIsActiveTrueAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, start, end, pageable);
+    public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, type, start, end, pageable);
+    }
+
+    @Override
+    public Page<Task> filterByPatientDetailsWoAreaIds(
+            TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
+        return taskDao.filterByPatientDetails(states, value, type, start, end, pageable);
+    }
+
+    @Override
+    public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
+        return taskDao.filterByAreaIdsAndPatientDetails(areaIds, states, type, value, start, end, pageable);
     }
 
 }

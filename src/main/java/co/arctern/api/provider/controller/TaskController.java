@@ -1,5 +1,6 @@
 package co.arctern.api.provider.controller;
 
+import co.arctern.api.provider.constant.TaskEventFlowState;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.TaskService;
@@ -69,6 +70,7 @@ public class TaskController {
 
     /**
      * reschedule a task api.
+     *
      * @param taskId
      * @param userId
      * @param time
@@ -96,6 +98,14 @@ public class TaskController {
     public ResponseEntity<StringBuilder> startTaskToUser(@RequestParam("taskId") Long taskId,
                                                          @RequestParam("userId") Long userId) {
         return ResponseEntity.ok(taskService.startTask(taskId, userId));
+    }
+
+    @PostMapping("/accept-reject")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<StringBuilder> acceptOrRejectTask(@RequestParam(value = "state", required = false, defaultValue = "ACCEPTED") TaskEventFlowState state,
+                                                            @RequestParam("taskId") Long taskId) {
+        return ResponseEntity.ok(taskService.acceptOrRejectAssignedTask(taskId, state));
     }
 
 

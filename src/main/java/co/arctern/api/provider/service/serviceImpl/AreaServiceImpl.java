@@ -8,12 +8,12 @@ import co.arctern.api.provider.domain.UserArea;
 import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.service.AreaService;
-import com.amazonaws.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class AreaServiceImpl implements AreaService {
     public void setAreasToUser(User user, List<Long> areaIds) {
         List<UserArea> userAreas = new ArrayList<>();
         List<UserArea> existingUserAreas = user.getUserAreas();
-        if (!CollectionUtils.isNullOrEmpty(existingUserAreas)) {
+        if (!CollectionUtils.isEmpty(existingUserAreas)) {
             existingUserAreas.stream().forEach(a -> a.setIsActive(false));
             userAreaDao.saveAll(existingUserAreas);
         }
