@@ -82,7 +82,8 @@ public class Task extends CodeGeneratorUtil {
     Address sourceAddress;
 
     @ManyToOne
-    @JsonBackReference("destinationAddress-task")
+    @JsonBackReference("" +
+            "tionAddress-task")
     Address destinationAddress;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)

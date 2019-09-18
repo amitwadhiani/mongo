@@ -236,8 +236,8 @@ public class TaskServiceImpl implements TaskService {
         task.setCancellationRequested(false);
         task.setIsActive(true);
         task.setExpectedArrivalTime(dto.getExpectedArrivalTime());
-        task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
-        task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
+     //   task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
+     //   task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
         task.setState(TaskState.OPEN);
         task = taskDao.save(task);
         taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, null);
