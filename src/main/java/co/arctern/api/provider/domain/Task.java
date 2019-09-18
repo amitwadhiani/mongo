@@ -111,7 +111,7 @@ public class Task extends CodeGeneratorUtil {
     @Column
     private String patientId;
 
-    @PostPersist
+    @PrePersist
     public void setCode() {
         this.code = generateTaskCode(this.id, this.patientName, this.type);
     }
