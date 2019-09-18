@@ -108,7 +108,7 @@ public class Task extends CodeGeneratorUtil {
     private String patientPhone;
 
     @Column
-    private String patientAge;
+    private String patientId;
 
     @PostPersist
     public void setCode() {

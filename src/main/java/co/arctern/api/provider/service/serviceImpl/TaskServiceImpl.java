@@ -231,7 +231,6 @@ public class TaskServiceImpl implements TaskService {
         task.setIsPrepaid(dto.getIsPrepaid());
         task.setPatientPhone(dto.getPatientPhone());
         task.setPatientName(dto.getPatientName());
-        task.setPatientAge(dto.getPatientAge());
         task.setType(dto.getType());
         task.setRefId(dto.getRefId());
         task.setCancellationRequested(false);

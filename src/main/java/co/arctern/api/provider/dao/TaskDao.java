@@ -87,7 +87,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.state IN (:states) " +
             "AND (task.patientName = (:value) OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
-            "AND task.createdAt >= (start) " +
+            "AND task.createdAt >= (:start) " +
             "AND task.createdAt < (:end) " +
             "ORDER BY task.createdAt DESC")
     public Page<Task> filterByPatientDetails(TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
