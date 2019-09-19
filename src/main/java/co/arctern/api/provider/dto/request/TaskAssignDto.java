@@ -30,7 +30,7 @@ public class TaskAssignDto {
     private String patientName;
     private String patientAge;
     private PaymentState paymentState;
-    private PaymentMode paymentMode;
+    private String paymentMode;
     private Double amount;
     private Timestamp expectedArrivalTime;
 
