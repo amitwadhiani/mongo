@@ -45,7 +45,7 @@ public class AddressServiceImpl implements AddressService {
         address.setPatientId(dto.getPatientId());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
-        address.setArea(areaService.fetchById(dto.getAreaId()));
+//        address.setArea(areaService.fetchById(dto.getAreaId()));
         return addressDao.save(address);
     }
 }
