@@ -75,22 +75,22 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.destinationAddress.area.id IN (:areaIds) " +
-            "AND (task.patientName = (:value) OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
+            "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
             "AND task.state IN (:states) " +
             "AND task.createdAt >= (:start) " +
             "AND task.createdAt < (:end) " +
-            "ORDER BY task.createdAt DESC")
+            "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByAreaIdsAndPatientDetails(@Param("areaIds") List<Long> areaIds, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.state IN (:states) " +
-            "AND (task.patientName = (:value) OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
+            "AND (task.patientName = LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
             "AND task.createdAt >= (:start) " +
             "AND task.createdAt < (:end) " +
-            "ORDER BY task.createdAt DESC")
+            "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByPatientDetails(@Param("states") TaskState[] states, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
