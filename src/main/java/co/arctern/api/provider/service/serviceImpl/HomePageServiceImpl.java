@@ -32,10 +32,12 @@ public class HomePageServiceImpl implements HomePageService {
     public HomePageResponse fetchHomePage(Long userId, Timestamp start, Timestamp end) {
         HomePageResponse response = new HomePageResponse();
         Integer assignedTasksCount = taskService.fetchUpcomingTasksForUser(userId, TaskState.ASSIGNED, start).size();
+        Integer acceptedTasksCount = taskService.fetchUpcomingTasksForUser(userId, TaskState.ACCEPTED, start).size();
         Integer startedTasksCount = taskService.fetchUpcomingTasksForUser(userId, TaskState.STARTED, start).size();
         response.setAssignedTasks(taskService.fetchUpcomingTasksForUser(userId, TaskState.ASSIGNED, start));
         response.setCompletedTasksCount(taskService.fetchTasksForUser(userId, TaskState.COMPLETED, start, end).size());
         response.setAssignedTasksCount(assignedTasksCount);
+        response.setAcceptedTasksCount(acceptedTasksCount);
         response.setStartedTasksCount(startedTasksCount);
         response.setAllTasksCount(assignedTasksCount + startedTasksCount);
         return response;
@@ -43,25 +45,26 @@ public class HomePageServiceImpl implements HomePageService {
 
     @Override
     public HomePageResponseForAdmin fetchHomePageForAdmin(TaskState[] states, Timestamp start, Timestamp end,
-                                                          List<Long> areaIds, TaskType taskType, String patientFilterValue,
+                                                          List<Long> areaIds, TaskType taskType, Long orderId,
+                                                          String patientFilterValue,
                                                           Pageable pageable) {
         HomePageResponseForAdmin adminResponse = new HomePageResponseForAdmin();
-        PaginatedResponse allTasks = userTaskService.fetchTasks(states, start, end, areaIds, taskType, patientFilterValue, pageable);
+        PaginatedResponse allTasks = userTaskService.fetchTasks(states, start, end, areaIds, taskType, orderId, patientFilterValue, pageable);
         adminResponse.setTasks(allTasks);
         adminResponse.setTasksCount(allTasks.getTotalElements());
-        PaginatedResponse cancelledTasks = userTaskService.fetchTasks(new TaskState[]{TaskState.CANCELLED}, start, end, areaIds, taskType, patientFilterValue, pageable);
+        PaginatedResponse cancelledTasks = userTaskService.fetchTasks(new TaskState[]{TaskState.CANCELLED}, start, end, areaIds, taskType, orderId, patientFilterValue, pageable);
         adminResponse.setCancelledTasks(cancelledTasks);
         adminResponse.setCancelledTasksCount(cancelledTasks.getTotalElements());
-        PaginatedResponse completedTasks = userTaskService.fetchTasks(new TaskState[]{TaskState.COMPLETED}, start, end, areaIds, taskType, patientFilterValue, pageable);
+        PaginatedResponse completedTasks = userTaskService.fetchTasks(new TaskState[]{TaskState.COMPLETED}, start, end, areaIds, taskType, orderId, patientFilterValue, pageable);
         adminResponse.setCompletedTasks(completedTasks);
         adminResponse.setCompletedTasksCount(completedTasks.getTotalElements());
-        PaginatedResponse openTasks = userTaskService.fetchTasks(new TaskState[]{TaskState.OPEN}, start, end, areaIds, taskType, patientFilterValue, pageable);
+        PaginatedResponse openTasks = userTaskService.fetchTasks(new TaskState[]{TaskState.OPEN}, start, end, areaIds, taskType, orderId, patientFilterValue, pageable);
         adminResponse.setOpenTasks(openTasks);
         adminResponse.setOpenTasksCount(openTasks.getTotalElements());
-        PaginatedResponse pendingTasks = userTaskService.fetchTasks(new TaskState[]{TaskState.ASSIGNED}, start, end, areaIds, taskType, patientFilterValue, pageable);
+        PaginatedResponse pendingTasks = userTaskService.fetchTasks(new TaskState[]{TaskState.ASSIGNED}, start, end, areaIds, taskType, orderId, patientFilterValue, pageable);
         adminResponse.setPendingTasks(pendingTasks);
         adminResponse.setPendingTasksCount(pendingTasks.getTotalElements());
-        PaginatedResponse startedTasks = userTaskService.fetchTasks(new TaskState[]{TaskState.STARTED}, start, end, areaIds, taskType, patientFilterValue, pageable);
+        PaginatedResponse startedTasks = userTaskService.fetchTasks(new TaskState[]{TaskState.STARTED}, start, end, areaIds, taskType, orderId, patientFilterValue, pageable);
         adminResponse.setStartedTasks(startedTasks);
         adminResponse.setStartedTasksCount(startedTasks.getTotalElements());
         return adminResponse;

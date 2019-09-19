@@ -15,6 +15,7 @@ public class HomePageResponse {
 
     List<TasksForProvider> assignedTasks;
     Integer assignedTasksCount;
+    Integer acceptedTasksCount;
     Integer completedTasksCount;
     Integer startedTasksCount;
     Integer allTasksCount;

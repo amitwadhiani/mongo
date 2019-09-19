@@ -220,9 +220,23 @@ public interface TaskService extends MessageUtil {
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            List<Long> areaIds, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            TaskState[] states, Long orderId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
     public Page<Task> filterByPatientDetailsWoAreaIds(
             TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    public Page<Task> filterByPatientDetailsWoAreaIds(
+            TaskState[] states, Long orderId, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
     public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Long orderId, TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
 }

@@ -78,6 +78,7 @@ public class UserTaskServiceImpl implements UserTaskService {
     @Override
     public PaginatedResponse fetchTasks(TaskState[] states, Timestamp start, Timestamp end,
                                         List<Long> areaIds, TaskType taskType,
+                                        Long orderId,
                                         String patientFilterValue,
                                         Pageable pageable) {
         if (states == null) {
@@ -86,19 +87,35 @@ public class UserTaskServiceImpl implements UserTaskService {
         }
         if (StringUtils.isEmpty(patientFilterValue)) {
             if (areaIds == null) {
+                if (orderId == null) {
+                    return getPaginatedResponse(
+                            taskService.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, taskType, start, end, pageable), pageable);
+                }
                 return getPaginatedResponse(
-                        taskService.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, taskType, start, end, pageable), pageable);
+                        taskService.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, taskType, start, end, pageable), pageable);
             } else {
+                if (orderId == null) {
+                    return getPaginatedResponse(
+                            taskService.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, taskType, start, end, pageable), pageable);
+                }
                 return getPaginatedResponse(
-                        taskService.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, taskType, start, end, pageable), pageable);
+                        taskService.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, orderId, taskType, start, end, pageable), pageable);
             }
         } else {
             if (areaIds == null) {
+                if (orderId == null) {
+                    return getPaginatedResponse(
+                            taskService.filterByPatientDetailsWoAreaIds(states, patientFilterValue, taskType, start, end, pageable), pageable);
+                }
                 return getPaginatedResponse(
-                        taskService.filterByPatientDetailsWoAreaIds(states, patientFilterValue, taskType, start, end, pageable), pageable);
+                        taskService.filterByPatientDetailsWoAreaIds(states, orderId, patientFilterValue, taskType, start, end, pageable), pageable);
             } else {
+                if (orderId == null) {
+                    return getPaginatedResponse(
+                            taskService.filterByPatientDetailsWithAreaIds(areaIds, states, patientFilterValue, taskType, start, end, pageable), pageable);
+                }
                 return getPaginatedResponse(
-                        taskService.filterByPatientDetailsWithAreaIds(areaIds, states, patientFilterValue, taskType, start, end, pageable), pageable);
+                        taskService.filterByPatientDetailsWithAreaIdsAndOrderId(areaIds, orderId, states, patientFilterValue, taskType, start, end, pageable), pageable);
             }
         }
     }

@@ -85,6 +85,18 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
+            "AND task.destinationAddress.area.id IN (:areaIds) " +
+            "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
+            "AND task.type = (:type) " +
+            "AND task.refId = (:refId) " +
+            "AND task.state IN (:states) " +
+            "AND task.createdAt >= (:start) " +
+            "AND task.createdAt < (:end) " +
+            "ORDER BY task.createdAt DESC ")
+    public Page<Task> filterByAreaIdsAndPatientDetailsWithRefId(@Param("areaIds") List<Long> areaIds, @Param("refId") Long refId, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
+
+    @Query("FROM Task task " +
+            "WHERE task.isActive = 1" +
             "AND task.state IN (:states) " +
             "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
@@ -93,7 +105,24 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByPatientDetails(@Param("states") TaskState[] states, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
+    @Query("FROM Task task " +
+            "WHERE task.isActive = 1" +
+            "AND task.state IN (:states) " +
+            "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
+            "AND task.type = (:type) " +
+            "AND task.refId = (:refId) " +
+            "AND task.createdAt >= (:start) " +
+            "AND task.createdAt < (:end) " +
+            "ORDER BY task.createdAt DESC ")
+    public Page<Task> filterByPatientDetailsWithRefId(@Param("states") TaskState[] states, @Param("refId") Long refId, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
+
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            TaskState[] states, Long orderId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
 }

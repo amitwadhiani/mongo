@@ -129,6 +129,7 @@ public class AdminController {
                                            @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
                                            @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end,
                                            @RequestParam(value = "areaIds", required = false) List<Long> areaIds,
+                                           @RequestParam(value = "orderId", required = false) Long orderId,
                                            @RequestParam(value = "taskType", required = false, defaultValue = "SAMPLE_PICKUP") TaskType taskType,
                                            @RequestParam(value = "patientFilterValue", required = false) String patientFilterValue,
                                            Pageable pageable) {
@@ -139,6 +140,7 @@ public class AdminController {
                 DateUtil.zonedDateTimeToTimestampConversion(end),
                 areaIds,
                 taskType,
+                orderId,
                 patientFilterValue,
                 pageable));
     }
