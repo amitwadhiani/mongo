@@ -86,7 +86,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.state IN (:states) " +
-            "AND (task.patientName = LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
+            "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
             "AND task.createdAt >= (:start) " +
             "AND task.createdAt < (:end) " +
