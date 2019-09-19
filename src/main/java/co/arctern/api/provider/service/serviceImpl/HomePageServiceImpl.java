@@ -5,6 +5,7 @@ import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.HomePageResponse;
 import co.arctern.api.provider.dto.response.HomePageResponseForAdmin;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.HomePageService;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.UserService;
@@ -31,15 +32,18 @@ public class HomePageServiceImpl implements HomePageService {
     @Override
     public HomePageResponse fetchHomePage(Long userId, Timestamp start, Timestamp end) {
         HomePageResponse response = new HomePageResponse();
-        Integer assignedTasksCount = taskService.fetchUpcomingTasksForUser(userId, TaskState.ASSIGNED, start).size();
+        List<TasksForProvider> assignedTasks = taskService.fetchUpcomingTasksForUser(userId, TaskState.ASSIGNED, start);
+        Integer assignedTasksCount = assignedTasks.size();
+        List<TasksForProvider> startedTasks = taskService.fetchUpcomingTasksForUser(userId, TaskState.STARTED, start);
         Integer acceptedTasksCount = taskService.fetchUpcomingTasksForUser(userId, TaskState.ACCEPTED, start).size();
-        Integer startedTasksCount = taskService.fetchUpcomingTasksForUser(userId, TaskState.STARTED, start).size();
-        response.setAssignedTasks(taskService.fetchUpcomingTasksForUser(userId, TaskState.ASSIGNED, start));
+        Integer startedTasksCount = startedTasks.size();
+        response.setAssignedTasks(assignedTasks);
+        response.setStartedTasks(startedTasks);
         response.setCompletedTasksCount(taskService.fetchTasksForUser(userId, TaskState.COMPLETED, start, end).size());
         response.setAssignedTasksCount(assignedTasksCount);
         response.setAcceptedTasksCount(acceptedTasksCount);
         response.setStartedTasksCount(startedTasksCount);
-        response.setAllTasksCount(assignedTasksCount + startedTasksCount);
+        response.setAllTasksCount(assignedTasksCount + startedTasksCount + acceptedTasksCount);
         return response;
     }
 
