@@ -1,6 +1,7 @@
 package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.dto.request.RescheduleRequestBody;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.TaskService;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -71,18 +71,14 @@ public class TaskController {
     /**
      * reschedule a task api.
      *
-     * @param taskId
-     * @param userId
-     * @param time
+     * @param request
      * @return
      */
     @PostMapping("/reschedule")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<StringBuilder> rescheduleTask(@RequestParam("taskId") Long taskId,
-                                                        @RequestParam("userId") Long userId,
-                                                        @RequestParam("time") Timestamp time) {
-        return ResponseEntity.ok(taskService.rescheduleTask(taskId, userId, time));
+    public ResponseEntity<StringBuilder> rescheduleTask(@RequestBody RescheduleRequestBody request) {
+        return ResponseEntity.ok(taskService.rescheduleTask(request.getTaskId(), request.getUserId(), request.getTime()));
     }
 
     /**
