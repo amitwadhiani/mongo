@@ -40,6 +40,7 @@ public class TaskAssignDto {
     private String addressName;
     private Long destAddressId;
     private Double latitude;
+    private Long areaId;
     private Double longitude;
     private Long sourceAddressId;
     private String city;

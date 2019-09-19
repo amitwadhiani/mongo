@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -70,7 +72,14 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public Page<Areas> fetchAreas(Pageable pageable) {
-        return areaDao.findByIsActiveTrue(pageable).map(area -> projectionFactory.createProjection(Areas.class,area));
+        return areaDao.findByIsActiveTrue(pageable).map(area -> projectionFactory.createProjection(Areas.class, area));
+    }
+
+    @Override
+    public Area fetchById(Long areaId) {
+        return areaDao.findById(areaId).orElseThrow(() -> {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid area Id.");
+        });
     }
 
 }
