@@ -243,6 +243,8 @@ public class TaskServiceImpl implements TaskService {
         task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
         task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
         task.setState(TaskState.OPEN);
+        String paymentMode = dto.getPaymentMode();
+        if (paymentMode == null || paymentMode.isEmpty()) dto.setPaymentMode("");
         task = taskDao.save(task);
         taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, null);
         paymentService.create(task, dto);
