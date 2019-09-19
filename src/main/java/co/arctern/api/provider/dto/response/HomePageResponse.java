@@ -18,7 +18,6 @@ public class HomePageResponse {
     Integer acceptedTasksCount;
     Integer completedTasksCount;
     Integer startedTasksCount;
-    Integer rejectedTasksCount;
     List<TasksForProvider> startedTasks;
     Integer allTasksCount;
 }
