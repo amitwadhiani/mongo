@@ -149,7 +149,7 @@ public class AdminController {
      * fetch all users
      */
     @CrossOrigin
-    @GetMapping("/user/fetch-all")
+    @GetMapping("/user")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<PaginatedResponse> fetchAllUsers(Pageable pageable) {
         return ResponseEntity.ok(userService.fetchAllUsersByAdmin(pageable));
