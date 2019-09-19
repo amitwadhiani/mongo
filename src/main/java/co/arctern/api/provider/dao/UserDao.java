@@ -1,6 +1,8 @@
 package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
@@ -54,5 +56,7 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
     @Override
     @PreAuthorize("permitAll()")
     Optional<User> findById(Long id);
+
+    Page<User> findByIsActiveTrue(Pageable pageable);
 
 }

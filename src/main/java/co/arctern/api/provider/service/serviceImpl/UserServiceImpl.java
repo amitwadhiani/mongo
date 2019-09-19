@@ -3,9 +3,10 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
-import co.arctern.api.provider.dto.response.projection.Areas;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
+import co.arctern.api.provider.util.PaginationUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +23,6 @@ import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -152,4 +152,8 @@ public class UserServiceImpl implements UserService {
         return offeringService.fetchUserOfferings(offeringIds, pageable).map(a -> a.getUser());
     }
 
+    public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable) {
+        return PaginationUtil.returnPaginatedBody(userDao.findByIsActiveTrue(pageable)
+                .map(a -> projectionFactory.createProjection(Users.class, a)), pageable);
+    }
 }

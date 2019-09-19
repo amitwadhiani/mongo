@@ -238,5 +238,4 @@ public interface TaskService extends MessageUtil {
     public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Long orderId, TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
-
 }
