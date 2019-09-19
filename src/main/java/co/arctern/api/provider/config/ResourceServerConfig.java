@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 
 /**
  * Resource server config to allow base urls to be authenticated automatically.
+ * read authentication.
  */
 @Configuration
 @EnableResourceServer

@@ -72,7 +72,7 @@ public class UserTaskServiceImpl implements UserTaskService {
 
     @Override
     public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start) {
-        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqual(userId, state, start);
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateAndCreatedAtGreaterThanEqual(userId, state, start);
     }
 
     @Override
