@@ -228,6 +228,10 @@ public class TaskServiceImpl implements TaskService {
         {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid task Id.");
         });
+        /**
+         * to set source address Id of Warehouse / provider ( 3 in case of staging , change later / on prod.
+         */
+        dto.setSourceAddressId(3l);
         task.setIsPrepaid(dto.getIsPrepaid());
         task.setPatientPhone(dto.getPatientPhone());
         task.setPatientName(dto.getPatientName());
