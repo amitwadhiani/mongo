@@ -37,8 +37,8 @@ public class HomePageController {
     public ResponseEntity<HomePageResponse> fetchHomePage(@RequestParam("userId") Long userId,
                                                           @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
                                                           @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end) {
-        if (start == null) start = ZonedDateTime.now();
-        if (end == null) end = start.plusDays(2);
+        if (start == null) start = ZonedDateTime.now().minusDays(1);
+        if (end == null) end = start.plusDays(5);
         return ResponseEntity.ok(homePageService.fetchHomePage(userId, DateUtil.zonedDateTimeToTimestampConversion(start), DateUtil.zonedDateTimeToTimestampConversion(end)));
     }
 }
