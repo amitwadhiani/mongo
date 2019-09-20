@@ -56,7 +56,7 @@ public class ProviderServiceImpl implements ProviderService {
     @Override
     public PaginatedResponse fetchFilteredTasksForProvider(Long userId, TaskState state, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(userTaskService.fetchTasksForUser(userId, state, pageable)
-                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a)), pageable);
+                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask())), pageable);
     }
 
 }
