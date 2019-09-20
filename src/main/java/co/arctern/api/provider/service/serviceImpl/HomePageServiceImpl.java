@@ -30,16 +30,16 @@ public class HomePageServiceImpl implements HomePageService {
     UserService userService;
 
     @Override
-    public HomePageResponse fetchHomePage(Long userId, Timestamp start, Timestamp end) {
+    public HomePageResponse fetchHomePage(Long userId) {
         HomePageResponse response = new HomePageResponse();
-        List<TasksForProvider> assignedTasks = taskService.fetchUpcomingTasksForUser(userId, TaskState.ASSIGNED, start);
+        List<TasksForProvider> assignedTasks = taskService.fetchTasksForUser(userId, TaskState.ASSIGNED);
         Integer assignedTasksCount = assignedTasks.size();
-        List<TasksForProvider> startedTasks = taskService.fetchUpcomingTasksForUser(userId, TaskState.STARTED, start);
-        Integer acceptedTasksCount = taskService.fetchUpcomingTasksForUser(userId, TaskState.ACCEPTED, start).size();
+        List<TasksForProvider> startedTasks = taskService.fetchTasksForUser(userId, TaskState.STARTED);
+        Integer acceptedTasksCount = taskService.fetchTasksForUser(userId, TaskState.ACCEPTED).size();
         Integer startedTasksCount = startedTasks.size();
         response.setAssignedTasks(assignedTasks);
         response.setStartedTasks(startedTasks);
-        response.setCompletedTasksCount(taskService.fetchTasksForUser(userId, TaskState.COMPLETED, start, end).size());
+        response.setCompletedTasksCount(taskService.fetchTasksForUser(userId, TaskState.COMPLETED).size());
         response.setAssignedTasksCount(assignedTasksCount);
         response.setAcceptedTasksCount(acceptedTasksCount);
         response.setStartedTasksCount(startedTasksCount);

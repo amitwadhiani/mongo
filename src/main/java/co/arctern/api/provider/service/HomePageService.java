@@ -15,11 +15,9 @@ public interface HomePageService {
      * fetch homepage for user.
      *
      * @param userId
-     * @param start
-     * @param end
      * @return
      */
-    public HomePageResponse fetchHomePage(Long userId, Timestamp start, Timestamp end);
+    public HomePageResponse fetchHomePage(Long userId);
 
     /**
      * fetch homepage for admin.

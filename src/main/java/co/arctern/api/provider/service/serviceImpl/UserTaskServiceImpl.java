@@ -76,6 +76,11 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     @Override
+    public List<UserTask> fetchTasksForUser(Long userId, TaskState state) {
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskState(userId, state);
+    }
+
+    @Override
     public PaginatedResponse fetchTasks(TaskState[] states, Timestamp start, Timestamp end,
                                         List<Long> areaIds, TaskType taskType,
                                         Long orderId,

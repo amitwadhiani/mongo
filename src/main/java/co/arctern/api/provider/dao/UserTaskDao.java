@@ -55,6 +55,8 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskStateAndCreatedAtGreaterThanEqual(Long userId, TaskState state, Timestamp start);
 
+    List<UserTask> findByIsActiveTrueAndUserIdAndTaskState(Long userId, TaskState state);
+
     /**
      * fetch count of tasks for a user filtered by task creation time.
      *

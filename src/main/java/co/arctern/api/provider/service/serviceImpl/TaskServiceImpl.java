@@ -275,6 +275,14 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<TasksForProvider> fetchTasksForUser(Long userId, TaskState state) {
+        return userTaskService.fetchTasksForUser(userId, state)
+                .stream()
+                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
         return taskDao.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, type, start, end, pageable);

@@ -217,6 +217,15 @@ public interface TaskService extends MessageUtil {
      */
     public List<TasksForProvider> fetchUpcomingTasksForUser(Long userId, TaskState state, Timestamp start);
 
+    /**
+     * fetch all tasks for a user filtered by state.
+     *
+     * @param userId
+     * @param state
+     * @return
+     */
+    public List<TasksForProvider> fetchTasksForUser(Long userId, TaskState state);
+
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
