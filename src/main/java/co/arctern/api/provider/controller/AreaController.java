@@ -33,6 +33,11 @@ public class AreaController {
         return ResponseEntity.ok(areaService.createAreas(dtos));
     }
 
+    /**
+     * fetch all areas.
+     * @param pageable
+     * @return
+     */
     @GetMapping("/fetch-all")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

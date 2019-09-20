@@ -69,9 +69,31 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     Page<Task> findByCancellationRequestedTrue(Pageable pageable);
 
 
+    /**
+     * fetch active tasks filtered by state and type.
+     *
+     * @param states
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * filter tasks through areas and patient details.
+     *
+     * @param areaIds
+     * @param states
+     * @param type
+     * @param value
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.destinationAddress.area.id IN (:areaIds) " +
@@ -83,6 +105,19 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByAreaIdsAndPatientDetails(@Param("areaIds") List<Long> areaIds, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
+    /**
+     * filter tasks through areas, patient details and refId(orderId).
+     *
+     * @param areaIds
+     * @param refId
+     * @param states
+     * @param type
+     * @param value
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.destinationAddress.area.id IN (:areaIds) " +
@@ -95,6 +130,17 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByAreaIdsAndPatientDetailsWithRefId(@Param("areaIds") List<Long> areaIds, @Param("refId") Long refId, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
+    /**
+     * filter tasks by patient details.
+     *
+     * @param states
+     * @param value
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.state IN (:states) " +
@@ -105,6 +151,18 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByPatientDetails(@Param("states") TaskState[] states, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
+    /**
+     * filter tasks by patient details and refId(orderId).
+     *
+     * @param states
+     * @param refId
+     * @param value
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.state IN (:states) " +
@@ -116,12 +174,46 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByPatientDetailsWithRefId(@Param("states") TaskState[] states, @Param("refId") Long refId, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
+    /**
+     * filter tasks by areas, states, type.
+     *
+     * @param areaIds
+     * @param states
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * filter tasks by areas, states, refId(orderId) and type.
+     *
+     * @param areaIds
+     * @param states
+     * @param refId
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * filter tasks by states, refId(orderId) and type.
+     *
+     * @param states
+     * @param orderId
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, Long orderId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
