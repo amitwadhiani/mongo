@@ -9,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 
@@ -93,10 +90,10 @@ public class ProviderController {
      * @return
      */
     @CrossOrigin
-    @GetMapping("/task/{state}")
+    @GetMapping("/task/filter/{state}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<PaginatedResponse> fetchAssignedTasksForProvider(@RequestParam("userId") Long userId,
-                                                                           @RequestParam("state") TaskState state,
+    public ResponseEntity<PaginatedResponse> fetchFilteredTasksForProvider(@RequestParam("userId") Long userId,
+                                                                           @PathVariable("state") TaskState state,
                                                                            Pageable pageable) {
         return ResponseEntity.ok(providerService.fetchFilteredTasksForProvider(userId, state, pageable));
     }
