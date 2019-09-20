@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
+/**
+ * Reschedule task request body.
+ */
 @Data
 @NoArgsConstructor
 public class RescheduleRequestBody {

@@ -1,7 +1,6 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.TasksForProviderResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
@@ -10,14 +9,12 @@ import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.UserTaskService;
 import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
-import java.util.stream.Collectors;
 
 @Service
 public class ProviderServiceImpl implements ProviderService {
@@ -58,9 +55,8 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public PaginatedResponse fetchFilteredTasksForProvider(Long userId, TaskState state, Pageable pageable) {
-        Page<UserTask> userTasks = userTaskService.fetchTasksForUser(userId, state, pageable);
-        return PaginationUtil.returnPaginatedBody(userTasks.stream().map(a -> projectionFactory.createProjection(TasksForProvider.class, a)).collect(Collectors.toList()),
-                pageable.getPageNumber(), pageable.getPageSize());
+        return PaginationUtil.returnPaginatedBody(userTaskService.fetchTasksForUser(userId, state, pageable)
+                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a)), pageable);
     }
 
 }

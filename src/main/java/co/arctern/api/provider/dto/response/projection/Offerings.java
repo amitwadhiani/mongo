@@ -4,6 +4,9 @@ import co.arctern.api.provider.constant.OfferingType;
 import co.arctern.api.provider.domain.Offering;
 import org.springframework.data.rest.core.config.Projection;
 
+/**
+ * offerings response body.
+ */
 @Projection(types = {Offering.class})
 public interface Offerings {
 

@@ -18,7 +18,7 @@ public class TaskAssignDto {
     private Long userId;
 
     /**
-     *
+     * orderId from order-api.
      */
     private Long refId;
     private Long taskId;
