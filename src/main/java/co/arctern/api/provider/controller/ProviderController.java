@@ -90,10 +90,10 @@ public class ProviderController {
      * @return
      */
     @CrossOrigin
-    @GetMapping("/task/filter/{state}")
+    @GetMapping("/task/filter")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<PaginatedResponse> fetchFilteredTasksForProvider(@RequestParam("userId") Long userId,
-                                                                           @PathVariable("state") TaskState state,
+                                                                           @RequestParam("state") TaskState state,
                                                                            Pageable pageable) {
         return ResponseEntity.ok(providerService.fetchFilteredTasksForProvider(userId, state, pageable));
     }
