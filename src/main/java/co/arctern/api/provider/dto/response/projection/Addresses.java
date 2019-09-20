@@ -27,6 +27,4 @@ public interface Addresses {
 
      Double getLongitude();
 
-    String getPatientId();
-
 }

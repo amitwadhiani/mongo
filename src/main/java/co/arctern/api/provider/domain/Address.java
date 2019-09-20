@@ -57,9 +57,6 @@ public class Address {
     @Column
     private String landmark;
 
-    @Column
-    private String patientId;
-
     @OneToMany(mappedBy = "sourceAddress")
     List<Task> tasksForSourceAddress;
 

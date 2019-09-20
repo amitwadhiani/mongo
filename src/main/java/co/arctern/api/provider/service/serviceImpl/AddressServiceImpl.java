@@ -42,7 +42,6 @@ public class AddressServiceImpl implements AddressService {
         address.setLocality(dto.getLocality());
         address.setLandmark(dto.getLandmark());
         address.setPinCode(dto.getPinCode());
-        address.setPatientId(dto.getPatientId());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
 //        address.setArea(areaService.fetchById(dto.getAreaId()));
