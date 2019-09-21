@@ -78,9 +78,9 @@ spring:
       providerDiagnosticLabQueueName: "provider-staging-diagnostic-updates-simple"
       diagnosticproviderQueueName: "diagnostic-provider-staging-updates-simple"
   security:
-    signingKey: '4vvL2EefcZbBvUnJ'
+    signingKey: 4vvL2EefcZbBvUnJ
     encodingStrength: 512
-    securityRealm: 'Auth Staging'
+    securityRealm: Auth Staging
     jwt:
       clientId: "LRL6ZCEt5Ag7whaa"
       clientSecret: "LwprrjdLzMc9zSq4XY4jWCz3hNWYMVV6"
