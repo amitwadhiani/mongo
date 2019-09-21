@@ -14,4 +14,6 @@ public interface PaymentService extends MessageUtil {
      * @return
      */
     Payment create(Task task, TaskAssignDto dto);
+
+    Payment patch(Task task);
 }

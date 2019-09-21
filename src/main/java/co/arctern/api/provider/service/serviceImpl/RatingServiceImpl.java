@@ -3,9 +3,11 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.RatingDao;
 import co.arctern.api.provider.domain.Rating;
 import co.arctern.api.provider.domain.Task;
+import co.arctern.api.provider.service.PaymentService;
 import co.arctern.api.provider.service.RatingService;
 import co.arctern.api.provider.service.TaskService;
 import lombok.SneakyThrows;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class RatingServiceImpl implements RatingService {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    PaymentService paymentService;
 
     @Override
     @SneakyThrows(Exception.class)
@@ -38,6 +43,7 @@ public class RatingServiceImpl implements RatingService {
         rating.setTask(task);
         ratingDao.save(rating);
         taskService.completeTask(taskId, userId);
+        paymentService.patch(task);
         return "Success";
     }
 
