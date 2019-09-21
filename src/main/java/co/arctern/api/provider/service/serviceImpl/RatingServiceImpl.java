@@ -23,18 +23,21 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     @SneakyThrows(Exception.class)
-    public String saveRating(Long taskId, String otp) {
+    public String saveRating(Long taskId, Long userId, String otp) {
         Task task = taskService.fetchTask(taskId);
         Rating rating = task.getRating();
-        if (otp.equals(rating.getOtpNo())) {
-            rating.setIsSatisfied(false);
-        } else if (otp.equals(rating.getOtpYes())) {
-            rating.setIsSatisfied(true);
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE);
+        if (otp != null) {
+            if (otp.equals(rating.getOtpNo())) {
+                rating.setIsSatisfied(false);
+            } else if (otp.equals(rating.getOtpYes())) {
+                rating.setIsSatisfied(true);
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE);
+            }
         }
         rating.setTask(task);
         ratingDao.save(rating);
+        taskService.completeTask(taskId, userId);
         return "Success";
     }
 

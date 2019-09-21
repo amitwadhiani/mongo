@@ -142,6 +142,16 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
+    public StringBuilder completeTask(Long taskId, Long userId) {
+        Task task = fetchTask(taskId);
+        task.setState(TaskState.COMPLETED);
+        taskStateFlowService.createFlow(task, TaskEventFlowState.COMPLETED, userId);
+        taskDao.save(task);
+        return SUCCESS_MESSAGE;
+    }
+
+    @Override
+    @Transactional
     public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId) {
         Task task = this.fetchTask(taskId);
         if (isCancelled) {

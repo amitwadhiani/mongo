@@ -226,6 +226,8 @@ public interface TaskService extends MessageUtil {
      */
     public List<TasksForProvider> fetchTasksForUser(Long userId, TaskState state);
 
+    public StringBuilder completeTask(Long taskId, Long userId);
+
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
