@@ -45,7 +45,7 @@ public class RatingController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<String> saveRating(@RequestParam("taskId") Long taskId,
-                                             @RequestParam("otp") String otp,
+                                             @RequestParam(value = "otp", required = false) String otp,
                                              @RequestParam("userId") Long userId) {
         return ResponseEntity.ok(ratingService.saveRating(taskId, userId, otp));
     }
