@@ -29,7 +29,7 @@ public class AddressServiceImpl implements AddressService {
     public Address createOrFetchAddress(TaskAssignDto dto, Long addressId) {
         if (addressId != null) return addressDao.findById(addressId).orElseThrow(() ->
         {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role id.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ROLE_ID_MESSAGE.toString());
         });
         return saveAddress(dto);
     }
