@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaskStateFlowServiceImpl implements TaskStateFlowService {
 
-    final
-    TaskStateFlowDao taskStateFlowDao;
+    private final TaskStateFlowDao taskStateFlowDao;
 
     @Autowired
     public TaskStateFlowServiceImpl(TaskStateFlowDao taskStateFlowDao) {
