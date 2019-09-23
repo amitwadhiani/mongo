@@ -30,13 +30,13 @@ public class UserAreaServiceImpl implements UserAreaService {
     @Override
     public PaginatedResponse fetchUsersByArea(List<Long> areaIds, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(userAreaDao.findByAreaIdInAndIsActiveTrue(areaIds, pageable).map(
-                a -> a.getUser()), pageable);
+                UserArea::getUser), pageable);
     }
 
     @Override
     public List<Areas> fetchAreasForUser(List<UserArea> userAreas) {
         return userAreas.parallelStream()
-                .filter(a -> a.getIsActive())
+                .filter(UserArea::getIsActive)
                 .map(a -> projectionFactory.createProjection(Areas.class, a.getArea())).collect(Collectors.toList());
     }
 
