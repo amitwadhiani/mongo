@@ -48,6 +48,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRoleService userRoleService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Override
     public String signIn(String phone, String username, String password) {
         return null;
@@ -72,7 +75,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public StringBuilder markUserInactive(Long userId, Boolean status) {
-        User user = fetchUser(userId);
+        Long id = (userId == null) ? tokenService.fetchUserId(): userId;
+        User user = fetchUser(id);
         user.setIsActive(status);
         userDao.save(user);
         return SUCCESS_MESSAGE;
@@ -82,19 +86,19 @@ public class UserServiceImpl implements UserService {
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public User fetchUser(String phone) {
         return userDao.findByPhone(phone)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, REGISTER_USER_MESSAGE));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, REGISTER_USER_MESSAGE.toString()));
     }
 
     @Override
     public User fetchUser(Long userId) {
-        return userDao.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE));
+        return userDao.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE.toString()));
     }
 
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public User fetchUserByPhone(String phone) {
         return userDao.findByPhone(phone)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE.toString()));
     }
 
     @Override
@@ -133,7 +137,7 @@ public class UserServiceImpl implements UserService {
     public void saveLastLoginTime(String phone, Timestamp loginTime) {
         User user = userDao.findByPhone(phone).orElseThrow(() -> {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    USER_NOT_FOUND_MESSAGE);
+                    USER_NOT_FOUND_MESSAGE.toString());
         });
         user.setLastLoginTime(loginTime);
         user.setIsLoggedIn(true);

@@ -79,10 +79,10 @@ public class LoginServiceImpl implements LoginService {
                 userService.saveLastLoginTime(phone, login.getCreatedAt());
                 return oAuth2AccessToken;
             } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXPIRED_OTP_MESSAGE);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXPIRED_OTP_MESSAGE.toString());
             }
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE.toString());
     }
 
     @Override
@@ -90,7 +90,7 @@ public class LoginServiceImpl implements LoginService {
         User user = userService.fetchUser(userId);
         Login login = loginDao.findByUserIdAndStatusAndContact(userId, OTPState.USED, user.getPhone())
                 .orElseThrow(() -> {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_LOGGED_IN_MESSAGE);
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_LOGGED_IN_MESSAGE.toString());
                 });
         login.setLoginState(false);
         login.setLogoutTime(DateUtil.CURRENT_TIMESTAMP);

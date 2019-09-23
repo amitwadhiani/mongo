@@ -37,7 +37,7 @@ public class RatingServiceImpl implements RatingService {
             } else if (otp.equals(rating.getOtpYes())) {
                 rating.setIsSatisfied(true);
             } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE.toString());
             }
         }
         rating.setTask(task);
