@@ -12,8 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
-    @Autowired
+    final
     PaymentDao paymentDao;
+
+    @Autowired
+    public PaymentServiceImpl(PaymentDao paymentDao) {
+        this.paymentDao = paymentDao;
+    }
 
     @Override
     public Payment create(Task task, TaskAssignDto dto) {

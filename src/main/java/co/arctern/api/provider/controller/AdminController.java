@@ -27,20 +27,24 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    private AdminService adminService;
+    private final AdminService adminService;
+    private final UserService userService;
+    private final TaskService taskService;
+    private final TokenService tokenService;
+    private final HomePageService homePageService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private HomePageService homePageService;
+    public AdminController(AdminService adminService,
+                           UserService userService,
+                           TaskService taskService,
+                           TokenService tokenService,
+                           HomePageService homePageService) {
+        this.adminService = adminService;
+        this.userService = userService;
+        this.taskService = taskService;
+        this.tokenService = tokenService;
+        this.homePageService = homePageService;
+    }
 
     /**
      * view providers for admin's / particular areas api.

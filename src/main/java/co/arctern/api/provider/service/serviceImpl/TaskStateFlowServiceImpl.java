@@ -11,8 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaskStateFlowServiceImpl implements TaskStateFlowService {
 
+    private final TaskStateFlowDao taskStateFlowDao;
+
     @Autowired
-    TaskStateFlowDao taskStateFlowDao;
+    public TaskStateFlowServiceImpl(TaskStateFlowDao taskStateFlowDao) {
+        this.taskStateFlowDao = taskStateFlowDao;
+    }
 
     @Override
     public TaskStateFlow createFlow(Task task, TaskEventFlowState state, Long userId) {

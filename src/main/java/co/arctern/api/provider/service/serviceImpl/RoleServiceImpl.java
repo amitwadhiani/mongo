@@ -19,11 +19,15 @@ import java.util.stream.Collectors;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    RoleDao roleDao;
+    private final RoleDao roleDao;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    ProjectionFactory projectionFactory;
+    public RoleServiceImpl(RoleDao roleDao,
+                           ProjectionFactory projectionFactory) {
+        this.roleDao = roleDao;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     @Transactional
@@ -38,7 +42,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Roles> fetchRoles() {
         return Lists.newArrayList(roleDao.findAll()).stream()
-                .map(a -> projectionFactory.createProjection(Roles.class, a))
+                .map(role -> projectionFactory.createProjection(Roles.class, role))
                 .collect(Collectors.toList());
 
     }
@@ -47,7 +51,7 @@ public class RoleServiceImpl implements RoleService {
     public Roles fetchRoleById(Long id) {
         return projectionFactory.createProjection(Roles.class, roleDao.findById(id).orElseThrow(() ->
         {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role id.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ROLE_ID_MESSAGE.toString());
         }));
     }
 }

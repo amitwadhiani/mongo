@@ -19,14 +19,18 @@ import java.sql.Timestamp;
 @Service
 public class ProviderServiceImpl implements ProviderService {
 
-    @Autowired
-    TaskService taskService;
+    private final TaskService taskService;
+    private final ProjectionFactory projectionFactory;
+    private final UserTaskService userTaskService;
 
     @Autowired
-    ProjectionFactory projectionFactory;
-
-    @Autowired
-    UserTaskService userTaskService;
+    public ProviderServiceImpl(TaskService taskService,
+                               ProjectionFactory projectionFactory,
+                               UserTaskService userTaskService) {
+        this.taskService = taskService;
+        this.projectionFactory = projectionFactory;
+        this.userTaskService = userTaskService;
+    }
 
     @Transactional
     @Override

@@ -15,24 +15,28 @@ import java.util.List;
 @Service
 public class UserRoleServiceImpl implements UserRoleService {
 
-    @Autowired
-    private UserRoleDao userRoleDao;
+    private final UserRoleDao userRoleDao;
+    private final RoleDao roleDao;
 
     @Autowired
-    private RoleDao roleDao;
+    public UserRoleServiceImpl(UserRoleDao userRoleDao,
+                               RoleDao roleDao) {
+        this.userRoleDao = userRoleDao;
+        this.roleDao = roleDao;
+    }
 
     @Override
     public void createUserRoles(User user, List<Long> roleIds) {
         List<UserRole> userRoles = new ArrayList<>();
         List<UserRole> existingUserRoles = user.getUserRoles();
         if (!CollectionUtils.isEmpty(userRoles)) {
-            existingUserRoles.stream().forEach(a -> a.setIsActive(false));
+            existingUserRoles.stream().forEach(userRole -> userRole.setIsActive(false));
             userRoleDao.saveAll(existingUserRoles);
         }
         roleDao.findByIdIn(roleIds)
-                .forEach(a -> {
+                .forEach(role -> {
                     UserRole userRole = new UserRole();
-                    userRole.setRole(a);
+                    userRole.setRole(role);
                     userRole.setIsActive(true);
                     userRole.setUser(user);
                     userRoles.add(userRole);

@@ -16,20 +16,24 @@ import javax.transaction.Transactional;
 @Service
 public class OtpServiceImpl implements OtpService {
 
-    @Autowired
-    private SmsService smsService;
+    private final SmsService smsService;
+    private final UserService userService;
+    private final LoginService loginService;
+    private final RatingService ratingService;
+    private final TaskService taskService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private LoginService loginService;
-
-    @Autowired
-    private RatingService ratingService;
-
-    @Autowired
-    private TaskService taskService;
+    public OtpServiceImpl(SmsService smsService,
+                          UserService userService,
+                          LoginService loginService,
+                          RatingService ratingService,
+                          TaskService taskService) {
+        this.smsService = smsService;
+        this.userService = userService;
+        this.loginService = loginService;
+        this.ratingService = ratingService;
+        this.taskService = taskService;
+    }
 
     @Transactional
     @Override

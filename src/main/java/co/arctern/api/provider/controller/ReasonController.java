@@ -13,8 +13,12 @@ import java.util.List;
 @RequestMapping("/reason")
 public class ReasonController {
 
+    private final ReasonService reasonService;
+
     @Autowired
-    private ReasonService reasonService;
+    public ReasonController(ReasonService reasonService) {
+        this.reasonService = reasonService;
+    }
 
     /**
      * create new reasons api.

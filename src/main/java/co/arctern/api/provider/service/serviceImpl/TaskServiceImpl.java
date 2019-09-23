@@ -6,6 +6,7 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
+import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
@@ -27,34 +28,38 @@ import java.util.stream.Collectors;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    @Autowired
-    private TaskDao taskDao;
+    private final TaskDao taskDao;
+    private final UserTaskService userTaskService;
+    private final TaskStateFlowService taskStateFlowService;
+    private final UserService userService;
+    private final AddressService addressService;
+    private final PaymentService paymentService;
+    private final ReasonService reasonService;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    private UserTaskService userTaskService;
-
-    @Autowired
-    private TaskStateFlowService taskStateFlowService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AddressService addressService;
-
-    @Autowired
-    PaymentService paymentService;
-
-    @Autowired
-    ReasonService reasonService;
-
-    @Autowired
-    private ProjectionFactory projectionFactory;
+    public TaskServiceImpl(TaskDao taskDao,
+                           UserTaskService userTaskService,
+                           TaskStateFlowService taskStateFlowService,
+                           UserService userService,
+                           AddressService addressService,
+                           PaymentService paymentService,
+                           ReasonService reasonService,
+                           ProjectionFactory projectionFactory) {
+        this.taskDao = taskDao;
+        this.userTaskService = userTaskService;
+        this.taskStateFlowService = taskStateFlowService;
+        this.userService = userService;
+        this.addressService = addressService;
+        this.paymentService = paymentService;
+        this.reasonService = reasonService;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public Task fetchTask(Long taskId) {
         return taskDao.findById(taskId).orElseThrow(() -> {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TASK_ID_MESSAGE);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TASK_ID_MESSAGE.toString());
         });
     }
 
@@ -118,8 +123,8 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public StringBuilder startTask(Long taskId, Long userId) {
         Task task = fetchTask(taskId);
-        if (task.getUserTasks().stream().filter(a -> a.getIsActive()).findFirst().get().getUser().getId().longValue() != userId) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not assigned/active for this user.");
+        if (task.getUserTasks().stream().filter(UserTask::getIsActive).findFirst().get().getUser().getId().longValue() != userId) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TASK_NOT_ASSIGNED_OR_INACTIVE_MESSAGE.toString());
         }
         task.setState(TaskState.STARTED);
         taskStateFlowService.createFlow(task, TaskEventFlowState.STARTED, userId);
@@ -227,7 +232,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public PaginatedResponse seeCancelRequests(Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(taskDao.findByCancellationRequestedTrue(pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a)), pageable);
+        return PaginationUtil.returnPaginatedBody(taskDao.findByCancellationRequestedTrue(pageable).map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
     }
 
 
@@ -236,7 +241,7 @@ public class TaskServiceImpl implements TaskService {
         Long taskId = dto.getTaskId();
         Task task = (taskId == null) ? new Task() : taskDao.findById(taskId).orElseThrow(() ->
         {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid task Id.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TASK_ID_MESSAGE.toString());
         });
         /**
          * to set source address Id of Warehouse / provider ( 3 in case of staging , change later / on prod.

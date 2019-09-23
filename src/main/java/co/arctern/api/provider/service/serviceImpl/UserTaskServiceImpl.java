@@ -24,14 +24,18 @@ import java.util.List;
 @Service
 public class UserTaskServiceImpl implements UserTaskService {
 
-    @Autowired
-    private UserTaskDao userTaskDao;
+    private final UserTaskDao userTaskDao;
+    private final TaskService taskService;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    TaskService taskService;
-
-    @Autowired
-    ProjectionFactory projectionFactory;
+    public UserTaskServiceImpl(UserTaskDao userTaskDao,
+                               TaskService taskService,
+                               ProjectionFactory projectionFactory) {
+        this.userTaskDao = userTaskDao;
+        this.taskService = taskService;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public void createUserTask(User user, Task task) {
@@ -126,7 +130,7 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(tasks.map(a -> projectionFactory.createProjection(TasksForProvider.class, a)), pageable);
+        return PaginationUtil.returnPaginatedBody(tasks.map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
     }
 
 

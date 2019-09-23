@@ -17,15 +17,19 @@ import java.util.stream.Collectors;
 @Service
 public class UserOfferingServiceImpl implements UserOfferingService {
 
-    @Autowired
-    UserOfferingDao userOfferingDao;
+    private final UserOfferingDao userOfferingDao;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    ProjectionFactory projectionFactory;
+    public UserOfferingServiceImpl(UserOfferingDao userOfferingDao,
+                                   ProjectionFactory projectionFactory) {
+        this.userOfferingDao = userOfferingDao;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public Map<Object, List<Users>> fetchUsersByOffering(Pageable pageable) {
         return userOfferingDao.findByIsActiveTrue(pageable).stream()
-                .collect(Collectors.groupingBy(a -> projectionFactory.createProjection(Offerings.class, a.getOffering()), Collectors.mapping(a -> projectionFactory.createProjection(Users.class, a.getUser()), Collectors.toList())));
+                .collect(Collectors.groupingBy(userOffering -> projectionFactory.createProjection(Offerings.class, userOffering.getOffering()), Collectors.mapping(userOffering -> projectionFactory.createProjection(Users.class, userOffering.getUser()), Collectors.toList())));
     }
 }

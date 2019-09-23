@@ -5,6 +5,7 @@ import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.domain.UserRole;
 import co.arctern.api.provider.service.TokenService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,10 @@ import java.util.stream.Collectors;
 @Service
 public class TokenServiceImpl implements TokenService {
 
-    @Autowired
-    private TokenEndpoint tokenEndpoint;
-
-    @Autowired
-    private TokenStore tokenStore;
+    private final TokenEndpoint tokenEndpoint;
+    private final TokenStore tokenStore;
+    private final UserDao userDao;
+    private final AreaDao areaDao;
 
     @Value("${security.jwt.client-id}")
     private String clientID;
@@ -43,10 +43,15 @@ public class TokenServiceImpl implements TokenService {
     private String grantType;
 
     @Autowired
-    UserDao userDao;
-
-    @Autowired
-    AreaDao areaDao;
+    public TokenServiceImpl(TokenEndpoint tokenEndpoint,
+                            TokenStore tokenStore,
+                            UserDao userDao,
+                            AreaDao areaDao) {
+        this.tokenEndpoint = tokenEndpoint;
+        this.tokenStore = tokenStore;
+        this.userDao = userDao;
+        this.areaDao = areaDao;
+    }
 
     @Override
     @SneakyThrows(Exception.class)
@@ -58,7 +63,7 @@ public class TokenServiceImpl implements TokenService {
         parameters.put("password", user.getPassword());
         parameters.put("username", user.getUsername());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        List<Role> roles = user.getUserRoles().stream().map(a -> a.getRole()).collect(Collectors.toList());
+        List<Role> roles = user.getUserRoles().stream().map(UserRole::getRole).collect(Collectors.toList());
         for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getRole()));
         }
@@ -111,7 +116,6 @@ public class TokenServiceImpl implements TokenService {
         OAuth2AuthenticationDetails oAuth2AuthenticationDetails = (OAuth2AuthenticationDetails) authentication1.getDetails();
         String accessToken = oAuth2AuthenticationDetails.getTokenValue();
         OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(accessToken);
-        Map<String, Object> additionalInformation = oAuth2AccessToken.getAdditionalInformation();
-        return additionalInformation;
+        return oAuth2AccessToken.getAdditionalInformation();
     }
 }

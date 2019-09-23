@@ -2,6 +2,7 @@ package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.domain.UserOffering;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
@@ -27,26 +28,27 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
+    private final ProjectionFactory projectionFactory;
+    private final OfferingService offeringService;
+    private final AreaService areaService;
+    private final UserRoleService userRoleService;
+    private final TokenService tokenService;
 
     @Autowired
-    private ProjectionFactory projectionFactory;
-
-    @Autowired
-    private OfferingService offeringService;
-
-    @Autowired
-    private UserOfferingService userOfferingService;
-
-    @Autowired
-    private AreaService areaService;
-
-    @Autowired
-    UserAreaService userAreaService;
-
-    @Autowired
-    private UserRoleService userRoleService;
+    public UserServiceImpl(UserDao userDao,
+                           ProjectionFactory projectionFactory,
+                           OfferingService offeringService,
+                           AreaService areaService,
+                           UserRoleService userRoleService,
+                           TokenService tokenService) {
+        this.userDao = userDao;
+        this.projectionFactory = projectionFactory;
+        this.offeringService = offeringService;
+        this.areaService = areaService;
+        this.userRoleService = userRoleService;
+        this.tokenService = tokenService;
+    }
 
     @Override
     public String signIn(String phone, String username, String password) {
@@ -72,7 +74,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public StringBuilder markUserInactive(Long userId, Boolean status) {
-        User user = fetchUser(userId);
+        Long id = (userId == null) ? tokenService.fetchUserId(): userId;
+        User user = fetchUser(id);
         user.setIsActive(status);
         userDao.save(user);
         return SUCCESS_MESSAGE;
@@ -82,19 +85,19 @@ public class UserServiceImpl implements UserService {
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public User fetchUser(String phone) {
         return userDao.findByPhone(phone)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, REGISTER_USER_MESSAGE));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, REGISTER_USER_MESSAGE.toString()));
     }
 
     @Override
     public User fetchUser(Long userId) {
-        return userDao.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE));
+        return userDao.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE.toString()));
     }
 
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public User fetchUserByPhone(String phone) {
         return userDao.findByPhone(phone)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE.toString()));
     }
 
     @Override
@@ -133,7 +136,7 @@ public class UserServiceImpl implements UserService {
     public void saveLastLoginTime(String phone, Timestamp loginTime) {
         User user = userDao.findByPhone(phone).orElseThrow(() -> {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    USER_NOT_FOUND_MESSAGE);
+                    USER_NOT_FOUND_MESSAGE.toString());
         });
         user.setLastLoginTime(loginTime);
         user.setIsLoggedIn(true);
@@ -149,7 +152,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable) {
-        return offeringService.fetchUserOfferings(offeringIds, pageable).map(a -> a.getUser());
+        return offeringService.fetchUserOfferings(offeringIds, pageable).map(UserOffering::getUser);
     }
 
     public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable) {

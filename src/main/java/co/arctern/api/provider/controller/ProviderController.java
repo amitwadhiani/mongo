@@ -24,11 +24,15 @@ import java.sql.Timestamp;
 @RequestMapping("/provider")
 public class ProviderController {
 
-    @Autowired
-    private ProviderService providerService;
+    private final ProviderService providerService;
+    private final TokenService tokenService;
 
     @Autowired
-    private TokenService tokenService;
+    public ProviderController(ProviderService providerService,
+                              TokenService tokenService) {
+        this.providerService = providerService;
+        this.tokenService = tokenService;
+    }
 
     /**
      * fetch all tasks for a provider api.

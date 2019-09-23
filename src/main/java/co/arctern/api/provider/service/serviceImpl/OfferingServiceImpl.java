@@ -26,14 +26,18 @@ import java.util.stream.Collectors;
 @Service
 public class OfferingServiceImpl implements OfferingService {
 
-    @Autowired
-    OfferingDao offeringDao;
+    private final OfferingDao offeringDao;
+    private final UserOfferingDao userOfferingDao;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    UserOfferingDao userOfferingDao;
-
-    @Autowired
-    ProjectionFactory projectionFactory;
+    public OfferingServiceImpl(OfferingDao offeringDao,
+                               UserOfferingDao userOfferingDao,
+                               ProjectionFactory projectionFactory) {
+        this.offeringDao = offeringDao;
+        this.userOfferingDao = userOfferingDao;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public void setOfferingsToUser(User user, List<Long> offeringIds) {
@@ -76,13 +80,13 @@ public class OfferingServiceImpl implements OfferingService {
 
     @Override
     public List<Offerings> fetchAll() {
-        return Lists.newArrayList(offeringDao.findAll()).stream().map(a -> projectionFactory.createProjection(Offerings.class, a))
+        return Lists.newArrayList(offeringDao.findAll()).stream().map(offering -> projectionFactory.createProjection(Offerings.class, offering))
                 .collect(Collectors.toList());
     }
 
     public Offerings fetchById(Long id) {
         return projectionFactory.createProjection(Offerings.class, offeringDao.findById(id).orElseThrow(() -> {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid id");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_OFFERING_ID_MESSAGE.toString());
         }));
     }
 

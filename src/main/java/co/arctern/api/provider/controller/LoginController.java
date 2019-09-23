@@ -19,14 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/login")
 public class LoginController {
 
-    @Autowired
-    private UserService userService;
+    private final LoginService loginService;
+    private final TokenService tokenService;
 
     @Autowired
-    private LoginService loginService;
-
-    @Autowired
-    private TokenService tokenService;
+    public LoginController(LoginService loginService,
+                           TokenService tokenService) {
+        this.loginService = loginService;
+        this.tokenService = tokenService;
+    }
 
     /**
      * to generate otp for login using phone number api.

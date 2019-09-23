@@ -23,30 +23,34 @@ import javax.transaction.Transactional;
 @Service
 public class LoginServiceImpl implements LoginService {
 
-    @Autowired
-    private OtpService otpService;
+    private final OtpService otpService;
+    private final LoginEventHandler loginEventHandler;
+    private final LoginDao loginDao;
+    private final TokenService tokenService;
+    private final UserService userService;
 
     @Autowired
-    LoginEventHandler loginEventHandler;
-
-    @Autowired
-    private LoginDao loginDao;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private UserService userService;
+    public LoginServiceImpl(OtpService otpService,
+                            LoginEventHandler loginEventHandler,
+                            LoginDao loginDao,
+                            TokenService tokenService,
+                            UserService userService) {
+        this.otpService = otpService;
+        this.loginEventHandler = loginEventHandler;
+        this.loginDao = loginDao;
+        this.tokenService = tokenService;
+        this.userService = userService;
+    }
 
     @SneakyThrows(Exception.class)
     @Transactional
     @Override
     public String generateOTP(String phone, Boolean isAdmin) {
         if (isAdmin) {
-            if (!userService.fetchUser(phone).getUserRoles().stream()
+            if (userService.fetchUser(phone).getUserRoles().stream()
                     .filter(a -> a.getRole().getRole().equalsIgnoreCase("ROLE_ADMIN"))
-                    .findAny().isPresent()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only Admin login allowed.");
+                    .findAny().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ONLY_ADMIN_LOGIN_ALLOWED_MESSAGE.toString());
             }
             return otpService.generateOTPForLogin(phone);
         }
@@ -79,10 +83,10 @@ public class LoginServiceImpl implements LoginService {
                 userService.saveLastLoginTime(phone, login.getCreatedAt());
                 return oAuth2AccessToken;
             } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXPIRED_OTP_MESSAGE);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXPIRED_OTP_MESSAGE.toString());
             }
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE.toString());
     }
 
     @Override
@@ -90,7 +94,7 @@ public class LoginServiceImpl implements LoginService {
         User user = userService.fetchUser(userId);
         Login login = loginDao.findByUserIdAndStatusAndContact(userId, OTPState.USED, user.getPhone())
                 .orElseThrow(() -> {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_LOGGED_IN_MESSAGE);
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_LOGGED_IN_MESSAGE.toString());
                 });
         login.setLoginState(false);
         login.setLogoutTime(DateUtil.CURRENT_TIMESTAMP);

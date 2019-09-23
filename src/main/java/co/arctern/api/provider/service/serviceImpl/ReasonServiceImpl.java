@@ -19,14 +19,18 @@ import java.util.stream.Collectors;
 @Service
 public class ReasonServiceImpl implements ReasonService {
 
-    @Autowired
-    ReasonDao reasonDao;
+    private final ReasonDao reasonDao;
+    private final ProjectionFactory projectionFactory;
+    private final TaskReasonDao taskReasonDao;
 
     @Autowired
-    ProjectionFactory projectionFactory;
-
-    @Autowired
-    TaskReasonDao taskReasonDao;
+    public ReasonServiceImpl(ReasonDao reasonDao,
+                             ProjectionFactory projectionFactory,
+                             TaskReasonDao taskReasonDao) {
+        this.reasonDao = reasonDao;
+        this.projectionFactory = projectionFactory;
+        this.taskReasonDao = taskReasonDao;
+    }
 
     @Override
     public StringBuilder create(List<String> reasons) {
@@ -57,7 +61,7 @@ public class ReasonServiceImpl implements ReasonService {
 
     @Override
     public List<Reasons> fetchAll() {
-        return Lists.newArrayList(reasonDao.findAll()).stream().map(a -> projectionFactory.createProjection(Reasons.class, a))
+        return Lists.newArrayList(reasonDao.findAll()).stream().map(reason -> projectionFactory.createProjection(Reasons.class, reason))
                 .collect(Collectors.toList());
     }
 }

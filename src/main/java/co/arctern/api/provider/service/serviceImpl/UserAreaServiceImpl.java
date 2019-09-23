@@ -17,23 +17,27 @@ import java.util.stream.Collectors;
 @Service
 public class UserAreaServiceImpl implements UserAreaService {
 
-    @Autowired
-    private UserAreaDao userAreaDao;
+    private final UserAreaDao userAreaDao;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    private ProjectionFactory projectionFactory;
+    public UserAreaServiceImpl(UserAreaDao userAreaDao,
+                               ProjectionFactory projectionFactory) {
+        this.userAreaDao = userAreaDao;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public PaginatedResponse fetchUsersByArea(List<Long> areaIds, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(userAreaDao.findByAreaIdInAndIsActiveTrue(areaIds, pageable).map(
-                a -> a.getUser()), pageable);
+                UserArea::getUser), pageable);
     }
 
     @Override
     public List<Areas> fetchAreasForUser(List<UserArea> userAreas) {
         return userAreas.parallelStream()
-                .filter(a -> a.getIsActive())
-                .map(a -> projectionFactory.createProjection(Areas.class, a.getArea())).collect(Collectors.toList());
+                .filter(UserArea::getIsActive)
+                .map(userArea -> projectionFactory.createProjection(Areas.class, userArea.getArea())).collect(Collectors.toList());
     }
 
 }

@@ -14,18 +14,22 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class AddressServiceImpl implements AddressService {
 
-    @Autowired
-    AddressDao addressDao;
+    private final AddressDao addressDao;
+    private final AreaService areaService;
 
     @Autowired
-    AreaService areaService;
+    public AddressServiceImpl(AddressDao addressDao,
+                              AreaService areaService) {
+        this.addressDao = addressDao;
+        this.areaService = areaService;
+    }
 
     @Override
     @SneakyThrows(Exception.class)
     public Address createOrFetchAddress(TaskAssignDto dto, Long addressId) {
         if (addressId != null) return addressDao.findById(addressId).orElseThrow(() ->
         {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role id.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ROLE_ID_MESSAGE.toString());
         });
         return saveAddress(dto);
     }
