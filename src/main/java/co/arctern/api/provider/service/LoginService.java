@@ -13,7 +13,7 @@ public interface LoginService extends MessageUtil {
      * @param isAdmin
      * @return
      */
-    public String generateOTP(String phone,Boolean isAdmin);
+    public StringBuilder generateOTP(String phone,Boolean isAdmin);
 
     /**
      * to verify otp from db with provided otp using phone number.

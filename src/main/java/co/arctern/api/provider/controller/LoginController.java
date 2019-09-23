@@ -2,7 +2,6 @@ package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.service.LoginService;
 import co.arctern.api.provider.service.TokenService;
-import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +36,8 @@ public class LoginController {
      * @throws Exception
      */
     @PostMapping("/generate-otp")
-    public ResponseEntity<String> generateOTP(@RequestParam("phone") String phone,
-                                              @RequestParam(value = "isAdmin", required = false, defaultValue = "false") Boolean isAdmin)
+    public ResponseEntity<StringBuilder> generateOTP(@RequestParam("phone") String phone,
+                                                     @RequestParam(value = "isAdmin", required = false, defaultValue = "false") Boolean isAdmin)
             throws Exception {
         return ResponseEntity.ok(loginService.generateOTP(phone, isAdmin));
     }

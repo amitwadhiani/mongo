@@ -45,7 +45,7 @@ public class LoginServiceImpl implements LoginService {
     @SneakyThrows(Exception.class)
     @Transactional
     @Override
-    public String generateOTP(String phone, Boolean isAdmin) {
+    public StringBuilder generateOTP(String phone, Boolean isAdmin) {
         if (isAdmin) {
             if (userService.fetchUser(phone).getUserRoles().stream()
                     .filter(a -> a.getRole().getRole().equalsIgnoreCase("ROLE_ADMIN"))

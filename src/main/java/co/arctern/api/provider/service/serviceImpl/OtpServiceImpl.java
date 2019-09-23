@@ -37,13 +37,13 @@ public class OtpServiceImpl implements OtpService {
 
     @Transactional
     @Override
-    public String generateOTPForLogin(String phone) {
+    public StringBuilder generateOTPForLogin(String phone) {
         User user = userService.fetchUser(phone);
         String otp = getOtpString();
         if (smsService.sendSms(phone, otp) != null) {
             loginService.generateLogin(phone, otp, user);
         }
-        return otp;
+        return SUCCESS_MESSAGE;
     }
 
     @Transactional

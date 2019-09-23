@@ -10,7 +10,7 @@ public interface OtpService extends MessageUtil {
      * @param phone
      * @return
      */
-    public String generateOTPForLogin(String phone);
+    public StringBuilder generateOTPForLogin(String phone);
 
     /**
      * generating otp for rating flow.
