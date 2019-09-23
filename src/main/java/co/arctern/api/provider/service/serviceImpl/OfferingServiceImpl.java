@@ -80,7 +80,7 @@ public class OfferingServiceImpl implements OfferingService {
 
     @Override
     public List<Offerings> fetchAll() {
-        return Lists.newArrayList(offeringDao.findAll()).stream().map(a -> projectionFactory.createProjection(Offerings.class, a))
+        return Lists.newArrayList(offeringDao.findAll()).stream().map(offering -> projectionFactory.createProjection(Offerings.class, offering))
                 .collect(Collectors.toList());
     }
 
