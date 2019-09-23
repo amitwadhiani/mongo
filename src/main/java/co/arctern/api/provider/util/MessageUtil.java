@@ -77,4 +77,9 @@ public interface MessageUtil {
      */
     StringBuilder INVALID_OFFERING_ID_MESSAGE = new StringBuilder("Invalid id");
 
+    /**
+     * task not assigned or inactive message.
+     */
+    StringBuilder TASK_NOT_ASSIGNED_OR_INACTIVE_MESSAGE = new StringBuilder("Task not assigned/active for this user.");
+
 }

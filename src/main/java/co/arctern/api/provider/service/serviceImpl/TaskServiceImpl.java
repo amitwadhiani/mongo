@@ -124,7 +124,7 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder startTask(Long taskId, Long userId) {
         Task task = fetchTask(taskId);
         if (task.getUserTasks().stream().filter(UserTask::getIsActive).findFirst().get().getUser().getId().longValue() != userId) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not assigned/active for this user.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TASK_NOT_ASSIGNED_OR_INACTIVE_MESSAGE.toString());
         }
         task.setState(TaskState.STARTED);
         taskStateFlowService.createFlow(task, TaskEventFlowState.STARTED, userId);
@@ -241,7 +241,7 @@ public class TaskServiceImpl implements TaskService {
         Long taskId = dto.getTaskId();
         Task task = (taskId == null) ? new Task() : taskDao.findById(taskId).orElseThrow(() ->
         {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid task Id.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TASK_ID_MESSAGE.toString());
         });
         /**
          * to set source address Id of Warehouse / provider ( 3 in case of staging , change later / on prod.
