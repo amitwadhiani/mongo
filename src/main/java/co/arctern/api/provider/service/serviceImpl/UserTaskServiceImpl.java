@@ -6,6 +6,7 @@ import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.service.UserTaskService;
+import co.arctern.api.provider.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -75,6 +76,11 @@ public class UserTaskServiceImpl implements UserTaskService {
     @Override
     public List<UserTask> fetchTasksForUser(Long userId, TaskState state) {
         return userTaskDao.findByIsActiveTrueAndUserIdAndTaskState(userId, state);
+    }
+
+    @Override
+    public List<UserTask> fetchUserTasksForCron() {
+        return userTaskDao.fetchUserTasksForCron(DateUtil.fetchTimestampFromCurrentTimestamp(20), TaskState.ASSIGNED);
     }
 
 

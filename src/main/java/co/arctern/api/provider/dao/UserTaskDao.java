@@ -4,6 +4,7 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.domain.UserTask;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -81,4 +82,12 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
     Page<UserTask> findByIsActiveTrueAndTaskStateInAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(TaskState[] states, Timestamp start,
                                                                                                             Timestamp end, Pageable pageable);
 
+    @Query("FROM UserTask ut " +
+            "JOIN FETCH ut.task task " +
+            "JOIN FETCH ut.user user " +
+            "WHERE ut.isActive = 1 " +
+            "AND ut.task.createdAt <= (:createdAt) " +
+            "AND task.isActive = 1 " +
+            "AND task.state = :state ")
+    List<UserTask> fetchUserTasksForCron(Timestamp createdAt, TaskState state);
 }
