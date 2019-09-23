@@ -48,7 +48,7 @@ public class RatingServiceImpl implements RatingService {
         ratingDao.save(rating);
         taskService.completeTask(taskId, userId);
         paymentService.patch(task);
-        return "Success";
+        return SUCCESS_MESSAGE.toString();
     }
 
     @Override
