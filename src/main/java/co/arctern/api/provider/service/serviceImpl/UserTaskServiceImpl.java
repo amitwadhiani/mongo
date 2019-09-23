@@ -130,7 +130,7 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(tasks.map(a -> projectionFactory.createProjection(TasksForProvider.class, a)), pageable);
+        return PaginationUtil.returnPaginatedBody(tasks.map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
     }
 
 
