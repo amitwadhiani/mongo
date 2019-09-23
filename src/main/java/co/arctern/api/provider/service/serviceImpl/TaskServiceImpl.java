@@ -294,50 +294,50 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, type, start, end, pageable);
+            TaskState[] states, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndStateInAndTypeOrderByCreatedAtDesc(states, type, pageable);
     }
 
     @Override
     public Page<Task> filterByPatientDetailsWoAreaIds(
-            TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.filterByPatientDetails(states, value, type, start, end, pageable);
+            TaskState[] states, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByPatientDetails(states, value, type, pageable);
     }
 
     @Override
     public Page<Task> filterByPatientDetailsWoAreaIds(
-            TaskState[] states, Long orderId, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.filterByPatientDetailsWithRefId(states, orderId, value, type, start, end, pageable);
+            TaskState[] states, Long orderId, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByPatientDetailsWithRefId(states, orderId, value, type, pageable);
     }
 
     @Override
-    public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.filterByAreaIdsAndPatientDetails(areaIds, states, type, value, start, end, pageable);
+    public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, TaskState[] states, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByAreaIdsAndPatientDetails(areaIds, states, type, value, pageable);
     }
 
     @Override
-    public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Long orderId, TaskState[] states, String value, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.filterByAreaIdsAndPatientDetailsWithRefId(areaIds, orderId, states, type, value, start, end, pageable);
+    public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Long orderId, TaskState[] states, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByAreaIdsAndPatientDetailsWithRefId(areaIds, orderId, states, type, value, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, Long orderId, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, type, start, end, pageable);
+            TaskState[] states, Long orderId, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(states, orderId, type, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-                areaIds, states, refId, type, start, end, pageable);
+            List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(
+                areaIds, states, refId, type, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            List<Long> areaIds, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-                areaIds, states, type, start, end, pageable);
+            List<Long> areaIds, TaskState[] states, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInOrderByCreatedAtDesc(
+                areaIds, states, type, pageable);
     }
 
 

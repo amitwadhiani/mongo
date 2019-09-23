@@ -86,12 +86,10 @@ public interface UserTaskService extends MessageUtil {
      * fetch tasks filtered by states within a range.
      *
      * @param states
-     * @param start
-     * @param end
      * @param pageable
      * @return
      */
-    public PaginatedResponse fetchTasks(TaskState[] states, Timestamp start, Timestamp end,
+    public PaginatedResponse fetchTasks(TaskState[] states,
                                         List<Long> areaIds, TaskType taskType, Long orderId, String patientFilterValue,
                                         Pageable pageable);
 

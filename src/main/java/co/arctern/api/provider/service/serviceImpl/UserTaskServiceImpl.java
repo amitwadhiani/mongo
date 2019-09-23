@@ -81,7 +81,7 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     @Override
-    public PaginatedResponse fetchTasks(TaskState[] states, Timestamp start, Timestamp end,
+    public PaginatedResponse fetchTasks(TaskState[] states,
                                         List<Long> areaIds, TaskType taskType,
                                         Long orderId,
                                         String patientFilterValue,
@@ -94,33 +94,33 @@ public class UserTaskServiceImpl implements UserTaskService {
             if (areaIds == null) {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            taskService.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, taskType, start, end, pageable), pageable);
+                            taskService.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        taskService.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, taskType, start, end, pageable), pageable);
+                        taskService.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, taskType, pageable), pageable);
             } else {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            taskService.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, taskType, start, end, pageable), pageable);
+                            taskService.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        taskService.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, orderId, taskType, start, end, pageable), pageable);
+                        taskService.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, orderId, taskType, pageable), pageable);
             }
         } else {
             if (areaIds == null) {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            taskService.filterByPatientDetailsWoAreaIds(states, patientFilterValue, taskType, start, end, pageable), pageable);
+                            taskService.filterByPatientDetailsWoAreaIds(states, patientFilterValue, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        taskService.filterByPatientDetailsWoAreaIds(states, orderId, patientFilterValue, taskType, start, end, pageable), pageable);
+                        taskService.filterByPatientDetailsWoAreaIds(states, orderId, patientFilterValue, taskType, pageable), pageable);
             } else {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            taskService.filterByPatientDetailsWithAreaIds(areaIds, states, patientFilterValue, taskType, start, end, pageable), pageable);
+                            taskService.filterByPatientDetailsWithAreaIds(areaIds, states, patientFilterValue, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        taskService.filterByPatientDetailsWithAreaIdsAndOrderId(areaIds, orderId, states, patientFilterValue, taskType, start, end, pageable), pageable);
+                        taskService.filterByPatientDetailsWithAreaIdsAndOrderId(areaIds, orderId, states, patientFilterValue, taskType, pageable), pageable);
             }
         }
     }
