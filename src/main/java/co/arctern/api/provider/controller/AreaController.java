@@ -18,7 +18,7 @@ import java.util.List;
 public class AreaController {
 
     @Autowired
-    AreaService areaService;
+    private AreaService areaService;
 
     /**
      * create new area api.

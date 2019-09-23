@@ -1,6 +1,7 @@
 package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.service.LoginService;
+import co.arctern.api.provider.service.TokenService;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
@@ -19,10 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    LoginService loginService;
+    private LoginService loginService;
+
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * to generate otp for login using phone number api.
@@ -35,7 +39,7 @@ public class LoginController {
     public ResponseEntity<String> generateOTP(@RequestParam("phone") String phone,
                                               @RequestParam(value = "isAdmin", required = false, defaultValue = "false") Boolean isAdmin)
             throws Exception {
-        return ResponseEntity.ok(loginService.generateOTP(phone,isAdmin));
+        return ResponseEntity.ok(loginService.generateOTP(phone, isAdmin));
     }
 
     /**
@@ -64,8 +68,9 @@ public class LoginController {
      */
     @PostMapping("/log-out")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<StringBuilder> logOut(@RequestParam("userId") Long userId)
+    public ResponseEntity<StringBuilder> logOut(@RequestParam(value = "userId", required = false) Long userId)
             throws Exception {
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(loginService.logOut(userId));
 
     }

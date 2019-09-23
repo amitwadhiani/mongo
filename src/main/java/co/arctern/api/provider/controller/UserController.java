@@ -19,7 +19,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     /**
      * to create new user api-> allowed for Admin only .
@@ -41,6 +41,7 @@ public class UserController {
      */
     @GetMapping("/fetch/all")
     @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<Users>> fetchAll() {
         return ResponseEntity.ok(userService.fetchAll());
     }

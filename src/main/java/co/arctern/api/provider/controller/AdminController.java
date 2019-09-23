@@ -5,10 +5,7 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
-import co.arctern.api.provider.service.AdminService;
-import co.arctern.api.provider.service.HomePageService;
-import co.arctern.api.provider.service.TaskService;
-import co.arctern.api.provider.service.UserService;
+import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,16 +31,19 @@ import java.util.List;
 public class AdminController {
 
     @Autowired
-    AdminService adminService;
+    private AdminService adminService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    TaskService taskService;
+    private TaskService taskService;
 
     @Autowired
-    HomePageService homePageService;
+    private TokenService tokenService;
+
+    @Autowired
+    private HomePageService homePageService;
 
     /**
      * view providers for admin's / particular areas api.
@@ -99,7 +99,8 @@ public class AdminController {
     @GetMapping("/user/state")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> markUserStatus(@RequestParam("state") Boolean state,
-                                                        @RequestParam("userId") Long userId) {
+                                                        @RequestParam(value = "userId", required = false) Long userId) {
+        if(userId==null) userId=tokenService.fetchUserId();
         return ResponseEntity.ok(userService.markUserInactive(userId, state));
     }
 

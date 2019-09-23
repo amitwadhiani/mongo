@@ -14,7 +14,7 @@ import java.util.List;
 public class ReasonController {
 
     @Autowired
-    ReasonService reasonService;
+    private ReasonService reasonService;
 
     /**
      * create new reasons api.

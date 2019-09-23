@@ -2,7 +2,7 @@ package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.dto.response.HomePageResponse;
 import co.arctern.api.provider.service.HomePageService;
-import co.arctern.api.provider.util.DateUtil;
+import co.arctern.api.provider.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomePageController {
 
     @Autowired
-    HomePageService homePageService;
+    private HomePageService homePageService;
+
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * fetch tasks filtered by user and time range api.
@@ -31,7 +34,8 @@ public class HomePageController {
     @CrossOrigin
     @GetMapping("/tasks")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<HomePageResponse> fetchHomePage(@RequestParam("userId") Long userId) {
+    public ResponseEntity<HomePageResponse> fetchHomePage(@RequestParam(value = "userId", required = false) Long userId) {
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(homePageService.fetchHomePage(userId));
     }
 }

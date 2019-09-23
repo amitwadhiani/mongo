@@ -5,6 +5,7 @@ import co.arctern.api.provider.dto.request.RescheduleRequestBody;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.TaskService;
+import co.arctern.api.provider.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
@@ -23,7 +24,10 @@ import java.util.List;
 public class TaskController {
 
     @Autowired
-    TaskService taskService;
+    private TaskService taskService;
+
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * assign tasks to user ( automatic task creation and assignment for a particular diagnosticOrder ) api.
@@ -49,7 +53,8 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> reassignTaskToUser(@RequestParam("taskId") Long taskId,
-                                                            @RequestParam("userId") Long userId) {
+                                                            @RequestParam(value = "userId",required = false) Long userId) {
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(taskService.reassignTask(taskId, userId));
     }
 
@@ -64,7 +69,8 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> assignTaskToUser(@RequestParam("taskId") Long taskId,
-                                                          @RequestParam("userId") Long userId) {
+                                                          @RequestParam(value = "userId", required = false) Long userId) {
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(taskService.assignTask(taskId, userId));
     }
 
@@ -78,7 +84,9 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> rescheduleTask(@RequestBody RescheduleRequestBody request) {
-        return ResponseEntity.ok(taskService.rescheduleTask(request.getTaskId(), request.getUserId(), request.getTime()));
+        Long userId = request.getUserId();
+        if (userId == null) userId = tokenService.fetchUserId();
+        return ResponseEntity.ok(taskService.rescheduleTask(request.getTaskId(), userId, request.getTime()));
     }
 
     /**
@@ -92,7 +100,8 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> startTaskToUser(@RequestParam("taskId") Long taskId,
-                                                         @RequestParam("userId") Long userId) {
+                                                         @RequestParam(value = "userId", required = false) Long userId) {
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(taskService.startTask(taskId, userId));
     }
 
@@ -119,6 +128,7 @@ public class TaskController {
     public ResponseEntity<StringBuilder> cancelTask(@RequestParam(value = "isCancelled", defaultValue = "true") Boolean isCancelled,
                                                     @RequestParam("taskId") Long taskId,
                                                     @RequestParam(value = "userId", required = false) Long userId) {
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(taskService.cancelTask(isCancelled, taskId, userId));
     }
 
@@ -146,6 +156,7 @@ public class TaskController {
      */
     @PostMapping("/create")
     @CrossOrigin
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<TasksForProvider> createTask(@RequestBody TaskAssignDto dto) {
         log.info("Call from order-api");
         return ResponseEntity.ok(taskService.fetchProjectedResponseFromPost(dto));

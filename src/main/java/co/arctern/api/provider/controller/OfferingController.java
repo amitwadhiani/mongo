@@ -16,7 +16,7 @@ import java.util.List;
 public class OfferingController {
 
     @Autowired
-    OfferingService offeringService;
+    private OfferingService offeringService;
 
     /**
      * create new offering api.
