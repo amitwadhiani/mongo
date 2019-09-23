@@ -37,7 +37,7 @@ public class UserAreaServiceImpl implements UserAreaService {
     public List<Areas> fetchAreasForUser(List<UserArea> userAreas) {
         return userAreas.parallelStream()
                 .filter(UserArea::getIsActive)
-                .map(a -> projectionFactory.createProjection(Areas.class, a.getArea())).collect(Collectors.toList());
+                .map(userArea -> projectionFactory.createProjection(Areas.class, userArea.getArea())).collect(Collectors.toList());
     }
 
 }
