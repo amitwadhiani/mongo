@@ -61,7 +61,7 @@ public class ReasonServiceImpl implements ReasonService {
 
     @Override
     public List<Reasons> fetchAll() {
-        return Lists.newArrayList(reasonDao.findAll()).stream().map(a -> projectionFactory.createProjection(Reasons.class, a))
+        return Lists.newArrayList(reasonDao.findAll()).stream().map(reason -> projectionFactory.createProjection(Reasons.class, reason))
                 .collect(Collectors.toList());
     }
 }
