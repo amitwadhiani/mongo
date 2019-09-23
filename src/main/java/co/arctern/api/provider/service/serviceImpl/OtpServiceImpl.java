@@ -67,7 +67,7 @@ public class OtpServiceImpl implements OtpService {
 
     @Override
     public String getOtpString() {
-        return OTPUtil.generateOtp();
+        return OTPUtil.generateOtp().toString();
     }
 
 }

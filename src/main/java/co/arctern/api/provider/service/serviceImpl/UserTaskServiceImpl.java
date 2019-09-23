@@ -84,54 +84,5 @@ public class UserTaskServiceImpl implements UserTaskService {
         return userTaskDao.findByIsActiveTrueAndUserIdAndTaskState(userId, state);
     }
 
-    @Override
-    public PaginatedResponse fetchTasks(TaskState[] states,
-                                        List<Long> areaIds, TaskType taskType,
-                                        Long orderId,
-                                        String patientFilterValue,
-                                        Pageable pageable) {
-        if (states == null) {
-            states = new TaskState[]{TaskState.OPEN, TaskState.ASSIGNED, TaskState.STARTED, TaskState.COMPLETED,
-                    TaskState.ACCEPTED, TaskState.CANCELLED};
-        }
-        if (StringUtils.isEmpty(patientFilterValue)) {
-            if (areaIds == null) {
-                if (orderId == null) {
-                    return getPaginatedResponse(
-                            taskService.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, taskType, pageable), pageable);
-                }
-                return getPaginatedResponse(
-                        taskService.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, taskType, pageable), pageable);
-            } else {
-                if (orderId == null) {
-                    return getPaginatedResponse(
-                            taskService.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, taskType, pageable), pageable);
-                }
-                return getPaginatedResponse(
-                        taskService.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, orderId, taskType, pageable), pageable);
-            }
-        } else {
-            if (areaIds == null) {
-                if (orderId == null) {
-                    return getPaginatedResponse(
-                            taskService.filterByPatientDetailsWoAreaIds(states, patientFilterValue, taskType, pageable), pageable);
-                }
-                return getPaginatedResponse(
-                        taskService.filterByPatientDetailsWoAreaIds(states, orderId, patientFilterValue, taskType, pageable), pageable);
-            } else {
-                if (orderId == null) {
-                    return getPaginatedResponse(
-                            taskService.filterByPatientDetailsWithAreaIds(areaIds, states, patientFilterValue, taskType, pageable), pageable);
-                }
-                return getPaginatedResponse(
-                        taskService.filterByPatientDetailsWithAreaIdsAndOrderId(areaIds, orderId, states, patientFilterValue, taskType, pageable), pageable);
-            }
-        }
-    }
-
-    public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(tasks.map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
-    }
-
 
 }

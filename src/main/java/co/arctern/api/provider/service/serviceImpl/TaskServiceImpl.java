@@ -12,6 +12,7 @@ import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -345,5 +346,52 @@ public class TaskServiceImpl implements TaskService {
                 areaIds, states, type, pageable);
     }
 
+    @Override
+    public PaginatedResponse fetchTasks(TaskState[] states,
+                                        List<Long> areaIds, TaskType taskType,
+                                        Long orderId,
+                                        String patientFilterValue,
+                                        Pageable pageable) {
+        if (states == null) {
+            states = new TaskState[]{TaskState.OPEN, TaskState.ASSIGNED, TaskState.STARTED, TaskState.COMPLETED,
+                    TaskState.ACCEPTED, TaskState.CANCELLED};
+        }
+        if (StringUtils.isEmpty(patientFilterValue)) {
+            if (areaIds == null) {
+                if (orderId == null) {
+                    return getPaginatedResponse(
+                            this.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, taskType, pageable), pageable);
+                }
+                return getPaginatedResponse(
+                        this.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, taskType, pageable), pageable);
+            } else {
+                if (orderId == null) {
+                    return getPaginatedResponse(
+                            this.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, taskType, pageable), pageable);
+                }
+                return getPaginatedResponse(
+                        this.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, orderId, taskType, pageable), pageable);
+            }
+        } else {
+            if (areaIds == null) {
+                if (orderId == null) {
+                    return getPaginatedResponse(
+                            this.filterByPatientDetailsWoAreaIds(states, patientFilterValue, taskType, pageable), pageable);
+                }
+                return getPaginatedResponse(
+                        this.filterByPatientDetailsWoAreaIds(states, orderId, patientFilterValue, taskType, pageable), pageable);
+            } else {
+                if (orderId == null) {
+                    return getPaginatedResponse(
+                            this.filterByPatientDetailsWithAreaIds(areaIds, states, patientFilterValue, taskType, pageable), pageable);
+                }
+                return getPaginatedResponse(
+                        this.filterByPatientDetailsWithAreaIdsAndOrderId(areaIds, orderId, states, patientFilterValue, taskType, pageable), pageable);
+            }
+        }
+    }
 
+    public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable) {
+        return PaginationUtil.returnPaginatedBody(tasks.map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
+    }
 }
