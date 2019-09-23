@@ -43,7 +43,7 @@ public class ProviderController {
     @CrossOrigin
     @GetMapping("/task/all")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<TasksForProviderResponse> fetchTasksForProvider(@RequestParam(value = "userId",required = false) Long userId,
+    public ResponseEntity<TasksForProviderResponse> fetchTasksForProvider(@RequestParam(value = "userId", required = false) Long userId,
                                                                           Pageable pageable) {
         if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(providerService.fetchTasksForProvider(userId, pageable));
@@ -58,7 +58,7 @@ public class ProviderController {
     @CrossOrigin
     @GetMapping("/task/fetch/assigned")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<PaginatedResponse> fetchAssignedTasksForProvider(@RequestParam(value = "userId",required = false) Long userId,
+    public ResponseEntity<PaginatedResponse> fetchAssignedTasksForProvider(@RequestParam(value = "userId", required = false) Long userId,
                                                                            Pageable pageable) {
         if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(providerService.fetchAssignedTasksForProvider(userId, pageable));
@@ -90,10 +90,12 @@ public class ProviderController {
      */
     @CrossOrigin
     @GetMapping("/task/count")
-    public ResponseEntity<Long> fetchCountOfTasksForProvider(@RequestParam("userId") Long userId,
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Long> fetchCountOfTasksForProvider(@RequestParam(value = "userId",required = false) Long userId,
                                                              @RequestParam("state") TaskState state,
                                                              @RequestParam("start") Timestamp start,
                                                              @RequestParam("end") Timestamp end) {
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(providerService.fetchCountOfTasksForProvider(userId, state, start, end));
     }
 
@@ -106,9 +108,10 @@ public class ProviderController {
     @CrossOrigin
     @GetMapping("/task/filter")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<PaginatedResponse> fetchFilteredTasksForProvider(@RequestParam("userId") Long userId,
+    public ResponseEntity<PaginatedResponse> fetchFilteredTasksForProvider(@RequestParam(value = "userId", required = false) Long userId,
                                                                            @RequestParam("state") TaskState state,
                                                                            Pageable pageable) {
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(providerService.fetchFilteredTasksForProvider(userId, state, pageable));
     }
 

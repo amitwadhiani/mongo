@@ -56,8 +56,7 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> reassignTaskToUser(@RequestParam("taskId") Long taskId,
-                                                            @RequestParam(value = "userId",required = false) Long userId) {
-        if (userId == null) userId = tokenService.fetchUserId();
+                                                            @RequestParam(value = "userId") Long userId) {
         return ResponseEntity.ok(taskService.reassignTask(taskId, userId));
     }
 
@@ -72,8 +71,7 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> assignTaskToUser(@RequestParam("taskId") Long taskId,
-                                                          @RequestParam(value = "userId", required = false) Long userId) {
-        if (userId == null) userId = tokenService.fetchUserId();
+                                                          @RequestParam(value = "userId") Long userId) {
         return ResponseEntity.ok(taskService.assignTask(taskId, userId));
     }
 
@@ -87,9 +85,7 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> rescheduleTask(@RequestBody RescheduleRequestBody request) {
-        Long userId = request.getUserId();
-        if (userId == null) userId = tokenService.fetchUserId();
-        return ResponseEntity.ok(taskService.rescheduleTask(request.getTaskId(), userId, request.getTime()));
+        return ResponseEntity.ok(taskService.rescheduleTask(request.getTaskId(), request.getUserId(), request.getTime()));
     }
 
     /**
@@ -130,8 +126,7 @@ public class TaskController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> cancelTask(@RequestParam(value = "isCancelled", defaultValue = "true") Boolean isCancelled,
                                                     @RequestParam("taskId") Long taskId,
-                                                    @RequestParam(value = "userId", required = false) Long userId) {
-        if (userId == null) userId = tokenService.fetchUserId();
+                                                    @RequestParam(value = "userId") Long userId) {
         return ResponseEntity.ok(taskService.cancelTask(isCancelled, taskId, userId));
     }
 
