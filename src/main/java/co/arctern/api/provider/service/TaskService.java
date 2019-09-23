@@ -258,4 +258,8 @@ public interface TaskService extends MessageUtil {
 
     public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable);
 
+    public List<Task> fetchTasksForCron();
+
+    public Iterable<Task> saveAll(List<Task> tasks);
+
 }

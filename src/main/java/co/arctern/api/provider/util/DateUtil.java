@@ -15,6 +15,10 @@ public interface DateUtil {
         return new Date(System.currentTimeMillis() - minutes * 60 * 1000).getTime();
     }
 
+    public static Timestamp fetchTimestampFromCurrentTimestamp(Integer minutes) {
+        return new Timestamp(new Date(System.currentTimeMillis() - 20 * 60 * 1000).getTime());
+    }
+
     public static Timestamp zonedDateTimeToTimestampConversion(ZonedDateTime value) {
         return Timestamp.valueOf(value.toLocalDateTime());
     }

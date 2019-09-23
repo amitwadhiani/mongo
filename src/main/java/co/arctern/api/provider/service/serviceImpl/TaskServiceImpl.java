@@ -11,6 +11,7 @@ import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.*;
+import co.arctern.api.provider.util.DateUtil;
 import co.arctern.api.provider.util.PaginationUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -396,5 +397,13 @@ public class TaskServiceImpl implements TaskService {
 
     public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(tasks.map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
+    }
+
+    public List<Task> fetchTasksForCron() {
+        return taskDao.findByIsActiveTrueAndCreatedAtLessThanEqualAndState(DateUtil.fetchTimestampFromCurrentTimestamp(20), TaskState.ASSIGNED);
+    }
+
+    public Iterable<Task> saveAll(List<Task> tasks) {
+        return taskDao.saveAll(tasks);
     }
 }

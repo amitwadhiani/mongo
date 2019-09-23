@@ -229,6 +229,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInOrderByCreatedAtDesc(
             List<Long> areaIds, TaskState[] states, TaskType type, Pageable pageable);
+
     /**
      * filter tasks by areas, states, refId(orderId) and type.
      *
@@ -263,5 +264,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
 
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(
             TaskState[] states, Long orderId, TaskType type, Pageable pageable);
+
+    public List<Task> findByIsActiveTrueAndCreatedAtLessThanEqualAndState(Timestamp start, TaskState state);
 
 }

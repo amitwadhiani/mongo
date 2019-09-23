@@ -9,6 +9,7 @@ public enum TaskEventFlowState {
     ACCEPTED,
     RESCHEDULED,
     REJECTED,
+    TIMED_OUT,
     REASSIGNED,
     STARTED,
     OUT_FOR_PICKUP,
