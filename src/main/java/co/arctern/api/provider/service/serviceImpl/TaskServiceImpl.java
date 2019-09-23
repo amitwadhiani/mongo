@@ -79,6 +79,9 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventFlowState state) {
         Task task = fetchTask(taskId);
+        if (state.equals(TaskEventFlowState.REJECTED)) {
+            userTaskService.markInactive(task);
+        }
         taskStateFlowService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
         task.setState((state.equals(TaskEventFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
         taskDao.save(task);

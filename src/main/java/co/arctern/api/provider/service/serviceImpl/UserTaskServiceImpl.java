@@ -1,17 +1,11 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.UserTaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
-import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.projection.TasksForProvider;
-import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.UserTaskService;
-import co.arctern.api.provider.util.PaginationUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,8 +40,10 @@ public class UserTaskServiceImpl implements UserTaskService {
     @Override
     public void markInactive(Task task) {
         UserTask userTask = userTaskDao.findByIsActiveTrueAndTaskId(task.getId());
-        userTask.setIsActive(false);
-        userTaskDao.save(userTask);
+        if (userTask != null) {
+            userTask.setIsActive(false);
+            userTaskDao.save(userTask);
+        }
     }
 
     @Override
