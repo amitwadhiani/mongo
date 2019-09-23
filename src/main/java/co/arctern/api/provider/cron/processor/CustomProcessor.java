@@ -18,8 +18,6 @@ import java.util.List;
 @Slf4j
 public class CustomProcessor {
 
-    public static final Integer DELAY_SECONDS_IN_MS = 3600000;
-
     private final TaskService taskService;
     private final TaskStateFlowService taskStateFlowService;
 
@@ -29,7 +27,7 @@ public class CustomProcessor {
         this.taskStateFlowService = taskStateFlowService;
     }
 
-    @Scheduled(fixedDelay = DELAY_SECONDS_IN_MS)
+    @Scheduled(fixedDelay = 3600000)
     @Async("threadPoolTaskExecutor")
     public void processUnattendedTasks() {
         List<Task> tasks = taskService.fetchTasksForCron();
