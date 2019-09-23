@@ -82,4 +82,9 @@ public interface MessageUtil {
      */
     StringBuilder TASK_NOT_ASSIGNED_OR_INACTIVE_MESSAGE = new StringBuilder("Task not assigned/active for this user.");
 
+    /**
+     * only admin login allowed message.
+     */
+    StringBuilder ONLY_ADMIN_LOGIN_ALLOWED_MESSAGE = new StringBuilder("Only Admin login allowed.");
+
 }

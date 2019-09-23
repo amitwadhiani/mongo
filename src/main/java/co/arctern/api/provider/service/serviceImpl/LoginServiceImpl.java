@@ -50,7 +50,7 @@ public class LoginServiceImpl implements LoginService {
             if (userService.fetchUser(phone).getUserRoles().stream()
                     .filter(a -> a.getRole().getRole().equalsIgnoreCase("ROLE_ADMIN"))
                     .findAny().isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only Admin login allowed.");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ONLY_ADMIN_LOGIN_ALLOWED_MESSAGE.toString());
             }
             return otpService.generateOTPForLogin(phone);
         }
