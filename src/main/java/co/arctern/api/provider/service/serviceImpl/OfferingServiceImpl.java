@@ -86,7 +86,7 @@ public class OfferingServiceImpl implements OfferingService {
 
     public Offerings fetchById(Long id) {
         return projectionFactory.createProjection(Offerings.class, offeringDao.findById(id).orElseThrow(() -> {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid id");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_OFFERING_ID_MESSAGE.toString());
         }));
     }
 

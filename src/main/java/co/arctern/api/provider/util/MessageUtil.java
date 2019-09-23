@@ -72,4 +72,9 @@ public interface MessageUtil {
      */
     StringBuilder REGISTER_USER_MESSAGE = new StringBuilder("No user found. Ask admin for new sign up. ");
 
+    /**
+     * invalid offering id message.
+     */
+    StringBuilder INVALID_OFFERING_ID_MESSAGE = new StringBuilder("Invalid id");
+
 }
