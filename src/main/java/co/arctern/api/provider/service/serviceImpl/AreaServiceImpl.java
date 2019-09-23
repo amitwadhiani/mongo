@@ -82,7 +82,7 @@ public class AreaServiceImpl implements AreaService {
     @Override
     public Area fetchById(Long areaId) {
         return areaDao.findById(areaId).orElseThrow(() -> {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid area Id.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_AREA_ID_MESSAGE.toString());
         });
     }
 

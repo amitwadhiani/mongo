@@ -87,4 +87,9 @@ public interface MessageUtil {
      */
     StringBuilder ONLY_ADMIN_LOGIN_ALLOWED_MESSAGE = new StringBuilder("Only Admin login allowed.");
 
+    /**
+     * invalid area id message.
+     */
+    StringBuilder INVALID_AREA_ID_MESSAGE = new StringBuilder("Invalid area Id.");
+
 }
