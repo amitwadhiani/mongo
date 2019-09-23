@@ -6,6 +6,7 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
+import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
@@ -122,7 +123,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public StringBuilder startTask(Long taskId, Long userId) {
         Task task = fetchTask(taskId);
-        if (task.getUserTasks().stream().filter(a -> a.getIsActive()).findFirst().get().getUser().getId().longValue() != userId) {
+        if (task.getUserTasks().stream().filter(UserTask::getIsActive).findFirst().get().getUser().getId().longValue() != userId) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task not assigned/active for this user.");
         }
         task.setState(TaskState.STARTED);
