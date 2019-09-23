@@ -7,6 +7,14 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 public interface LoginService extends MessageUtil {
 
     /**
+     * generating otp for login.
+     *
+     * @param phone
+     * @return
+     */
+    public StringBuilder generateOTPForLogin(String phone);
+
+    /**
      * to generate otp for a phone number.
      *
      * @param phone

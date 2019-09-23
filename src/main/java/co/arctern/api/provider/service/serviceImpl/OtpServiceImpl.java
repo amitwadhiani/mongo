@@ -17,33 +17,16 @@ import javax.transaction.Transactional;
 public class OtpServiceImpl implements OtpService {
 
     private final SmsService smsService;
-    private final UserService userService;
-    private final LoginService loginService;
     private final RatingService ratingService;
     private final TaskService taskService;
 
     @Autowired
     public OtpServiceImpl(SmsService smsService,
-                          UserService userService,
-                          LoginService loginService,
                           RatingService ratingService,
                           TaskService taskService) {
         this.smsService = smsService;
-        this.userService = userService;
-        this.loginService = loginService;
         this.ratingService = ratingService;
         this.taskService = taskService;
-    }
-
-    @Transactional
-    @Override
-    public StringBuilder generateOTPForLogin(String phone) {
-        User user = userService.fetchUser(phone);
-        String otp = getOtpString();
-        if (smsService.sendSms(phone, otp) != null) {
-            loginService.generateLogin(phone, otp, user);
-        }
-        return SUCCESS_MESSAGE;
     }
 
     @Transactional

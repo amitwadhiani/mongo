@@ -5,14 +5,6 @@ import co.arctern.api.provider.util.MessageUtil;
 public interface OtpService extends MessageUtil {
 
     /**
-     * generating otp for login.
-     *
-     * @param phone
-     * @return
-     */
-    public StringBuilder generateOTPForLogin(String phone);
-
-    /**
      * generating otp for rating flow.
      *
      * @param taskId
