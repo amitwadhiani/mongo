@@ -51,7 +51,7 @@ public class RoleServiceImpl implements RoleService {
     public Roles fetchRoleById(Long id) {
         return projectionFactory.createProjection(Roles.class, roleDao.findById(id).orElseThrow(() ->
         {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role id.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ROLE_ID_MESSAGE.toString());
         }));
     }
 }
