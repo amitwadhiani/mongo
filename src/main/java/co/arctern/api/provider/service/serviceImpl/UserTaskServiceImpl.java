@@ -25,15 +25,12 @@ import java.util.List;
 public class UserTaskServiceImpl implements UserTaskService {
 
     private final UserTaskDao userTaskDao;
-    private final TaskService taskService;
     private final ProjectionFactory projectionFactory;
 
     @Autowired
     public UserTaskServiceImpl(UserTaskDao userTaskDao,
-                               TaskService taskService,
                                ProjectionFactory projectionFactory) {
         this.userTaskDao = userTaskDao;
-        this.taskService = taskService;
         this.projectionFactory = projectionFactory;
     }
 

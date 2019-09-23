@@ -10,6 +10,7 @@ import co.arctern.api.provider.service.LoginService;
 import co.arctern.api.provider.service.OtpService;
 import co.arctern.api.provider.service.TokenService;
 import co.arctern.api.provider.service.UserService;
+import co.arctern.api.provider.sms.SmsService;
 import co.arctern.api.provider.util.DateUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,18 +29,20 @@ public class LoginServiceImpl implements LoginService {
     private final LoginDao loginDao;
     private final TokenService tokenService;
     private final UserService userService;
+    private final SmsService smsService;
 
     @Autowired
     public LoginServiceImpl(OtpService otpService,
                             LoginEventHandler loginEventHandler,
                             LoginDao loginDao,
                             TokenService tokenService,
-                            UserService userService) {
+                            UserService userService, SmsService smsService) {
         this.otpService = otpService;
         this.loginEventHandler = loginEventHandler;
         this.loginDao = loginDao;
         this.tokenService = tokenService;
         this.userService = userService;
+        this.smsService = smsService;
     }
 
     @SneakyThrows(Exception.class)
@@ -52,9 +55,20 @@ public class LoginServiceImpl implements LoginService {
                     .findAny().isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ONLY_ADMIN_LOGIN_ALLOWED_MESSAGE.toString());
             }
-            return otpService.generateOTPForLogin(phone);
+            return generateOTPForLogin(phone);
         }
-        return otpService.generateOTPForLogin(phone);
+        return generateOTPForLogin(phone);
+    }
+
+    @Transactional
+    @Override
+    public StringBuilder generateOTPForLogin(String phone) {
+        User user = userService.fetchUser(phone);
+        String otp = otpService.getOtpString();
+        if (smsService.sendSms(phone, otp) != null) {
+            generateLogin(phone, otp, user);
+        }
+        return SUCCESS_MESSAGE;
     }
 
     @Override
