@@ -39,6 +39,7 @@ public class AppUserDetailsService implements UserDetailsService {
         userDetails.setId(user.getId());
         userDetails.setName(user.getName());
         userDetails.setEmail(user.getEmail());
+        userDetails.setUsername(user.getUsername());
         userDetails.setPhone(user.getPhone());
         userDetails.setAreaIds(StringUtils.join(user.getUserAreas().stream().map(a -> a.getArea().getId()).collect(Collectors.toList()), ","));
         return userDetails;
