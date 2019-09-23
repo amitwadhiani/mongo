@@ -116,7 +116,6 @@ public class TokenServiceImpl implements TokenService {
         OAuth2AuthenticationDetails oAuth2AuthenticationDetails = (OAuth2AuthenticationDetails) authentication1.getDetails();
         String accessToken = oAuth2AuthenticationDetails.getTokenValue();
         OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(accessToken);
-        Map<String, Object> additionalInformation = oAuth2AccessToken.getAdditionalInformation();
-        return additionalInformation;
+        return oAuth2AccessToken.getAdditionalInformation();
     }
 }
