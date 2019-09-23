@@ -16,14 +16,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/rating")
 public class RatingController {
 
-    @Autowired
-    private OtpService otpService;
+    private final OtpService otpService;
+    private final RatingService ratingService;
+    private final TokenService tokenService;
 
     @Autowired
-    private RatingService ratingService;
-
-    @Autowired
-    private TokenService tokenService;
+    public RatingController(OtpService otpService,
+                            RatingService ratingService,
+                            TokenService tokenService) {
+        this.otpService = otpService;
+        this.ratingService = ratingService;
+        this.tokenService = tokenService;
+    }
 
     /**
      * to generate rating for a particular task api.

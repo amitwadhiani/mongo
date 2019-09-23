@@ -27,11 +27,10 @@ import java.util.stream.Collectors;
 @Service
 public class TokenServiceImpl implements TokenService {
 
-    @Autowired
-    private TokenEndpoint tokenEndpoint;
-
-    @Autowired
-    private TokenStore tokenStore;
+    private final TokenEndpoint tokenEndpoint;
+    private final TokenStore tokenStore;
+    private final UserDao userDao;
+    private final AreaDao areaDao;
 
     @Value("${security.jwt.client-id}")
     private String clientID;
@@ -43,10 +42,15 @@ public class TokenServiceImpl implements TokenService {
     private String grantType;
 
     @Autowired
-    UserDao userDao;
-
-    @Autowired
-    AreaDao areaDao;
+    public TokenServiceImpl(TokenEndpoint tokenEndpoint,
+                            TokenStore tokenStore,
+                            UserDao userDao,
+                            AreaDao areaDao) {
+        this.tokenEndpoint = tokenEndpoint;
+        this.tokenStore = tokenStore;
+        this.userDao = userDao;
+        this.areaDao = areaDao;
+    }
 
     @Override
     @SneakyThrows(Exception.class)

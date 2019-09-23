@@ -16,17 +16,18 @@ import java.util.List;
 @Service
 public class AdminServiceImpl implements AdminService {
 
-    @Autowired
-    TokenService tokenService;
+    private final UserService userService;
+    private final UserAreaService userAreaService;
+    private final TaskService taskService;
 
     @Autowired
-    UserService userService;
-
-    @Autowired
-    UserAreaService userAreaService;
-
-    @Autowired
-    TaskService taskService;
+    public AdminServiceImpl(UserService userService,
+                            UserAreaService userAreaService,
+                            TaskService taskService) {
+        this.userService = userService;
+        this.userAreaService = userAreaService;
+        this.taskService = taskService;
+    }
 
     @Override
     public PaginatedResponse fetchProvidersByArea(List<Long> areaIds, Pageable pageable) {

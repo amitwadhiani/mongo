@@ -19,11 +19,15 @@ import java.util.stream.Collectors;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    RoleDao roleDao;
+    private final RoleDao roleDao;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    ProjectionFactory projectionFactory;
+    public RoleServiceImpl(RoleDao roleDao,
+                           ProjectionFactory projectionFactory) {
+        this.roleDao = roleDao;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     @Transactional

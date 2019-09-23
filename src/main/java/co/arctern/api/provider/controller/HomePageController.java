@@ -19,11 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/home")
 public class HomePageController {
 
-    @Autowired
-    private HomePageService homePageService;
+    private final HomePageService homePageService;
+    private final TokenService tokenService;
 
     @Autowired
-    private TokenService tokenService;
+    public HomePageController(HomePageService homePageService,
+                              TokenService tokenService) {
+        this.homePageService = homePageService;
+        this.tokenService = tokenService;
+    }
 
     /**
      * fetch tasks filtered by user and time range api.

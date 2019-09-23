@@ -15,8 +15,12 @@ import java.util.List;
 @RequestMapping("/offering")
 public class OfferingController {
 
+    private final OfferingService offeringService;
+
     @Autowired
-    private OfferingService offeringService;
+    public OfferingController(OfferingService offeringService) {
+        this.offeringService = offeringService;
+    }
 
     /**
      * create new offering api.

@@ -27,29 +27,27 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserDao userDao;
+    private final ProjectionFactory projectionFactory;
+    private final OfferingService offeringService;
+    private final AreaService areaService;
+    private final UserRoleService userRoleService;
+    private final TokenService tokenService;
 
     @Autowired
-    private ProjectionFactory projectionFactory;
-
-    @Autowired
-    private OfferingService offeringService;
-
-    @Autowired
-    private UserOfferingService userOfferingService;
-
-    @Autowired
-    private AreaService areaService;
-
-    @Autowired
-    UserAreaService userAreaService;
-
-    @Autowired
-    private UserRoleService userRoleService;
-
-    @Autowired
-    private TokenService tokenService;
+    public UserServiceImpl(UserDao userDao,
+                           ProjectionFactory projectionFactory,
+                           OfferingService offeringService,
+                           AreaService areaService,
+                           UserRoleService userRoleService,
+                           TokenService tokenService) {
+        this.userDao = userDao;
+        this.projectionFactory = projectionFactory;
+        this.offeringService = offeringService;
+        this.areaService = areaService;
+        this.userRoleService = userRoleService;
+        this.tokenService = tokenService;
+    }
 
     @Override
     public String signIn(String phone, String username, String password) {

@@ -17,11 +17,15 @@ import java.util.stream.Collectors;
 @Service
 public class UserAreaServiceImpl implements UserAreaService {
 
-    @Autowired
-    private UserAreaDao userAreaDao;
+    private final UserAreaDao userAreaDao;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    private ProjectionFactory projectionFactory;
+    public UserAreaServiceImpl(UserAreaDao userAreaDao,
+                               ProjectionFactory projectionFactory) {
+        this.userAreaDao = userAreaDao;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public PaginatedResponse fetchUsersByArea(List<Long> areaIds, Pageable pageable) {

@@ -14,11 +14,15 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class AddressServiceImpl implements AddressService {
 
-    @Autowired
-    AddressDao addressDao;
+    private final AddressDao addressDao;
+    private final AreaService areaService;
 
     @Autowired
-    AreaService areaService;
+    public AddressServiceImpl(AddressDao addressDao,
+                              AreaService areaService) {
+        this.addressDao = addressDao;
+        this.areaService = areaService;
+    }
 
     @Override
     @SneakyThrows(Exception.class)

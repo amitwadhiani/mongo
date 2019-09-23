@@ -27,29 +27,33 @@ import java.util.stream.Collectors;
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    @Autowired
-    private TaskDao taskDao;
+    private final TaskDao taskDao;
+    private final UserTaskService userTaskService;
+    private final TaskStateFlowService taskStateFlowService;
+    private final UserService userService;
+    private final AddressService addressService;
+    private final PaymentService paymentService;
+    private final ReasonService reasonService;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    private UserTaskService userTaskService;
-
-    @Autowired
-    private TaskStateFlowService taskStateFlowService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AddressService addressService;
-
-    @Autowired
-    PaymentService paymentService;
-
-    @Autowired
-    ReasonService reasonService;
-
-    @Autowired
-    private ProjectionFactory projectionFactory;
+    public TaskServiceImpl(TaskDao taskDao,
+                           UserTaskService userTaskService,
+                           TaskStateFlowService taskStateFlowService,
+                           UserService userService,
+                           AddressService addressService,
+                           PaymentService paymentService,
+                           ReasonService reasonService,
+                           ProjectionFactory projectionFactory) {
+        this.taskDao = taskDao;
+        this.userTaskService = userTaskService;
+        this.taskStateFlowService = taskStateFlowService;
+        this.userService = userService;
+        this.addressService = addressService;
+        this.paymentService = paymentService;
+        this.reasonService = reasonService;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public Task fetchTask(Long taskId) {

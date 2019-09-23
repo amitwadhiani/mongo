@@ -19,14 +19,15 @@ import java.util.List;
 @Service
 public class HomePageServiceImpl implements HomePageService {
 
-    @Autowired
-    TaskService taskService;
+    private final TaskService taskService;
+    private final UserTaskService userTaskService;
 
     @Autowired
-    UserTaskService userTaskService;
-
-    @Autowired
-    UserService userService;
+    public HomePageServiceImpl(TaskService taskService,
+                               UserTaskService userTaskService) {
+        this.taskService = taskService;
+        this.userTaskService = userTaskService;
+    }
 
     @Override
     public HomePageResponse fetchHomePage(Long userId) {

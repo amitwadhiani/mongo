@@ -23,20 +23,24 @@ import javax.transaction.Transactional;
 @Service
 public class LoginServiceImpl implements LoginService {
 
-    @Autowired
-    private OtpService otpService;
+    private final OtpService otpService;
+    private final LoginEventHandler loginEventHandler;
+    private final LoginDao loginDao;
+    private final TokenService tokenService;
+    private final UserService userService;
 
     @Autowired
-    LoginEventHandler loginEventHandler;
-
-    @Autowired
-    private LoginDao loginDao;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private UserService userService;
+    public LoginServiceImpl(OtpService otpService,
+                            LoginEventHandler loginEventHandler,
+                            LoginDao loginDao,
+                            TokenService tokenService,
+                            UserService userService) {
+        this.otpService = otpService;
+        this.loginEventHandler = loginEventHandler;
+        this.loginDao = loginDao;
+        this.tokenService = tokenService;
+        this.userService = userService;
+    }
 
     @SneakyThrows(Exception.class)
     @Transactional

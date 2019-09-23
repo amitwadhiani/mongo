@@ -23,11 +23,14 @@ import java.util.List;
 @Slf4j
 public class TaskController {
 
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
+    private final TokenService tokenService;
 
     @Autowired
-    private TokenService tokenService;
+    public TaskController(TaskService taskService, TokenService tokenService) {
+        this.taskService = taskService;
+        this.tokenService = tokenService;
+    }
 
     /**
      * assign tasks to user ( automatic task creation and assignment for a particular diagnosticOrder ) api.

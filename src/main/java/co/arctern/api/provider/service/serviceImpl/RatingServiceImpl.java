@@ -17,14 +17,18 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class RatingServiceImpl implements RatingService {
 
-    @Autowired
-    private RatingDao ratingDao;
+    private final RatingDao ratingDao;
+    private final TaskService taskService;
+    private final PaymentService paymentService;
 
     @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    PaymentService paymentService;
+    public RatingServiceImpl(RatingDao ratingDao,
+                             TaskService taskService,
+                             PaymentService paymentService) {
+        this.ratingDao = ratingDao;
+        this.taskService = taskService;
+        this.paymentService = paymentService;
+    }
 
     @Override
     @SneakyThrows(Exception.class)

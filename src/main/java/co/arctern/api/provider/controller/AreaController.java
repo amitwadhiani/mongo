@@ -17,8 +17,12 @@ import java.util.List;
 @RequestMapping("/area")
 public class AreaController {
 
+    private final AreaService areaService;
+
     @Autowired
-    private AreaService areaService;
+    public AreaController(AreaService areaService) {
+        this.areaService = areaService;
+    }
 
     /**
      * create new area api.

@@ -17,11 +17,15 @@ import java.util.stream.Collectors;
 @Service
 public class UserOfferingServiceImpl implements UserOfferingService {
 
-    @Autowired
-    UserOfferingDao userOfferingDao;
+    private final UserOfferingDao userOfferingDao;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    ProjectionFactory projectionFactory;
+    public UserOfferingServiceImpl(UserOfferingDao userOfferingDao,
+                                   ProjectionFactory projectionFactory) {
+        this.userOfferingDao = userOfferingDao;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public Map<Object, List<Users>> fetchUsersByOffering(Pageable pageable) {

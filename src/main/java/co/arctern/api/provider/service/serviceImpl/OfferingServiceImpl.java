@@ -26,14 +26,18 @@ import java.util.stream.Collectors;
 @Service
 public class OfferingServiceImpl implements OfferingService {
 
-    @Autowired
-    OfferingDao offeringDao;
+    private final OfferingDao offeringDao;
+    private final UserOfferingDao userOfferingDao;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    UserOfferingDao userOfferingDao;
-
-    @Autowired
-    ProjectionFactory projectionFactory;
+    public OfferingServiceImpl(OfferingDao offeringDao,
+                               UserOfferingDao userOfferingDao,
+                               ProjectionFactory projectionFactory) {
+        this.offeringDao = offeringDao;
+        this.userOfferingDao = userOfferingDao;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public void setOfferingsToUser(User user, List<Long> offeringIds) {

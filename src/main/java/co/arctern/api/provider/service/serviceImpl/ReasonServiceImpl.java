@@ -19,14 +19,18 @@ import java.util.stream.Collectors;
 @Service
 public class ReasonServiceImpl implements ReasonService {
 
-    @Autowired
-    ReasonDao reasonDao;
+    private final ReasonDao reasonDao;
+    private final ProjectionFactory projectionFactory;
+    private final TaskReasonDao taskReasonDao;
 
     @Autowired
-    ProjectionFactory projectionFactory;
-
-    @Autowired
-    TaskReasonDao taskReasonDao;
+    public ReasonServiceImpl(ReasonDao reasonDao,
+                             ProjectionFactory projectionFactory,
+                             TaskReasonDao taskReasonDao) {
+        this.reasonDao = reasonDao;
+        this.projectionFactory = projectionFactory;
+        this.taskReasonDao = taskReasonDao;
+    }
 
     @Override
     public StringBuilder create(List<String> reasons) {

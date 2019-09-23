@@ -24,14 +24,18 @@ import java.util.List;
 @Service
 public class AreaServiceImpl implements AreaService {
 
-    @Autowired
-    AreaDao areaDao;
+    private final AreaDao areaDao;
+    private final UserAreaDao userAreaDao;
+    private final ProjectionFactory projectionFactory;
 
     @Autowired
-    UserAreaDao userAreaDao;
-
-    @Autowired
-    ProjectionFactory projectionFactory;
+    public AreaServiceImpl(AreaDao areaDao,
+                           UserAreaDao userAreaDao,
+                           ProjectionFactory projectionFactory) {
+        this.areaDao = areaDao;
+        this.userAreaDao = userAreaDao;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public void setAreasToUser(User user, List<Long> areaIds) {
