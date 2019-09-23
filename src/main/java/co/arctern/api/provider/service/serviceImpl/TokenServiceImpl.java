@@ -14,8 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
@@ -58,7 +56,7 @@ public class TokenServiceImpl implements TokenService {
         parameters.put("client_id", clientID);
         parameters.put("grant_type", grantType);
         parameters.put("password", user.getPassword());
-        parameters.put("username", user.getPhone());
+        parameters.put("username", user.getUsername());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         List<Role> roles = user.getUserRoles().stream().map(a -> a.getRole()).collect(Collectors.toList());
         for (Role role : roles) {

@@ -26,10 +26,10 @@ public class AppUserDetailsService implements UserDetailsService {
     private UserDao userDao;
 
     @Override
-    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-        User user = userDao.findByPhone(phone)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userDao.findByUsername(username)
                 .orElseThrow(() -> {
-                    throw new UsernameNotFoundException(String.format("The contact %phone doesn't exist", phone));
+                    throw new UsernameNotFoundException(String.format("The User %username doesn't exist", username));
                 });
         List<GrantedAuthority> authorities = new ArrayList<>();
         user.getUserRoles().stream().forEach(role -> {
