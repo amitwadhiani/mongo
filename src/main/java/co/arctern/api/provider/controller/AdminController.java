@@ -133,7 +133,7 @@ public class AdminController {
                                            @RequestParam(value = "taskType", required = false, defaultValue = "SAMPLE_PICKUP") TaskType taskType,
                                            @RequestParam(value = "patientFilterValue", required = false) String patientFilterValue,
                                            Pageable pageable) {
-        if (start == null) start = ZonedDateTime.now().minusDays(1);
+        if (start == null) start = ZonedDateTime.now().minusDays(5);
         if (end == null) end = start.plusDays(5);
         return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states,
                 DateUtil.zonedDateTimeToTimestampConversion(start),
