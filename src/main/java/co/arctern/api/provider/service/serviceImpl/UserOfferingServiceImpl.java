@@ -30,6 +30,6 @@ public class UserOfferingServiceImpl implements UserOfferingService {
     @Override
     public Map<Object, List<Users>> fetchUsersByOffering(Pageable pageable) {
         return userOfferingDao.findByIsActiveTrue(pageable).stream()
-                .collect(Collectors.groupingBy(a -> projectionFactory.createProjection(Offerings.class, a.getOffering()), Collectors.mapping(a -> projectionFactory.createProjection(Users.class, a.getUser()), Collectors.toList())));
+                .collect(Collectors.groupingBy(userOffering -> projectionFactory.createProjection(Offerings.class, userOffering.getOffering()), Collectors.mapping(userOffering -> projectionFactory.createProjection(Users.class, userOffering.getUser()), Collectors.toList())));
     }
 }
