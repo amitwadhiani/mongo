@@ -47,9 +47,9 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public String generateOTP(String phone, Boolean isAdmin) {
         if (isAdmin) {
-            if (!userService.fetchUser(phone).getUserRoles().stream()
+            if (userService.fetchUser(phone).getUserRoles().stream()
                     .filter(a -> a.getRole().getRole().equalsIgnoreCase("ROLE_ADMIN"))
-                    .findAny().isPresent()) {
+                    .findAny().isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Only Admin login allowed.");
             }
             return otpService.generateOTPForLogin(phone);
