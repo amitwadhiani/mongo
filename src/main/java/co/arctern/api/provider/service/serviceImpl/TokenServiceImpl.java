@@ -5,6 +5,7 @@ import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.domain.UserRole;
 import co.arctern.api.provider.service.TokenService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,7 @@ public class TokenServiceImpl implements TokenService {
         parameters.put("password", user.getPassword());
         parameters.put("username", user.getUsername());
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        List<Role> roles = user.getUserRoles().stream().map(a -> a.getRole()).collect(Collectors.toList());
+        List<Role> roles = user.getUserRoles().stream().map(UserRole::getRole).collect(Collectors.toList());
         for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority(role.getRole()));
         }
