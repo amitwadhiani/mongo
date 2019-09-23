@@ -249,4 +249,13 @@ public interface TaskService extends MessageUtil {
     public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, TaskState[] states, String value, TaskType type, Pageable pageable);
 
     public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Long orderId, TaskState[] states, String value, TaskType type, Pageable pageable);
+
+    public PaginatedResponse fetchTasks(TaskState[] states,
+                                        List<Long> areaIds, TaskType taskType,
+                                        Long orderId,
+                                        String patientFilterValue,
+                                        Pageable pageable);
+
+    public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable);
+
 }
