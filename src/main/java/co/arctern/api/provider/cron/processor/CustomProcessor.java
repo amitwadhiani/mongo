@@ -20,11 +20,14 @@ public class CustomProcessor {
 
     public static final Integer DELAY_SECONDS_IN_MS = 3600000;
 
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
+    private final TaskStateFlowService taskStateFlowService;
 
     @Autowired
-    private TaskStateFlowService taskStateFlowService;
+    public CustomProcessor(TaskService taskService, TaskStateFlowService taskStateFlowService) {
+        this.taskService = taskService;
+        this.taskStateFlowService = taskStateFlowService;
+    }
 
     @Scheduled(fixedDelay = DELAY_SECONDS_IN_MS)
     @Async("threadPoolTaskExecutor")
