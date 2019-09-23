@@ -42,7 +42,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Roles> fetchRoles() {
         return Lists.newArrayList(roleDao.findAll()).stream()
-                .map(a -> projectionFactory.createProjection(Roles.class, a))
+                .map(role -> projectionFactory.createProjection(Roles.class, role))
                 .collect(Collectors.toList());
 
     }
