@@ -13,7 +13,7 @@ import java.util.Map;
 public class SmsService {
 
     private static final String API_KEY = "Ac750b5013fc96f09a4904280423cb1af";
-    private static final String SENDER = "ZMEDDO";
+    private static final String SENDER = "DMEDDO";
     private static final String BASE_URL = "https://alerts.solutionsinfini.co/api/v4/?";
 
     public String sendSms(String mob, String otp) {
