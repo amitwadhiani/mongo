@@ -115,25 +115,25 @@ public class UserServiceImpl implements UserService {
         List<Long> areaIds = dto.getAreaIds();
         List<Long> offeringIds = dto.getOfferingIds();
         User user = (userId == null) ? new User() : userDao.findById(userId).get();
-        String email = dto.getEmail();
         Gender gender = dto.getGender();
         Date dateOfBirth = dto.getDateOfBirth();
-        String phone = dto.getPhone();
-        String username = dto.getUsername();
         String name = dto.getName();
         Integer age = dto.getAge();
+        String phone = dto.getPhone();
         Boolean isActive = dto.getIsActive();
-        if (email != null) user.setEmail(email);
         user.setIsActive((isActive == null) ? true : isActive);
         if (name != null) user.setName(name);
         user.setIsTest(false);
         if (dateOfBirth != null) user.setDateOfBirth(dateOfBirth);
         if (age != null) user.setAge(age);
         if (gender != null) user.setGender(gender);
-        if (userId == null) user.setIsLoggedIn(false);
-        user.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
+        if (userId == null) {
+            user.setIsLoggedIn(false);
+            user.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
+            user.setUsername(dto.getUsername());
+            user.setEmail(dto.getEmail());
+        }
         if (phone != null) user.setPhone(phone);
-        if (username != null) user.setUsername(username);
         user = userDao.save(user);
         if (!org.springframework.util.CollectionUtils.isEmpty(roleIds)) userRoleService.createUserRoles(user, roleIds);
         if (!org.springframework.util.CollectionUtils.isEmpty(areaIds)) areaService.setAreasToUser(user, areaIds);
