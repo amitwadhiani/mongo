@@ -1,6 +1,5 @@
 package co.arctern.api.provider.dto.request;
 
-import co.arctern.api.provider.constant.PaymentMode;
 import co.arctern.api.provider.constant.PaymentState;
 import co.arctern.api.provider.constant.TaskType;
 import lombok.Data;

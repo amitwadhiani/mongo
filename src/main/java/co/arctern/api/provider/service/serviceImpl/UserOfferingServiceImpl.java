@@ -1,7 +1,6 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dao.UserOfferingDao;
-import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.dto.response.projection.Offerings;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.UserOfferingService;
