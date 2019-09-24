@@ -31,7 +31,7 @@ public class CustomProcessor {
         this.taskStateFlowService = taskStateFlowService;
     }
 
-    @Scheduled(cron = "0 */20 6-23 * * *")
+    @Scheduled(cron = "0 */20 * * * *")
     @Async("threadPoolTaskExecutor")
     public void processUnattendedTasks() {
         List<UserTask> userTasks = userTaskService.fetchUserTasksForCron();
