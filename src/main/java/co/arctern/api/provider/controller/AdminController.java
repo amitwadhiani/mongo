@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -131,15 +132,15 @@ public class AdminController {
     @PreAuthorize(("hasAuthority('ROLE_ADMIN')"))
     public ResponseEntity<?> fetchHomepage(@RequestParam(value = "states", required = false) TaskState[] states,
                                            @RequestParam(value = "areaIds", required = false) List<Long> areaIds,
-                                           @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Timestamp start,
-                                           @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Timestamp end,
+                                           @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
+                                           @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end,
                                            @RequestParam(value = "orderId", required = false) Long orderId,
                                            @RequestParam(value = "taskType", required = false, defaultValue = "SAMPLE_PICKUP") TaskType taskType,
                                            @RequestParam(value = "patientFilterValue", required = false) String patientFilterValue,
                                            Pageable pageable) {
-        if (start == null) start = DateUtil.CURRENT_MIDNIGHT_TIMESTAMP;
-        if (end == null) end = start;
-        return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, start, end,
+        Timestamp startTs = (start != null) ? DateUtil.fetchTodayTimestamp(start) : DateUtil.fetchTodayTimestamp(ZonedDateTime.now());
+        Timestamp endTs = (end != null) ? DateUtil.fetchTodayTimestamp(end) : startTs;
+        return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, startTs, endTs,
                 areaIds,
                 taskType,
                 orderId,

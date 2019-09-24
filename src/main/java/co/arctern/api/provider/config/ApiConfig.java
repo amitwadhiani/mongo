@@ -22,7 +22,7 @@ public class ApiConfig {
     @Bean("threadPoolTaskExecutor")
     public TaskExecutor createThreadPool() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-        threadPoolTaskExecutor.setCorePoolSize(20);
+        threadPoolTaskExecutor.setCorePoolSize(1);
         threadPoolTaskExecutor.setMaxPoolSize(2000);
         threadPoolTaskExecutor.setWaitForTasksToCompleteOnShutdown(true);
         threadPoolTaskExecutor.setThreadNamePrefix("Async call -> ");
