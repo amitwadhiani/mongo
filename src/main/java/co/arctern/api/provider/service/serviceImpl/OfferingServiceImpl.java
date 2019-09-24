@@ -44,8 +44,7 @@ public class OfferingServiceImpl implements OfferingService {
         List<UserOffering> userOfferings = new ArrayList<>();
         List<UserOffering> existingUserOfferings = user.getUserOfferings();
         if (!CollectionUtils.isEmpty(existingUserOfferings)) {
-            existingUserOfferings.stream().forEach(a -> a.setIsActive(false));
-            userOfferingDao.saveAll(existingUserOfferings);
+            userOfferingDao.deleteAll(existingUserOfferings);
         }
         offeringDao.findAllById(offeringIds).forEach(offering -> {
             UserOffering userOffering = new UserOffering();

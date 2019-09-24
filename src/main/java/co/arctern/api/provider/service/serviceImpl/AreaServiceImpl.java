@@ -42,8 +42,7 @@ public class AreaServiceImpl implements AreaService {
         List<UserArea> userAreas = new ArrayList<>();
         List<UserArea> existingUserAreas = user.getUserAreas();
         if (!CollectionUtils.isEmpty(existingUserAreas)) {
-            existingUserAreas.stream().forEach(a -> a.setIsActive(false));
-            userAreaDao.saveAll(existingUserAreas);
+            userAreaDao.deleteAll(existingUserAreas);
         }
         areaDao.findByIdIn(areaIds)
                 .forEach(a -> {
