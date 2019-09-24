@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -106,13 +108,15 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public StringBuilder logOut(Long userId) {
         User user = userService.fetchUser(userId);
-        Login login = loginDao.findByUserIdAndStatusAndContact(userId, OTPState.USED, user.getPhone())
-                .orElseThrow(() -> {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_LOGGED_IN_MESSAGE.toString());
-                });
-        login.setLoginState(false);
-        login.setLogoutTime(DateUtil.CURRENT_TIMESTAMP);
-        loginDao.save(login);
+        List<Login> logins = loginDao.findByUserIdAndStatusAndContactOrderByCreatedAtDesc(userId, OTPState.USED, user.getPhone());
+        if (!CollectionUtils.isEmpty(logins)) {
+            Login login = logins.get(0);
+            login.setLoginState(false);
+            login.setLogoutTime(DateUtil.CURRENT_TIMESTAMP);
+            loginDao.save(login);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_LOGGED_IN_MESSAGE.toString());
+        }
         loginEventHandler.markLoggedInStateForUser(user, false);
         return SUCCESS_MESSAGE;
     }

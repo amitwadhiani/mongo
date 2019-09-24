@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,6 +36,8 @@ public interface LoginDao extends PagingAndSortingRepository<Login, Long> {
      * @return
      */
     Optional<Login> findByUserIdAndStatusAndContact(Long userId, OTPState status, String contact);
+
+    List<Login> findByUserIdAndStatusAndContactOrderByCreatedAtDesc(Long userId, OTPState status, String contact);
 
     /**
      * fetch active login through phone and otp within a given time frame.
