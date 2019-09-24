@@ -28,8 +28,20 @@ public interface AreaService extends MessageUtil {
      */
     public StringBuilder createAreas(List<AreaRequestDto> dtos);
 
+    /**
+     * fetch all areas.
+     *
+     * @param pageable
+     * @return
+     */
     public Page<Areas> fetchAreas(Pageable pageable);
 
+    /**
+     * fetch area by id .
+     *
+     * @param areaId
+     * @return
+     */
     public Area fetchById(Long areaId);
 
 }

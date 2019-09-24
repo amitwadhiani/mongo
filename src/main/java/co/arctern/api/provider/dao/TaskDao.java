@@ -82,11 +82,19 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * fetch tasks filtered by states and type.
+     *
+     * @param states
+     * @param type
+     * @param pageable
+     * @return
+     */
     Page<Task> findByIsActiveTrueAndStateInAndTypeOrderByCreatedAtDesc(
             TaskState[] states, TaskType type, Pageable pageable);
 
     /**
-     * filter tasks through areas and patient details.
+     * filter tasks through areas and patient details in a datetime range.
      *
      * @param areaIds
      * @param states
@@ -108,6 +116,16 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByAreaIdsAndPatientDetailsWithTime(@Param("areaIds") List<Long> areaIds, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
+    /**
+     * fetch filtered tasks by areaIds, states and type.
+     *
+     * @param areaIds
+     * @param states
+     * @param type
+     * @param value
+     * @param pageable
+     * @return
+     */
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.destinationAddress.area.id IN (:areaIds) " +
@@ -142,6 +160,17 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByAreaIdsAndPatientDetailsWithRefIdWithTime(@Param("areaIds") List<Long> areaIds, @Param("refId") Long refId, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
+    /**
+     * fetch filtered tasks by areaIds, orderId and patient details.
+     *
+     * @param areaIds
+     * @param refId
+     * @param states
+     * @param type
+     * @param value
+     * @param pageable
+     * @return
+     */
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.destinationAddress.area.id IN (:areaIds) " +
@@ -173,6 +202,15 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByPatientDetailsAndTime(@Param("states") TaskState[] states, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
+    /**
+     * filter tasks by patientDetails.
+     *
+     * @param states
+     * @param value
+     * @param type
+     * @param pageable
+     * @return
+     */
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.state IN (:states) " +
@@ -204,6 +242,16 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByPatientDetailsWithRefIdWithTime(@Param("states") TaskState[] states, @Param("refId") Long refId, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
+    /**
+     * fetch filtered tasks by patientDetails, orderId.
+     *
+     * @param states
+     * @param refId
+     * @param value
+     * @param type
+     * @param pageable
+     * @return
+     */
     @Query("FROM Task task " +
             "WHERE task.isActive = 1" +
             "AND task.state IN (:states) " +
@@ -227,6 +275,15 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * filter tasks by areaIds and state.
+     *
+     * @param areaIds
+     * @param states
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInOrderByCreatedAtDesc(
             List<Long> areaIds, TaskState[] states, TaskType type, Pageable pageable);
 
@@ -245,6 +302,16 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * filter tasks by areaIds, orderId, states and type.
+     *
+     * @param areaIds
+     * @param states
+     * @param refId
+     * @param type
+     * @param pageable
+     * @return
+     */
     Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(
             List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Pageable pageable);
 
@@ -262,9 +329,25 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, Long orderId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * fetch tasks filtered by states, orderId and type.
+     *
+     * @param states
+     * @param orderId
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(
             TaskState[] states, Long orderId, TaskType type, Pageable pageable);
 
+    /**
+     * fetch filtered tasks by state and less than a datetime (for cronjon ).
+     *
+     * @param start
+     * @param state
+     * @return
+     */
     public List<Task> findByIsActiveTrueAndCreatedAtLessThanEqualAndState(Timestamp start, TaskState state);
 
 }

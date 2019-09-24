@@ -12,6 +12,15 @@ import java.util.List;
  */
 public interface PaginationUtil {
 
+    /**
+     * to paginate a list and return list in return.
+     *
+     * @param sourceList
+     * @param page
+     * @param pageSize
+     * @param <T>
+     * @return
+     */
     public static <T> List<T> paginateList(List<T> sourceList, int page, int pageSize) {
         if (pageSize <= 0 || page <= 0) {
             throw new IllegalArgumentException("Invalid page size/number ");

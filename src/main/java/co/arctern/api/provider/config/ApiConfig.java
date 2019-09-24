@@ -19,6 +19,11 @@ public class ApiConfig {
         return new SpelAwareProxyProjectionFactory();
     }
 
+    /**
+     * creating a thread pool for task execution (used in scheduler).
+     *
+     * @return
+     */
     @Bean("threadPoolTaskExecutor")
     public TaskExecutor createThreadPool() {
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();

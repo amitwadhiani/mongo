@@ -13,9 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 
-/**
- * otp Service to generate / use otp for various use cases in the api server.
- */
 @Service
 public class OtpServiceImpl implements OtpService {
 

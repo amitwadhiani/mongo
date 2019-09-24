@@ -1,8 +1,8 @@
 package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.constant.OfferingType;
-import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
@@ -226,30 +226,142 @@ public interface TaskService extends MessageUtil {
      */
     public List<TasksForProvider> fetchTasksForUser(Long userId, TaskState state);
 
+    /**
+     * to complete a task.
+     *
+     * @param taskId
+     * @param userId
+     * @return
+     */
     public StringBuilder completeTask(Long taskId, Long userId);
 
+    /**
+     * filter tasks by state and type.
+     *
+     * @param states
+     * @param start
+     * @param end
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, Timestamp start, Timestamp end, TaskType type, Pageable pageable);
 
+    /**
+     * filter tasks by state, type and areaIds.
+     *
+     * @param areaIds
+     * @param start
+     * @param end
+     * @param states
+     * @param refId
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, Long refId, TaskType type, Pageable pageable);
 
+    /**
+     * filter tasks by areaIds and states, type.
+     *
+     * @param areaIds
+     * @param start
+     * @param end
+     * @param states
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, TaskType type, Pageable pageable);
 
+    /**
+     * filter tasks by states, type and orderId.
+     *
+     * @param states
+     * @param start
+     * @param end
+     * @param orderId
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, Timestamp start, Timestamp end, Long orderId, TaskType type, Pageable pageable);
 
+    /**
+     * filter by patient details.
+     *
+     * @param states
+     * @param start
+     * @param end
+     * @param value
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<Task> filterByPatientDetailsWoAreaIds(
             TaskState[] states, Timestamp start, Timestamp end, String value, TaskType type, Pageable pageable);
 
+    /**
+     * filter tasks without areaIds.
+     *
+     * @param states
+     * @param start
+     * @param end
+     * @param orderId
+     * @param value
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<Task> filterByPatientDetailsWoAreaIds(
             TaskState[] states, Timestamp start, Timestamp end, Long orderId, String value, TaskType type, Pageable pageable);
 
+    /**
+     * filter tasks by patient details and areaIds.
+     *
+     * @param areaIds
+     * @param start
+     * @param end
+     * @param states
+     * @param value
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, String value, TaskType type, Pageable pageable);
 
+    /**
+     * filter tasks for homepage.
+     *
+     * @param areaIds
+     * @param start
+     * @param end
+     * @param orderId
+     * @param states
+     * @param value
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Timestamp start, Timestamp end, Long orderId, TaskState[] states, String value, TaskType type, Pageable pageable);
 
+    /**
+     * fetch filtered tasks for homepage.
+     *
+     * @param states
+     * @param start
+     * @param end
+     * @param areaIds
+     * @param taskType
+     * @param orderId
+     * @param patientFilterValue
+     * @param pageable
+     * @return
+     */
     public PaginatedResponse fetchTasks(TaskState[] states,
                                         Timestamp start, Timestamp end,
                                         List<Long> areaIds, TaskType taskType,
@@ -259,8 +371,19 @@ public interface TaskService extends MessageUtil {
 
     public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable);
 
+    /**
+     * fetch tasks for cronjob.
+     *
+     * @return
+     */
     public List<Task> fetchTasksForCron();
 
+    /**
+     * save all tasks.
+     *
+     * @param tasks
+     * @return
+     */
     public Iterable<Task> saveAll(List<Task> tasks);
 
 }

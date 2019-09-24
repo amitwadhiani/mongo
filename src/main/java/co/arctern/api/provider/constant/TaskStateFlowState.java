@@ -4,6 +4,7 @@ package co.arctern.api.provider.constant;
  * task states for flows for particular tasks.
  */
 public enum TaskStateFlowState {
+
     OPEN,
     ASSIGNED,
     ACCEPTED,
@@ -15,6 +16,5 @@ public enum TaskStateFlowState {
     OUT_FOR_PICKUP,
     OUT_FOR_DELIVERY,
     CANCELLED,
-    COMPLETED,
-
+    COMPLETED
 }

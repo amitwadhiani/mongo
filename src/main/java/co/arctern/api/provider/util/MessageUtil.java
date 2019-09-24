@@ -93,7 +93,7 @@ public interface MessageUtil {
     StringBuilder INVALID_AREA_ID_MESSAGE = new StringBuilder("Invalid area Id.");
 
     /**
-     * invalid area id message.
+     * rating entity already generated for task id message.
      */
     StringBuilder RATING_ALREADY_GENERATED_MESSAGE = new StringBuilder("Rating already generated for this task.");
 

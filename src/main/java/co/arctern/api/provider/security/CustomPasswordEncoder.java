@@ -9,6 +9,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.security.SecureRandom;
 import java.util.regex.Pattern;
 
+/**
+ * CustomPasswordEncoder to override match function for password matching ( encoded and original ).
+ */
 @Slf4j
 @NoArgsConstructor
 public class CustomPasswordEncoder extends BCryptPasswordEncoder {

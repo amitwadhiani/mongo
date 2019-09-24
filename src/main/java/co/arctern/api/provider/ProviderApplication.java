@@ -8,6 +8,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Provider-api Spring boot project
+ * enable scheduling for cronjob.
+ * enable async for running separate thread(s) for cronjob.
  */
 @SpringBootApplication
 @EnableAsync

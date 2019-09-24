@@ -2,7 +2,6 @@ package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -10,8 +9,6 @@ import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * apis for user creation.
@@ -40,6 +37,12 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(dto));
     }
 
+    /**
+     * to update details in user's profile ( excluding password, email and username) .
+     *
+     * @param dto
+     * @return
+     */
     @PatchMapping("/update")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

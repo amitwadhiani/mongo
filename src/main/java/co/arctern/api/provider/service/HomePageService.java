@@ -19,10 +19,17 @@ public interface HomePageService {
      */
     public HomePageResponse fetchHomePage(Long userId);
 
+
     /**
      * fetch homepage for admin.
      *
      * @param states
+     * @param start
+     * @param end
+     * @param areaIds
+     * @param taskType
+     * @param orderId
+     * @param patientFilterValue
      * @param pageable
      * @return
      */

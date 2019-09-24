@@ -83,6 +83,12 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
     Page<UserTask> findByIsActiveTrueAndTaskStateInAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(TaskState[] states, Timestamp start,
                                                                                                             Timestamp end, Pageable pageable);
 
+    /**
+     * to fetch userTasks for cron.
+     * @param createdAt
+     * @param state
+     * @return
+     */
     @Query("FROM UserTask ut " +
             "JOIN FETCH ut.task task " +
             "JOIN FETCH ut.user user " +
