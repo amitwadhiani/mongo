@@ -40,12 +40,11 @@ public class SmsService {
     }
 
     public String sendSmsForRating(String mob, String otpYes, String otpNo) {
-        String message = "Thank you for using Meddo. Please use this code : "
+        String message = "Thank you for using Meddo. Please use this code "
                 + otpYes
-                + "(if satisfied) and"
-                + ": "
+                + "(if satisfied) and "
                 + otpNo
-                + " (if unsatisfied) with our service.\nPlease enter the digits only";
+                + "(if unsatisfied) with our service.\nPlease enter the digits only";
         return sendSmsViaGateway(mob, message);
     }
 
