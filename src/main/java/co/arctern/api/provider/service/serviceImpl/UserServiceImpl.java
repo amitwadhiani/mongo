@@ -163,10 +163,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginatedResponse fetchAll(Pageable pageable) {
-        List<Users> role_admin = userDao.findByIsActiveTrue(pageable).getContent().stream()
-                .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")))
-                .map(user -> projectionFactory.createProjection(Users.class, user)).collect(Collectors.toList());
-        return PaginationUtil.returnPaginatedBody(role_admin, pageable.getPageNumber(), pageable.getPageSize());
+        return PaginationUtil.returnPaginatedBody(
+                userDao.findByIsActiveTrue(pageable).getContent().stream()
+                        .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")))
+                        .map(user -> projectionFactory.createProjection(Users.class, user))
+                        .collect(Collectors.toList()),
+                pageable.getPageNumber(),
+                pageable.getPageSize()
+        );
     }
 
     @Override
