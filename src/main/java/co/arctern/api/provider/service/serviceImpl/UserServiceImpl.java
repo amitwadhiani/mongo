@@ -4,6 +4,7 @@ import co.arctern.api.provider.constant.Gender;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserOffering;
+import co.arctern.api.provider.domain.UserRole;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
@@ -27,6 +28,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -160,15 +162,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Users> fetchAll() {
-        List<Users> users = new ArrayList<>();
-        Lists.newArrayList(userDao.findAll())
-                .stream()
-                .filter(a -> a.getUserRoles()
-                        .stream()
-                        .anyMatch(b -> b.getRole().getRole().equalsIgnoreCase("ROLE_USER")))
-                .forEach(a -> users.add(projectionFactory.createProjection(Users.class, a)));
-        return users;
+    public PaginatedResponse fetchAll(Pageable pageable) {
+        return PaginationUtil.returnPaginatedBody(
+                userDao.findByIsActiveTrue(pageable).getContent().stream()
+                        .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")))
+                        .map(user -> projectionFactory.createProjection(Users.class, user))
+                        .collect(Collectors.toList()),
+                pageable.getPageNumber(),
+                pageable.getPageSize()
+        );
     }
 
     @Override
@@ -176,6 +178,7 @@ public class UserServiceImpl implements UserService {
         return offeringService.fetchUserOfferings(offeringIds, pageable).map(UserOffering::getUser);
     }
 
+    @Override
     public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(userDao.findByIsActiveTrue(pageable)
                 .map(a -> projectionFactory.createProjection(Users.class, a)), pageable);
