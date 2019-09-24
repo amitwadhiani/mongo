@@ -93,7 +93,7 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
             "JOIN FETCH ut.task task " +
             "JOIN FETCH ut.user user " +
             "WHERE ut.isActive = 1 " +
-            "AND ut.task.createdAt <= (:createdAt) " +
+            "AND ut.createdAt <= (:createdAt) " +
             "AND task.isActive = 1 " +
             "AND task.state = :state ")
     List<UserTask> fetchUserTasksForCron(@Param("createdAt") Timestamp createdAt, @Param("state") TaskState state);
