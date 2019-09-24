@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @NoArgsConstructor
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "role_id", "isActive"})})
 public class UserRole {
 
     @Id
