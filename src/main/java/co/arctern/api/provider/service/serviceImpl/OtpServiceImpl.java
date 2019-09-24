@@ -1,12 +1,15 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.domain.Task;
-import co.arctern.api.provider.domain.User;
-import co.arctern.api.provider.service.*;
+import co.arctern.api.provider.service.OtpService;
+import co.arctern.api.provider.service.RatingService;
+import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.sms.SmsService;
 import co.arctern.api.provider.util.OTPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 
@@ -33,6 +36,9 @@ public class OtpServiceImpl implements OtpService {
     @Override
     public StringBuilder generateOTPForRating(Long taskId) {
         Task task = taskService.fetchTask(taskId);
+        if (task.getRating() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RATING_ALREADY_GENERATED_MESSAGE.toString());
+        }
         String otpYes = this.getOtpString();
         String otpNo = this.getOtpString();
         /**
