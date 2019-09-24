@@ -107,10 +107,16 @@ public interface UserService extends MessageUtil {
     public void saveLastLoginTime(String phone, Timestamp loginTime);
 
     /**
-     * fetch all users.
+     * fetch all users who don't have admin role.
      * @return
      */
     public PaginatedResponse fetchAll(Pageable pageable);
+
+    /**
+     * fetch all users.
+     * @return
+     */
+    public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable);
 
     /**
      * fetch users filtered by offerings.
@@ -119,7 +125,5 @@ public interface UserService extends MessageUtil {
      * @return
      */
     public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable);
-
-    public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable);
 
 }
