@@ -1,7 +1,7 @@
 package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.constant.OfferingType;
-import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.Task;
@@ -78,7 +78,7 @@ public interface TaskService extends MessageUtil {
      * @param state
      * @return
      */
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventFlowState state);
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskStateFlowState state);
 
     /**
      * fetch completed tasks for user.

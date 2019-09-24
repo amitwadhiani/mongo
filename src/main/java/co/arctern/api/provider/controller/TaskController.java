@@ -1,6 +1,6 @@
 package co.arctern.api.provider.controller;
 
-import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.dto.request.RescheduleRequestBody;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
@@ -107,7 +107,7 @@ public class TaskController {
     @PostMapping("/accept-reject")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<StringBuilder> acceptOrRejectTask(@RequestParam(value = "state", required = false, defaultValue = "ACCEPTED") TaskEventFlowState state,
+    public ResponseEntity<StringBuilder> acceptOrRejectTask(@RequestParam(value = "state", required = false, defaultValue = "ACCEPTED") TaskStateFlowState state,
                                                             @RequestParam("taskId") Long taskId) {
         return ResponseEntity.ok(taskService.acceptOrRejectAssignedTask(taskId, state));
     }

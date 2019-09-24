@@ -1,6 +1,6 @@
 package co.arctern.api.provider.cron;
 
-import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.UserTask;
@@ -41,8 +41,8 @@ public class CustomProcessor {
             Long userId = a.getUser().getId();
             Task task = a.getTask();
             userTaskService.markInactive(task);
-            taskStateFlowService.createFlow(task, TaskEventFlowState.TIMED_OUT, userId);
-            taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, userId);
+            taskStateFlowService.createFlow(task, TaskStateFlowState.TIMED_OUT, userId);
+            taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
             task.setState(TaskState.OPEN);
             tasksToSave.add(task);
         });
