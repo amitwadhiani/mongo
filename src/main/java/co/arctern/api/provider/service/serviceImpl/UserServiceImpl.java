@@ -178,6 +178,7 @@ public class UserServiceImpl implements UserService {
         return offeringService.fetchUserOfferings(offeringIds, pageable).map(UserOffering::getUser);
     }
 
+    @Override
     public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(userDao.findByIsActiveTrue(pageable)
                 .map(a -> projectionFactory.createProjection(Users.class, a)), pageable);
