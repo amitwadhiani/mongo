@@ -124,9 +124,10 @@ public class TaskController {
     @PostMapping("/cancel-reassign")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<StringBuilder> cancelTask(@RequestParam(value = "isCancelled", defaultValue = "true") Boolean isCancelled,
+    public ResponseEntity<StringBuilder> cancelTask(@RequestParam(value = "isCancelled", defaultValue = "true", required = false) Boolean isCancelled,
                                                     @RequestParam("taskId") Long taskId,
-                                                    @RequestParam(value = "userId") Long userId) {
+                                                    @RequestParam(value = "userId", required = false) Long userId) {
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(taskService.cancelTask(isCancelled, taskId, userId));
     }
 
