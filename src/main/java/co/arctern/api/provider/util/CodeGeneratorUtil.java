@@ -9,7 +9,7 @@ public class CodeGeneratorUtil {
 
     public String generateTaskCode(Long id, Long orderId, TaskType type) {
         return STATIC_TASK_PREFIX
-                + ":"
+                + "-"
                 + type.getValue()
                 + orderId.toString()
                 + RandomStringUtils.randomAlphanumeric(5).toUpperCase();
