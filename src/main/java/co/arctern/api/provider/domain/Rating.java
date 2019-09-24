@@ -3,6 +3,7 @@ package co.arctern.api.provider.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -34,25 +35,21 @@ public class Rating {
     @JsonBackReference("task-rating")
     private Task task;
 
-    @Size(min = 1, max = 5, message = "Invalid rating value")
     @Column
     private Integer value;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1")
-    @NotNull
     private Boolean isSatisfied;
 
-    @Size(min = 6, max = 6, message = "Invalid otp")
     @Column(nullable = false)
     private String otpYes;
 
-    @Size(min = 6, max = 6, message = "Invalid otp")
     @Column(nullable = false)
     private String otpNo;
 
     @PrePersist
     public void setValue() {
-        if (this.isSatisfied)
+        if (BooleanUtils.isTrue(this.isSatisfied))
             this.value = 5;
         else
             this.value = 1;
