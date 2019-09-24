@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
@@ -89,5 +90,5 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
             "AND ut.task.createdAt <= (:createdAt) " +
             "AND task.isActive = 1 " +
             "AND task.state = :state ")
-    List<UserTask> fetchUserTasksForCron(Timestamp createdAt, TaskState state);
+    List<UserTask> fetchUserTasksForCron(@Param("createdAt") Timestamp createdAt, @Param("state") TaskState state);
 }
