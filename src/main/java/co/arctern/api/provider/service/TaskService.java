@@ -229,28 +229,29 @@ public interface TaskService extends MessageUtil {
     public StringBuilder completeTask(Long taskId, Long userId);
 
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, TaskType type, Pageable pageable);
+            TaskState[] states, Timestamp start, Timestamp end, TaskType type, Pageable pageable);
 
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Pageable pageable);
+            List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, Long refId, TaskType type, Pageable pageable);
 
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            List<Long> areaIds, TaskState[] states, TaskType type, Pageable pageable);
+            List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, TaskType type, Pageable pageable);
 
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, Long orderId, TaskType type, Pageable pageable);
+            TaskState[] states, Timestamp start, Timestamp end, Long orderId, TaskType type, Pageable pageable);
 
     public Page<Task> filterByPatientDetailsWoAreaIds(
-            TaskState[] states, String value, TaskType type, Pageable pageable);
+            TaskState[] states, Timestamp start, Timestamp end, String value, TaskType type, Pageable pageable);
 
     public Page<Task> filterByPatientDetailsWoAreaIds(
-            TaskState[] states, Long orderId, String value, TaskType type, Pageable pageable);
+            TaskState[] states, Timestamp start, Timestamp end, Long orderId, String value, TaskType type, Pageable pageable);
 
-    public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, TaskState[] states, String value, TaskType type, Pageable pageable);
+    public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, String value, TaskType type, Pageable pageable);
 
-    public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Long orderId, TaskState[] states, String value, TaskType type, Pageable pageable);
+    public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Timestamp start, Timestamp end, Long orderId, TaskState[] states, String value, TaskType type, Pageable pageable);
 
     public PaginatedResponse fetchTasks(TaskState[] states,
+                                        Timestamp start, Timestamp end,
                                         List<Long> areaIds, TaskType taskType,
                                         Long orderId,
                                         String patientFilterValue,

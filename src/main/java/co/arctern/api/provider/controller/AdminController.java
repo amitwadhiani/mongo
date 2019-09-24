@@ -6,6 +6,7 @@ import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.*;
+import co.arctern.api.provider.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -129,11 +130,15 @@ public class AdminController {
     @PreAuthorize(("hasAuthority('ROLE_ADMIN')"))
     public ResponseEntity<?> fetchHomepage(@RequestParam(value = "states", required = false) TaskState[] states,
                                            @RequestParam(value = "areaIds", required = false) List<Long> areaIds,
+                                           @RequestParam(value = "start", required = false) Timestamp start,
+                                           @RequestParam(value = "end", required = false) Timestamp end,
                                            @RequestParam(value = "orderId", required = false) Long orderId,
                                            @RequestParam(value = "taskType", required = false, defaultValue = "SAMPLE_PICKUP") TaskType taskType,
                                            @RequestParam(value = "patientFilterValue", required = false) String patientFilterValue,
                                            Pageable pageable) {
-        return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states,
+        if (start == null) start = DateUtil.CURRENT_MIDNIGHT_TIMESTAMP;
+        if (end == null) end = start;
+        return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, start, end,
                 areaIds,
                 taskType,
                 orderId,

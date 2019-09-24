@@ -304,54 +304,55 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndTypeOrderByCreatedAtDesc(states, type, pageable);
+            TaskState[] states, Timestamp start, Timestamp end, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> filterByPatientDetailsWoAreaIds(
-            TaskState[] states, String value, TaskType type, Pageable pageable) {
-        return taskDao.filterByPatientDetails(states, value, type, pageable);
+            TaskState[] states, Timestamp start, Timestamp end, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByPatientDetailsAndTime(states, value, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> filterByPatientDetailsWoAreaIds(
-            TaskState[] states, Long orderId, String value, TaskType type, Pageable pageable) {
-        return taskDao.filterByPatientDetailsWithRefId(states, orderId, value, type, pageable);
+            TaskState[] states, Timestamp start, Timestamp end, Long orderId, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByPatientDetailsWithRefIdWithTime(states, orderId, value, type, start, end, pageable);
     }
 
     @Override
-    public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, TaskState[] states, String value, TaskType type, Pageable pageable) {
-        return taskDao.filterByAreaIdsAndPatientDetails(areaIds, states, type, value, pageable);
+    public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByAreaIdsAndPatientDetailsWithTime(areaIds, states, type, value, start, end, pageable);
     }
 
     @Override
-    public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Long orderId, TaskState[] states, String value, TaskType type, Pageable pageable) {
-        return taskDao.filterByAreaIdsAndPatientDetailsWithRefId(areaIds, orderId, states, type, value, pageable);
+    public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Timestamp start, Timestamp end, Long orderId, TaskState[] states, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByAreaIdsAndPatientDetailsWithRefIdWithTime(areaIds, orderId, states, type, value, start, end, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, Long orderId, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(states, orderId, type, pageable);
+            TaskState[] states, Timestamp start, Timestamp end, Long orderId, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(
-                areaIds, states, refId, type, pageable);
+            List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, Long refId, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+                areaIds, states, refId, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            List<Long> areaIds, TaskState[] states, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInOrderByCreatedAtDesc(
-                areaIds, states, type, pageable);
+            List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+                areaIds, states, type, start, end, pageable);
     }
 
     @Override
     public PaginatedResponse fetchTasks(TaskState[] states,
+                                        Timestamp start, Timestamp end,
                                         List<Long> areaIds, TaskType taskType,
                                         Long orderId,
                                         String patientFilterValue,
@@ -364,33 +365,33 @@ public class TaskServiceImpl implements TaskService {
             if (areaIds == null) {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            this.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, taskType, pageable), pageable);
+                            this.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, start, end, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        this.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, taskType, pageable), pageable);
+                        this.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, start, end, orderId, taskType, pageable), pageable);
             } else {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            this.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, taskType, pageable), pageable);
+                            this.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, start, end, states, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        this.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, orderId, taskType, pageable), pageable);
+                        this.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, start, end, states, orderId, taskType, pageable), pageable);
             }
         } else {
             if (areaIds == null) {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            this.filterByPatientDetailsWoAreaIds(states, patientFilterValue, taskType, pageable), pageable);
+                            this.filterByPatientDetailsWoAreaIds(states, start, end, patientFilterValue, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        this.filterByPatientDetailsWoAreaIds(states, orderId, patientFilterValue, taskType, pageable), pageable);
+                        this.filterByPatientDetailsWoAreaIds(states, start, end, orderId, patientFilterValue, taskType, pageable), pageable);
             } else {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            this.filterByPatientDetailsWithAreaIds(areaIds, states, patientFilterValue, taskType, pageable), pageable);
+                            this.filterByPatientDetailsWithAreaIds(areaIds, start, end, states, patientFilterValue, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        this.filterByPatientDetailsWithAreaIdsAndOrderId(areaIds, orderId, states, patientFilterValue, taskType, pageable), pageable);
+                        this.filterByPatientDetailsWithAreaIdsAndOrderId(areaIds, start, end, orderId, states, patientFilterValue, taskType, pageable), pageable);
             }
         }
     }

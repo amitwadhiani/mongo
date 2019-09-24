@@ -1,5 +1,7 @@
 package co.arctern.api.provider.util;
 
+import org.joda.time.LocalDateTime;
+
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -10,6 +12,8 @@ import java.util.Date;
 public interface DateUtil {
 
     public static Timestamp CURRENT_TIMESTAMP = new Timestamp(new Date(System.currentTimeMillis()).getTime());
+
+    public static Timestamp CURRENT_MIDNIGHT_TIMESTAMP = new Timestamp(LocalDateTime.now().toLocalDate().toDateTimeAtStartOfDay().getMillis());
 
     public static Long fetchDifferenceFromCurrentDateInMs(Integer minutes) {
         return new Date(System.currentTimeMillis() - minutes * 60 * 1000).getTime();
