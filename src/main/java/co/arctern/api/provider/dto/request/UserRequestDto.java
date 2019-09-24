@@ -26,6 +26,7 @@ public class UserRequestDto {
     private String email;
     private Gender gender;
     private String profilePic;
+    private Boolean isActive;
     private List<Long> roleIds;
     private List<Long> areaIds;
     private List<Long> offeringIds;

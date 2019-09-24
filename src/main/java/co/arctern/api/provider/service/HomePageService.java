@@ -26,6 +26,9 @@ public interface HomePageService {
      * @param pageable
      * @return
      */
-    public HomePageResponseForAdmin fetchHomePageForAdmin(TaskState[] states, List<Long> areaIds, TaskType taskType, Long orderId, String patientFilterValue,
+    public HomePageResponseForAdmin fetchHomePageForAdmin(TaskState[] states,
+                                                          Timestamp start, Timestamp end,
+                                                          List<Long> areaIds, TaskType taskType, Long orderId,
+                                                          String patientFilterValue,
                                                           Pageable pageable);
 }

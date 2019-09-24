@@ -1,5 +1,6 @@
 package co.arctern.api.provider.service.serviceImpl;
 
+import co.arctern.api.provider.constant.Gender;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserOffering;
@@ -9,6 +10,7 @@ import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
+import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public StringBuilder markUserInactive(Long userId, Boolean status) {
-        Long id = (userId == null) ? tokenService.fetchUserId(): userId;
+        Long id = (userId == null) ? tokenService.fetchUserId() : userId;
         User user = fetchUser(id);
         user.setIsActive(status);
         userDao.save(user);
@@ -115,22 +118,35 @@ public class UserServiceImpl implements UserService {
         List<Long> areaIds = dto.getAreaIds();
         List<Long> offeringIds = dto.getOfferingIds();
         User user = (userId == null) ? new User() : userDao.findById(userId).get();
-        user.setEmail(dto.getEmail());
-        user.setIsActive(true);
-        user.setName(dto.getName());
+        Gender gender = dto.getGender();
+        Date dateOfBirth = dto.getDateOfBirth();
+        String name = dto.getName();
+        Integer age = dto.getAge();
+        String phone = dto.getPhone();
+        Boolean isActive = dto.getIsActive();
+        user.setIsActive((isActive == null) ? true : isActive);
+        if (name != null) user.setName(name);
         user.setIsTest(false);
-        user.setDateOfBirth(dto.getDateOfBirth());
-        user.setAge(dto.getAge());
-        user.setGender(dto.getGender());
-        user.setIsLoggedIn(false);
-        user.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
-        user.setPhone(dto.getPhone());
-        user.setUsername(dto.getUsername());
+        if (dateOfBirth != null) user.setDateOfBirth(dateOfBirth);
+        if (age != null) user.setAge(age);
+        if (gender != null) user.setGender(gender);
+        if (userId == null) {
+            user.setIsLoggedIn(false);
+            user.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
+            user.setUsername(dto.getUsername());
+            user.setEmail(dto.getEmail());
+        }
+        if (phone != null) user.setPhone(phone);
         user = userDao.save(user);
         if (!org.springframework.util.CollectionUtils.isEmpty(roleIds)) userRoleService.createUserRoles(user, roleIds);
         if (!org.springframework.util.CollectionUtils.isEmpty(areaIds)) areaService.setAreasToUser(user, areaIds);
         if (!CollectionUtils.isEmpty(offeringIds)) offeringService.setOfferingsToUser(user, offeringIds);
         return SUCCESS_MESSAGE;
+    }
+
+    @Override
+    public StringBuilder updateUser(UserRequestDto dto) {
+        return this.createUser(dto);
     }
 
     @Transactional

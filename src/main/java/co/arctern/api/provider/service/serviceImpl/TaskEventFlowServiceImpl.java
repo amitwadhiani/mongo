@@ -1,6 +1,6 @@
 package co.arctern.api.provider.service.serviceImpl;
 
-import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.dao.TaskEventFlowDao;
 import co.arctern.api.provider.domain.TaskEvent;
 import co.arctern.api.provider.domain.TaskEventFlow;
@@ -19,7 +19,7 @@ public class TaskEventFlowServiceImpl implements TaskEventFlowService {
     }
 
     @Override
-    public TaskEventFlow createFlow(TaskEvent taskEvent, TaskEventFlowState state, Long userId) {
+    public TaskEventFlow createFlow(TaskEvent taskEvent, TaskStateFlowState state, Long userId) {
         TaskEventFlow taskEventFlow = new TaskEventFlow();
         taskEventFlow.setTaskEvent(taskEvent);
         taskEventFlow.setState(state);

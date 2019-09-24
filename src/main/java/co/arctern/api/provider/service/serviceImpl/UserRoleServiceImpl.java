@@ -30,8 +30,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         List<UserRole> userRoles = new ArrayList<>();
         List<UserRole> existingUserRoles = user.getUserRoles();
         if (!CollectionUtils.isEmpty(userRoles)) {
-            existingUserRoles.stream().forEach(userRole -> userRole.setIsActive(false));
-            userRoleDao.saveAll(existingUserRoles);
+            userRoleDao.deleteAll(existingUserRoles);
         }
         roleDao.findByIdIn(roleIds)
                 .forEach(role -> {

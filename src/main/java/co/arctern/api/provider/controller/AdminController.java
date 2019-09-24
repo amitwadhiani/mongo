@@ -6,10 +6,12 @@ import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.*;
+import co.arctern.api.provider.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -129,11 +132,15 @@ public class AdminController {
     @PreAuthorize(("hasAuthority('ROLE_ADMIN')"))
     public ResponseEntity<?> fetchHomepage(@RequestParam(value = "states", required = false) TaskState[] states,
                                            @RequestParam(value = "areaIds", required = false) List<Long> areaIds,
+                                           @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
+                                           @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end,
                                            @RequestParam(value = "orderId", required = false) Long orderId,
                                            @RequestParam(value = "taskType", required = false, defaultValue = "SAMPLE_PICKUP") TaskType taskType,
                                            @RequestParam(value = "patientFilterValue", required = false) String patientFilterValue,
                                            Pageable pageable) {
-        return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states,
+        Timestamp startTs = (start != null) ? DateUtil.fetchTodayTimestamp(start) : DateUtil.fetchTodayTimestamp(ZonedDateTime.now());
+        Timestamp endTs = (end != null) ? DateUtil.fetchTodayTimestamp(end) : DateUtil.fetchTodayTimestamp(ZonedDateTime.now().plusDays(1));
+        return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, startTs, endTs,
                 areaIds,
                 taskType,
                 orderId,

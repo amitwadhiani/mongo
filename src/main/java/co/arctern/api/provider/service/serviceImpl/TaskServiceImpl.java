@@ -1,7 +1,7 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.OfferingType;
-import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.TaskDao;
@@ -71,20 +71,20 @@ public class TaskServiceImpl implements TaskService {
         Long userId = dto.getUserId();
         Task task = createTask(dto);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, userId);
-        taskStateFlowService.createFlow(task, TaskEventFlowState.ASSIGNED, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
         return TASK_ASSIGNED_MESSAGE;
     }
 
     @Override
     @Transactional
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskEventFlowState state) {
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskStateFlowState state) {
         Task task = fetchTask(taskId);
-        if (state.equals(TaskEventFlowState.REJECTED)) {
+        if (state.equals(TaskStateFlowState.REJECTED)) {
             userTaskService.markInactive(task);
         }
         taskStateFlowService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
-        task.setState((state.equals(TaskEventFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
+        task.setState((state.equals(TaskStateFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
         taskDao.save(task);
         return SUCCESS_MESSAGE;
     }
@@ -110,7 +110,7 @@ public class TaskServiceImpl implements TaskService {
         task.setState(TaskState.ASSIGNED);
         task = taskDao.save(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskStateFlowService.createFlow(task, TaskEventFlowState.ASSIGNED, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
         return TASK_ASSIGNED_MESSAGE;
     }
 
@@ -119,7 +119,7 @@ public class TaskServiceImpl implements TaskService {
     public void markInactiveAndReassignTask(Long userId, Task task) {
         userTaskService.markInactive(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskStateFlowService.createFlow(task, TaskEventFlowState.REASSIGNED, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
         taskDao.save(task);
     }
@@ -132,7 +132,7 @@ public class TaskServiceImpl implements TaskService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TASK_NOT_ASSIGNED_OR_INACTIVE_MESSAGE.toString());
         }
         task.setState(TaskState.STARTED);
-        taskStateFlowService.createFlow(task, TaskEventFlowState.STARTED, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
         taskDao.save(task);
         return SUCCESS_MESSAGE;
     }
@@ -144,7 +144,7 @@ public class TaskServiceImpl implements TaskService {
         task.setState(TaskState.OPEN);
         task.setExpectedArrivalTime(time);
         userTaskService.markInactive(task);
-        taskStateFlowService.createFlow(task, TaskEventFlowState.RESCHEDULED, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.RESCHEDULED, userId);
         taskDao.save(task);
         return SUCCESS_MESSAGE;
 
@@ -155,7 +155,7 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder completeTask(Long taskId, Long userId) {
         Task task = fetchTask(taskId);
         task.setState(TaskState.COMPLETED);
-        taskStateFlowService.createFlow(task, TaskEventFlowState.COMPLETED, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.COMPLETED, userId);
         taskDao.save(task);
         return SUCCESS_MESSAGE;
     }
@@ -169,7 +169,7 @@ public class TaskServiceImpl implements TaskService {
              *  cancel
              */
             task.setIsActive(false);
-            taskStateFlowService.createFlow(task, TaskEventFlowState.CANCELLED,
+            taskStateFlowService.createFlow(task, TaskStateFlowState.CANCELLED,
                     userTaskService.findActiveUserTask(taskId).getId());
             task.setState(TaskState.CANCELLED);
             taskDao.save(task);
@@ -267,7 +267,7 @@ public class TaskServiceImpl implements TaskService {
         String paymentMode = dto.getPaymentMode();
         if (paymentMode == null || paymentMode.isEmpty()) dto.setPaymentMode("");
         task = taskDao.save(task);
-        taskStateFlowService.createFlow(task, TaskEventFlowState.OPEN, null);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, null);
         paymentService.create(task, dto);
         return task;
 
@@ -304,54 +304,55 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndTypeOrderByCreatedAtDesc(states, type, pageable);
+            TaskState[] states, Timestamp start, Timestamp end, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> filterByPatientDetailsWoAreaIds(
-            TaskState[] states, String value, TaskType type, Pageable pageable) {
-        return taskDao.filterByPatientDetails(states, value, type, pageable);
+            TaskState[] states, Timestamp start, Timestamp end, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByPatientDetailsAndTime(states, value, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> filterByPatientDetailsWoAreaIds(
-            TaskState[] states, Long orderId, String value, TaskType type, Pageable pageable) {
-        return taskDao.filterByPatientDetailsWithRefId(states, orderId, value, type, pageable);
+            TaskState[] states, Timestamp start, Timestamp end, Long orderId, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByPatientDetailsWithRefIdWithTime(states, orderId, value, type, start, end, pageable);
     }
 
     @Override
-    public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, TaskState[] states, String value, TaskType type, Pageable pageable) {
-        return taskDao.filterByAreaIdsAndPatientDetails(areaIds, states, type, value, pageable);
+    public Page<Task> filterByPatientDetailsWithAreaIds(List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByAreaIdsAndPatientDetailsWithTime(areaIds, states, type, value, start, end, pageable);
     }
 
     @Override
-    public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Long orderId, TaskState[] states, String value, TaskType type, Pageable pageable) {
-        return taskDao.filterByAreaIdsAndPatientDetailsWithRefId(areaIds, orderId, states, type, value, pageable);
+    public Page<Task> filterByPatientDetailsWithAreaIdsAndOrderId(List<Long> areaIds, Timestamp start, Timestamp end, Long orderId, TaskState[] states, String value, TaskType type, Pageable pageable) {
+        return taskDao.filterByAreaIdsAndPatientDetailsWithRefIdWithTime(areaIds, orderId, states, type, value, start, end, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            TaskState[] states, Long orderId, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(states, orderId, type, pageable);
+            TaskState[] states, Timestamp start, Timestamp end, Long orderId, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(
-                areaIds, states, refId, type, pageable);
+            List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, Long refId, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+                areaIds, states, refId, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            List<Long> areaIds, TaskState[] states, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInOrderByCreatedAtDesc(
-                areaIds, states, type, pageable);
+            List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, TaskType type, Pageable pageable) {
+        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+                areaIds, states, type, start, end, pageable);
     }
 
     @Override
     public PaginatedResponse fetchTasks(TaskState[] states,
+                                        Timestamp start, Timestamp end,
                                         List<Long> areaIds, TaskType taskType,
                                         Long orderId,
                                         String patientFilterValue,
@@ -364,33 +365,33 @@ public class TaskServiceImpl implements TaskService {
             if (areaIds == null) {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            this.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, taskType, pageable), pageable);
+                            this.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, start, end, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        this.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, taskType, pageable), pageable);
+                        this.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, start, end, orderId, taskType, pageable), pageable);
             } else {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            this.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, taskType, pageable), pageable);
+                            this.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, start, end, states, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        this.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, states, orderId, taskType, pageable), pageable);
+                        this.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, start, end, states, orderId, taskType, pageable), pageable);
             }
         } else {
             if (areaIds == null) {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            this.filterByPatientDetailsWoAreaIds(states, patientFilterValue, taskType, pageable), pageable);
+                            this.filterByPatientDetailsWoAreaIds(states, start, end, patientFilterValue, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        this.filterByPatientDetailsWoAreaIds(states, orderId, patientFilterValue, taskType, pageable), pageable);
+                        this.filterByPatientDetailsWoAreaIds(states, start, end, orderId, patientFilterValue, taskType, pageable), pageable);
             } else {
                 if (orderId == null) {
                     return getPaginatedResponse(
-                            this.filterByPatientDetailsWithAreaIds(areaIds, states, patientFilterValue, taskType, pageable), pageable);
+                            this.filterByPatientDetailsWithAreaIds(areaIds, start, end, states, patientFilterValue, taskType, pageable), pageable);
                 }
                 return getPaginatedResponse(
-                        this.filterByPatientDetailsWithAreaIdsAndOrderId(areaIds, orderId, states, patientFilterValue, taskType, pageable), pageable);
+                        this.filterByPatientDetailsWithAreaIdsAndOrderId(areaIds, start, end, orderId, states, patientFilterValue, taskType, pageable), pageable);
             }
         }
     }

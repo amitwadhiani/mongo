@@ -3,7 +3,7 @@ package co.arctern.api.provider.constant;
 /**
  * task states for flows for particular tasks.
  */
-public enum TaskEventFlowState {
+public enum TaskStateFlowState {
     OPEN,
     ASSIGNED,
     ACCEPTED,

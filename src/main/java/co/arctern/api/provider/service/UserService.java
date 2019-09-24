@@ -96,6 +96,8 @@ public interface UserService extends MessageUtil {
      */
     public StringBuilder createUser(UserRequestDto dto);
 
+    public StringBuilder updateUser(UserRequestDto dto);
+
     /**
      * save last login time based on login.
      *
