@@ -108,7 +108,7 @@ public interface UserService extends MessageUtil {
      * fetch all users.
      * @return
      */
-    public List<Users> fetchAll();
+    public PaginatedResponse fetchAll(Pageable pageable);
 
     /**
      * fetch users filtered by offerings.
