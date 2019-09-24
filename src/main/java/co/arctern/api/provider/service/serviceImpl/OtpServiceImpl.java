@@ -36,7 +36,7 @@ public class OtpServiceImpl implements OtpService {
     @Override
     public StringBuilder generateOTPForRating(Long taskId) {
         Task task = taskService.fetchTask(taskId);
-        if (task.getRating() == null) {
+        if (task.getRating() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RATING_ALREADY_GENERATED_MESSAGE.toString());
         }
         String otpYes = this.getOtpString();
