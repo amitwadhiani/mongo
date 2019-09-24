@@ -139,7 +139,7 @@ public class AdminController {
                                            @RequestParam(value = "patientFilterValue", required = false) String patientFilterValue,
                                            Pageable pageable) {
         Timestamp startTs = (start != null) ? DateUtil.fetchTodayTimestamp(start) : DateUtil.fetchTodayTimestamp(ZonedDateTime.now());
-        Timestamp endTs = (end != null) ? DateUtil.fetchTodayTimestamp(end) : startTs;
+        Timestamp endTs = (end != null) ? DateUtil.fetchTodayTimestamp(end) : DateUtil.fetchTodayTimestamp(ZonedDateTime.now().plusDays(1));
         return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, startTs, endTs,
                 areaIds,
                 taskType,
