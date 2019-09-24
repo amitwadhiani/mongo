@@ -38,6 +38,13 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(dto));
     }
 
+    @PatchMapping("/update")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<StringBuilder> updateUser(@RequestBody UserRequestDto dto) {
+        return ResponseEntity.ok(userService.updateUser(dto));
+    }
+
     /**
      * fetch all users api.
      *
