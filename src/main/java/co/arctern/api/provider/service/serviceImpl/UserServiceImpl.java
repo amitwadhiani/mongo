@@ -9,6 +9,7 @@ import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
+import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -161,7 +162,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Users> fetchAll() {
         List<Users> users = new ArrayList<>();
-        userDao.findAll().forEach(a -> users.add(projectionFactory.createProjection(Users.class, a)));
+        Lists.newArrayList(userDao.findAll())
+                .stream()
+                .filter(a -> a.getUserRoles()
+                        .stream()
+                        .anyMatch(b -> b.getRole().getRole().equalsIgnoreCase("ROLE_USER")))
+                .forEach(a -> users.add(projectionFactory.createProjection(Users.class, a)));
         return users;
     }
 

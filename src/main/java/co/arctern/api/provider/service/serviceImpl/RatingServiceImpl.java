@@ -7,6 +7,7 @@ import co.arctern.api.provider.service.PaymentService;
 import co.arctern.api.provider.service.RatingService;
 import co.arctern.api.provider.service.TaskService;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class RatingServiceImpl implements RatingService {
     public String saveRating(Long taskId, Long userId, String otp) {
         Task task = taskService.fetchTask(taskId);
         Rating rating = task.getRating();
-        if (otp != null) {
+        if (!StringUtils.isEmpty(otp)) {
             if (otp.equals(rating.getOtpNo())) {
                 rating.setIsSatisfied(false);
             } else if (otp.equals(rating.getOtpYes())) {
