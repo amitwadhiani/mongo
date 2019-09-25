@@ -121,7 +121,7 @@ public class TaskController {
      * @param userId
      * @return
      */
-    @PostMapping("/cancel-reassign")
+    @PostMapping("/cancel")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> cancelTask(@RequestParam(value = "isCancelled", defaultValue = "true", required = false) Boolean isCancelled,
