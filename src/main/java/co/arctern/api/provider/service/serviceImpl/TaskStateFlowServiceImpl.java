@@ -23,6 +23,7 @@ public class TaskStateFlowServiceImpl implements TaskStateFlowService {
         TaskStateFlow taskStateFlow = new TaskStateFlow();
         taskStateFlow.setTask(task);
         taskStateFlow.setState(state);
+        taskStateFlow.setUserId(userId);
         return taskStateFlowDao.save(taskStateFlow);
     }
 }
