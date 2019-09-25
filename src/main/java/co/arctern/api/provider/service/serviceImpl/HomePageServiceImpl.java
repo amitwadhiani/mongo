@@ -69,9 +69,6 @@ public class HomePageServiceImpl implements HomePageService {
         adminResponse.setStartedTasks(startedTasks);
         PaginatedResponse acceptedTasks = taskService.fetchTasks(new TaskState[]{TaskState.ACCEPTED}, start, end, areaIds, taskType, orderId, patientFilterValue, pageable);
         adminResponse.setAcceptedTasks(acceptedTasks);
-        PaginatedResponse cancelRequests = taskService.seeCancelRequests(pageable);
-        adminResponse.setCancelRequests(cancelRequests);
-        adminResponse.setCancelRequestsCount(cancelRequests.getTotalElements());
         adminResponse.setAcceptedTasksCount(acceptedTasks.getTotalElements());
         adminResponse.setStartedTasksCount(startedTasks.getTotalElements());
         return adminResponse;

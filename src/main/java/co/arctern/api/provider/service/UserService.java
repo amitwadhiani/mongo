@@ -109,7 +109,7 @@ public interface UserService extends MessageUtil {
      *
      * @return
      */
-    public PaginatedResponse fetchAll(Long taskId, Pageable pageable);
+    public PaginatedResponse fetchAll(Pageable pageable);
 
     /**
      * fetch all users.
