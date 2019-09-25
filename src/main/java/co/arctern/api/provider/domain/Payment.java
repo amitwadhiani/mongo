@@ -1,6 +1,5 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.PaymentMode;
 import co.arctern.api.provider.constant.PaymentState;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
@@ -43,9 +42,7 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentState state;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PAID'")
-    private PaymentMode mode;
+    private String mode;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
     private Boolean isPrepaid;

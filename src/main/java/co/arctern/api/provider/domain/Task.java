@@ -1,9 +1,11 @@
 package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.ServiceType;
+import co.arctern.api.provider.constant.TaskType;
+import co.arctern.api.provider.util.CodeGeneratorUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,11 +20,15 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class Task {
+public class Task extends CodeGeneratorUtil {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true, length = 64)
+    @Getter
+    private String code;
 
     @CreatedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -31,6 +37,9 @@ public class Task {
     @LastModifiedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
+
+    @Column(nullable = true)
+    private Timestamp expectedArrivalTime;
 
     @OneToMany(mappedBy = "task")
     private List<TaskEvent> taskEvents;
@@ -43,8 +52,8 @@ public class Task {
     private TaskState state;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PICKUP'")
-    private ServiceType type;
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'SAMPLE_PICKUP'")
+    private TaskType type;
 
     private Boolean isPrepaid;
 
@@ -97,6 +106,14 @@ public class Task {
     @Pattern(regexp = "(^$|[0-9]{10})")
     @Column(nullable = false)
     private String patientPhone;
+
+    @Column
+    private String patientId;
+
+    @PrePersist
+    public void setCode() {
+        this.code = generateTaskCode(this.id, this.refId, this.type);
+    }
 
     public Task(Long version) {
         this.version = version;

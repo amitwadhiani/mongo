@@ -1,51 +1,41 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.domain.Task;
-import co.arctern.api.provider.domain.User;
-import co.arctern.api.provider.service.*;
+import co.arctern.api.provider.service.OtpService;
+import co.arctern.api.provider.service.RatingService;
+import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.sms.SmsService;
 import co.arctern.api.provider.util.OTPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 
-/**
- * otp Service to generate / use otp for various use cases in the api server.
- */
 @Service
 public class OtpServiceImpl implements OtpService {
 
-    @Autowired
-    private SmsService smsService;
+    private final SmsService smsService;
+    private final RatingService ratingService;
+    private final TaskService taskService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private LoginService loginService;
-
-    @Autowired
-    private RatingService ratingService;
-
-    @Autowired
-    private TaskService taskService;
-
-    @Transactional
-    @Override
-    public String generateOTPForLogin(String phone) {
-        User user = userService.fetchUser(phone);
-        String otp = getOtpString();
-        if (smsService.sendSms(phone, otp) != null) {
-            loginService.generateLogin(phone, otp, user);
-        }
-        return otp;
+    public OtpServiceImpl(SmsService smsService,
+                          RatingService ratingService,
+                          TaskService taskService) {
+        this.smsService = smsService;
+        this.ratingService = ratingService;
+        this.taskService = taskService;
     }
 
     @Transactional
     @Override
     public StringBuilder generateOTPForRating(Long taskId) {
         Task task = taskService.fetchTask(taskId);
+        if (task.getRating() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RATING_ALREADY_GENERATED_MESSAGE.toString());
+        }
         String otpYes = this.getOtpString();
         String otpNo = this.getOtpString();
         /**
@@ -63,7 +53,7 @@ public class OtpServiceImpl implements OtpService {
 
     @Override
     public String getOtpString() {
-        return OTPUtil.generateOtp();
+        return OTPUtil.generateOtp().toString();
     }
 
 }

@@ -6,18 +6,28 @@ import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.service.UserTaskService;
+import co.arctern.api.provider.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 public class UserTaskServiceImpl implements UserTaskService {
 
+    private final UserTaskDao userTaskDao;
+    private final ProjectionFactory projectionFactory;
+
     @Autowired
-    private UserTaskDao userTaskDao;
+    public UserTaskServiceImpl(UserTaskDao userTaskDao,
+                               ProjectionFactory projectionFactory) {
+        this.userTaskDao = userTaskDao;
+        this.projectionFactory = projectionFactory;
+    }
 
     @Override
     public void createUserTask(User user, Task task) {
@@ -31,8 +41,10 @@ public class UserTaskServiceImpl implements UserTaskService {
     @Override
     public void markInactive(Task task) {
         UserTask userTask = userTaskDao.findByIsActiveTrueAndTaskId(task.getId());
-        userTask.setIsActive(false);
-        userTaskDao.save(userTask);
+        if (userTask != null) {
+            userTask.setIsActive(false);
+            userTaskDao.save(userTask);
+        }
     }
 
     @Override
@@ -50,4 +62,26 @@ public class UserTaskServiceImpl implements UserTaskService {
         return userTaskDao.countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(userId,
                 state, start, end);
     }
+
+    @Override
+    public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end) {
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(userId, state, start, end);
+    }
+
+    @Override
+    public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start) {
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateAndCreatedAtGreaterThanEqual(userId, state, start);
+    }
+
+    @Override
+    public List<UserTask> fetchTasksForUser(Long userId, TaskState state) {
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskState(userId, state);
+    }
+
+    @Override
+    public List<UserTask> fetchUserTasksForCron() {
+        return userTaskDao.fetchUserTasksForCron(DateUtil.fetchTimestampFromCurrentTimestamp(20), TaskState.ASSIGNED);
+    }
+
+
 }

@@ -50,7 +50,7 @@ public class Area {
     private List<UserArea> areaUsers;
 
     @OneToMany(mappedBy = "area")
-    private List<Area> area;
+    private List<Address> addresses;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

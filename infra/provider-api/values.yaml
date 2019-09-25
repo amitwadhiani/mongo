@@ -5,16 +5,13 @@
 replicaCount: 2
 
 image:
-  repository: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/provider
-  tag: 0.0.9
+  repository: meddo.azurecr.io/provider
+  tag: latest
   pullPolicy: Always
 
 service:
   type: ClusterIP
   port: 80
-
-hostname: provider.api
-domain: arctern.co
 
 ingress:
   enabled: true
@@ -22,6 +19,7 @@ ingress:
     kubernetes.io/ingress.class: traefik
   path: /
   hosts:
+    - provider.api.meddo.tech
     - provider.api.arctern.co
     - provider.api.meddo.in
   tls: []
@@ -40,9 +38,6 @@ resources:
   limits:
     cpu: 2
     memory: 7Gi
-
-nodeSelector:
-  "node-role.kubernetes.io/dedicated": "true"
 
 tolerations: []
 
@@ -82,9 +77,9 @@ spring:
     jcache:
       config: "classpath:ehcache/production.xml"
   datasource:
-    url: "jdbc:mysql://meddo-db.cluster-ciqusgcofpad.ap-south-1.rds.amazonaws.com:3306/arctern_provider?useSSL=false"
-    slaveUrl: "jdbc:mysql://meddo-db.cluster-ciqusgcofpad.ap-south-1.rds.amazonaws.com:3306/arctern_provider?useSSL=false"
-    username: "provider_service"
+    url: "jdbc:mysql://meddo-db.mysql.database.azure.com:3306/arctern_provider?useSSL=false"
+    slaveUrl: "jdbc:mysql://meddo-slave.mysql.database.azure.com:3306/arctern_provider?useSSL=false"
+    username: "provider_service@meddo-db"
     password: "Qu3AjY4qnzerbJnc"
   sqs:
     consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/provider-consumer-updates-simple"

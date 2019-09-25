@@ -7,7 +7,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -58,5 +57,12 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
     @PreAuthorize("permitAll()")
     Optional<User> findById(Long id);
 
-    Page<User> findByUserOfferingOfferingIdIn(List<Long> offeringIds, Pageable pageable);
+    /**
+     * fetch active users.
+     *
+     * @param pageable
+     * @return
+     */
+    Page<User> findByIsActiveTrue(Pageable pageable);
+
 }

@@ -1,7 +1,7 @@
 package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.service.LoginService;
-import co.arctern.api.provider.service.UserService;
+import co.arctern.api.provider.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
@@ -18,27 +18,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/login")
 public class LoginController {
 
-    @Autowired
-    UserService userService;
+    private final LoginService loginService;
+    private final TokenService tokenService;
 
     @Autowired
-    LoginService loginService;
+    public LoginController(LoginService loginService,
+                           TokenService tokenService) {
+        this.loginService = loginService;
+        this.tokenService = tokenService;
+    }
 
     /**
-     * to generate otp for login using phone number.
+     * to generate otp for login using phone number api.
      *
      * @param phone
      * @return
      * @throws Exception
      */
     @PostMapping("/generate-otp")
-    public ResponseEntity<String> generateOTP(@RequestParam("phone") String phone)
+    public ResponseEntity<StringBuilder> generateOTP(@RequestParam("phone") String phone,
+                                                     @RequestParam(value = "isAdmin", required = false, defaultValue = "false") Boolean isAdmin)
             throws Exception {
-        return ResponseEntity.ok(loginService.generateOTP(phone));
+        return ResponseEntity.ok(loginService.generateOTP(phone, isAdmin));
     }
 
     /**
-     * to verify the given otp with the otp and phone in otp.
+     * to verify the given otp with the otp and phone in otp api.
      *
      * @param phone
      * @param otp
@@ -54,7 +59,7 @@ public class LoginController {
     }
 
     /**
-     * to log out of the system
+     * to log out of the system api.
      *
      * @param userId
      * @param
@@ -62,9 +67,10 @@ public class LoginController {
      * @throws Exception
      */
     @PostMapping("/log-out")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<StringBuilder> logOut(@RequestParam("userId") Long userId)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
+    public ResponseEntity<StringBuilder> logOut(@RequestParam(value = "userId", required = false) Long userId)
             throws Exception {
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(loginService.logOut(userId));
 
     }

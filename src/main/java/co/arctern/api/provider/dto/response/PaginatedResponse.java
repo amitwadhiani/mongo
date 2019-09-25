@@ -6,6 +6,9 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * generic paginated response.
+ */
 @Data
 @NoArgsConstructor
 public class PaginatedResponse {

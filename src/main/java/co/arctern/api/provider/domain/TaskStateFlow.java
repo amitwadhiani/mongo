@@ -1,7 +1,6 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.TaskFlowState;
-import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -33,9 +32,11 @@ public class TaskStateFlow {
     @JsonBackReference("task-taskStateFlow")
     private Task task;
 
+    private Long userId;
+
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(255) DEFAULT 'OPEN'", nullable = false)
-    private TaskFlowState state;
+    private TaskStateFlowState state;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

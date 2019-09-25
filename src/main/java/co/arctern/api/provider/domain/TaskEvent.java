@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @NoArgsConstructor
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"task_id", "event_id"})})
 public class TaskEvent {
 
     @Id

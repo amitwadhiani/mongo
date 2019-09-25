@@ -1,6 +1,6 @@
 package co.arctern.api.provider.domain;
 
-import com.amazonaws.services.polly.model.Gender;
+import co.arctern.api.provider.constant.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -59,11 +60,15 @@ public class User {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'Male'")
     private Gender gender;
 
-    @Column
+    @Column(nullable = true)
     private Integer age;
+
+    @Column(nullable = true)
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
 
     @Column
     private Timestamp lastLoginTime;

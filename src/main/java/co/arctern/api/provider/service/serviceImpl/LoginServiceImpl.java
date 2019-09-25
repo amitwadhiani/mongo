@@ -10,39 +10,67 @@ import co.arctern.api.provider.service.LoginService;
 import co.arctern.api.provider.service.OtpService;
 import co.arctern.api.provider.service.TokenService;
 import co.arctern.api.provider.service.UserService;
+import co.arctern.api.provider.sms.SmsService;
 import co.arctern.api.provider.util.DateUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class LoginServiceImpl implements LoginService {
 
-    @Autowired
-    private OtpService otpService;
+    private final OtpService otpService;
+    private final LoginEventHandler loginEventHandler;
+    private final LoginDao loginDao;
+    private final TokenService tokenService;
+    private final UserService userService;
+    private final SmsService smsService;
 
     @Autowired
-    LoginEventHandler loginEventHandler;
-
-    @Autowired
-    private LoginDao loginDao;
-
-    @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private UserService userService;
+    public LoginServiceImpl(OtpService otpService,
+                            LoginEventHandler loginEventHandler,
+                            LoginDao loginDao,
+                            TokenService tokenService,
+                            UserService userService, SmsService smsService) {
+        this.otpService = otpService;
+        this.loginEventHandler = loginEventHandler;
+        this.loginDao = loginDao;
+        this.tokenService = tokenService;
+        this.userService = userService;
+        this.smsService = smsService;
+    }
 
     @SneakyThrows(Exception.class)
     @Transactional
     @Override
-    public String generateOTP(String phone) {
-        return otpService.generateOTPForLogin(phone);
+    public StringBuilder generateOTP(String phone, Boolean isAdmin) {
+        if (isAdmin) {
+            if (userService.fetchUser(phone).getUserRoles().stream()
+                    .filter(a -> a.getRole().getRole().equalsIgnoreCase("ROLE_ADMIN"))
+                    .findAny().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ONLY_ADMIN_LOGIN_ALLOWED_MESSAGE.toString());
+            }
+            return generateOTPForLogin(phone);
+        }
+        return generateOTPForLogin(phone);
+    }
+
+    @Transactional
+    @Override
+    public StringBuilder generateOTPForLogin(String phone) {
+        User user = userService.fetchUser(phone);
+        String otp = otpService.getOtpString();
+        if (smsService.sendSms(phone, otp) != null) {
+            generateLogin(phone, otp, user);
+        }
+        return SUCCESS_MESSAGE;
     }
 
     @Override
@@ -58,34 +86,37 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     @SneakyThrows(Exception.class)
+    @Transactional
     public OAuth2AccessToken verifyOTP(String phone, String otp) {
         Login login = loginDao.findByGeneratedOTPAndStatusAndContact(otp, OTPState.GENERATED, phone);
         if (login != null) {
             if (login.getCreatedAt().getTime() - DateUtil.fetchDifferenceFromCurrentDateInMs(1) > 0) {
                 login.setStatus(OTPState.USED);
                 login.setLoginState(true);
-                loginEventHandler.markLoggedInStateForUser(userService.fetchUserByPhone(phone), true);
                 OAuth2AccessToken oAuth2AccessToken = tokenService.retrieveToken(phone, otp);
                 loginDao.save(login);
+                loginEventHandler.markLoggedInStateForUser(userService.fetchUserByPhone(phone), true);
                 userService.saveLastLoginTime(phone, login.getCreatedAt());
                 return oAuth2AccessToken;
             } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXPIRED_OTP_MESSAGE);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXPIRED_OTP_MESSAGE.toString());
             }
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE);
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, WRONG_OTP_MESSAGE.toString());
     }
 
     @Override
     public StringBuilder logOut(Long userId) {
         User user = userService.fetchUser(userId);
-        Login login = loginDao.findByUserIdAndStatusAndContact(userId, OTPState.USED, user.getPhone())
-                .orElseThrow(() -> {
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_LOGGED_IN_MESSAGE);
-                });
-        login.setLoginState(false);
-        login.setLogoutTime(DateUtil.CURRENT_TIMESTAMP);
-        loginDao.save(login);
+        List<Login> logins = loginDao.findByUserIdAndStatusAndContactOrderByCreatedAtDesc(userId, OTPState.USED, user.getPhone());
+        if (!CollectionUtils.isEmpty(logins)) {
+            Login login = logins.get(0);
+            login.setLoginState(false);
+            login.setLogoutTime(DateUtil.CURRENT_TIMESTAMP);
+            loginDao.save(login);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_LOGGED_IN_MESSAGE.toString());
+        }
         loginEventHandler.markLoggedInStateForUser(user, false);
         return SUCCESS_MESSAGE;
     }

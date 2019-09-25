@@ -1,16 +1,14 @@
 package co.arctern.api.provider.controller;
 
-import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * apis for user creation.
@@ -19,11 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserController {
 
+    private final UserService userService;
+
     @Autowired
-    UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
-     * to create new user -> allowed for Admin only.
+     * to create new user api-> allowed for Admin only .
      *
      * @param dto
      * @return
@@ -31,7 +33,34 @@ public class UserController {
     @PostMapping("/create")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<User> createNewUser(@RequestBody UserRequestDto dto) {
+    public ResponseEntity<StringBuilder> createNewUser(@RequestBody UserRequestDto dto) {
         return ResponseEntity.ok(userService.createUser(dto));
     }
+
+    /**
+     * to update details in user's profile ( excluding password, email and username) .
+     *
+     * @param dto
+     * @return
+     */
+    @PatchMapping("/update")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<StringBuilder> updateUser(@RequestBody UserRequestDto dto) {
+        return ResponseEntity.ok(userService.updateUser(dto));
+    }
+
+    /**
+     * fetch all users api.
+     *
+     * @return
+     */
+    @GetMapping("/fetch/all")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<PaginatedResponse> fetchAll(Pageable pageable) {
+        return ResponseEntity.ok(userService.fetchAll(pageable));
+    }
+
+
 }

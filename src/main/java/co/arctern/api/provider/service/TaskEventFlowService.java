@@ -1,6 +1,6 @@
 package co.arctern.api.provider.service;
 
-import co.arctern.api.provider.constant.TaskFlowState;
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.domain.TaskEvent;
 import co.arctern.api.provider.domain.TaskEventFlow;
 import co.arctern.api.provider.util.MessageUtil;
@@ -15,5 +15,5 @@ public interface TaskEventFlowService extends MessageUtil {
      * @param userId
      * @return
      */
-    public TaskEventFlow createFlow(TaskEvent taskEvent, TaskFlowState state, Long userId);
+    public TaskEventFlow createFlow(TaskEvent taskEvent, TaskStateFlowState state, Long userId);
 }

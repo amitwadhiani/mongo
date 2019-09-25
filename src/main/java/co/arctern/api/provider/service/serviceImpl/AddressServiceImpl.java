@@ -4,6 +4,7 @@ import co.arctern.api.provider.dao.AddressDao;
 import co.arctern.api.provider.domain.Address;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.service.AddressService;
+import co.arctern.api.provider.service.AreaService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,19 +14,23 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class AddressServiceImpl implements AddressService {
 
+    private final AddressDao addressDao;
+    private final AreaService areaService;
+
     @Autowired
-    AddressDao addressDao;
+    public AddressServiceImpl(AddressDao addressDao,
+                              AreaService areaService) {
+        this.addressDao = addressDao;
+        this.areaService = areaService;
+    }
 
     @Override
     @SneakyThrows(Exception.class)
-    public Address createOrFetchAddress(TaskAssignDto dto) {
-        Long addressId = (dto.getDestAddressId() == null) ? dto.getSourceAddressId() : dto.getDestAddressId();
-        if (addressId != null) {
-            return addressDao.findById(addressId).orElseThrow(() -> {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid address id.");
-                    }
-            );
-        }
+    public Address createOrFetchAddress(TaskAssignDto dto, Long addressId) {
+        if (addressId != null) return addressDao.findById(addressId).orElseThrow(() ->
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ROLE_ID_MESSAGE.toString());
+        });
         return saveAddress(dto);
     }
 
@@ -33,13 +38,17 @@ public class AddressServiceImpl implements AddressService {
     public Address saveAddress(TaskAssignDto dto) {
         Address address = new Address();
         address.setCity(dto.getCity());
+        address.setName(dto.getAddressName());
         address.setHouseNumber(dto.getHouseNumber());
         address.setLine(dto.getLine());
+        address.setLatitude(dto.getLatitude());
+        address.setLongitude(dto.getLongitude());
         address.setLocality(dto.getLocality());
+        address.setLandmark(dto.getLandmark());
         address.setPinCode(dto.getPinCode());
-        address.setPatientId(dto.getPatientId());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
+//        address.setArea(areaService.fetchById(dto.getAreaId()));
         return addressDao.save(address);
     }
 }

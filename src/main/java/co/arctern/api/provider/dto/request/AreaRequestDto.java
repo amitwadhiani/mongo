@@ -3,6 +3,9 @@ package co.arctern.api.provider.dto.request;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * area creation request body.
+ */
 @Data
 @NoArgsConstructor
 public class AreaRequestDto {

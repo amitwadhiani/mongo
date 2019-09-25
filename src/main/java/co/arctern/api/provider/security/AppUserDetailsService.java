@@ -9,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +18,17 @@ import java.util.stream.Collectors;
 /**
  * Setting details in the User security model through user entity
  */
-@Component
+@Service
 public class AppUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserDao userDao;
 
     @Override
-    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-        User user = userDao.findByPhone(phone)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userDao.findByUsername(username)
                 .orElseThrow(() -> {
-                    throw new UsernameNotFoundException(String.format("The contact %phone doesn't exist", phone));
+                    throw new UsernameNotFoundException(String.format("The User %username doesn't exist", username));
                 });
         List<GrantedAuthority> authorities = new ArrayList<>();
         user.getUserRoles().stream().forEach(role -> {
@@ -38,7 +38,7 @@ public class AppUserDetailsService implements UserDetailsService {
         userDetails.setId(user.getId());
         userDetails.setName(user.getName());
         userDetails.setEmail(user.getEmail());
-        userDetails.setPassword(user.getPassword());
+        userDetails.setUsername(user.getUsername());
         userDetails.setPhone(user.getPhone());
         userDetails.setAreaIds(StringUtils.join(user.getUserAreas().stream().map(a -> a.getArea().getId()).collect(Collectors.toList()), ","));
         return userDetails;

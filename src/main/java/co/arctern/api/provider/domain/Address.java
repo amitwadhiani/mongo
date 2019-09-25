@@ -46,7 +46,16 @@ public class Address {
     private String state;
 
     @Column
-    private String patientId;
+    private Double latitude;
+
+    @Column
+    private Double longitude;
+
+    @Column
+    private String addressTag;
+
+    @Column
+    private String landmark;
 
     @OneToMany(mappedBy = "sourceAddress")
     List<Task> tasksForSourceAddress;

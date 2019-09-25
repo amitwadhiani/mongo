@@ -48,8 +48,8 @@ spec:
               value: {{default "test" .Values.spring.rabbitmq.password}}
             - name: SECURITY_SIGNING_KEY
               value: {{default "MaYzkSjmkzPC57L" .Values.spring.security.signingKey}}
-#            - name: SECURITY_ENCODING_STRENTH
-#              value: {{default "256" .Values.spring.security.encodingStrenth}}
+            - name: EMR_CLIENT_API_URL
+              value: {{default "http://emr-api.default.svc.cluster.local" .Values.spring.emr.apiUrl}}
             - name: SECURITY_REALM
               value: {{default "Spring Boot JWT Example Realm" .Values.spring.securityRealm}}
             - name: SECURITY_JWT_CLIENT_ID

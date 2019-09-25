@@ -46,13 +46,13 @@ public interface UserService extends MessageUtil {
     public void deleteUser(String username);
 
     /**
-     * to mark user as active/inactive using username.
+     * to mark user as active/inactive using userId.
      *
-     * @param username
+     * @param userId
      * @param status
      * @return
      */
-    public String markUserInactive(String username, Boolean status);
+    public StringBuilder markUserInactive(Long userId, Boolean status);
 
     /**
      * to fetch user using username.
@@ -92,7 +92,9 @@ public interface UserService extends MessageUtil {
      * @param dto
      * @return
      */
-    public User createUser(UserRequestDto dto);
+    public StringBuilder createUser(UserRequestDto dto);
+
+    public StringBuilder updateUser(UserRequestDto dto);
 
     /**
      * save last login time based on login.
@@ -102,5 +104,27 @@ public interface UserService extends MessageUtil {
      */
     public void saveLastLoginTime(String phone, Timestamp loginTime);
 
+    /**
+     * fetch all users who don't have admin role.
+     *
+     * @return
+     */
+    public PaginatedResponse fetchAll(Pageable pageable);
+
+    /**
+     * fetch all users.
+     *
+     * @return
+     */
+    public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable);
+
+    /**
+     * fetch users filtered by offerings.
+     *
+     * @param offeringIds
+     * @param pageable
+     * @return
+     */
     public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable);
+
 }

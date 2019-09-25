@@ -13,7 +13,7 @@ import java.util.Map;
 public class SmsService {
 
     private static final String API_KEY = "Ac750b5013fc96f09a4904280423cb1af";
-    private static final String SENDER = "ZMEDDO";
+    private static final String SENDER = "DMEDDO";
     private static final String BASE_URL = "https://alerts.solutionsinfini.co/api/v4/?";
 
     public String sendSms(String mob, String otp) {
@@ -40,12 +40,11 @@ public class SmsService {
     }
 
     public String sendSmsForRating(String mob, String otpYes, String otpNo) {
-        String message = "Thank you for using Meddo. Please use this code : "
+        String message = "Thank you for using Meddo. Please use this code "
                 + otpYes
-                + "(if satisfied) and"
-                + ": "
+                + "(if satisfied) and "
                 + otpNo
-                + " (if unsatisfied) with our service.\nPlease enter the digits only";
+                + "(if unsatisfied) with our service.\nPlease enter the digits only";
         return sendSmsViaGateway(mob, message);
     }
 
