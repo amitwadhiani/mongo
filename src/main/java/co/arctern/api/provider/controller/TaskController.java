@@ -108,7 +108,7 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> acceptOrRejectTask(@RequestParam(value = "state", required = false, defaultValue = "ACCEPTED") TaskStateFlowState state,
-                                                            @RequestParam("taskId") Long taskId) {
+                                                            @RequestParam(value = "taskId", required = false) Long taskId) {
         return ResponseEntity.ok(taskService.acceptOrRejectAssignedTask(taskId, state));
     }
 
