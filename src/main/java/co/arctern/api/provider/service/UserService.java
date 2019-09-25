@@ -106,18 +106,21 @@ public interface UserService extends MessageUtil {
 
     /**
      * fetch all users who don't have admin role.
+     *
      * @return
      */
-    public PaginatedResponse fetchAll(Pageable pageable);
+    public PaginatedResponse fetchAll(Long taskId, Pageable pageable);
 
     /**
      * fetch all users.
+     *
      * @return
      */
     public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable);
 
     /**
      * fetch users filtered by offerings.
+     *
      * @param offeringIds
      * @param pageable
      * @return

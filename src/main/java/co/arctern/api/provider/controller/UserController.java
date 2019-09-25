@@ -5,6 +5,7 @@ import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,8 +59,8 @@ public class UserController {
     @GetMapping("/fetch/all")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<PaginatedResponse> fetchAll(Pageable pageable) {
-        return ResponseEntity.ok(userService.fetchAll(pageable));
+    public ResponseEntity<PaginatedResponse> fetchAll(@Param("taskId") Long taskId, Pageable pageable) {
+        return ResponseEntity.ok(userService.fetchAll(taskId, pageable));
     }
 
 

@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final AreaService areaService;
     private final UserRoleService userRoleService;
     private final TokenService tokenService;
+    private final UserTaskService userTaskService;
 
     @Autowired
     public UserServiceImpl(UserDao userDao,
@@ -43,13 +44,15 @@ public class UserServiceImpl implements UserService {
                            OfferingService offeringService,
                            AreaService areaService,
                            UserRoleService userRoleService,
-                           TokenService tokenService) {
+                           TokenService tokenService,
+                           UserTaskService userTaskService) {
         this.userDao = userDao;
         this.projectionFactory = projectionFactory;
         this.offeringService = offeringService;
         this.areaService = areaService;
         this.userRoleService = userRoleService;
         this.tokenService = tokenService;
+        this.userTaskService = userTaskService;
     }
 
     @Override
@@ -159,7 +162,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PaginatedResponse fetchAll(Pageable pageable) {
+    public PaginatedResponse fetchAll(Long taskId, Pageable pageable) {
+               userTaskService.findActiveUserTask(taskId)
         return PaginationUtil.returnPaginatedBody(
                 userDao.findByIsActiveTrue(pageable).getContent().stream()
                         .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")))
