@@ -129,6 +129,9 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public StringBuilder startTask(Long taskId, Long userId) {
         Task task = fetchTask(taskId);
+        if (task.getState().equals(TaskState.STARTED)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TASK_ALREADY_STARTED_MESSAGE.toString());
+        }
         if (task.getUserTasks().stream().filter(UserTask::getIsActive).findFirst().get().getUser().getId().longValue() != userId) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TASK_NOT_ASSIGNED_OR_INACTIVE_MESSAGE.toString());
         }

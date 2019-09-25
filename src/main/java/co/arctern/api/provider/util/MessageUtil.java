@@ -97,4 +97,9 @@ public interface MessageUtil {
      */
     StringBuilder RATING_ALREADY_GENERATED_MESSAGE = new StringBuilder("Rating already generated for this task.");
 
+    /**
+     * Task already started message.
+     */
+    StringBuilder TASK_ALREADY_STARTED_MESSAGE = new StringBuilder("Task has already been started.");
+
 }
