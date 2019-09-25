@@ -22,10 +22,9 @@ public interface PaginationUtil {
      * @return
      */
     public static <T> List<T> paginateList(List<T> sourceList, int page, int pageSize) {
-        if (pageSize <= 0 || page <= 0) {
+        if (pageSize <= 0 || page < 0) {
             throw new IllegalArgumentException("Invalid page size/number ");
         }
-
         int fromIndex = (page) * pageSize;
         if (sourceList == null || sourceList.size() < fromIndex) {
             return Collections.emptyList();
