@@ -348,7 +348,7 @@ public class TaskServiceImpl implements TaskService {
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, TaskType type, Pageable pageable) {
         return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-                areaIds, states, type, start, end, pageable);
+                areaIds, type, states, start, end, pageable);
     }
 
     @Override

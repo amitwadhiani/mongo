@@ -273,7 +273,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @return
      */
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            List<Long> areaIds, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+            List<Long> areaIds, TaskType type, TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
      * filter tasks by areaIds and state.
