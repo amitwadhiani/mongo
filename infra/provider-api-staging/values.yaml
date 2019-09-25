@@ -21,6 +21,8 @@ ingress:
   path: /
   hosts:
   - provider.staging.meddo.tech
+  - provider.staging.arctern.co
+  - provider.staging.meddo.in
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
