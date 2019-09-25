@@ -43,6 +43,7 @@ public class AddressServiceImpl implements AddressService {
         address.setLine(dto.getLine());
         address.setLatitude(dto.getLatitude());
         address.setLongitude(dto.getLongitude());
+        address.setIsSourceAddress((dto.getIsSourceAddress() == null) ? false : dto.getIsSourceAddress());
         address.setLocality(dto.getLocality());
         address.setLandmark(dto.getLandmark());
         address.setPinCode(dto.getPinCode());

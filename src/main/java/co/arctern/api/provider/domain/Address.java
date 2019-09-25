@@ -45,6 +45,9 @@ public class Address {
     @Column(nullable = false)
     private String state;
 
+    @Column(columnDefinition = "tinyint(1) DEFAULT 0", nullable = true)
+    private Boolean isSourceAddress;
+
     @Column
     private Double latitude;
 
