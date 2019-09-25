@@ -18,11 +18,6 @@ public interface MessageUtil {
     StringBuilder TASK_ASSIGNED_MESSAGE = new StringBuilder("Task assigned.");
 
     /**
-     * task assigned message.
-     */
-    public static final StringBuilder TASK_ASSIGNED_MESSAGE = new StringBuilder("Task assigned.");
-
-    /**
      * retry request message.
      */
     StringBuilder TRY_AGAIN_MESSAGE = new StringBuilder("Please try again.");
