@@ -1,5 +1,6 @@
 package co.arctern.api.provider.service;
 
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
@@ -111,6 +112,8 @@ public interface UserService extends MessageUtil {
      * @return
      */
     public PaginatedResponse fetchAll(Pageable pageable);
+
+    public PaginatedResponse fetchAllByTaskType(TaskType taskType,Pageable pageable);
 
     /**
      * fetch user details through taskId.

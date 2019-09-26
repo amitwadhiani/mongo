@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.Gender;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserOffering;
@@ -116,9 +117,12 @@ public class UserServiceImpl implements UserService {
         String phone = dto.getPhone();
         String username = dto.getUsername();
         String email = dto.getEmail();
-        if (userDao.existsByPhone(phone)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PHONE_ALREADY_EXISTS_MESSAGE.toString());
-        if (userDao.existsByUsername(username)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USERNAME_ALREADY_EXISTS_MESSAGE.toString());
-        if (userDao.existsByEmail(email)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EMAIL_ALREADY_EXISTS_MESSAGE.toString());
+        if (userDao.existsByPhone(phone))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PHONE_ALREADY_EXISTS_MESSAGE.toString());
+        if (userDao.existsByUsername(username))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USERNAME_ALREADY_EXISTS_MESSAGE.toString());
+        if (userDao.existsByEmail(email))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EMAIL_ALREADY_EXISTS_MESSAGE.toString());
         Long userId = dto.getUserId();
         List<Long> roleIds = dto.getRoleIds();
         List<Long> areaIds = dto.getAreaIds();
@@ -176,6 +180,16 @@ public class UserServiceImpl implements UserService {
                 pageable.getPageNumber(),
                 pageable.getPageSize()
         );
+    }
+
+    @Override
+    public PaginatedResponse fetchAllByTaskType(TaskType taskType, Pageable pageable) {
+        return PaginationUtil.returnPaginatedBody(
+                userDao.findByIsActiveTrue(pageable)
+                        .getContent()
+                        .stream()
+                        .filter(a -> !a.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")) && a.getUserOfferings().stream().anyMatch(b -> b.getOffering().getType().toString().equalsIgnoreCase(taskType.toString())))
+                        .collect(Collectors.toList()), pageable.getPageNumber(), pageable.getPageSize());
     }
 
     /**
