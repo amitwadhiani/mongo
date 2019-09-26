@@ -80,11 +80,12 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskStateFlowState state) {
         Task task = fetchTask(taskId);
-        taskStateFlowService.createFlow(task, state, userTaskService.findActiveUserTask(taskId).getUser().getId());
+        Long userId = userTaskService.findActiveUserTask(taskId).getUser().getId();
+        taskStateFlowService.createFlow(task, state, userId);
         task.setState((state.equals(TaskStateFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
         if (state.equals(TaskStateFlowState.REJECTED)) {
             userTaskService.markInactive(task);
-            taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userTaskService.findActiveUserTask(taskId).getUser().getId());
+            taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         }
         taskDao.save(task);
         return SUCCESS_MESSAGE;
@@ -106,10 +107,12 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
+    @Transactional
     public StringBuilder assignTask(Long taskId, Long userId) {
         Task task = this.fetchTask(taskId);
         task.setState(TaskState.ASSIGNED);
         task = taskDao.save(task);
+        userTaskService.markInactive(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
         return TASK_ASSIGNED_MESSAGE;
@@ -118,7 +121,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public void markInactiveAndReassignTask(Long userId, Task task) {
-        userTaskService.markInactive(task);
+        if (userTaskService.markInactive(task).longValue() == userId) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TASK_SAME_USER_MESSAGE.toString());
+        }
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
@@ -169,12 +174,13 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId) {
         Task task = this.fetchTask(taskId);
         if (isCancelled) {
+            UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
+
             /**
              *  cancel
              */
-            task.setIsActive(false);
             taskStateFlowService.createFlow(task, TaskStateFlowState.CANCELLED,
-                    userTaskService.findActiveUserTask(taskId).getId());
+                    (activeUserTask == null) ? null : activeUserTask.getUser().getId());
             task.setState(TaskState.CANCELLED);
             taskDao.save(task);
             return TASK_CANCEL_MESSAGE;
