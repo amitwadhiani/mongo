@@ -172,12 +172,14 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId) {
         Task task = this.fetchTask(taskId);
         if (isCancelled) {
+            UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
+
             /**
              *  cancel
              */
             task.setIsActive(false);
             taskStateFlowService.createFlow(task, TaskStateFlowState.CANCELLED,
-                    userTaskService.findActiveUserTask(taskId).getId());
+                    (activeUserTask == null) ? null : activeUserTask.getUser().getId());
             task.setState(TaskState.CANCELLED);
             taskDao.save(task);
             return TASK_CANCEL_MESSAGE;

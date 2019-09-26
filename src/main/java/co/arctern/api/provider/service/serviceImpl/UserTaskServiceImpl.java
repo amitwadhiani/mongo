@@ -83,5 +83,4 @@ public class UserTaskServiceImpl implements UserTaskService {
         return userTaskDao.fetchUserTasksForCron(DateUtil.fetchTimestampFromCurrentTimestamp(20), TaskState.ASSIGNED);
     }
 
-
 }
