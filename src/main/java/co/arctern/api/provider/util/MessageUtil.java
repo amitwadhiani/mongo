@@ -102,4 +102,19 @@ public interface MessageUtil {
      */
     StringBuilder TASK_ALREADY_STARTED_MESSAGE = new StringBuilder("Task has already been started.");
 
+    /**
+     * User already exists message by username.
+     */
+    StringBuilder USERNAME_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this username already exists. ");
+
+    /**
+     * User already exists message by phone.
+     */
+    StringBuilder PHONE_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this phone already exists. ");
+
+    /**
+     * User already exists message by email.
+     */
+    StringBuilder EMAIL_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this email already exists. ");
+
 }

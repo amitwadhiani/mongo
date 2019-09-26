@@ -113,6 +113,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public StringBuilder createUser(UserRequestDto dto) {
+        String phone = dto.getPhone();
+        String username = dto.getUsername();
+        String email = dto.getEmail();
+        if (userDao.existsByPhone(phone)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PHONE_ALREADY_EXISTS_MESSAGE.toString());
+        if (userDao.existsByUsername(username)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USERNAME_ALREADY_EXISTS_MESSAGE.toString());
+        if (userDao.existsByEmail(email)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EMAIL_ALREADY_EXISTS_MESSAGE.toString());
         Long userId = dto.getUserId();
         List<Long> roleIds = dto.getRoleIds();
         List<Long> areaIds = dto.getAreaIds();
@@ -122,7 +128,6 @@ public class UserServiceImpl implements UserService {
         Date dateOfBirth = dto.getDateOfBirth();
         String name = dto.getName();
         Integer age = dto.getAge();
-        String phone = dto.getPhone();
         Boolean isActive = dto.getIsActive();
         user.setIsActive((isActive == null) ? true : isActive);
         if (name != null) user.setName(name);
@@ -133,8 +138,8 @@ public class UserServiceImpl implements UserService {
         if (userId == null) {
             user.setIsLoggedIn(false);
             user.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
-            user.setUsername(dto.getUsername());
-            user.setEmail(dto.getEmail());
+            user.setUsername(username);
+            user.setEmail(email);
         }
         if (phone != null) user.setPhone(phone);
         user = userDao.save(user);
