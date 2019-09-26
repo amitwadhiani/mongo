@@ -39,12 +39,13 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     @Override
-    public void markInactive(Task task) {
+    public Long markInactive(Task task) {
         UserTask userTask = userTaskDao.findByIsActiveTrueAndTaskId(task.getId());
         if (userTask != null) {
             userTask.setIsActive(false);
             userTaskDao.save(userTask);
         }
+        return userTask.getUser().getId();
     }
 
     @Override

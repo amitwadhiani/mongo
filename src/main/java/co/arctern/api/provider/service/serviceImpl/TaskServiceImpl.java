@@ -121,7 +121,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public void markInactiveAndReassignTask(Long userId, Task task) {
-        userTaskService.markInactive(task);
+        if (userTaskService.markInactive(task).longValue() == userId) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task cannot be reassigned to the same user.");
+        }
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
