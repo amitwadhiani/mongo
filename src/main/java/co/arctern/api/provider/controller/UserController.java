@@ -1,5 +1,6 @@
 package co.arctern.api.provider.controller;
 
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
@@ -60,8 +61,8 @@ public class UserController {
     @GetMapping("/fetch/all")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<PaginatedResponse> fetchAll(Pageable pageable) {
-        return ResponseEntity.ok(userService.fetchAll(pageable));
+    public ResponseEntity<PaginatedResponse> fetchAll(@RequestParam(value = "taskType", required = false) TaskType taskType, Pageable pageable) {
+        return ResponseEntity.ok((taskType == null) ? userService.fetchAll(pageable) : userService.fetchAllByTaskType(taskType, pageable));
     }
 
     @GetMapping("/task/detail")
