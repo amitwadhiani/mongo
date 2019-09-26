@@ -107,6 +107,7 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     @Override
+    @Transactional
     public StringBuilder assignTask(Long taskId, Long userId) {
         Task task = this.fetchTask(taskId);
         task.setState(TaskState.ASSIGNED);
