@@ -173,6 +173,17 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    /**
+     * fetch user details through taskId.
+     *
+     * @param taskId
+     * @return
+     */
+    @Override
+    public Users fetchDetails(Long taskId) {
+        return projectionFactory.createProjection(Users.class, userTaskService.findActiveUserTask(taskId).getUser());
+    }
+
     @Override
     public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable) {
         return offeringService.fetchUserOfferings(offeringIds, pageable).map(UserOffering::getUser);

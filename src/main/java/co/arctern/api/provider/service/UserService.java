@@ -3,6 +3,7 @@ package co.arctern.api.provider.service;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -110,6 +111,13 @@ public interface UserService extends MessageUtil {
      * @return
      */
     public PaginatedResponse fetchAll(Pageable pageable);
+
+    /**
+     * fetch user details through taskId.
+     *
+     * @return
+     */
+    public Users fetchDetails(Long taskId);
 
     /**
      * fetch all users.
