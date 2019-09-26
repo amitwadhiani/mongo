@@ -154,6 +154,7 @@ public class TaskServiceImpl implements TaskService {
         task.setExpectedArrivalTime(time);
         userTaskService.markInactive(task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.RESCHEDULED, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskDao.save(task);
         return SUCCESS_MESSAGE;
 
