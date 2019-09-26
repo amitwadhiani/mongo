@@ -5,6 +5,7 @@ import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserOffering;
+import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
@@ -200,7 +201,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Users fetchDetails(Long taskId) {
-        return projectionFactory.createProjection(Users.class, userTaskService.findActiveUserTask(taskId).getUser());
+        UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
+        if (activeUserTask == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NO_ACTIVE_USER_MESSAGE.toString());
+        return projectionFactory.createProjection(Users.class, activeUserTask.getUser());
     }
 
     @Override

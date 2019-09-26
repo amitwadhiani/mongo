@@ -157,7 +157,6 @@ public class TaskServiceImpl implements TaskService {
         taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskDao.save(task);
         return SUCCESS_MESSAGE;
-
     }
 
     @Override

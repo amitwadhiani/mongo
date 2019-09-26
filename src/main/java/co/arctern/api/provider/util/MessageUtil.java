@@ -122,4 +122,9 @@ public interface MessageUtil {
      */
     StringBuilder TASK_SAME_USER_MESSAGE = new StringBuilder("Task cannot be reassigned to the same user.");
 
+    /**
+     * No active user exists for this task message.
+     */
+    StringBuilder NO_ACTIVE_USER_MESSAGE = new StringBuilder("No active user for this task.");
+
 }
