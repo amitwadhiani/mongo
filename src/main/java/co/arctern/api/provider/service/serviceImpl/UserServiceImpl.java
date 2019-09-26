@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
                 userDao.findByIsActiveTrue(pageable)
                         .getContent()
                         .stream()
-                        .filter(a -> a.getUserOfferings().stream().anyMatch(b -> b.getOffering().getType().toString().equalsIgnoreCase(taskType.toString())))
+                        .filter(a -> !a.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")) && a.getUserOfferings().stream().anyMatch(b -> b.getOffering().getType().toString().equalsIgnoreCase(taskType.toString())))
                         .collect(Collectors.toList()), pageable.getPageNumber(), pageable.getPageSize());
     }
 
