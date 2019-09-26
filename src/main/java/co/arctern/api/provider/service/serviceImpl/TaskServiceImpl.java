@@ -177,7 +177,6 @@ public class TaskServiceImpl implements TaskService {
             /**
              *  cancel
              */
-            task.setIsActive(false);
             taskStateFlowService.createFlow(task, TaskStateFlowState.CANCELLED,
                     (activeUserTask == null) ? null : activeUserTask.getUser().getId());
             task.setState(TaskState.CANCELLED);
