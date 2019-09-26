@@ -44,8 +44,9 @@ public class UserTaskServiceImpl implements UserTaskService {
         if (userTask != null) {
             userTask.setIsActive(false);
             userTaskDao.save(userTask);
+            return userTask.getUser().getId();
         }
-        return userTask.getUser().getId();
+        return null;
     }
 
     @Override
