@@ -117,4 +117,9 @@ public interface MessageUtil {
      */
     StringBuilder EMAIL_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this email already exists. ");
 
+    /**
+     * Task cannot be reassigned to the same user message .
+     */
+    StringBuilder TASK_SAME_USER_MESSAGE = new StringBuilder("Task cannot be reassigned to the same user.");
+
 }
