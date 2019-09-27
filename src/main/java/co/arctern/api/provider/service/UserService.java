@@ -127,6 +127,13 @@ public interface UserService extends MessageUtil {
      *
      * @return
      */
+    public PaginatedResponse fetchActiveUsersByAdmin(Pageable pageable);
+
+    /**
+     * fetch all users.
+     *
+     * @return
+     */
     public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable);
 
     /**
