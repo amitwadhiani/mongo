@@ -40,14 +40,13 @@ public interface PaginationUtil {
      * @param pageSize
      * @return
      */
-    public static PaginatedResponse returnPaginatedBody(List<?> sourceList, int page, int pageSize) {
+    public static PaginatedResponse returnPaginatedBody(List<?> sourceList, Integer page, Integer pageSize, Long totalElements, int totalPages) {
         PaginatedResponse response = new PaginatedResponse();
         response.setContent(paginateList(sourceList, page, pageSize));
         response.setPage(page);
         response.setSize(pageSize);
-        int totalElements = sourceList.size();
-        response.setTotalElements(Long.valueOf(totalElements));
-        response.setTotalPages((int) Math.ceil((double) totalElements / pageSize));
+        response.setTotalElements(totalElements);
+        response.setTotalPages(totalPages);
         return response;
     }
 

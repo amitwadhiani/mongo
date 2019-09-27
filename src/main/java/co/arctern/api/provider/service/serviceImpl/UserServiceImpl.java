@@ -173,24 +173,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginatedResponse fetchAll(Pageable pageable) {
+        Page<User> users = userDao.findByIsActiveTrue(pageable);
         return PaginationUtil.returnPaginatedBody(
-                userDao.findByIsActiveTrue(pageable).getContent().stream()
+                users.getContent().stream()
                         .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")))
                         .map(user -> projectionFactory.createProjection(Users.class, user))
                         .collect(Collectors.toList()),
                 pageable.getPageNumber(),
-                pageable.getPageSize()
-        );
+                pageable.getPageSize(), users.getTotalElements(), users.getTotalPages());
     }
 
     @Override
     public PaginatedResponse fetchAllByTaskType(TaskType taskType, Pageable pageable) {
+        Page<User> users = userDao.findByIsActiveTrue(pageable);
         return PaginationUtil.returnPaginatedBody(
-                userDao.findByIsActiveTrue(pageable)
-                        .getContent()
+                users.getContent()
                         .stream()
                         .filter(a -> !a.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")) && a.getUserOfferings().stream().anyMatch(b -> b.getOffering().getType().toString().equalsIgnoreCase(taskType.toString())))
-                        .collect(Collectors.toList()), pageable.getPageNumber(), pageable.getPageSize());
+                        .collect(Collectors.toList()), pageable.getPageNumber(), pageable.getPageSize(), users.getTotalElements(), users.getTotalPages());
     }
 
     /**
