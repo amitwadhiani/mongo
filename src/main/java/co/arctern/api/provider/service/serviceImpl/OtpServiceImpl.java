@@ -45,7 +45,7 @@ public class OtpServiceImpl implements OtpService {
             otpNo = this.getOtpString();
         }
         ratingService.createRating(task, otpNo, otpYes);
-        if (smsService.sendSmsForRating(task.getPatientPhone(), getOtpString(), getOtpString()) != null) {
+        if (smsService.sendSmsForRating(task.getPatientPhone(), otpYes, otpNo) != null) {
             return SUCCESS_MESSAGE;
         }
         return TRY_AGAIN_MESSAGE;
