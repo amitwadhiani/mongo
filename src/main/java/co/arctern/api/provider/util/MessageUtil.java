@@ -58,6 +58,11 @@ public interface MessageUtil {
     StringBuilder INVALID_ROLE_ID_MESSAGE = new StringBuilder("Invalid role id.");
 
     /**
+     * invalid address id message.
+     */
+    StringBuilder INVALID_ADDRESS_ID_MESSAGE = new StringBuilder("Invalid address id.");
+
+    /**
      * user not found message.
      */
     StringBuilder USER_NOT_FOUND_MESSAGE = new StringBuilder("User not found .");

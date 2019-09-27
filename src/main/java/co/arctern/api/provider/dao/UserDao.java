@@ -58,6 +58,8 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
     @PreAuthorize("permitAll()")
     Optional<User> findByPhone(String phone);
 
+    Optional<User> findByPhoneAndIsActiveTrue(String phone);
+
     /**
      * delete user by username.
      *
