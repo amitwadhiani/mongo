@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public User fetchUser(String phone) {
-        return userDao.findByPhone(phone)
+        return userDao.findByPhoneAndIsActiveTrue(phone)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, REGISTER_USER_MESSAGE.toString()));
     }
 
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @SneakyThrows({HttpClientErrorException.BadRequest.class})
     public User fetchUserByPhone(String phone) {
-        return userDao.findByPhone(phone)
+        return userDao.findByPhoneAndIsActiveTrue(phone)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE.toString()));
     }
 
