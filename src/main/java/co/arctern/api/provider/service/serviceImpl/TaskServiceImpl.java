@@ -5,14 +5,18 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.TaskDao;
+import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.Task;
+import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
+import co.arctern.api.provider.queue.Sender;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.DateUtil;
 import co.arctern.api.provider.util.PaginationUtil;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,6 +43,7 @@ public class TaskServiceImpl implements TaskService {
     private final PaymentService paymentService;
     private final ReasonService reasonService;
     private final ProjectionFactory projectionFactory;
+    private final Sender sender;
 
     @Autowired
     public TaskServiceImpl(TaskDao taskDao,
@@ -48,7 +53,8 @@ public class TaskServiceImpl implements TaskService {
                            AddressService addressService,
                            PaymentService paymentService,
                            ReasonService reasonService,
-                           ProjectionFactory projectionFactory) {
+                           ProjectionFactory projectionFactory,
+                           Sender sender) {
         this.taskDao = taskDao;
         this.userTaskService = userTaskService;
         this.taskStateFlowService = taskStateFlowService;
@@ -57,6 +63,7 @@ public class TaskServiceImpl implements TaskService {
         this.paymentService = paymentService;
         this.reasonService = reasonService;
         this.projectionFactory = projectionFactory;
+        this.sender = sender;
     }
 
     @Override
@@ -114,6 +121,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     @Transactional
+    @SneakyThrows
     public StringBuilder assignTask(Long taskId, Long userId) {
         Task task = this.fetchTask(taskId);
         task.setState(TaskState.ASSIGNED);
@@ -121,6 +129,8 @@ public class TaskServiceImpl implements TaskService {
         userTaskService.markInactive(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
+        User user = userService.fetchUser(userId);
+        sender.sendAdminAssignTaskNotification(user);
         return TASK_ASSIGNED_MESSAGE;
     }
 

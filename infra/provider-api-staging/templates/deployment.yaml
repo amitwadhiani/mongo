@@ -78,6 +78,8 @@ spec:
               value: {{default "CGIiWhg4n1x8JqRSE4cSZJ72" .Values.spring.razorpay.apiSecret}}
             - name: MEDDO_WALLET_DISCOUNT_PERCENTAGE
               value: {{default "10" .Values.spring.meddo.wallet.discountPercentage | quote}}
+            - name: SPRING_RABBITMQ_ORDER_NOTIFICATION_QUEUE_NAME
+              value: {{default "order-staging-notification-updates-simple" .Values.spring.rabbitmq.notification.queueOrderName}}
           livenessProbe:
             httpGet:
               path: /actuator/health
