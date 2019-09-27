@@ -95,7 +95,7 @@ public interface MessageUtil {
     /**
      * rating entity already generated for task id message.
      */
-    StringBuilder RATING_ALREADY_GENERATED_MESSAGE = new StringBuilder("Rating already generated for this task.");
+    StringBuilder RATING_ALREADY_GENERATED_MESSAGE = new StringBuilder("OTP already generated for this task. Complete the task using OTP.");
 
     /**
      * Task already started message.
