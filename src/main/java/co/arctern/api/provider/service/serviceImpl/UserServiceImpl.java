@@ -1,9 +1,11 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.Gender;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserOffering;
+import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
@@ -36,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final AreaService areaService;
     private final UserRoleService userRoleService;
     private final TokenService tokenService;
+    private final UserTaskService userTaskService;
 
     @Autowired
     public UserServiceImpl(UserDao userDao,
@@ -43,13 +46,15 @@ public class UserServiceImpl implements UserService {
                            OfferingService offeringService,
                            AreaService areaService,
                            UserRoleService userRoleService,
-                           TokenService tokenService) {
+                           TokenService tokenService,
+                           UserTaskService userTaskService) {
         this.userDao = userDao;
         this.projectionFactory = projectionFactory;
         this.offeringService = offeringService;
         this.areaService = areaService;
         this.userRoleService = userRoleService;
         this.tokenService = tokenService;
+        this.userTaskService = userTaskService;
     }
 
     @Override
@@ -110,6 +115,15 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public StringBuilder createUser(UserRequestDto dto) {
+        String phone = dto.getPhone();
+        String username = dto.getUsername();
+        String email = dto.getEmail();
+        if (userDao.existsByPhone(phone))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, PHONE_ALREADY_EXISTS_MESSAGE.toString());
+        if (userDao.existsByUsername(username))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USERNAME_ALREADY_EXISTS_MESSAGE.toString());
+        if (userDao.existsByEmail(email))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EMAIL_ALREADY_EXISTS_MESSAGE.toString());
         Long userId = dto.getUserId();
         List<Long> roleIds = dto.getRoleIds();
         List<Long> areaIds = dto.getAreaIds();
@@ -119,7 +133,6 @@ public class UserServiceImpl implements UserService {
         Date dateOfBirth = dto.getDateOfBirth();
         String name = dto.getName();
         Integer age = dto.getAge();
-        String phone = dto.getPhone();
         Boolean isActive = dto.getIsActive();
         user.setIsActive((isActive == null) ? true : isActive);
         if (name != null) user.setName(name);
@@ -130,8 +143,8 @@ public class UserServiceImpl implements UserService {
         if (userId == null) {
             user.setIsLoggedIn(false);
             user.setPassword(new BCryptPasswordEncoder().encode(dto.getPassword()));
-            user.setUsername(dto.getUsername());
-            user.setEmail(dto.getEmail());
+            user.setUsername(username);
+            user.setEmail(email);
         }
         if (phone != null) user.setPhone(phone);
         user = userDao.save(user);
@@ -171,13 +184,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public PaginatedResponse fetchAllByTaskType(TaskType taskType, Pageable pageable) {
+        return PaginationUtil.returnPaginatedBody(
+                userDao.findByIsActiveTrue(pageable)
+                        .getContent()
+                        .stream()
+                        .filter(a -> !a.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")) && a.getUserOfferings().stream().anyMatch(b -> b.getOffering().getType().toString().equalsIgnoreCase(taskType.toString())))
+                        .collect(Collectors.toList()), pageable.getPageNumber(), pageable.getPageSize());
+    }
+
+    /**
+     * fetch user details through taskId.
+     *
+     * @param taskId
+     * @return
+     */
+    @Override
+    public Users fetchDetails(Long taskId) {
+        UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
+        if (activeUserTask == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NO_ACTIVE_USER_MESSAGE.toString());
+        return projectionFactory.createProjection(Users.class, activeUserTask.getUser());
+    }
+
+    @Override
     public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable) {
         return offeringService.fetchUserOfferings(offeringIds, pageable).map(UserOffering::getUser);
     }
 
     @Override
-    public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable) {
+    public PaginatedResponse fetchActiveUsersByAdmin(Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(userDao.findByIsActiveTrue(pageable)
+                .map(a -> projectionFactory.createProjection(Users.class, a)), pageable);
+    }
+
+    @Override
+    public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable) {
+        return PaginationUtil.returnPaginatedBody(userDao.findAll(pageable)
                 .map(a -> projectionFactory.createProjection(Users.class, a)), pageable);
     }
 }

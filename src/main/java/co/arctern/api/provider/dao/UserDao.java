@@ -24,6 +24,22 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
     Optional<User> findByUsername(String userName);
 
     /**
+     * exists by phone.
+     *
+     * @param phone
+     * @return
+     */
+    Boolean existsByPhone(String phone);
+
+    /**
+     * exists by email.
+     *
+     * @param email
+     * @return
+     */
+    Boolean existsByEmail(String email);
+
+    /**
      * exists by username.
      *
      * @param userName

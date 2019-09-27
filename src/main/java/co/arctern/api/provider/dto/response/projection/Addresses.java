@@ -6,7 +6,7 @@ import org.springframework.data.rest.core.config.Projection;
 /**
  * addresses response body.
  */
-@Projection(types={Address.class})
+@Projection(types = {Address.class})
 public interface Addresses {
 
     Long getId();
@@ -17,16 +17,18 @@ public interface Addresses {
 
     String getPinCode();
 
-     String getCity();
+    String getCity();
 
-     String getLocality();
+    Boolean getIsSourceAddress();
 
-     String getHouseNumber();
+    String getLocality();
 
-     String getState();
+    String getHouseNumber();
 
-     Double getLatitude();
+    String getState();
 
-     Double getLongitude();
+    Double getLatitude();
+
+    Double getLongitude();
 
 }

@@ -39,12 +39,14 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     @Override
-    public void markInactive(Task task) {
+    public Long markInactive(Task task) {
         UserTask userTask = userTaskDao.findByIsActiveTrueAndTaskId(task.getId());
         if (userTask != null) {
             userTask.setIsActive(false);
             userTaskDao.save(userTask);
+            return userTask.getUser().getId();
         }
+        return null;
     }
 
     @Override
@@ -82,6 +84,5 @@ public class UserTaskServiceImpl implements UserTaskService {
     public List<UserTask> fetchUserTasksForCron() {
         return userTaskDao.fetchUserTasksForCron(DateUtil.fetchTimestampFromCurrentTimestamp(20), TaskState.ASSIGNED);
     }
-
 
 }

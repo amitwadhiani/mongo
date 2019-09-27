@@ -26,7 +26,7 @@ public interface UserTaskService extends MessageUtil {
      *
      * @param task
      */
-    public void markInactive(Task task);
+    public Long markInactive(Task task);
 
     /**
      * fetch tasks for user.

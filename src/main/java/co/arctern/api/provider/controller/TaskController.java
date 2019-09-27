@@ -108,7 +108,7 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> acceptOrRejectTask(@RequestParam(value = "state", required = false, defaultValue = "ACCEPTED") TaskStateFlowState state,
-                                                            @RequestParam("taskId") Long taskId) {
+                                                            @RequestParam(value = "taskId", required = false) Long taskId) {
         return ResponseEntity.ok(taskService.acceptOrRejectAssignedTask(taskId, state));
     }
 
@@ -121,7 +121,7 @@ public class TaskController {
      * @param userId
      * @return
      */
-    @PostMapping("/cancel-reassign")
+    @PostMapping("/cancel")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> cancelTask(@RequestParam(value = "isCancelled", defaultValue = "true", required = false) Boolean isCancelled,
@@ -160,4 +160,14 @@ public class TaskController {
         log.info("Call from order-api");
         return ResponseEntity.ok(taskService.fetchProjectedResponseFromPost(dto));
     }
+
+    @PostMapping("/cancel/all")
+    @CrossOrigin
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<StringBuilder> cancelAllTasks(@RequestParam("taskIds") List<Long> taskIds,
+                                                        @RequestParam(value = "userId", required = false) Long userId) {
+        if (userId == null) userId = tokenService.fetchUserId();
+        return ResponseEntity.ok(taskService.cancelAllTasks(taskIds, userId));
+    }
+
 }

@@ -19,6 +19,8 @@ public interface Users {
 
     String getUsername();
 
+    Boolean getIsActive();
+
     String getEmail();
 
     String getPhone();

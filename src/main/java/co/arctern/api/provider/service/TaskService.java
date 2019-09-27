@@ -61,6 +61,8 @@ public interface TaskService extends MessageUtil {
      */
     public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId);
 
+    public StringBuilder cancelAllTasks(List<Long> taskIds, Long userId);
+
     /**
      * request cancellation for a particular task based on taskId -> By Rider.
      *
@@ -385,5 +387,7 @@ public interface TaskService extends MessageUtil {
      * @return
      */
     public Iterable<Task> saveAll(List<Task> tasks);
+
+    public List<Task> fetchAllTasks(List<Long> taskIds);
 
 }

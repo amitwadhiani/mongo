@@ -25,6 +25,8 @@ public interface TasksForProvider {
 
     TaskType getType();
 
+    Boolean getCancellationRequested();
+
     String getPatientName();
 
     String getPatientPhone();

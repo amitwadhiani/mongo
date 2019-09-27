@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -138,7 +139,8 @@ public class AdminController {
                                            @RequestParam(value = "taskType", required = false, defaultValue = "SAMPLE_PICKUP") TaskType taskType,
                                            @RequestParam(value = "patientFilterValue", required = false) String patientFilterValue,
                                            Pageable pageable) {
-        Timestamp startTs = (start != null) ? DateUtil.fetchTodayTimestamp(start) : DateUtil.fetchTodayTimestamp(ZonedDateTime.now());
+        Timestamp startTs = (start != null) ? DateUtil.fetchTodayTimestamp(start) :
+                DateUtil.fetchTodayTimestamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Asia/Kolkata")));
         Timestamp endTs = (end != null) ? DateUtil.fetchTodayTimestamp(end) : DateUtil.fetchTodayTimestamp(ZonedDateTime.now().plusDays(1));
         return ResponseEntity.ok(homePageService.fetchHomePageForAdmin(states, startTs, endTs,
                 areaIds,
@@ -154,9 +156,18 @@ public class AdminController {
     @CrossOrigin
     @GetMapping("/user")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<PaginatedResponse> fetchAllUsers(Pageable pageable) {
+    public ResponseEntity<PaginatedResponse> fetchActiveUsers(Pageable pageable) {
         return ResponseEntity.ok(userService.fetchAllUsersByAdmin(pageable));
     }
 
+    /**
+     * fetch all users
+     */
+    @CrossOrigin
+    @GetMapping("/user/all")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<PaginatedResponse> fetchAllUsers(Pageable pageable) {
+        return ResponseEntity.ok(userService.fetchAllUsersByAdmin(pageable));
+    }
 
 }

@@ -97,4 +97,34 @@ public interface MessageUtil {
      */
     StringBuilder RATING_ALREADY_GENERATED_MESSAGE = new StringBuilder("Rating already generated for this task.");
 
+    /**
+     * Task already started message.
+     */
+    StringBuilder TASK_ALREADY_STARTED_MESSAGE = new StringBuilder("Task has already been started.");
+
+    /**
+     * User already exists message by username.
+     */
+    StringBuilder USERNAME_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this username already exists. ");
+
+    /**
+     * User already exists message by phone.
+     */
+    StringBuilder PHONE_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this phone already exists. ");
+
+    /**
+     * User already exists message by email.
+     */
+    StringBuilder EMAIL_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this email already exists. ");
+
+    /**
+     * Task cannot be reassigned to the same user message .
+     */
+    StringBuilder TASK_SAME_USER_MESSAGE = new StringBuilder("Task cannot be reassigned to the same user.");
+
+    /**
+     * No active user exists for this task message.
+     */
+    StringBuilder NO_ACTIVE_USER_MESSAGE = new StringBuilder("No active user for this task.");
+
 }
