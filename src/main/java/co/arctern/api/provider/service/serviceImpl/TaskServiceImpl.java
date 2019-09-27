@@ -44,7 +44,6 @@ public class TaskServiceImpl implements TaskService {
     private final ReasonService reasonService;
     private final ProjectionFactory projectionFactory;
     private final Sender sender;
-    private final UserDao userDao;
 
     @Autowired
     public TaskServiceImpl(TaskDao taskDao,
@@ -55,8 +54,7 @@ public class TaskServiceImpl implements TaskService {
                            PaymentService paymentService,
                            ReasonService reasonService,
                            ProjectionFactory projectionFactory,
-                           Sender sender,
-                           UserDao userDao) {
+                           Sender sender) {
         this.taskDao = taskDao;
         this.userTaskService = userTaskService;
         this.taskStateFlowService = taskStateFlowService;
@@ -66,7 +64,6 @@ public class TaskServiceImpl implements TaskService {
         this.reasonService = reasonService;
         this.projectionFactory = projectionFactory;
         this.sender = sender;
-        this.userDao = userDao;
     }
 
     @Override
@@ -132,7 +129,7 @@ public class TaskServiceImpl implements TaskService {
         userTaskService.markInactive(task);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
-        User user = userDao.findById(userId).get();
+        User user = userService.fetchUser(userId);
         sender.sendAdminAssignTaskNotification(user);
         return TASK_ASSIGNED_MESSAGE;
     }
