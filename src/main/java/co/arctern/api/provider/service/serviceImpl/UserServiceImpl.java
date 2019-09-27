@@ -173,10 +173,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginatedResponse fetchAll(Pageable pageable) {
-        List<User> users = userDao.fetchActiveUsers();
+        List<User> users = userDao.fetchActiveUsers().stream()
+                .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")))
+                .collect(Collectors.toList());
         return PaginationUtil.returnPaginatedBody(
                 users.stream()
-                        .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")))
                         .map(user -> projectionFactory.createProjection(Users.class, user))
                         .collect(Collectors.toList()),
                 pageable.getPageNumber(),
@@ -185,11 +186,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginatedResponse fetchAllByTaskType(TaskType taskType, Pageable pageable) {
-        List<User> users = userDao.fetchActiveUsers();
+        List<User> users = userDao.fetchActiveUsers().stream()
+                .filter(a -> !a.getUserRoles().stream()
+                        .anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")) && a.getUserOfferings().stream().anyMatch(b -> b.getOffering().getType().toString().equalsIgnoreCase(taskType.toString())))
+                .collect(Collectors.toList());
         return PaginationUtil.returnPaginatedBody(
-                users
-                        .stream()
-                        .filter(a -> !a.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")) && a.getUserOfferings().stream().anyMatch(b -> b.getOffering().getType().toString().equalsIgnoreCase(taskType.toString())))
+                users.stream()
+                        .map(a -> projectionFactory.createProjection(Users.class, a))
                         .collect(Collectors.toList()), pageable.getPageNumber(), pageable.getPageSize(), users.size());
     }
 
