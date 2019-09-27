@@ -160,4 +160,15 @@ public class TaskController {
         log.info("Call from order-api");
         return ResponseEntity.ok(taskService.fetchProjectedResponseFromPost(dto));
     }
+
+    @PostMapping("/cancel/all")
+    @CrossOrigin
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<StringBuilder> cancelAllTasks(@RequestParam(value = "isCancelled", defaultValue = "true", required = false) Boolean isCancelled,
+                                                        @RequestParam("taskIds") List<Long> taskIds,
+                                                        @RequestParam(value = "userId", required = false) Long userId) {
+        if (userId == null) userId = tokenService.fetchUserId();
+        return ResponseEntity.ok(taskService.cancelAllTasks(taskIds, userId));
+    }
+
 }

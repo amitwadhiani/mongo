@@ -24,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,11 @@ public class TaskServiceImpl implements TaskService {
         return taskDao.findById(taskId).orElseThrow(() -> {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TASK_ID_MESSAGE.toString());
         });
+    }
+
+    @Override
+    public List<Task> fetchAllTasks(List<Long> taskIds) {
+        return taskDao.findByIdIn(taskIds);
     }
 
     @Override
@@ -191,6 +197,26 @@ public class TaskServiceImpl implements TaskService {
             markInactiveAndReassignTask(userId, task);
             return TASK_REASSIGN_MESSAGE;
         }
+    }
+
+    @Override
+    @Transactional
+    public StringBuilder cancelAllTasks(List<Long> taskIds, Long userId) {
+        List<Task> tasks = this.fetchAllTasks(taskIds);
+        List<Task> tasksToSave = new ArrayList<>();
+        tasks.stream().forEach(task ->
+        {
+            UserTask activeUserTask = userTaskService.findActiveUserTask(task.getId());
+            /**
+             *  cancel
+             */
+            taskStateFlowService.createFlow(task, TaskStateFlowState.CANCELLED,
+                    (activeUserTask == null) ? null : activeUserTask.getUser().getId());
+            task.setState(TaskState.CANCELLED);
+            tasksToSave.add(task);
+        });
+        taskDao.saveAll(tasksToSave);
+        return TASK_CANCEL_MESSAGE;
     }
 
     @Override

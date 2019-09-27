@@ -350,4 +350,6 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      */
     public List<Task> findByIsActiveTrueAndCreatedAtLessThanEqualAndState(Timestamp start, TaskState state);
 
+    public List<Task> findByIdIn(List<Long> taskIds);
+
 }
