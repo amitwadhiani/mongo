@@ -77,8 +77,8 @@ spring:
     jcache:
       config: "classpath:ehcache/production.xml"
   datasource:
-    url: "jdbc:mysql://meddo-db.mysql.database.azure.com:3306/arctern_provider?useSSL=false"
-    slaveUrl: "jdbc:mysql://meddo-slave.mysql.database.azure.com:3306/arctern_provider?useSSL=false"
+    url: "jdbc:mysql://meddo-db.mysql.database.azure.com:3306/arctern_provider?useSSL=true"
+    slaveUrl: "jdbc:mysql://meddo-slave.mysql.database.azure.com:3306/arctern_provider?useSSL=true"
     username: "provider_service@meddo-db"
     password: "Qu3AjY4qnzerbJnc"
   sqs:
