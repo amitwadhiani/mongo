@@ -297,7 +297,7 @@ public class TaskServiceImpl implements TaskService {
         /**
          * to set source address Id of Warehouse / provider ( 3 in case of staging , change later / on prod.
          */
-        dto.setSourceAddressId(3l);
+        dto.setSourceAddressId(1l);
         task.setIsPrepaid(dto.getIsPrepaid());
         task.setPatientPhone(dto.getPatientPhone());
         task.setPatientName(dto.getPatientName());
