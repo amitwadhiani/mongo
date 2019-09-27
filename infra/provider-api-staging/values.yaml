@@ -76,6 +76,7 @@ spring:
       queueproviderItemName: "provider-item-staging-notification-updates-simple"
       queueproviderName: "provider-staging-notification-updates-simple"
       providerDiagnosticLabNotificationQueueName: "provider-staging-diagnostic-notification-updates-simple"
+      queueOrderName: "order-staging-notification-updates-simple"
     middleware:
       providerDiagnosticLabQueueName: "provider-staging-diagnostic-updates-simple"
       diagnosticproviderQueueName: "diagnostic-provider-staging-updates-simple"

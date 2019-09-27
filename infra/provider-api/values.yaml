@@ -96,6 +96,7 @@ spring:
       queueproviderItemName: "provider-item-notification-updates-simple"
       queueproviderName: "provider-notification-updates-simple"
       providerDiagnosticLabNotificationQueueName: "provider-diagnostic-notification-updates-simple"
+      queueOrderName: "order-notification-updates-simple"
     middleware:
       providerDiagnosticLabQueueName: "provider-diagnostic-updates-simple"
       diagnosticproviderQueueName: "diagnostic-provider-updates-simple"
