@@ -133,6 +133,7 @@ public class TaskServiceImpl implements TaskService {
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
+        task.setCancellationRequested(false);
         taskDao.save(task);
     }
 
@@ -188,6 +189,7 @@ public class TaskServiceImpl implements TaskService {
             taskStateFlowService.createFlow(task, TaskStateFlowState.CANCELLED,
                     (activeUserTask == null) ? null : activeUserTask.getUser().getId());
             task.setState(TaskState.CANCELLED);
+            task.setCancellationRequested(false);
             taskDao.save(task);
             return TASK_CANCEL_MESSAGE;
         } else {
