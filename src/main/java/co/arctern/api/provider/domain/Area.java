@@ -24,12 +24,15 @@ public class Area {
     @Column(nullable = false)
     private String cluster;
 
+    @Column(nullable = false)
     private Double latitude;
 
+    @Column(nullable = false)
     private Double longitude;
 
     @Size(min = 6, max = 6, message = "Invalid pinCode")
     @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")
+    @Column
     private String pinCode;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
@@ -45,6 +48,9 @@ public class Area {
 
     @OneToMany(mappedBy = "area")
     private List<UserArea> areaUsers;
+
+    @OneToMany(mappedBy = "area")
+    private List<Address> addresses;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

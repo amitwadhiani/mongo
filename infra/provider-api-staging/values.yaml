@@ -5,16 +5,14 @@
 replicaCount: 1
 
 image:
-  repository: 739878518990.dkr.ecr.ap-south-1.amazonaws.com/provider
-  tag: 0.0.9
+  repository: meddo.azurecr.io/provider
+  tag: latest
   pullPolicy: Always
 
 service:
   type: ClusterIP
   port: 80
 
-hostname: provider.staging
-domain: arctern.co
 
 ingress:
   enabled: true
@@ -22,6 +20,7 @@ ingress:
     kubernetes.io/ingress.class: traefik
   path: /
   hosts:
+  - provider.staging.meddo.tech
   - provider.staging.arctern.co
   - provider.staging.meddo.in
   tls: []
@@ -41,8 +40,6 @@ resources:
     cpu: 2
     memory: 2304Mi
 
-nodeSelector: 
-  "node-role.kubernetes.io/spot-worker": "true"
 
 tolerations: []
 
@@ -62,7 +59,7 @@ spring:
     url: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_provider?useSSL=false"
     slaveUrl: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_provider?useSSL=false"
     username: "root"
-    password: "kZt3c5Fh4Y"
+    password: "2q1I447joT"
   sqs:
     consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/provider-consumer-updates-simple-staging"
     accessKey: "AKIA2YRBSIDHAXCGRJ6T"
@@ -79,13 +76,14 @@ spring:
       queueproviderItemName: "provider-item-staging-notification-updates-simple"
       queueproviderName: "provider-staging-notification-updates-simple"
       providerDiagnosticLabNotificationQueueName: "provider-staging-diagnostic-notification-updates-simple"
+      queueOrderName: "order-staging-notification-updates-simple"
     middleware:
       providerDiagnosticLabQueueName: "provider-staging-diagnostic-updates-simple"
       diagnosticproviderQueueName: "diagnostic-provider-staging-updates-simple"
   security:
-    signingKey: 4vvL2EefcZbBvUnJ
+    signingKey: '4vvL2EefcZbBvUnJ'
     encodingStrength: 512
-    securityRealm: Auth Staging
+    securityRealm: 'Auth Staging'
     jwt:
       clientId: "LRL6ZCEt5Ag7whaa"
       clientSecret: "LwprrjdLzMc9zSq4XY4jWCz3hNWYMVV6"

@@ -12,11 +12,19 @@ import java.util.List;
  */
 public interface PaginationUtil {
 
+    /**
+     * to paginate a list and return list in return.
+     *
+     * @param sourceList
+     * @param page
+     * @param pageSize
+     * @param <T>
+     * @return
+     */
     public static <T> List<T> paginateList(List<T> sourceList, int page, int pageSize) {
-        if (pageSize <= 0 || page <= 0) {
+        if (pageSize <= 0 || page < 0) {
             throw new IllegalArgumentException("Invalid page size/number ");
         }
-
         int fromIndex = (page) * pageSize;
         if (sourceList == null || sourceList.size() < fromIndex) {
             return Collections.emptyList();
@@ -32,12 +40,11 @@ public interface PaginationUtil {
      * @param pageSize
      * @return
      */
-    public static PaginatedResponse returnPaginatedBody(List<?> sourceList, int page, int pageSize) {
+    public static PaginatedResponse returnPaginatedBody(List<?> sourceList, Integer page, Integer pageSize, Integer totalElements) {
         PaginatedResponse response = new PaginatedResponse();
         response.setContent(paginateList(sourceList, page, pageSize));
         response.setPage(page);
         response.setSize(pageSize);
-        int totalElements = sourceList.size();
         response.setTotalElements(Long.valueOf(totalElements));
         response.setTotalPages((int) Math.ceil((double) totalElements / pageSize));
         return response;

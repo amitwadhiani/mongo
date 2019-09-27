@@ -17,15 +17,16 @@ public interface OTPUtil {
      *
      * @return
      */
-    public static String generateOtp() {
+    public static StringBuilder generateOtp() {
         String pool = "0123456789";
         Random random = new Random();
         char[] chars = new char[OTP_LENGTH];
         int i = 0;
+        StringBuilder otp = new StringBuilder("");
         while (i < OTP_LENGTH) {
-            chars[i] = pool.charAt(random.nextInt(pool.length()));
+            otp.append(pool.charAt(random.nextInt(pool.length())));
             i++;
         }
-        return new String(chars);
+        return otp;
     }
 }

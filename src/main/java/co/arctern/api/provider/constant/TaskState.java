@@ -8,6 +8,7 @@ public enum TaskState {
     OPEN,
     ASSIGNED,
     ACCEPTED,
+    STARTED,
     CANCELLED,
     COMPLETED
 }

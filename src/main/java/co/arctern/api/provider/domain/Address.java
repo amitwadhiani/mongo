@@ -1,12 +1,16 @@
 package co.arctern.api.provider.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -21,10 +25,16 @@ public class Address {
     @Column(nullable = false)
     private String name;
 
+    @ManyToOne
+    @JsonBackReference("area-address")
+    private Area area;
+
+    @Column
     private String line;
 
     @Size(min = 6, max = 6, message = "Invalid pinCode")
     @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")
+    @Column
     private String pinCode;
 
     @Column(nullable = false)
@@ -38,10 +48,31 @@ public class Address {
     @Column(nullable = false)
     private String state;
 
-    private String patientId;
+    @Column(columnDefinition = "tinyint(1) DEFAULT 0", nullable = true)
+    private Boolean isSourceAddress;
+
+    @Column
+    private Double latitude;
+
+    @Column
+    private Double longitude;
+
+    @Column
+    private String addressTag;
+
+    @Column
+    private String landmark;
 
     @OneToMany(mappedBy = "sourceAddress")
     List<Task> tasksForSourceAddress;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createdAt;
+
+    @LastModifiedDate
+    @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    private Timestamp lastModifiedAt;
 
     @OneToMany(mappedBy = "destinationAddress")
     List<Task> tasksForDestinationAddress;

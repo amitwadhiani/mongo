@@ -1,6 +1,6 @@
 package co.arctern.api.provider.domain;
 
-import co.arctern.api.provider.constant.TaskEventFlowState;
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.codehaus.jackson.annotate.JsonBackReference;
@@ -32,8 +32,10 @@ public class TaskEventFlow {
     private TaskEvent taskEvent;
 
     @Enumerated(EnumType.STRING)
-    private TaskEventFlowState state;
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'OPEN'")
+    private TaskStateFlowState state;
 
+    @Column
     private Long userId;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")

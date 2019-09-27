@@ -2,8 +2,10 @@ package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskType;
+import co.arctern.api.provider.util.CodeGeneratorUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,7 +13,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,11 +20,15 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class Task {
+public class Task extends CodeGeneratorUtil {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true, length = 64)
+    @Getter
+    private String code;
 
     @CreatedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -33,6 +38,9 @@ public class Task {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
+    @Column(nullable = true)
+    private Timestamp expectedArrivalTime;
+
     @OneToMany(mappedBy = "task")
     private List<TaskEvent> taskEvents;
 
@@ -40,9 +48,11 @@ public class Task {
     private List<Payment> payments;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'OPEN'")
     private TaskState state;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'SAMPLE_PICKUP'")
     private TaskType type;
 
     private Boolean isPrepaid;
@@ -57,24 +67,15 @@ public class Task {
     private List<UserTask> userTasks;
 
     /**
-     * orderItemIds separated by comma.
+     * record of status flows for a task.
      */
-    private String itemIds;
+    @OneToMany(mappedBy = "task")
+    private List<TaskStateFlow> taskStateFlows;
 
     /**
      * orderId linked with the item.
      */
-    private Long orderId;
-
-    /**
-     * amount for the item.
-     */
-    private Float amount;
-
-    /**
-     * payment state.
-     */
-    private String paymentState;
+    private Long refId;
 
     @ManyToOne
     @JsonBackReference("sourceAddress-task")
@@ -87,8 +88,14 @@ public class Task {
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
     private Boolean isActive;
 
-    @Column(columnDefinition = "tinyint(1) DEFAULT 0")
+    @Column(columnDefinition = "tinyint(1) DEFAULT 0", nullable = false)
     private Boolean cancellationRequested;
+
+    @OneToMany(mappedBy = "task")
+    private List<TaskReason> taskReasons;
+
+    @Column
+    private String patientName;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
@@ -97,8 +104,16 @@ public class Task {
 
     @NotEmpty
     @Pattern(regexp = "(^$|[0-9]{10})")
-    @NotNull(message = "Patient Phone mandatory")
+    @Column(nullable = false)
     private String patientPhone;
+
+    @Column
+    private String patientId;
+
+    @PrePersist
+    public void setCode() {
+        this.code = generateTaskCode(this.id, this.refId, this.type);
+    }
 
     public Task(Long version) {
         this.version = version;

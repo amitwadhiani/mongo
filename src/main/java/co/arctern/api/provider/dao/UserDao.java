@@ -1,10 +1,14 @@
 package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,6 +24,22 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
      * @return
      */
     Optional<User> findByUsername(String userName);
+
+    /**
+     * exists by phone.
+     *
+     * @param phone
+     * @return
+     */
+    Boolean existsByPhone(String phone);
+
+    /**
+     * exists by email.
+     *
+     * @param email
+     * @return
+     */
+    Boolean existsByEmail(String email);
 
     /**
      * exists by username.
@@ -54,4 +74,21 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
     @Override
     @PreAuthorize("permitAll()")
     Optional<User> findById(Long id);
+
+    /**
+     * fetch active users.
+     *
+     * @return
+     */
+    @Query("FROM User u WHERE u.isActive = 1 ")
+    List<User> fetchActiveUsers();
+
+    /**
+     * fetch active users.
+     *
+     * @param pageable
+     * @return
+     */
+    Page<User> findByIsActiveTrue(Pageable pageable);
+
 }

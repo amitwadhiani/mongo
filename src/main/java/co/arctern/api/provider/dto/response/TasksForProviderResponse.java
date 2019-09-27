@@ -1,6 +1,6 @@
 package co.arctern.api.provider.dto.response;
 
-import co.arctern.api.provider.dto.response.projection.TasksForRider;
+import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,9 +10,9 @@ import org.springframework.data.domain.Page;
  */
 @Data
 @NoArgsConstructor
-public class TasksForRiderResponse {
+public class TasksForProviderResponse {
 
-    public Page<TasksForRider> completedTasks;
-    public Page<TasksForRider> assignedTasks;
+    public Page<TasksForProvider> completedTasks;
+    public Page<TasksForProvider> assignedTasks;
 
 }

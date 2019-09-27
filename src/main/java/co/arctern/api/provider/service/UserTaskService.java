@@ -8,6 +8,9 @@ import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 public interface UserTaskService extends MessageUtil {
 
     /**
@@ -23,7 +26,7 @@ public interface UserTaskService extends MessageUtil {
      *
      * @param task
      */
-    public void markInactive(Task task);
+    public Long markInactive(Task task);
 
     /**
      * fetch tasks for user.
@@ -42,4 +45,52 @@ public interface UserTaskService extends MessageUtil {
      */
     public UserTask findActiveUserTask(Long taskId);
 
+    /**
+     * fetch count of tasks for a user filtered by state within a range.
+     *
+     * @param userId
+     * @param state
+     * @param start
+     * @param end
+     * @return
+     */
+    public Long countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(
+            Long userId, TaskState state, Timestamp start, Timestamp end);
+
+    /**
+     * fetch tasks for a user within a time range.
+     *
+     * @param userId
+     * @param state
+     * @param start
+     * @param end
+     * @return
+     */
+    public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start, Timestamp end);
+
+    /**
+     * fetch tasks for user filtered by state greater than a given time.
+     *
+     * @param userId
+     * @param state
+     * @param start
+     * @return
+     */
+    public List<UserTask> fetchTasksForUser(Long userId, TaskState state, Timestamp start);
+
+    /**
+     * fetch tasks for user.
+     *
+     * @param userId
+     * @param state
+     * @return
+     */
+    public List<UserTask> fetchTasksForUser(Long userId, TaskState state);
+
+    /**
+     * fetch userTasks for cronjob.
+     *
+     * @return
+     */
+    public List<UserTask> fetchUserTasksForCron();
 }

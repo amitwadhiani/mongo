@@ -1,11 +1,12 @@
 package co.arctern.api.provider.dao;
 
-import co.arctern.api.provider.domain.TaskEvent;
+import co.arctern.api.provider.domain.Event;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
+/**
+ * TaskEvent entity repository layer
+ */
 @Repository
-@PreAuthorize("isAuthenticated()")
-public interface TaskEventDao extends PagingAndSortingRepository<TaskEvent,Long> {
+public interface TaskEventDao extends PagingAndSortingRepository<Event,Long> {
 }

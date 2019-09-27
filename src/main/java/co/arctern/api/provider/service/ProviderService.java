@@ -1,34 +1,53 @@
 package co.arctern.api.provider.service;
 
+import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.TasksForRiderResponse;
+import co.arctern.api.provider.dto.response.TasksForProviderResponse;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Pageable;
+
+import java.sql.Timestamp;
 
 public interface ProviderService extends MessageUtil {
 
     /**
-     * fetch all tasks for rider.
+     * fetch all tasks for provider.
      *
      * @param userId
      * @return
      */
-    TasksForRiderResponse fetchTasksForRider(Long userId, Pageable pageable);
+    TasksForProviderResponse fetchTasksForProvider(Long userId, Pageable pageable);
 
     /**
-     * fetch completed tasks for rider.
+     * fetch completed tasks for provider.
      *
      * @param userId
      * @return
      */
-    PaginatedResponse fetchCompletedTasksForRider(Long userId, Pageable pageable);
+    PaginatedResponse fetchCompletedTasksForProvider(Long userId, Pageable pageable);
 
     /**
-     * fetch assigned tasks for rider.
+     * fetch assigned tasks for provider.
      *
      * @param userId
      * @return
      */
-    PaginatedResponse fetchAssignedTasksForRider(Long userId, Pageable pageable);
+    PaginatedResponse fetchAssignedTasksForProvider(Long userId, Pageable pageable);
+
+    /**
+     * fetch filtered tasks for provider.
+     *
+     * @param userId
+     * @return
+     */
+    PaginatedResponse fetchFilteredTasksForProvider(Long userId, TaskState state, Pageable pageable);
+
+    /**
+     * fetch count of tasks by state for provider.
+     *
+     * @param userId
+     * @return
+     */
+    Long fetchCountOfTasksForProvider(Long userId, TaskState state, Timestamp start, Timestamp end);
 
 }

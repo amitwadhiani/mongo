@@ -15,7 +15,7 @@ public class LoginEventHandler {
     UserService userService;
 
     public void markLoggedInStateForUser(User user, Boolean status) {
-        user.setLoginState(status);
+        user.setIsLoggedIn(status);
         userService.save(user);
     }
 }

@@ -1,8 +1,11 @@
 package co.arctern.api.provider.dto.request;
 
+import co.arctern.api.provider.constant.PaymentState;
 import co.arctern.api.provider.constant.TaskType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Timestamp;
 
 /**
  * Task assigning request body for Admin.
@@ -14,21 +17,32 @@ public class TaskAssignDto {
     private Long userId;
 
     /**
-     *
+     * orderId from order-api.
      */
     private Long refId;
+    private Long taskId;
 
-    private Long orderId;
     private Boolean isPrepaid;
     private TaskType type;
+    private String landmark;
     private String patientPhone;
-    private String paymentState;
-    private Float amount;
+    private String patientName;
+    private String patientAge;
+    private PaymentState paymentState;
+    private String paymentMode;
+    private Double amount;
+    private Timestamp expectedArrivalTime;
 
     /**
      * address related detail.
      */
-    private Long addressId;
+    private String addressName;
+    private Long destAddressId;
+    private Double latitude;
+    private Boolean isSourceAddress;
+    private Long areaId;
+    private Double longitude;
+    private Long sourceAddressId;
     private String city;
     private String houseNumber;
     private String line;

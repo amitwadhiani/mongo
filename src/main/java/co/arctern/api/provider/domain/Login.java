@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Data
@@ -30,6 +31,7 @@ public class Login {
     private Timestamp lastModifiedAt;
 
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'GENERATED' ")
     private OTPState status;
 
     @Column(columnDefinition = "TEXT")
@@ -38,19 +40,30 @@ public class Login {
     @Column(columnDefinition = "TEXT")
     private String picture2;
 
+    @Column(nullable = false)
     private String generatedOTP;
+
+    @Column(nullable = false)
     private String contact;
 
     @Enumerated(EnumType.STRING)
     private UserState userState;
 
+    /**
+     * login or logout
+     */
+    @Column(columnDefinition = "tinyint(1) DEFAULT 1")
     private Boolean loginState;
 
+    @Column
     private Timestamp logoutTime;
 
     @ManyToOne
     @JsonBackReference("user-login")
     User user;
+
+    @OneToMany(mappedBy = "login")
+    private List<LoginFlow> loginFlows;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
@@ -60,6 +73,5 @@ public class Login {
     public Login(Long version) {
         this.version = version;
     }
-
 
 }

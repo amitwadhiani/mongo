@@ -5,66 +5,126 @@ public interface MessageUtil {
     /**
      * success message.
      */
-    public static final StringBuilder SUCCESS_MESSAGE = new StringBuilder("Success");
+    StringBuilder SUCCESS_MESSAGE = new StringBuilder("Success");
 
     /**
      * task accept message.
      */
-    public static final StringBuilder TASK_ACCEPT_MESSAGE = new StringBuilder("Task accepted.");
+    StringBuilder TASK_ACCEPT_MESSAGE = new StringBuilder("Task accepted.");
+
+    /**
+     * task assigned message.
+     */
+    StringBuilder TASK_ASSIGNED_MESSAGE = new StringBuilder("Task assigned.");
 
     /**
      * retry request message.
      */
-    public static final StringBuilder TRY_AGAIN_MESSAGE = new StringBuilder("Please try again.");
+    StringBuilder TRY_AGAIN_MESSAGE = new StringBuilder("Please try again.");
 
     /**
      * task reject message.
      */
-    public static final StringBuilder TASK_REJECT_MESSAGE = new StringBuilder("Task Rejected.");
+    StringBuilder TASK_REJECT_MESSAGE = new StringBuilder("Task Rejected.");
 
     /**
      * task reassign message.
      */
-    public static final StringBuilder TASK_REASSIGN_MESSAGE = new StringBuilder("Task reassigned.");
+    StringBuilder TASK_REASSIGN_MESSAGE = new StringBuilder("Task reassigned.");
 
     /**
      * task cancel message.
      */
-    public static final StringBuilder TASK_CANCEL_MESSAGE = new StringBuilder("Task cancelled.");
+    StringBuilder TASK_CANCEL_MESSAGE = new StringBuilder("Task cancelled.");
 
     /**
      * wrong otp message.
      */
-    public static final String WRONG_OTP_MESSAGE = "Wrong OTP entered. Please Try again.";
+    StringBuilder WRONG_OTP_MESSAGE = new StringBuilder("Wrong OTP entered. Please Try again.");
 
     /**
      * otp expired message.
      */
-    public static final String EXPIRED_OTP_MESSAGE = "OTP expired. Please request an OTP again.";
+    StringBuilder EXPIRED_OTP_MESSAGE = new StringBuilder("OTP expired. Please request an OTP again.");
 
     /**
      * user not logged in message.
      */
-    public static final String USER_NOT_LOGGED_IN_MESSAGE = "User not logged in.";
+    StringBuilder USER_NOT_LOGGED_IN_MESSAGE = new StringBuilder("User not logged in.");
 
     /**
      * invalid role id message.
      */
-    public static final String INVALID_ROLE_ID_MESSAGE = "Invalid role id.";
+    StringBuilder INVALID_ROLE_ID_MESSAGE = new StringBuilder("Invalid role id.");
 
     /**
      * user not found message.
      */
-    public static final String USER_NOT_FOUND_MESSAGE = "User not found .";
+    StringBuilder USER_NOT_FOUND_MESSAGE = new StringBuilder("User not found .");
 
     /**
      * invalid task id message.
      */
-    public static final String INVALID_TASK_ID_MESSAGE = "User not found .";
+    StringBuilder INVALID_TASK_ID_MESSAGE = new StringBuilder("User not found .");
 
     /**
      * request user creation message.
      */
-    public static final String REGISTER_USER_MESSAGE = "No user found. Ask admin for new sign up. ";
+    StringBuilder REGISTER_USER_MESSAGE = new StringBuilder("No user found. Ask admin for new sign up. ");
+
+    /**
+     * invalid offering id message.
+     */
+    StringBuilder INVALID_OFFERING_ID_MESSAGE = new StringBuilder("Invalid id");
+
+    /**
+     * task not assigned or inactive message.
+     */
+    StringBuilder TASK_NOT_ASSIGNED_OR_INACTIVE_MESSAGE = new StringBuilder("Task not assigned/active for this user.");
+
+    /**
+     * only admin login allowed message.
+     */
+    StringBuilder ONLY_ADMIN_LOGIN_ALLOWED_MESSAGE = new StringBuilder("Only Admin login allowed.");
+
+    /**
+     * invalid area id message.
+     */
+    StringBuilder INVALID_AREA_ID_MESSAGE = new StringBuilder("Invalid area Id.");
+
+    /**
+     * rating entity already generated for task id message.
+     */
+    StringBuilder RATING_ALREADY_GENERATED_MESSAGE = new StringBuilder("OTP already generated for this task. Complete the task using OTP.");
+
+    /**
+     * Task already started message.
+     */
+    StringBuilder TASK_ALREADY_STARTED_MESSAGE = new StringBuilder("Task has already been started.");
+
+    /**
+     * User already exists message by username.
+     */
+    StringBuilder USERNAME_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this username already exists. ");
+
+    /**
+     * User already exists message by phone.
+     */
+    StringBuilder PHONE_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this phone already exists. ");
+
+    /**
+     * User already exists message by email.
+     */
+    StringBuilder EMAIL_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this email already exists. ");
+
+    /**
+     * Task cannot be reassigned to the same user message .
+     */
+    StringBuilder TASK_SAME_USER_MESSAGE = new StringBuilder("Task cannot be reassigned to the same user.");
+
+    /**
+     * No active user exists for this task message.
+     */
+    StringBuilder NO_ACTIVE_USER_MESSAGE = new StringBuilder("No active user for this task.");
 
 }
