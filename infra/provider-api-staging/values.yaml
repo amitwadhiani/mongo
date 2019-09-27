@@ -64,7 +64,7 @@ spring:
     consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/provider-consumer-updates-simple-staging"
     accessKey: "AKIA2YRBSIDHAXCGRJ6T"
     secretKey: "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"
-  rabbitmq:
+  rabbitmq:3
     host: "rabbitmq-rabbitmq-ha.default.svc.cluster.local"
     port: "5672"
     username: "test"
