@@ -173,7 +173,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginatedResponse fetchAll(Pageable pageable) {
-        List<User> users = userDao.findByIsActiveTrue();
+        List<User> users = userDao.fetchActiveUsers();
         return PaginationUtil.returnPaginatedBody(
                 users.stream()
                         .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN")))
@@ -185,7 +185,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginatedResponse fetchAllByTaskType(TaskType taskType, Pageable pageable) {
-        List<User> users = userDao.findByIsActiveTrue();
+        List<User> users = userDao.fetchActiveUsers();
         return PaginationUtil.returnPaginatedBody(
                 users
                         .stream()
