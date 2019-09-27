@@ -35,7 +35,7 @@ public class UserController {
      */
     @PostMapping("/create")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> createNewUser(@RequestBody UserRequestDto dto) {
         return ResponseEntity.ok(userService.createUser(dto));
     }
