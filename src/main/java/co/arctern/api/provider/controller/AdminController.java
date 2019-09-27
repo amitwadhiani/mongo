@@ -169,5 +169,4 @@ public class AdminController {
     public ResponseEntity<PaginatedResponse> fetchAllUsers(Pageable pageable) {
         return ResponseEntity.ok(userService.fetchAllUsersByAdmin(pageable));
     }
-
 }
