@@ -59,12 +59,12 @@ spring:
     url: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_provider?useSSL=false&createDatabaseIfNotExist=true"
     slaveUrl: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_provider?useSSL=false&createDatabaseIfNotExist=true"
     username: "root"
-    password: "uoGsYp2WYR"
+    password: "2q1I447joT"
   sqs:
     consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/provider-consumer-updates-simple-staging"
     accessKey: "AKIA2YRBSIDHAXCGRJ6T"
     secretKey: "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"
-  rabbitmq:3
+  rabbitmq:
     host: "rabbitmq-rabbitmq-ha.default.svc.cluster.local"
     port: "5672"
     username: "test"
