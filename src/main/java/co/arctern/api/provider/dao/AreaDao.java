@@ -22,5 +22,10 @@ public interface AreaDao extends PagingAndSortingRepository<Area, Long> {
      */
     List<Area> findByIdIn(List<Long> areaIds);
 
+    /**
+     * fetch active areas.
+     * @param pageable
+     * @return
+     */
     Page<Area> findByIsActiveTrue(Pageable pageable);
 }

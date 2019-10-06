@@ -36,7 +36,7 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
     UserTask findByIsActiveTrueAndTaskId(Long taskId);
 
     /**
-     * fetch users filtered by task state and within a time range.
+     * fetch userTasks filtered by task state and within a time range.
      *
      * @param userId
      * @param state
@@ -48,7 +48,7 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
                                                                                                                    Timestamp start, Timestamp end);
 
     /**
-     * fetch users through task state and greater than a time.
+     * fetch userTasks through task state and greater than a time.
      *
      * @param userId
      * @param state
@@ -57,10 +57,17 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskStateAndCreatedAtGreaterThanEqual(Long userId, TaskState state, Timestamp start);
 
+    /**
+     * fetch userTasks through userId and taskState.
+     *
+     * @param userId
+     * @param state
+     * @return
+     */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskState(Long userId, TaskState state);
 
     /**
-     * fetch count of tasks for a user filtered by task creation time.
+     * fetch count of userTasks for a user filtered by task creation time.
      *
      * @param userId
      * @param state
@@ -72,7 +79,7 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
             Long userId, TaskState state, Timestamp start, Timestamp end);
 
     /**
-     * fetch tasks filtered by task states and within a time range.
+     * fetch userTasks filtered by task states and within a time range.
      *
      * @param states
      * @param start
@@ -85,6 +92,7 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
 
     /**
      * to fetch userTasks for cron.
+     *
      * @param createdAt
      * @param state
      * @return
