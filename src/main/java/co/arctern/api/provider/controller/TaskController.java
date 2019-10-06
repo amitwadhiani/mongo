@@ -104,6 +104,12 @@ public class TaskController {
         return ResponseEntity.ok(taskService.startTask(taskId, userId));
     }
 
+    /**
+     * accept or reject task api.
+     * @param state
+     * @param taskId
+     * @return
+     */
     @PostMapping("/accept-reject")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -148,7 +154,7 @@ public class TaskController {
     }
 
     /**
-     * create new task api.
+     * create new task api. (called from order-api)
      *
      * @param dto
      * @return
@@ -161,6 +167,12 @@ public class TaskController {
         return ResponseEntity.ok(taskService.fetchProjectedResponseFromPost(dto));
     }
 
+    /**
+     * cancel tasks related to an order api. (called from order-api)
+     * @param taskIds
+     * @param userId
+     * @return
+     */
     @PostMapping("/cancel/all")
     @CrossOrigin
     @PreAuthorize("isAuthenticated()")

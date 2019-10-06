@@ -5,7 +5,6 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.TaskDao;
-import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;

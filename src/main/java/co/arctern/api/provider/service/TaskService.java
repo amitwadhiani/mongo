@@ -371,6 +371,12 @@ public interface TaskService extends MessageUtil {
                                         String patientFilterValue,
                                         Pageable pageable);
 
+    /**
+     * fetch paginated response for other methods.
+     * @param tasks
+     * @param pageable
+     * @return
+     */
     public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable);
 
     /**
@@ -388,6 +394,12 @@ public interface TaskService extends MessageUtil {
      */
     public Iterable<Task> saveAll(List<Task> tasks);
 
+    /**
+     * fetch list of all tasks.
+     *
+     * @param taskIds
+     * @return
+     */
     public List<Task> fetchAllTasks(List<Long> taskIds);
 
 }

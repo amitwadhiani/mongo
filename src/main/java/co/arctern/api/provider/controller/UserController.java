@@ -65,6 +65,12 @@ public class UserController {
         return ResponseEntity.ok((taskType == null) ? userService.fetchAll(pageable) : userService.fetchAllByTaskType(taskType, pageable));
     }
 
+    /**
+     * fetch task details from taskId api.
+     *
+     * @param taskId
+     * @return
+     */
     @GetMapping("/task/detail")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
