@@ -9,7 +9,7 @@ import org.springframework.data.rest.core.config.Projection;
 @Projection(types = {Role.class})
 public interface Roles {
 
-     Long getId();
+    Long getId();
 
     String getRole();
 

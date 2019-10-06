@@ -13,11 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 public class HomePageResponse {
 
-    List<TasksForProvider> assignedTasks;
-    Integer assignedTasksCount;
-    Integer acceptedTasksCount;
-    Integer completedTasksCount;
-    Integer startedTasksCount;
-    List<TasksForProvider> startedTasks;
-    Integer allTasksCount;
+    private List<TasksForProvider> assignedTasks;
+    private Integer assignedTasksCount;
+    private Integer acceptedTasksCount;
+    private Integer completedTasksCount;
+    private Integer startedTasksCount;
+    private List<TasksForProvider> startedTasks;
+    private Integer allTasksCount;
 }

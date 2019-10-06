@@ -10,20 +10,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-
+/**
+ * sender for push notifications.
+ */
 @Component
 @Slf4j
 public class Sender {
 
+    private final RabbitTemplate rabbitTemplate;
+
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    public Sender(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
 
     @Value("${spring.rabbitmq.order-event-name:order-notification-updates-simple}")
     public String orderNotificationQueueName;
 
+    /**
+     * to send notification for assigned task by admin to the user.
+     *
+     * @param user
+     * @throws JsonProcessingException
+     */
     public void sendAdminAssignTaskNotification(User user) throws JsonProcessingException {
         String object = new ObjectMapper().writeValueAsString(new ProviderAssignTaskEvent(user));
-        log.info("Sending message for Assign task : " + object);
+        log.info("Sending message for Assigned task : " + object);
         this.rabbitTemplate.convertAndSend(orderNotificationQueueName, object);
     }
 
