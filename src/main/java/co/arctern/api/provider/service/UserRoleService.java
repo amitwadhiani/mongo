@@ -1,5 +1,6 @@
 package co.arctern.api.provider.service;
 
+import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.domain.User;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +15,5 @@ public interface UserRoleService {
      * @param user
      * @param roleIds
      */
-    public void createUserRoles(User user, List<Long> roleIds);
+    public List<Role> createUserRoles(User user, List<Long> roleIds);
 }

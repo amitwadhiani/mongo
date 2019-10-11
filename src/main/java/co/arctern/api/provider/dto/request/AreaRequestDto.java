@@ -14,5 +14,6 @@ public class AreaRequestDto {
     private Double latitude;
     private Double longitude;
     private String pinCode;
+    private Long clusterId;
     private Boolean isActive;
 }

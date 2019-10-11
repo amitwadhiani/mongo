@@ -3,6 +3,7 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.constant.Gender;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.UserDao;
+import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserOffering;
 import co.arctern.api.provider.domain.UserTask;
@@ -148,8 +149,9 @@ public class UserServiceImpl implements UserService {
         }
         if (phone != null) user.setPhone(phone);
         user = userDao.save(user);
-        if (!org.springframework.util.CollectionUtils.isEmpty(roleIds)) userRoleService.createUserRoles(user, roleIds);
-        if (!org.springframework.util.CollectionUtils.isEmpty(areaIds)) areaService.setAreasToUser(user, areaIds);
+        List<Role> roles = (!org.springframework.util.CollectionUtils.isEmpty(roleIds)) ?
+                userRoleService.createUserRoles(user, roleIds) : user.getUserRoles().stream().map(a -> a.getRole()).collect(Collectors.toList());
+        areaService.setAreasToUser(user, areaIds, roles, dto.getClusterId());
         if (!CollectionUtils.isEmpty(offeringIds)) offeringService.setOfferingsToUser(user, offeringIds);
         return SUCCESS_MESSAGE;
     }

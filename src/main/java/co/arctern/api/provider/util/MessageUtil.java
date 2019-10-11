@@ -98,6 +98,11 @@ public interface MessageUtil {
     StringBuilder INVALID_AREA_ID_MESSAGE = new StringBuilder("Invalid area Id.");
 
     /**
+     * invalid cluster id message.
+     */
+    StringBuilder INVALID_CLUSTER_ID_MESSAGE = new StringBuilder("Invalid cluster Id.");
+
+    /**
      * rating entity already generated for task id message.
      */
     StringBuilder RATING_ALREADY_GENERATED_MESSAGE = new StringBuilder("OTP already generated for this task. Complete the task using OTP.");

@@ -150,7 +150,12 @@ public interface TaskService extends MessageUtil {
      * @param pageable
      * @return
      */
-    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Pageable pageable);
+    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType type, Pageable pageable);
+
+    public Page<TasksForProvider> fetchTasksByProvider(List<Long> ids, TaskType type, Pageable pageable);
+
+    public Page<TasksForProvider> fetchTasksByTypeAndProvider(List<Long> ids, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
 
     /**
      * fetch tasks by offering type within a time range.
@@ -172,7 +177,7 @@ public interface TaskService extends MessageUtil {
      * @param pageable
      * @return
      */
-    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
+    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
      * see cancellation requests for Admin.
@@ -373,6 +378,7 @@ public interface TaskService extends MessageUtil {
 
     /**
      * fetch paginated response for other methods.
+     *
      * @param tasks
      * @param pageable
      * @return

@@ -65,13 +65,15 @@ public class AdminController {
      * view tasks for admin's / particular areas api.
      */
     @CrossOrigin
-    @GetMapping("/task/by-area")
+    @GetMapping("/task/group-by")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Page<TasksForProvider>> fetchTasksByArea(@RequestParam("areaIds") List<Long> areaIds,
-                                                                   @RequestParam("start") Timestamp start,
-                                                                   @RequestParam("end") Timestamp end,
+    public ResponseEntity<Page<TasksForProvider>> fetchTasksByArea(@RequestParam("ids") List<Long> ids,
+                                                                   @RequestParam(value = "value", required = false, defaultValue = "provider") String value,
+                                                                   @RequestParam(value = "start", required = false) Timestamp start,
+                                                                   @RequestParam(value = "taskType", required = false, defaultValue = "SAMPLE_PICKUP") TaskType taskType,
+                                                                   @RequestParam(value = "end", required = false) Timestamp end,
                                                                    Pageable pageable) {
-        return ResponseEntity.ok(adminService.fetchTasksByArea(areaIds, start, end, pageable));
+        return ResponseEntity.ok(adminService.fetchTasksAndFilter(ids, taskType, value, start, end, pageable));
     }
 
     /**

@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
@@ -36,6 +37,10 @@ public interface UserTaskService extends MessageUtil {
      * @return
      */
     public Page<UserTask> fetchTasksForUser(Long userId, TaskState state, Pageable pageable);
+
+    public Page<UserTask> fetchTasksForProvider(List<Long> ids, TaskState state, TaskType type, Pageable pageable);
+
+    public Page<UserTask> fetchTasksForProvider(List<Long> ids, TaskState state, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
      * find active user-task ( only one possible at a time for particular task ).
