@@ -72,7 +72,7 @@ public class TaskController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> assignTaskToUser(@RequestParam("taskIds") List<Long> taskIds,
                                                           @RequestParam(value = "userId") Long userId) {
-        return ResponseEntity.ok(taskService.assignTask(taskIds, userId));
+        return ResponseEntity.ok(taskService.assignTasks(taskIds, userId));
     }
 
     /**
