@@ -138,9 +138,9 @@ public class TaskServiceImpl implements TaskService {
             userTaskService.markInactive(task);
             userTaskService.createUserTask(userService.fetchUser(userId), task);
             taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
-            User user = userService.fetchUser(userId);
-            sender.sendAdminAssignTaskNotification(user);
         });
+        User user = userService.fetchUser(userId);
+        sender.sendAdminAssignTaskNotification(user);
         return TASK_ASSIGNED_MESSAGE;
     }
 
