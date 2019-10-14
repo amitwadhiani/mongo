@@ -35,7 +35,7 @@ public class Sender {
      */
     public void sendAdminAssignTaskNotification(User user) throws JsonProcessingException {
         String object = new ObjectMapper().writeValueAsString(new ProviderAssignTaskEvent(user));
-        log.info("Sending message for Assigned task : " + object);
+        log.info("Sending message for Assigned tasks : " + object);
         this.rabbitTemplate.convertAndSend(orderNotificationQueueName, object);
     }
 
