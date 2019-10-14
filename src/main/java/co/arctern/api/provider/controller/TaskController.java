@@ -63,16 +63,16 @@ public class TaskController {
     /**
      * assign tasks to user api.
      *
-     * @param taskId
+     * @param taskIds
      * @param userId
      * @return
      */
     @PostMapping("/assign")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<StringBuilder> assignTaskToUser(@RequestParam("taskId") Long taskId,
+    public ResponseEntity<StringBuilder> assignTaskToUser(@RequestParam("taskIds") List<Long> taskIds,
                                                           @RequestParam(value = "userId") Long userId) {
-        return ResponseEntity.ok(taskService.assignTask(taskId, userId));
+        return ResponseEntity.ok(taskService.assignTask(taskIds, userId));
     }
 
     /**

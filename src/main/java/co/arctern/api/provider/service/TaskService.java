@@ -25,6 +25,8 @@ public interface TaskService extends MessageUtil {
      */
     public Task fetchTask(Long taskId);
 
+    public List<Task> fetchTasks(List<Long> taskIds);
+
     /**
      * create task and assign user to it .
      *
@@ -45,11 +47,11 @@ public interface TaskService extends MessageUtil {
     /**
      * assign task to user.
      *
-     * @param taskId
+     * @param taskIds
      * @param userId
      * @return
      */
-    public StringBuilder assignTask(Long taskId, Long userId);
+    public StringBuilder assignTasks(List<Long> taskIds, Long userId);
 
     /**
      * cancel task and mark inactive -> By Admin.
