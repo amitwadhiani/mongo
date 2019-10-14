@@ -15,6 +15,7 @@ import co.arctern.api.provider.queue.Sender;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.DateUtil;
 import co.arctern.api.provider.util.PaginationUtil;
+import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<Task> fetchTasks(List<Long> taskIds) {
+        return taskDao.findByIdIn(taskIds);
+    }
+
+    @Override
     public List<Task> fetchAllTasks(List<Long> taskIds) {
         return taskDao.findByIdIn(taskIds);
     }
@@ -114,22 +120,27 @@ public class TaskServiceImpl implements TaskService {
     /**
      * assign task to user.
      *
-     * @param taskId
+     * @param taskIds
      * @param userId
      * @return
      */
     @Override
     @Transactional
     @SneakyThrows
-    public StringBuilder assignTask(Long taskId, Long userId) {
-        Task task = this.fetchTask(taskId);
-        task.setState(TaskState.ASSIGNED);
-        task = taskDao.save(task);
-        userTaskService.markInactive(task);
-        userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
-        User user = userService.fetchUser(userId);
-        sender.sendAdminAssignTaskNotification(user);
+    public StringBuilder assignTasks(List<Long> taskIds, Long userId) {
+        List<Task> tasks = this.fetchTasks(taskIds);
+        tasks.stream().forEach(task ->
+        {
+            task.setState(TaskState.ASSIGNED);
+        });
+        tasks = Lists.newArrayList(taskDao.saveAll(tasks));
+        tasks.stream().forEach(task -> {
+            userTaskService.markInactive(task);
+            userTaskService.createUserTask(userService.fetchUser(userId), task);
+            taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
+            User user = userService.fetchUser(userId);
+            sender.sendAdminAssignTaskNotification(user);
+        });
         return TASK_ASSIGNED_MESSAGE;
     }
 
