@@ -6,7 +6,6 @@ import co.arctern.api.provider.domain.Task;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
-import javax.validation.Valid;
 import java.sql.Timestamp;
 
 /**
@@ -39,7 +38,7 @@ public interface TasksForProvider {
 
     Addresses getDestinationAddress();
 
-    @Value("#{@userTaskServiceImpl.findActiveUserTask(target.getId()).getUser()}")
+    @Value("#{@userTaskServiceImpl.findActiveUserFromUserTask(target.getId())}")
     Users getUser();
 
 

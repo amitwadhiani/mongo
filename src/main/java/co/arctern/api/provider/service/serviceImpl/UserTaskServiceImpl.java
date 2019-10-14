@@ -61,6 +61,12 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     @Override
+    public User findActiveUserFromUserTask(Long taskId) {
+        UserTask userTask = userTaskDao.findByIsActiveTrueAndTaskId(taskId);
+        return (userTask == null) ? null : userTask.getUser();
+    }
+
+    @Override
     public Long countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(Long userId, TaskState state, Timestamp start, Timestamp end) {
         return userTaskDao.countByIsActiveTrueAndUserIdAndTaskStateAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(userId,
                 state, start, end);

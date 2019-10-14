@@ -17,6 +17,8 @@ public interface Addresses {
 
     String getPinCode();
 
+    Areas getArea();
+
     String getCity();
 
     Boolean getIsSourceAddress();
