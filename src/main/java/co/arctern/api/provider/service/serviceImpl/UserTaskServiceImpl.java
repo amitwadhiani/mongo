@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.UserTaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
@@ -84,5 +85,16 @@ public class UserTaskServiceImpl implements UserTaskService {
     public List<UserTask> fetchUserTasksForCron() {
         return userTaskDao.fetchUserTasksForCron(DateUtil.fetchTimestampFromCurrentTimestamp(20), TaskState.ASSIGNED);
     }
+
+    @Override
+    public Page<UserTask> fetchTasksForProvider(List<Long> ids, TaskState state, TaskType type, Pageable pageable) {
+        return userTaskDao.findByIsActiveTrueAndUserIdInAndTaskType(ids, type, pageable);
+    }
+
+    @Override
+    public Page<UserTask> fetchTasksForProvider(List<Long> ids, TaskState state, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
+        return userTaskDao.findByIsActiveTrueAndUserIdInAndTaskTypeAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(ids, type, start, end, pageable);
+    }
+
 
 }

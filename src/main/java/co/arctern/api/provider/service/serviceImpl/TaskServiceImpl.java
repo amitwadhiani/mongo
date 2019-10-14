@@ -265,8 +265,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Pageable pageable) {
-        return taskDao.findByDestinationAddressAreaIdIn(areaIds, pageable).map(
+    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType taskType, Pageable pageable) {
+        return taskDao.findByDestinationAddressAreaIdInAndType(areaIds, taskType, pageable).map(
                 a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }
 
@@ -277,8 +277,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.findByDestinationAddressAreaIdInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, start, end, pageable).map(
+    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType taskType, Timestamp start, Timestamp end, Pageable pageable) {
+        return taskDao.findByDestinationAddressAreaIdInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, taskType, start, end, pageable).map(
                 a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }
 
@@ -454,4 +454,13 @@ public class TaskServiceImpl implements TaskService {
     public Iterable<Task> saveAll(List<Task> tasks) {
         return taskDao.saveAll(tasks);
     }
+
+    public Page<TasksForProvider> fetchTasksByProvider(List<Long> ids, TaskType type, Pageable pageable) {
+        return userTaskService.fetchTasksForProvider(ids, null, type, pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a));
+    }
+
+    public Page<TasksForProvider> fetchTasksByTypeAndProvider(List<Long> ids, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
+        return userTaskService.fetchTasksForProvider(ids, null, type, start, end, pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a));
+    }
+
 }

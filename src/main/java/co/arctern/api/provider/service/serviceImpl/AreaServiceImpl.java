@@ -3,11 +3,14 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.AreaDao;
 import co.arctern.api.provider.dao.UserAreaDao;
 import co.arctern.api.provider.domain.Area;
+import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserArea;
 import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.service.AreaService;
+import co.arctern.api.provider.service.ClusterService;
+import co.arctern.api.provider.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,32 +29,47 @@ public class AreaServiceImpl implements AreaService {
 
     private final AreaDao areaDao;
     private final UserAreaDao userAreaDao;
+    private final RoleService roleService;
+    private final ClusterService clusterService;
     private final ProjectionFactory projectionFactory;
 
     @Autowired
     public AreaServiceImpl(AreaDao areaDao,
                            UserAreaDao userAreaDao,
-                           ProjectionFactory projectionFactory) {
+                           ProjectionFactory projectionFactory,
+                           RoleService roleService,
+                           ClusterService clusterService) {
         this.areaDao = areaDao;
         this.userAreaDao = userAreaDao;
         this.projectionFactory = projectionFactory;
+        this.roleService = roleService;
+        this.clusterService = clusterService;
     }
 
     @Override
-    public void setAreasToUser(User user, List<Long> areaIds) {
+    public void setAreasToUser(User user, List<Long> areaIds, List<Role> roles, Long clusterId) {
+        List<Area> areas = new ArrayList<>();
+        if (!roles.contains("ROLE_ADMIN")) {
+            if (roles.contains("ROLE_CLUSTER_MANAGER")) {
+                areas = areaDao.fetchActiveAreasByCluster(clusterId);
+            } else {
+                areas = areaDao.findByIdIn(areaIds);
+            }
+        } else {
+            areas = areaDao.fetchActiveAreas();
+        }
         List<UserArea> userAreas = new ArrayList<>();
         List<UserArea> existingUserAreas = user.getUserAreas();
         if (!CollectionUtils.isEmpty(existingUserAreas)) {
             userAreaDao.deleteAll(existingUserAreas);
         }
-        areaDao.findByIdIn(areaIds)
-                .forEach(a -> {
-                    UserArea userArea = new UserArea();
-                    userArea.setArea(a);
-                    userArea.setIsActive(true);
-                    userArea.setUser(user);
-                    userAreas.add(userArea);
-                });
+        areas.forEach(a -> {
+            UserArea userArea = new UserArea();
+            userArea.setArea(a);
+            userArea.setIsActive(true);
+            userArea.setUser(user);
+            userAreas.add(userArea);
+        });
         userAreaDao.saveAll(userAreas);
     }
 
@@ -62,7 +80,7 @@ public class AreaServiceImpl implements AreaService {
         dtos.stream().forEach(dto ->
         {
             Area area = new Area();
-            area.setCluster(dto.getCluster());
+            area.setCluster(clusterService.fetchById(dto.getClusterId()));
             area.setIsActive(true);
             area.setLatitude(dto.getLatitude());
             area.setLongitude(dto.getLongitude());

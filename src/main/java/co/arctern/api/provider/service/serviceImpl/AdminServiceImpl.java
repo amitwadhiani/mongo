@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.OfferingType;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.service.AdminService;
@@ -38,9 +39,15 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable) {
-        return (start == null && end == null) ? taskService.fetchTasksByArea(areaIds, pageable)
-                : taskService.fetchTasksByArea(areaIds, start, end, pageable);
+    public Page<TasksForProvider> fetchTasksAndFilter(List<Long> ids, TaskType taskType, String value, Timestamp start, Timestamp end, Pageable pageable) {
+        switch (value) {
+            case "area":
+                return (start == null && end == null) ? taskService.fetchTasksByArea(ids, taskType, pageable)
+                        : taskService.fetchTasksByArea(ids, taskType, start, end, pageable);
+            default:
+                return (start == null && end == null) ? taskService.fetchTasksByProvider(ids, taskType, pageable)
+                        : taskService.fetchTasksByTypeAndProvider(ids, taskType, start, end, pageable);
+        }
     }
 
     @Override
@@ -48,7 +55,7 @@ public class AdminServiceImpl implements AdminService {
         return PaginationUtil.returnPaginatedBody(userService.fetchUsersByOffering(offeringIds, pageable), pageable);
     }
 
-   @Override
+    @Override
     public Page<TasksForProvider> fetchTasksByOffering(OfferingType type, Timestamp start, Timestamp end, Pageable pageable) {
         return (start == null && end == null) ? taskService.fetchTasksByType(type, pageable)
                 : taskService.fetchTasksByType(type, start, end, pageable);
