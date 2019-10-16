@@ -48,7 +48,7 @@ public class ReasonServiceImpl implements ReasonService {
     }
 
     @Override
-    public StringBuilder assignReasons(Task task, List<Long> reasonIds) {
+    public StringBuilder assignReasons(Task task, List<Long> reasonIds, TaskStateFlowState state) {
         List<TaskReason> taskReasons = new ArrayList<>();
         reasonDao.findByIdIn(reasonIds).stream().forEach(reason ->
         {
@@ -56,7 +56,7 @@ public class ReasonServiceImpl implements ReasonService {
             taskReason.setTask(task);
             taskReason.setReason(reason);
             taskReason.setIsActive(true);
-            taskReason.setState(TaskStateFlowState.CANCELLED);
+            taskReason.setState(state);
             taskReasons.add(taskReason);
         });
         taskReasonDao.saveAll(taskReasons);

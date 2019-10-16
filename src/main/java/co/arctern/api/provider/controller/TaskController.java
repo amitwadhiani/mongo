@@ -106,6 +106,7 @@ public class TaskController {
 
     /**
      * accept or reject task api.
+     *
      * @param state
      * @param taskId
      * @return
@@ -114,8 +115,9 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> acceptOrRejectTask(@RequestParam(value = "state", required = false, defaultValue = "ACCEPTED") TaskStateFlowState state,
-                                                            @RequestParam(value = "taskId", required = false) Long taskId) {
-        return ResponseEntity.ok(taskService.acceptOrRejectAssignedTask(taskId, state));
+                                                            @RequestParam(value = "taskId", required = false) Long taskId,
+                                                            @RequestParam(value = "reasonIds", required = false) List<Long> reasonIds) {
+        return ResponseEntity.ok(taskService.acceptOrRejectAssignedTask(taskId, reasonIds, state));
     }
 
 
@@ -169,6 +171,7 @@ public class TaskController {
 
     /**
      * cancel tasks related to an order api. (called from order-api)
+     *
      * @param taskIds
      * @param userId
      * @return

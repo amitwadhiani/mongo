@@ -96,13 +96,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskStateFlowState state) {
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, List<Long> reasonIds, TaskStateFlowState state) {
         Task task = fetchTask(taskId);
         Long userId = userTaskService.findActiveUserTask(taskId).getUser().getId();
         taskStateFlowService.createFlow(task, state, userId);
         task.setState((state.equals(TaskStateFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.REJECTED));
         if (state.equals(TaskStateFlowState.REJECTED)) {
             userTaskService.markInactive(task);
+            reasonService.assignReasons(task, reasonIds, TaskStateFlowState.REJECTED);
         }
         taskDao.save(task);
         return SUCCESS_MESSAGE;
@@ -244,7 +245,7 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         task.setCancellationRequested(cancelRequest);
-        reasonService.assignReasons(task, reasonIds);
+        reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLED);
         return SUCCESS_MESSAGE;
     }
 
