@@ -24,6 +24,7 @@ public class TaskAssignDto {
 
     private Boolean isPrepaid;
     private TaskType type;
+    private String source;
     private String landmark;
     private String patientPhone;
     private String patientName;
