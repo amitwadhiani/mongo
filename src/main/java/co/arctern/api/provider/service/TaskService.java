@@ -79,10 +79,11 @@ public interface TaskService extends MessageUtil {
      * accept/reject assigned task -> By rider.
      *
      * @param taskId
+     * @param reasonIds
      * @param state
      * @return
      */
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskStateFlowState state);
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, List<Long> reasonIds, TaskStateFlowState state);
 
     /**
      * fetch completed tasks for user.
