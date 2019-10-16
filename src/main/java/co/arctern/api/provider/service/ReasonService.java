@@ -30,10 +30,10 @@ public interface ReasonService extends MessageUtil {
 
     /**
      * fetch all reasons for declining the task/requesting cancellation.
-     *
+     * @param isAdmin
      * @return
      */
-    List<Reasons> fetchAll();
+    List<Reasons> fetchAll(Boolean isAdmin);
 
     StringBuilder edit(List<ReasonEditBody> bodies);
 }

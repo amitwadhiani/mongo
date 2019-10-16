@@ -49,8 +49,8 @@ public class ReasonController {
     @CrossOrigin
     @GetMapping("/fetch/all")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
-    public ResponseEntity<?> fetchAllReasons() {
-        return ResponseEntity.ok(reasonService.fetchAll());
+    public ResponseEntity<?> fetchAllReasons(@RequestParam(value = "isAdmin", required = false, defaultValue = "true") Boolean isAdmin) {
+        return ResponseEntity.ok(reasonService.fetchAll(isAdmin));
     }
 
 }
