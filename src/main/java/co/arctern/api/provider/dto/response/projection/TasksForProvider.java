@@ -20,6 +20,8 @@ public interface TasksForProvider {
 
     String getCode();
 
+    String getSource();
+
     Timestamp getExpectedArrivalTime();
 
     Timestamp getCreatedAt();
