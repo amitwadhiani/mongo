@@ -100,10 +100,9 @@ public class TaskServiceImpl implements TaskService {
         Task task = fetchTask(taskId);
         Long userId = userTaskService.findActiveUserTask(taskId).getUser().getId();
         taskStateFlowService.createFlow(task, state, userId);
-        task.setState((state.equals(TaskStateFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
+        task.setState((state.equals(TaskStateFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.REJECTED));
         if (state.equals(TaskStateFlowState.REJECTED)) {
             userTaskService.markInactive(task);
-            taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         }
         taskDao.save(task);
         return SUCCESS_MESSAGE;
@@ -177,11 +176,10 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time) {
         Task task = fetchTask(taskId);
-        task.setState(TaskState.OPEN);
+        task.setState(TaskState.RESCHEDULED);
         task.setExpectedArrivalTime(time);
         userTaskService.markInactive(task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.RESCHEDULED, userId);
-        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskDao.save(task);
         return SUCCESS_MESSAGE;
     }
