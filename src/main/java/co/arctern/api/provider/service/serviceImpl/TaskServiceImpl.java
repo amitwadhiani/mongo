@@ -314,6 +314,7 @@ public class TaskServiceImpl implements TaskService {
         task.setPatientId(dto.getPatientId());
         task.setType(dto.getType());
         task.setRefId(dto.getRefId());
+        task.setSource(dto.getSource());
         task.setCancellationRequested(false);
         task.setIsActive(true);
         task.setExpectedArrivalTime(dto.getExpectedArrivalTime());
