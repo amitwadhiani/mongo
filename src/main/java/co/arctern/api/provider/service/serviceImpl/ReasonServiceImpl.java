@@ -5,6 +5,7 @@ import co.arctern.api.provider.dao.TaskReasonDao;
 import co.arctern.api.provider.domain.Reason;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.TaskReason;
+import co.arctern.api.provider.dto.request.ReasonEditBody;
 import co.arctern.api.provider.dto.response.projection.Reasons;
 import co.arctern.api.provider.service.ReasonService;
 import com.google.common.collect.Lists;
@@ -63,5 +64,17 @@ public class ReasonServiceImpl implements ReasonService {
     public List<Reasons> fetchAll() {
         return Lists.newArrayList(reasonDao.findAll()).stream().map(reason -> projectionFactory.createProjection(Reasons.class, reason))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public StringBuilder edit(List<ReasonEditBody> bodies) {
+        List<Reason> reasonsToSave = new ArrayList<>();
+        bodies.stream().forEach(a -> {
+            Reason reason = reasonDao.findById(a.getReasonId()).get();
+            reason.setIsActive(a.getIsActive());
+            reasonsToSave.add(reason);
+        });
+        reasonDao.saveAll(reasonsToSave);
+        return SUCCESS_MESSAGE;
     }
 }

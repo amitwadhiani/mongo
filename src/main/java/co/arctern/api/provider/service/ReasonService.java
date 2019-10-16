@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.domain.Task;
+import co.arctern.api.provider.dto.request.ReasonEditBody;
 import co.arctern.api.provider.dto.response.projection.Reasons;
 import co.arctern.api.provider.util.MessageUtil;
 
@@ -28,4 +29,6 @@ public interface ReasonService extends MessageUtil {
      * @return
      */
     List<Reasons> fetchAll();
+
+    StringBuilder edit(List<ReasonEditBody> bodies);
 }
