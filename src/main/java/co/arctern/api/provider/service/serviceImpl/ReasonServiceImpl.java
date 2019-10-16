@@ -1,5 +1,6 @@
 package co.arctern.api.provider.service.serviceImpl;
 
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import co.arctern.api.provider.dao.ReasonDao;
 import co.arctern.api.provider.dao.TaskReasonDao;
 import co.arctern.api.provider.domain.Reason;
@@ -54,6 +55,8 @@ public class ReasonServiceImpl implements ReasonService {
             TaskReason taskReason = new TaskReason();
             taskReason.setTask(task);
             taskReason.setReason(reason);
+            taskReason.setIsActive(true);
+            taskReason.setState(TaskStateFlowState.CANCELLED);
             taskReasons.add(taskReason);
         });
         taskReasonDao.saveAll(taskReasons);
