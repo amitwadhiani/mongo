@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,6 +73,7 @@ public class ReasonServiceImpl implements ReasonService {
     }
 
     @Override
+    @Transactional
     public StringBuilder edit(List<ReasonEditBody> bodies) {
         List<Reason> reasonsToSave = new ArrayList<>();
         bodies.stream().forEach(a -> {

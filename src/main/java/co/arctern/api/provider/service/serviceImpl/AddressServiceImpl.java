@@ -43,13 +43,14 @@ public class AddressServiceImpl implements AddressService {
         address.setLine(dto.getLine());
         address.setLatitude(dto.getLatitude());
         address.setLongitude(dto.getLongitude());
-        address.setIsSourceAddress((dto.getIsSourceAddress() == null) ? false : dto.getIsSourceAddress());
+        Boolean isSourceAddress = dto.getIsSourceAddress();
+        address.setIsSourceAddress((isSourceAddress == null) ? false : isSourceAddress);
         address.setLocality(dto.getLocality());
         address.setLandmark(dto.getLandmark());
         address.setPinCode(dto.getPinCode());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
-//        address.setArea(areaService.fetchById(dto.getAreaId()));
+        if (isSourceAddress != null && !isSourceAddress) address.setArea(areaService.fetchById(dto.getAreaId()));
         return addressDao.save(address);
     }
 }
