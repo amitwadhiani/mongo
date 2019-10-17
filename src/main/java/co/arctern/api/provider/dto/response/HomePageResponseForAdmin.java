@@ -18,6 +18,8 @@ public class HomePageResponseForAdmin {
     private PaginatedResponse startedTasks;
     private PaginatedResponse cancelledTasks;
     private PaginatedResponse cancelRequests;
+    private PaginatedResponse rejectedTasks;
+    private PaginatedResponse rescheduledTasks;
     private Long tasksCount;
     private Long openTasksCount;
     private Long acceptedTasksCount;
@@ -26,5 +28,7 @@ public class HomePageResponseForAdmin {
     private Long cancelRequestsCount;
     private Long startedTasksCount;
     private Long cancelledTasksCount;
+    private Long rejectedTasksCount;
+    private Long rescheduledTasksCount;
 
 }
