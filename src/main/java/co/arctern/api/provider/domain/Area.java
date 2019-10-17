@@ -32,6 +32,9 @@ public class Area {
     @Column(nullable = false)
     private Double longitude;
 
+    @Column(nullable = true)
+    private String name;
+
     @Size(min = 6, max = 6, message = "Invalid pinCode")
     @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")
     @Column(unique = true)

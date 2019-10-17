@@ -82,6 +82,7 @@ public class AreaServiceImpl implements AreaService {
             Area area = new Area();
             area.setCluster(clusterService.fetchById(dto.getClusterId()));
             area.setIsActive(true);
+            area.setName(dto.getName());
             area.setLatitude(dto.getLatitude());
             area.setLongitude(dto.getLongitude());
             area.setPinCode(dto.getPinCode());

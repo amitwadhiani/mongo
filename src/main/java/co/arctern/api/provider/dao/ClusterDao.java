@@ -2,6 +2,8 @@ package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.domain.Cluster;
 import co.arctern.api.provider.domain.Event;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +12,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ClusterDao extends PagingAndSortingRepository<Cluster, Long> {
+
+    Page<Cluster> findByIsActiveTrue(Pageable pageable);
 }

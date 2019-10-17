@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AreaRequestDto {
 
-    private String cluster;
     private Double latitude;
     private Double longitude;
     private String pinCode;
+    private String name;
     private Long clusterId;
     private Boolean isActive;
 }

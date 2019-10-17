@@ -1,8 +1,9 @@
 package co.arctern.api.provider.controller;
 
-import co.arctern.api.provider.dto.request.AreaRequestDto;
+import co.arctern.api.provider.dto.request.ClusterRequestDto;
 import co.arctern.api.provider.dto.response.projection.Areas;
-import co.arctern.api.provider.service.AreaService;
+import co.arctern.api.provider.dto.response.projection.Clusters;
+import co.arctern.api.provider.service.ClusterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @BasePathAwareController
-@RequestMapping("/area")
-public class AreaController {
+@RequestMapping("/cluster")
+public class ClusterController {
 
-    private final AreaService areaService;
+    private final ClusterService clusterService;
 
     @Autowired
-    public AreaController(AreaService areaService) {
-        this.areaService = areaService;
+    public ClusterController(ClusterService clusterService) {
+        this.clusterService = clusterService;
     }
 
     /**
@@ -33,8 +34,8 @@ public class AreaController {
     @PostMapping("/create")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<StringBuilder> createAreas(@RequestBody List<AreaRequestDto> dtos) {
-        return ResponseEntity.ok(areaService.createAreas(dtos));
+    public ResponseEntity<StringBuilder> createClusters(@RequestBody List<ClusterRequestDto> dtos) {
+        return ResponseEntity.ok(clusterService.createClusters(dtos));
     }
 
     /**
@@ -46,8 +47,8 @@ public class AreaController {
     @GetMapping("/fetch-all")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Page<Areas>> fetchAreas(Pageable pageable) {
-        return ResponseEntity.ok(areaService.fetchAreas(pageable));
+    public ResponseEntity<Page<Clusters>> fetchClusters(Pageable pageable) {
+        return ResponseEntity.ok(clusterService.fetchAll(pageable));
     }
 
 }
