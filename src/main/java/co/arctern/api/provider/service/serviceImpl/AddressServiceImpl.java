@@ -50,7 +50,8 @@ public class AddressServiceImpl implements AddressService {
         address.setPinCode(dto.getPinCode());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
-        if (isSourceAddress != null && !isSourceAddress) address.setArea(areaService.fetchById(dto.getAreaId()));
+        if (isSourceAddress != null && !isSourceAddress && dto.getAreaId() != null)
+            address.setArea(areaService.fetchById(dto.getAreaId()));
         return addressDao.save(address);
     }
 }
