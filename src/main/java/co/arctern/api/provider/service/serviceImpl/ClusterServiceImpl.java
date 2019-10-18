@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,17 +49,27 @@ public class ClusterServiceImpl implements ClusterService {
     }
 
     @Override
+    @Transactional
     public StringBuilder createClusters(List<ClusterRequestDto> dtos) {
         List<Area> areasToSave = new ArrayList<>();
         dtos.stream().forEach(dto -> {
-            Cluster cluster = new Cluster();
-            cluster.setIsActive(true);
-            cluster.setName(dto.getClusterName());
+            Cluster cluster = (dto.getClusterId() == null) ? new Cluster() : clusterDao.findById(dto.getClusterId()).get();
+            if (dto.getIsActive() != null) cluster.setIsActive(dto.getIsActive());
+            if (dto.getClusterName() != null) cluster.setName(dto.getClusterName());
             List<Long> areaIds = dto.getAreaIds();
             cluster = clusterDao.save(cluster);
+            /**
+             * replace existing areas ( if there ) with new areas.
+             */
             if (!CollectionUtils.isEmpty(areaIds)) {
+                cluster.getAreas().stream().forEach(a -> {
+                    a.setCluster(null);
+                    areaService.save(a);
+                });
                 List<Area> areas = areaService.fetchAreas(areaIds);
                 for (Area area : areas) {
+                    if (area.getCluster() != null)
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
                     area.setCluster(cluster);
                     areasToSave.add(area);
                 }

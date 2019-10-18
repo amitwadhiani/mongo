@@ -38,6 +38,8 @@ public interface AreaService extends MessageUtil {
      */
     public Page<Areas> fetchAreas(Pageable pageable);
 
+    public Page<Areas> search(String pinCode, Pageable pageable);
+
     /**
      * fetch area by id .
      *
@@ -49,5 +51,7 @@ public interface AreaService extends MessageUtil {
     public List<Area> fetchAreas(List<Long> areaIds);
 
     public void saveAll(List<Area> areas);
+
+    public void save(Area area);
 
 }

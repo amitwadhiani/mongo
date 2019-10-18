@@ -114,4 +114,15 @@ public class AreaServiceImpl implements AreaService {
         areaDao.saveAll(areas);
     }
 
+    @Override
+    public void save(Area area) {
+        areaDao.save(area);
+    }
+
+    @Override
+    public Page<Areas> search(String pinCode, Pageable pageable) {
+        return areaDao.findByPinCodeStartingWith(pinCode, pageable).map(a -> projectionFactory.createProjection(Areas.class, a));
+    }
+
+
 }

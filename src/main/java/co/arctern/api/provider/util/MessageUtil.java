@@ -137,4 +137,6 @@ public interface MessageUtil {
      */
     StringBuilder NO_ACTIVE_USER_MESSAGE = new StringBuilder("No active user for this task.");
 
+    StringBuilder AREA_ALREADY_ASSIGNED_TO_CLUSTER = new StringBuilder("PinCode already attached to a cluster.");
+
 }

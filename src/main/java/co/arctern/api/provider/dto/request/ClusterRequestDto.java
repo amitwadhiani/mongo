@@ -11,6 +11,7 @@ public class ClusterRequestDto {
 
     private String clusterName;
     private Long clusterId;
+    private Boolean isActive;
     private List<AreaRequestDto> areas;
     private List<Long> areaIds;
 }
