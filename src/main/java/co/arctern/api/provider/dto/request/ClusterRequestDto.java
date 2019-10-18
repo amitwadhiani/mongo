@@ -14,4 +14,5 @@ public class ClusterRequestDto {
     private Boolean isActive;
     private List<AreaRequestDto> areas;
     private List<Long> areaIds;
+
 }
