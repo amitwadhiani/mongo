@@ -23,14 +23,6 @@ public interface AreaService extends MessageUtil {
     public void setAreasToUser(User user, List<Long> areaIds, List<Role> roles, Long clusterId);
 
     /**
-     * create areas.
-     *
-     * @param dtos
-     * @return
-     */
-    public StringBuilder createAreas(List<AreaRequestDto> dtos);
-
-    /**
      * fetch all areas.
      *
      * @param pageable

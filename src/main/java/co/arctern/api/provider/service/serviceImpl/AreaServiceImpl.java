@@ -6,10 +6,8 @@ import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserArea;
-import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.service.AreaService;
-import co.arctern.api.provider.service.ClusterService;
 import co.arctern.api.provider.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,20 +27,18 @@ public class AreaServiceImpl implements AreaService {
     private final AreaDao areaDao;
     private final UserAreaDao userAreaDao;
     private final RoleService roleService;
-    private final ClusterService clusterService;
     private final ProjectionFactory projectionFactory;
 
     @Autowired
     public AreaServiceImpl(AreaDao areaDao,
                            UserAreaDao userAreaDao,
                            ProjectionFactory projectionFactory,
-                           RoleService roleService,
-                           ClusterService clusterService) {
+                           RoleService roleService
+                           ) {
         this.areaDao = areaDao;
         this.userAreaDao = userAreaDao;
         this.projectionFactory = projectionFactory;
         this.roleService = roleService;
-        this.clusterService = clusterService;
     }
 
     @Override
@@ -71,25 +66,6 @@ public class AreaServiceImpl implements AreaService {
             userAreas.add(userArea);
         });
         userAreaDao.saveAll(userAreas);
-    }
-
-    @Override
-    @Transactional
-    public StringBuilder createAreas(List<AreaRequestDto> dtos) {
-        List<Area> areas = new ArrayList<>();
-        dtos.stream().forEach(dto ->
-        {
-            Area area = new Area();
-            area.setCluster(clusterService.fetchById(dto.getClusterId()));
-            area.setIsActive(true);
-            area.setName(dto.getName());
-            area.setLatitude(dto.getLatitude());
-            area.setLongitude(dto.getLongitude());
-            area.setPinCode(dto.getPinCode());
-            areas.add(area);
-        });
-        areaDao.saveAll(areas);
-        return SUCCESS_MESSAGE;
     }
 
     @Override

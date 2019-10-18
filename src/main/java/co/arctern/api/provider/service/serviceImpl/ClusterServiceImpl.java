@@ -3,6 +3,7 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.ClusterDao;
 import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.Cluster;
+import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.dto.request.ClusterRequestDto;
 import co.arctern.api.provider.dto.response.projection.Clusters;
 import co.arctern.api.provider.service.AreaService;
@@ -75,7 +76,26 @@ public class ClusterServiceImpl implements ClusterService {
                 }
             }
         });
-        areaService.saveAll(areasToSave);
+        if (!CollectionUtils.isEmpty(areasToSave)) areaService.saveAll(areasToSave);
+        return SUCCESS_MESSAGE;
+    }
+
+    @Override
+    @Transactional
+    public StringBuilder createAreas(List<AreaRequestDto> dtos) {
+        List<Area> areas = new ArrayList<>();
+        dtos.stream().forEach(dto ->
+        {
+            Area area = new Area();
+            area.setCluster(fetchById(dto.getClusterId()));
+            area.setIsActive(true);
+            area.setName(dto.getName());
+            area.setLatitude(dto.getLatitude());
+            area.setLongitude(dto.getLongitude());
+            area.setPinCode(dto.getPinCode());
+            areas.add(area);
+        });
+        areaService.saveAll(areas);
         return SUCCESS_MESSAGE;
     }
 

@@ -3,6 +3,7 @@ package co.arctern.api.provider.controller;
 import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.service.AreaService;
+import co.arctern.api.provider.service.ClusterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +19,13 @@ import java.util.List;
 public class AreaController {
 
     private final AreaService areaService;
+    private final ClusterService clusterService;
 
     @Autowired
-    public AreaController(AreaService areaService) {
+    public AreaController(AreaService areaService,
+                          ClusterService clusterService) {
         this.areaService = areaService;
+        this.clusterService = clusterService;
     }
 
     /**
@@ -34,7 +38,7 @@ public class AreaController {
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> createAreas(@RequestBody List<AreaRequestDto> dtos) {
-        return ResponseEntity.ok(areaService.createAreas(dtos));
+        return ResponseEntity.ok(clusterService.createAreas(dtos));
     }
 
     /**
