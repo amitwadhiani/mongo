@@ -50,4 +50,6 @@ public interface AreaDao extends PagingAndSortingRepository<Area, Long> {
     List<Area> fetchActiveAreasByCluster(@Param("clusterId") Long clusterId);
 
     Page<Area> findByPinCodeStartingWith(String pinCode, Pageable pageable);
+
+    Page<Area> findByNameContaining(String name, Pageable pageable);
 }
