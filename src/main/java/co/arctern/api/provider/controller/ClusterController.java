@@ -44,7 +44,7 @@ public class ClusterController {
      * @param pageable
      * @return
      */
-    @GetMapping("/fetch/all")
+    @GetMapping("/fetch-all")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Page<Clusters>> fetchClusters(Pageable pageable) {
