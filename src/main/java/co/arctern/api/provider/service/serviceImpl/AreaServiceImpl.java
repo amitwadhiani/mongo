@@ -104,4 +104,14 @@ public class AreaServiceImpl implements AreaService {
         });
     }
 
+    @Override
+    public List<Area> fetchAreas(List<Long> areaIds) {
+        return areaDao.findByIdIn(areaIds);
+    }
+
+    @Override
+    public void saveAll(List<Area> areas) {
+        areaDao.saveAll(areas);
+    }
+
 }

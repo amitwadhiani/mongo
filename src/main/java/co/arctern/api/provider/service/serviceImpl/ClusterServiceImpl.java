@@ -1,9 +1,11 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dao.ClusterDao;
+import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.Cluster;
 import co.arctern.api.provider.dto.request.ClusterRequestDto;
 import co.arctern.api.provider.dto.response.projection.Clusters;
+import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.ClusterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,11 +24,14 @@ public class ClusterServiceImpl implements ClusterService {
 
     private final ClusterDao clusterDao;
     private final ProjectionFactory projectionFactory;
+    private final AreaService areaService;
 
     @Autowired
     public ClusterServiceImpl(ClusterDao clusterDao,
-                              ProjectionFactory projectionFactory) {
+                              ProjectionFactory projectionFactory,
+                              AreaService areaService) {
         this.clusterDao = clusterDao;
+        this.areaService = areaService;
         this.projectionFactory = projectionFactory;
     }
 
@@ -44,17 +49,22 @@ public class ClusterServiceImpl implements ClusterService {
 
     @Override
     public StringBuilder createClusters(List<ClusterRequestDto> dtos) {
-        List<Cluster> clusters = new ArrayList<>();
+        List<Area> areasToSave = new ArrayList<>();
         dtos.stream().forEach(dto -> {
             Cluster cluster = new Cluster();
             cluster.setIsActive(true);
             cluster.setName(dto.getClusterName());
-            if (!CollectionUtils.isEmpty(dto.getAreas())) {
-                // TODO :: Area creation / attaching areas to cluster
+            List<Long> areaIds = dto.getAreaIds();
+            cluster = clusterDao.save(cluster);
+            if (!CollectionUtils.isEmpty(areaIds)) {
+                List<Area> areas = areaService.fetchAreas(areaIds);
+                for (Area area : areas) {
+                    area.setCluster(cluster);
+                    areasToSave.add(area);
+                }
             }
-            clusters.add(cluster);
         });
-        clusterDao.saveAll(clusters);
+        areaService.saveAll(areasToSave);
         return SUCCESS_MESSAGE;
     }
 

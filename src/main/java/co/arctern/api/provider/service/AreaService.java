@@ -46,4 +46,8 @@ public interface AreaService extends MessageUtil {
      */
     public Area fetchById(Long areaId);
 
+    public List<Area> fetchAreas(List<Long> areaIds);
+
+    public void saveAll(List<Area> areas);
+
 }
