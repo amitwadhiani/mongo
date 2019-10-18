@@ -19,7 +19,7 @@ public class Cluster {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
