@@ -9,6 +9,7 @@ import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.UserTaskService;
 import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;

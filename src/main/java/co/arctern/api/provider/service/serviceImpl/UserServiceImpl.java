@@ -228,4 +228,14 @@ public class UserServiceImpl implements UserService {
         return PaginationUtil.returnPaginatedBody(userDao.findAll(pageable)
                 .map(a -> projectionFactory.createProjection(Users.class, a)), pageable);
     }
+
+    @Override
+    public Page<Users> search(String value, Pageable pageable) {
+        if (value.matches("^[0-9]*$")) {
+            return userDao.findById(Long.valueOf(value), pageable)
+                    .map(a -> projectionFactory.createProjection(Users.class, a));
+        }
+        return userDao.findByNameStartingWith(value, pageable)
+                .map(a -> projectionFactory.createProjection(Users.class, a));
+    }
 }

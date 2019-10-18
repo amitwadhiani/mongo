@@ -6,8 +6,8 @@ import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,8 +74,15 @@ public class UserController {
     @GetMapping("/task/detail")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Users> fetchDetails(@Param("taskId") Long taskId) {
+    public ResponseEntity<Users> fetchDetails(@RequestParam("taskId") Long taskId) {
         return ResponseEntity.ok(userService.fetchDetails(taskId));
+    }
+
+    @CrossOrigin
+    @GetMapping("/search")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<Page<Users>> search(@RequestParam("value") String value, Pageable pageable) {
+        return ResponseEntity.ok(userService.search(value, pageable));
     }
 
 

@@ -3,7 +3,9 @@ package co.arctern.api.provider.service;
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.TasksForProviderResponse;
+import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.util.MessageUtil;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.sql.Timestamp;

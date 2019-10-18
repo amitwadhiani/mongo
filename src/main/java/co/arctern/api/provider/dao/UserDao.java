@@ -99,4 +99,8 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
      */
     Page<User> findByIsActiveTrue(Pageable pageable);
 
+    Page<User> findById(Long id, Pageable pageable);
+
+    Page<User> findByNameStartingWith(String name, Pageable pageable);
+
 }
