@@ -46,7 +46,7 @@ public class ClusterServiceImpl implements ClusterService {
 
     @Override
     public Page<Clusters> fetchAll(Pageable pageable) {
-        return clusterDao.findByIsActiveTrue(pageable).map(a -> projectionFactory.createProjection(Clusters.class, a));
+        return clusterDao.findAll(pageable).map(a -> projectionFactory.createProjection(Clusters.class, a));
     }
 
     @Override
