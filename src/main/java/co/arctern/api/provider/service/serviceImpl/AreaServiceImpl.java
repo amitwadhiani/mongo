@@ -105,7 +105,7 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public Boolean pincodeExists(String value) {
-        return areaDao.existsByPincode(value);
+        return areaDao.existsByPinCode(value);
     }
 
 }
