@@ -4,9 +4,9 @@ import lombok.Getter;
 
 public enum OfficeType {
 
-    SUB_POST_OFFICE("S.O"),
-    HEAD_POST_OFFICE("H.O"),
-    BRANCH_POST_OFFICE("B.O");
+    SO(" SUB_POST_OFFICE"),
+    HO("HEAD_POST_OFFICE"),
+    BO("BRANCH_POST_OFFICE");
 
     @Getter
     String value;
