@@ -1,5 +1,6 @@
 package co.arctern.api.provider.domain;
 
+import co.arctern.api.provider.constant.OfficeType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -26,11 +27,42 @@ public class Area {
     @JsonBackReference("cluster-area")
     private Cluster cluster;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double latitude;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double longitude;
+
+    @Column(columnDefinition = "tinyint(1) DEFAULT 1")
+    private Boolean deliveryState;
+
+    @Column(nullable = true)
+    private String state;
+
+    @Column
+    private String region;
+
+    @Column
+    private String division;
+
+    @Column
+    private String circle;
+
+    @Column
+    private String phone;
+
+    @Column
+    private String district;
+
+    @Column
+    private String subOffice;
+
+    @Column
+    private String headOffice;
+
+    @Enumerated
+    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'GENERATED' ")
+    private OfficeType officeType;
 
     @Column(nullable = true)
     private String name;
