@@ -34,7 +34,7 @@ public class AreaServiceImpl implements AreaService {
                            UserAreaDao userAreaDao,
                            ProjectionFactory projectionFactory,
                            RoleService roleService
-                           ) {
+    ) {
         this.areaDao = areaDao;
         this.userAreaDao = userAreaDao;
         this.projectionFactory = projectionFactory;
@@ -101,6 +101,11 @@ public class AreaServiceImpl implements AreaService {
             return areaDao.findByPinCodeStartingWith(value, pageable).map(a -> projectionFactory.createProjection(Areas.class, a));
         }
         return areaDao.findByNameContaining(value, pageable).map(a -> projectionFactory.createProjection(Areas.class, a));
+    }
+
+    @Override
+    public Boolean pincodeExists(String value) {
+        return areaDao.existsByPincode(value);
     }
 
 }

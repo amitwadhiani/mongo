@@ -61,4 +61,11 @@ public class AreaController {
         return ResponseEntity.ok(areaService.search(value, pageable));
     }
 
+    @GetMapping("/exists")
+    @CrossOrigin
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Boolean> pincodeExists(@RequestParam("value") String value) {
+        return ResponseEntity.ok(areaService.pincodeExists(value));
+    }
+
 }

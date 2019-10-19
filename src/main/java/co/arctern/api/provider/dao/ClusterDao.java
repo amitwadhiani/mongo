@@ -1,7 +1,6 @@
 package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.domain.Cluster;
-import co.arctern.api.provider.domain.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;

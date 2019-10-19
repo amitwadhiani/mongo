@@ -3,7 +3,6 @@ package co.arctern.api.provider.service;
 import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.domain.User;
-import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
@@ -45,5 +44,7 @@ public interface AreaService extends MessageUtil {
     public void saveAll(List<Area> areas);
 
     public void save(Area area);
+
+    public Boolean pincodeExists(String value);
 
 }

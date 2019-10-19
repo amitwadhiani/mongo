@@ -1,7 +1,6 @@
 package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.dto.request.ClusterRequestDto;
-import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.dto.response.projection.Clusters;
 import co.arctern.api.provider.service.ClusterService;
 import org.springframework.beans.factory.annotation.Autowired;

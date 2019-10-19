@@ -4,9 +4,6 @@ import co.arctern.api.provider.constant.OfficeType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Enumerated;
-
 /**
  * area creation request body.
  */
