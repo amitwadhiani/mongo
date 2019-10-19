@@ -53,5 +53,5 @@ public interface AreaDao extends PagingAndSortingRepository<Area, Long> {
 
     Page<Area> findByNameContaining(String name, Pageable pageable);
 
-    Boolean existsByPincode(String pincode);
+    Boolean existsByPinCode(String pincode);
 }
