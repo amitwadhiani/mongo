@@ -74,6 +74,9 @@ public class Area {
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
     private Boolean isActive;
 
+    @Column(columnDefinition = "tinyint(1) DEFAULT 0", nullable = false)
+    private Boolean meddoDeliveryState;
+
     @CreatedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;

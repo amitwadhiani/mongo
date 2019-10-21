@@ -72,6 +72,7 @@ public class ClusterServiceImpl implements ClusterService {
                     if (area.getCluster() != null)
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
                     area.setCluster(cluster);
+                    area.setMeddoDeliveryState(true);
                     areasToSave.add(area);
                 }
             }
