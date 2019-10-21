@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AreaServiceImpl implements AreaService {
@@ -96,11 +97,13 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public Page<Areas> search(String value, Pageable pageable) {
+    public List<Areas> search(String value, Pageable pageable) {
         if (value.matches("^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")) {
-            return areaDao.findByPinCodeStartingWithAndDeliveryStateTrue(value, pageable).map(a -> projectionFactory.createProjection(Areas.class, a));
+            return areaDao.findByPinCodeStartingWithAndDeliveryStateTrue(value, pageable).stream().map(a -> projectionFactory.createProjection(Areas.class, a))
+                    .collect(Collectors.toList());
         }
-        return areaDao.findByNameContainingAndDeliveryStateTrue(value, pageable).map(a -> projectionFactory.createProjection(Areas.class, a));
+        return areaDao.findByNameContainingAndDeliveryStateTrue(value, pageable).stream().map(a -> projectionFactory.createProjection(Areas.class, a))
+                .collect(Collectors.toList());
     }
 
     @Override

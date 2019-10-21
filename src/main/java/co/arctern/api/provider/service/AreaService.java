@@ -29,7 +29,7 @@ public interface AreaService extends MessageUtil {
      */
     public Page<Areas> fetchAreas(Pageable pageable);
 
-    public Page<Areas> search(String value, Pageable pageable);
+    public List<Areas> search(String value, Pageable pageable);
 
     /**
      * fetch area by id .
