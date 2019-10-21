@@ -16,6 +16,8 @@ public interface ClusterService extends MessageUtil {
 
     public Page<Clusters> fetchAll(Pageable pageable);
 
+    public Clusters fetch(Long id);
+
     public StringBuilder createClusters(List<ClusterRequestDto> dtos);
 
     public StringBuilder createAreas(List<AreaRequestDto> dtos);

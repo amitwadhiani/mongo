@@ -50,4 +50,16 @@ public class ClusterController {
         return ResponseEntity.ok(clusterService.fetchAll(pageable));
     }
 
+    /**
+     * fetch cluster.
+     *
+     * @return
+     */
+    @GetMapping("/fetch/{id}")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<Clusters> fetchClusters(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(clusterService.fetch(id));
+    }
+
 }

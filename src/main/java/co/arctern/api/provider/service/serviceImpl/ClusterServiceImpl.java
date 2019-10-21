@@ -50,6 +50,11 @@ public class ClusterServiceImpl implements ClusterService {
     }
 
     @Override
+    public Clusters fetch(Long id) {
+        return projectionFactory.createProjection(Clusters.class, clusterDao.findById(id).get());
+    }
+
+    @Override
     @Transactional
     public StringBuilder createClusters(List<ClusterRequestDto> dtos) {
         List<Area> areasToSave = new ArrayList<>();
