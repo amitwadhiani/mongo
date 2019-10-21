@@ -98,9 +98,9 @@ public class AreaServiceImpl implements AreaService {
     @Override
     public Page<Areas> search(String value, Pageable pageable) {
         if (value.matches("^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")) {
-            return areaDao.findByPinCode(value, pageable).map(a -> projectionFactory.createProjection(Areas.class, a));
+            return areaDao.findByPinCodeAndDeliveryStateTrue(value, pageable).map(a -> projectionFactory.createProjection(Areas.class, a));
         }
-        return areaDao.findByNameContaining(value, pageable).map(a -> projectionFactory.createProjection(Areas.class, a));
+        return areaDao.findByNameContainingAndDeliveryStateTrue(value, pageable).map(a -> projectionFactory.createProjection(Areas.class, a));
     }
 
     @Override

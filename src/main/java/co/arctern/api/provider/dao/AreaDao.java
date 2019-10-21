@@ -37,7 +37,7 @@ public interface AreaDao extends PagingAndSortingRepository<Area, Long> {
      *
      * @return
      */
-    @Query("FROM Area a WHERE a.isActive =1 ")
+    @Query("FROM Area a WHERE a.isActive =1 AND a.deliveryState = 1 ")
     List<Area> fetchActiveAreas();
 
 
@@ -49,9 +49,9 @@ public interface AreaDao extends PagingAndSortingRepository<Area, Long> {
     @Query("FROM Area a WHERE (a.isActive =1 AND a.cluster.id = :clusterId ) ")
     List<Area> fetchActiveAreasByCluster(@Param("clusterId") Long clusterId);
 
-    Page<Area> findByPinCode(String pinCode, Pageable pageable);
+    Page<Area> findByPinCodeAndDeliveryStateTrue(String pinCode, Pageable pageable);
 
-    Page<Area> findByNameContaining(String name, Pageable pageable);
+    Page<Area> findByNameContainingAndDeliveryStateTrue(String name, Pageable pageable);
 
     Boolean existsByPinCode(String pincode);
 }
