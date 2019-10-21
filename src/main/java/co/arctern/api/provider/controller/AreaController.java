@@ -57,7 +57,7 @@ public class AreaController {
     @GetMapping("/search")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Page<Areas>> search(@RequestParam("value") String value, Pageable pageable) {
+    public ResponseEntity<List<Areas>> search(@RequestParam("value") String value, Pageable pageable) {
         return ResponseEntity.ok(areaService.search(value, pageable));
     }
 
