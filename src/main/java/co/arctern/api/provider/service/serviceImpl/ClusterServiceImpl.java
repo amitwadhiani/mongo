@@ -79,25 +79,25 @@ public class ClusterServiceImpl implements ClusterService {
             Cluster cluster = (dto.getClusterId() == null) ? new Cluster() : clusterDao.findById(dto.getClusterId()).get();
             if (dto.getIsActive() != null) cluster.setIsActive(dto.getIsActive());
             if (dto.getClusterName() != null) cluster.setName(dto.getClusterName());
-            List<Long> areaIds = dto.getAreaIds();
             List<String> pinCodes = dto.getPinCodes();
             cluster = clusterDao.save(cluster);
             /**
              * replace existing areas ( if there ) with new areas.
              */
-            if (!CollectionUtils.isEmpty(pinCodes)) {
-                cluster.getAreas().stream().forEach(a -> {
+            List<Area> existingAreas = cluster.getAreas();
+            if (!CollectionUtils.isEmpty(existingAreas)) {
+                existingAreas.stream().forEach(a -> {
                     a.setCluster(null);
                     areaService.save(a);
                 });
-                List<Area> areas = areaService.fetchAreas(pinCodes);
-                for (Area area : areas) {
-                    if (area.getCluster() != null)
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
-                    area.setCluster(cluster);
-                    area.setMeddoDeliveryState(true);
-                    areasToSave.add(area);
-                }
+            }
+            List<Area> areas = areaService.fetchAreas(pinCodes);
+            for (Area area : areas) {
+                if (area.getCluster() != null)
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
+                area.setCluster(cluster);
+                area.setMeddoDeliveryState(true);
+                areasToSave.add(area);
             }
         });
         if (!CollectionUtils.isEmpty(areasToSave)) areaService.saveAll(areasToSave);
