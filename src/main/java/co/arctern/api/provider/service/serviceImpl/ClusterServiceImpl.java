@@ -5,11 +5,13 @@ import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.Cluster;
 import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.dto.request.ClusterRequestDto;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Clusters;
 import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.ClusterService;
 import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -45,8 +47,8 @@ public class ClusterServiceImpl implements ClusterService {
     }
 
     @Override
-    public List<Clusters> fetchAll() {
-        return clusterDao.findAll().stream().
+    public PaginatedResponse fetchAll(Pageable pageable) {
+        List<Clusters> clusters = clusterDao.findAll().stream().
                 map(a -> {
                     a.setAreas(a.getAreas()
                             .stream()
@@ -54,6 +56,14 @@ public class ClusterServiceImpl implements ClusterService {
                             .collect(Collectors.toList()));
                     return projectionFactory.createProjection(Clusters.class, a);
                 }).collect(Collectors.toList());
+        return PaginationUtil.returnPaginatedBody(clusterDao.findAll().stream().
+                map(a -> {
+                    a.setAreas(a.getAreas()
+                            .stream()
+                            .filter(PaginationUtil.distinctByKey(b -> b.getPinCode()))
+                            .collect(Collectors.toList()));
+                    return projectionFactory.createProjection(Clusters.class, a);
+                }).collect(Collectors.toList()), pageable.getPageNumber(), pageable.getPageSize(), clusters.size());
     }
 
     @Override

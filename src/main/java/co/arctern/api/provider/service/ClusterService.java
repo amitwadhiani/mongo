@@ -3,6 +3,7 @@ package co.arctern.api.provider.service;
 import co.arctern.api.provider.domain.Cluster;
 import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.dto.request.ClusterRequestDto;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Clusters;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ public interface ClusterService extends MessageUtil {
 
     public Cluster fetchById(Long id);
 
-    public List<Clusters> fetchAll();
+    public PaginatedResponse fetchAll(Pageable pageable);
 
     public Clusters fetch(Long id);
 
