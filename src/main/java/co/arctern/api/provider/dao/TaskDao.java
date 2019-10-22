@@ -362,4 +362,6 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      */
     public List<Task> findByIdIn(List<Long> taskIds);
 
+    public List<Task> findByActiveUserId(Long userId);
+
 }

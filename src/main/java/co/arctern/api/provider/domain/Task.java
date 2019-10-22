@@ -63,6 +63,8 @@ public class Task extends CodeGeneratorUtil {
     @OneToOne(mappedBy = "task")
     private Rating rating;
 
+    private Long activeUserId;
+
     /**
      * record of users working on/have worked upon a task.
      */

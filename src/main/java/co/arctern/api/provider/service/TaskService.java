@@ -1,12 +1,10 @@
 package co.arctern.api.provider.service;
 
-import co.arctern.api.provider.constant.OfferingType;
-import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.TaskStateFlowState;
-import co.arctern.api.provider.constant.TaskType;
+import co.arctern.api.provider.constant.*;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.Payments;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
@@ -194,9 +192,10 @@ public interface TaskService extends MessageUtil {
      * create a new task .
      *
      * @param dto
+     * @param userId
      * @return
      */
-    public Task createTask(TaskAssignDto dto);
+    public Task createTask(TaskAssignDto dto, Long userId);
 
     /**
      * fetch projected response after save call (task) .
@@ -411,4 +410,7 @@ public interface TaskService extends MessageUtil {
      */
     public List<Task> fetchAllTasks(List<Long> taskIds);
 
+    public List<Payments> requestSettlement(Long userId, SettleState settleState);
+
+    public List<Payments> settle(Long userId, SettleState settleState);
 }

@@ -12,6 +12,8 @@ import java.util.List;
 
 public interface AreaService extends MessageUtil {
 
+    public static final String PIN_CODE_REGEXP = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$";
+
     /**
      * assign areas to user.
      *
@@ -29,7 +31,7 @@ public interface AreaService extends MessageUtil {
      */
     public Page<Areas> fetchAreas(Pageable pageable);
 
-    public List<Areas> search(String value, Pageable pageable);
+    public List<String> search(String value);
 
     /**
      * fetch area by id .
@@ -39,7 +41,7 @@ public interface AreaService extends MessageUtil {
      */
     public Area fetchById(Long areaId);
 
-    public List<Area> fetchAreas(List<Long> areaIds);
+    public List<Area> fetchAreas(List<String> pinCodes);
 
     public void saveAll(List<Area> areas);
 

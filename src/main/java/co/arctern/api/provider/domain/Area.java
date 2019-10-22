@@ -10,7 +10,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -70,6 +69,12 @@ public class Area {
     @Pattern(regexp = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")
     @Column(unique = true)
     private String pinCode;
+
+    /**
+     * duplicate pinCodes' grouping.
+     */
+    @Transient
+    private List<Long> ids;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
     private Boolean isActive;

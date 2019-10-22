@@ -82,8 +82,8 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public List<Area> fetchAreas(List<Long> areaIds) {
-        return areaDao.findByIdIn(areaIds);
+    public List<Area> fetchAreas(List<String> pinCodes) {
+        return areaDao.findDistinctByPinCodeIn(pinCodes);
     }
 
     @Override
@@ -97,12 +97,14 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public List<Areas> search(String value, Pageable pageable) {
-        if (value.matches("^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$")) {
-            return areaDao.findByPinCodeStartingWithAndDeliveryStateTrue(value, pageable).stream().map(a -> projectionFactory.createProjection(Areas.class, a))
-                    .collect(Collectors.toList());
-        }
-        return areaDao.findByNameContainingAndDeliveryStateTrue(value, pageable).stream().map(a -> projectionFactory.createProjection(Areas.class, a))
+    public List<String> search(String value) {
+        return ((value.matches(PIN_CODE_REGEXP)) ?
+                areaDao.findByPinCodeStartingWithAndDeliveryStateTrue(value) :
+                areaDao.findByNameContainingAndDeliveryStateTrue(value)).stream().collect(Collectors
+                .groupingBy(a -> a.getPinCode()))
+                .keySet()
+                .stream()
+                .map(a -> a)
                 .collect(Collectors.toList());
     }
 

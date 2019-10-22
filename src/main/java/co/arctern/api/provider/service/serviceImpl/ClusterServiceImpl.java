@@ -72,7 +72,7 @@ public class ClusterServiceImpl implements ClusterService {
                     a.setCluster(null);
                     areaService.save(a);
                 });
-                List<Area> areas = areaService.fetchAreas(areaIds);
+                List<Area> areas = areaService.fetchAreas(dto.getPinCodes());
                 for (Area area : areas) {
                     if (area.getCluster() != null)
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());

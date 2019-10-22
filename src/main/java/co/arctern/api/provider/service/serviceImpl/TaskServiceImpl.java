@@ -1,15 +1,13 @@
 package co.arctern.api.provider.service.serviceImpl;
 
-import co.arctern.api.provider.constant.OfferingType;
-import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.TaskStateFlowState;
-import co.arctern.api.provider.constant.TaskType;
+import co.arctern.api.provider.constant.*;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.Payments;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.queue.Sender;
 import co.arctern.api.provider.service.*;
@@ -87,7 +85,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
         Long userId = dto.getUserId();
-        Task task = createTask(dto);
+        Task task = createTask(dto, userId);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
@@ -132,6 +130,7 @@ public class TaskServiceImpl implements TaskService {
         tasks.stream().forEach(task ->
         {
             task.setState(TaskState.ASSIGNED);
+            task.setActiveUserId(userId);
         });
         tasks = Lists.newArrayList(taskDao.saveAll(tasks));
         tasks.stream().forEach(task -> {
@@ -154,6 +153,7 @@ public class TaskServiceImpl implements TaskService {
         taskStateFlowService.createFlow(task, TaskStateFlowState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
         task.setCancellationRequested(false);
+        task.setActiveUserId(userId);
         taskDao.save(task);
     }
 
@@ -299,7 +299,7 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public Task createTask(TaskAssignDto dto) {
+    public Task createTask(TaskAssignDto dto, Long userId) {
         Long taskId = dto.getTaskId();
         Task task = (taskId == null) ? new Task() : taskDao.findById(taskId).orElseThrow(() ->
         {
@@ -322,6 +322,7 @@ public class TaskServiceImpl implements TaskService {
         task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
         task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
         task.setState(TaskState.OPEN);
+        if (userId != null) task.setActiveUserId(userId);
         String paymentMode = dto.getPaymentMode();
         if (paymentMode == null || paymentMode.isEmpty()) dto.setPaymentMode("");
         task = taskDao.save(task);
@@ -333,7 +334,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto) {
-        return projectionFactory.createProjection(TasksForProvider.class, createTask(dto));
+        return projectionFactory.createProjection(TasksForProvider.class, createTask(dto, null));
     }
 
     @Override
@@ -454,24 +455,46 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
+    @Override
     public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(tasks.map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
     }
 
+    @Override
     public List<Task> fetchTasksForCron() {
         return taskDao.findByIsActiveTrueAndCreatedAtLessThanEqualAndState(DateUtil.fetchTimestampFromCurrentTimestamp(20), TaskState.ASSIGNED);
     }
 
+    @Override
     public Iterable<Task> saveAll(List<Task> tasks) {
         return taskDao.saveAll(tasks);
     }
 
+    @Override
     public Page<TasksForProvider> fetchTasksByProvider(List<Long> ids, TaskType type, Pageable pageable) {
         return userTaskService.fetchTasksForProvider(ids, null, type, pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }
 
+    @Override
     public Page<TasksForProvider> fetchTasksByTypeAndProvider(List<Long> ids, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
         return userTaskService.fetchTasksForProvider(ids, null, type, start, end, pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a));
+    }
+
+    @Override
+    public List<Payments> requestSettlement(Long userId, SettleState settleState) {
+        List<Task> tasks = taskDao.findByActiveUserId(userId);
+        List<Payments> payments = new ArrayList<>();
+        tasks.stream().forEach(a -> {
+            payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(settleState))
+                    .map(c -> projectionFactory.createProjection(Payments.class, c))
+                    .collect(Collectors.toList()));
+        });
+        return payments;
+    }
+
+    @Override
+    public List<Payments> settle(Long userId, SettleState settleState) {
+        return paymentService.fetchSettleRequests(settleState);
     }
 
 }
