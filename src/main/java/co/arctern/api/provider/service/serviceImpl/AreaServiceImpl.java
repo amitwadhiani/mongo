@@ -98,9 +98,10 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public List<String> search(String value) {
-        return ((value.matches(PIN_CODE_REGEXP)) ?
+        List<Area> areas = ((value.matches(PIN_CODE_REGEXP)) ?
                 areaDao.findByPinCodeStartingWithAndDeliveryStateTrue(value) :
-                areaDao.findByNameContainingAndDeliveryStateTrue(value)).stream().collect(Collectors
+                areaDao.findByNameContainingAndDeliveryStateTrue(value));
+        return areas.stream().collect(Collectors
                 .groupingBy(a -> a.getPinCode()))
                 .keySet()
                 .stream()

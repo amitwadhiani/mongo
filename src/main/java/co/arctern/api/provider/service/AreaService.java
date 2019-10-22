@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface AreaService extends MessageUtil {
 
-    public static final String PIN_CODE_REGEXP = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$";
+    public static final String PIN_CODE_REGEXP = "^[0-9]*$";
 
     /**
      * assign areas to user.
