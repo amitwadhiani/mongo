@@ -63,16 +63,17 @@ public class ClusterServiceImpl implements ClusterService {
             if (dto.getIsActive() != null) cluster.setIsActive(dto.getIsActive());
             if (dto.getClusterName() != null) cluster.setName(dto.getClusterName());
             List<Long> areaIds = dto.getAreaIds();
+            List<String> pinCodes = dto.getPinCodes();
             cluster = clusterDao.save(cluster);
             /**
              * replace existing areas ( if there ) with new areas.
              */
-            if (!CollectionUtils.isEmpty(areaIds)) {
+            if (!CollectionUtils.isEmpty(pinCodes)) {
                 cluster.getAreas().stream().forEach(a -> {
                     a.setCluster(null);
                     areaService.save(a);
                 });
-                List<Area> areas = areaService.fetchAreas(dto.getPinCodes());
+                List<Area> areas = areaService.fetchAreas(pinCodes);
                 for (Area area : areas) {
                     if (area.getCluster() != null)
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
