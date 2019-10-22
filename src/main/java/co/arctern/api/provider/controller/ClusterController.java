@@ -4,8 +4,6 @@ import co.arctern.api.provider.dto.request.ClusterRequestDto;
 import co.arctern.api.provider.dto.response.projection.Clusters;
 import co.arctern.api.provider.service.ClusterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,14 +38,13 @@ public class ClusterController {
     /**
      * fetch all clusters.
      *
-     * @param pageable
      * @return
      */
     @GetMapping("/fetch-all")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Page<Clusters>> fetchClusters(Pageable pageable) {
-        return ResponseEntity.ok(clusterService.fetchAll(pageable));
+    public ResponseEntity<List<Clusters>> fetchClusters() {
+        return ResponseEntity.ok(clusterService.fetchAll());
     }
 
     /**

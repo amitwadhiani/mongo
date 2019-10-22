@@ -8,9 +8,8 @@ import co.arctern.api.provider.dto.request.ClusterRequestDto;
 import co.arctern.api.provider.dto.response.projection.Clusters;
 import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.ClusterService;
+import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClusterServiceImpl implements ClusterService {
@@ -45,8 +45,15 @@ public class ClusterServiceImpl implements ClusterService {
     }
 
     @Override
-    public Page<Clusters> fetchAll(Pageable pageable) {
-        return clusterDao.findAll(pageable).map(a -> projectionFactory.createProjection(Clusters.class, a));
+    public List<Clusters> fetchAll() {
+        return clusterDao.findAll().stream().
+                map(a -> {
+                    a.setAreas(a.getAreas()
+                            .stream()
+                            .filter(PaginationUtil.distinctByKey(b -> b.getPinCode()))
+                            .collect(Collectors.toList()));
+                    return projectionFactory.createProjection(Clusters.class, a);
+                }).collect(Collectors.toList());
     }
 
     @Override

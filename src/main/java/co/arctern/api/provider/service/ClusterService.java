@@ -14,7 +14,7 @@ public interface ClusterService extends MessageUtil {
 
     public Cluster fetchById(Long id);
 
-    public Page<Clusters> fetchAll(Pageable pageable);
+    public List<Clusters> fetchAll();
 
     public Clusters fetch(Long id);
 

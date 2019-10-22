@@ -6,6 +6,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Pagination utility class for making list calls -> paginated.
@@ -65,6 +69,11 @@ public interface PaginationUtil {
         response.setTotalElements(page.getTotalElements());
         response.setTotalPages(page.getTotalPages());
         return response;
+    }
+
+    public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> map = new ConcurrentHashMap<>();
+        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
 }
