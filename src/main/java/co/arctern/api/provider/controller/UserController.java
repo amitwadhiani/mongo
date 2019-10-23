@@ -4,6 +4,8 @@ import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
+import co.arctern.api.provider.service.TaskService;
+import co.arctern.api.provider.service.TokenService;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,10 +23,16 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final TaskService taskService;
+    private final TokenService tokenService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService,
+                          TokenService tokenService,
+                          TaskService taskService) {
         this.userService = userService;
+        this.tokenService = tokenService;
+        this.taskService = taskService;
     }
 
     /**
@@ -85,5 +93,11 @@ public class UserController {
         return ResponseEntity.ok(userService.search(value, pageable));
     }
 
+    @GetMapping("/profile")
+    @CrossOrigin
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
+    public ResponseEntity<Users> fetchProfileDetails() {
+        return ResponseEntity.ok(taskService.fetchProfileDetails(tokenService.fetchUserId()));
+    }
 
 }

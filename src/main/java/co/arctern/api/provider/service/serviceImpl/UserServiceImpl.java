@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final ProjectionFactory projectionFactory;
     private final OfferingService offeringService;
     private final AreaService areaService;
+
     private final UserRoleService userRoleService;
     private final TokenService tokenService;
     private final UserTaskService userTaskService;
@@ -238,4 +239,5 @@ public class UserServiceImpl implements UserService {
         return userDao.findByNameStartingWith(value, pageable)
                 .map(a -> projectionFactory.createProjection(Users.class, a));
     }
+
 }

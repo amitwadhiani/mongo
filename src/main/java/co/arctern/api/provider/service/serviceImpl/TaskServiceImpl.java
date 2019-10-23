@@ -9,6 +9,7 @@ import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Payments;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
+import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.queue.Sender;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.DateUtil;
@@ -482,7 +483,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Payments> requestSettlement(Long userId, SettleState settleState) {
-        List<Task> tasks = taskDao.findByActiveUserId(userId);
+        List<Task> tasks = taskDao.findByActiveUserIdAndState(userId, TaskState.COMPLETED);
         List<Payments> payments = new ArrayList<>();
         tasks.stream().forEach(a -> {
             payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(settleState))
@@ -493,8 +494,21 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Double fetchUserOwedAmount(Long userId) {
+        return this.requestSettlement(userId, SettleState.PAYMENT_RECEIVED).stream().mapToDouble(a -> a.getAmount()).sum();
+    }
+
+    @Override
     public List<Payments> settle(Long userId, SettleState settleState) {
         return paymentService.fetchSettleRequests(settleState);
     }
+
+    @Override
+    public Users fetchProfileDetails(Long userId) {
+        User user = userService.fetchUser(userId);
+        user.setAmountOwed(this.fetchUserOwedAmount(userId));
+        return projectionFactory.createProjection(Users.class, user);
+    }
+
 
 }

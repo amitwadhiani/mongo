@@ -6,6 +6,7 @@ import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Payments;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
+import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -413,4 +414,9 @@ public interface TaskService extends MessageUtil {
     public List<Payments> requestSettlement(Long userId, SettleState settleState);
 
     public List<Payments> settle(Long userId, SettleState settleState);
+
+    public Double fetchUserOwedAmount(Long userId);
+
+    public Users fetchProfileDetails(Long userId);
+
 }

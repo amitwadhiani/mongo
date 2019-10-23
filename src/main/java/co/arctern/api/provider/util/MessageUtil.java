@@ -63,6 +63,11 @@ public interface MessageUtil {
     StringBuilder INVALID_ADDRESS_ID_MESSAGE = new StringBuilder("Invalid address id.");
 
     /**
+     * invalid user id message.
+     */
+    StringBuilder INVALID_USER_ID_MESSAGE = new StringBuilder("Invalid user id.");
+
+    /**
      * user not found message.
      */
     StringBuilder USER_NOT_FOUND_MESSAGE = new StringBuilder("User not found .");
