@@ -66,7 +66,7 @@ public class User {
     @Column(nullable = true)
     private Integer age;
 
-    @Column
+    @Transient
     private Double amountOwed;
 
     @Column(nullable = true)
