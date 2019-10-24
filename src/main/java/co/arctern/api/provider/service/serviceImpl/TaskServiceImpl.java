@@ -147,7 +147,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public void markInactiveAndReassignTask(Long userId, Task task) {
-        if (userTaskService.markInactive(task).longValue() == userId) {
+        Long taskUserId = userTaskService.markInactive(task);
+        if (taskUserId != null && taskUserId.longValue() == userId) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TASK_SAME_USER_MESSAGE.toString());
         }
         userTaskService.createUserTask(userService.fetchUser(userId), task);
