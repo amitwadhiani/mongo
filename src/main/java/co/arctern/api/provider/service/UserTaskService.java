@@ -33,10 +33,14 @@ public interface UserTaskService extends MessageUtil {
      * fetch tasks for user.
      *
      * @param userId
-     * @param state
+     * @param states
      * @return
      */
-    public Page<UserTask> fetchTasksForUser(Long userId, TaskState state, Pageable pageable);
+    public Page<UserTask> fetchTasksForUser(Long userId, TaskState[] states, Pageable pageable);
+
+    public Page<UserTask> fetchTasksForUser(Long userId, TaskState[] states, TaskType type, Pageable pageable);
+
+    public Page<UserTask> fetchTasksForUser(Long userId, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     public Page<UserTask> fetchTasksForProvider(List<Long> ids, TaskState state, TaskType type, Pageable pageable);
 

@@ -23,10 +23,14 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      * find active task for user .
      *
      * @param userId
-     * @param state
+     * @param states
      * @return
      */
-    Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateOrderByTaskCreatedAtDesc(Long userId, TaskState state, Pageable pageable);
+    Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateInOrderByTaskCreatedAtDesc(Long userId, TaskState[] states, Pageable pageable);
+
+    Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateInAndTaskTypeOrderByTaskCreatedAtDesc(Long userId, TaskState[] states, TaskType type, Pageable pageable);
+
+    Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateInAndTaskTypeAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThanOrderByTaskCreatedAtDesc(Long userId, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
      * find user_task for task_id.

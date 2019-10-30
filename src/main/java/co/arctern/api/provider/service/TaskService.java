@@ -377,6 +377,7 @@ public interface TaskService extends MessageUtil {
                                         List<Long> areaIds, TaskType taskType,
                                         Long orderId,
                                         String patientFilterValue,
+                                        Long providerId,
                                         Pageable pageable);
 
     /**

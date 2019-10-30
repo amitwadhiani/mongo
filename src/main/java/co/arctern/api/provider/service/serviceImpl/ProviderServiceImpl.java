@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.TasksForProviderResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
@@ -58,9 +59,11 @@ public class ProviderServiceImpl implements ProviderService {
     }
 
     @Override
-    public PaginatedResponse fetchFilteredTasksForProvider(Long userId, TaskState state, Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(userTaskService.fetchTasksForUser(userId, state, pageable)
-                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask())), pageable);
+    public PaginatedResponse fetchFilteredTasksForProvider(Long userId, TaskState[] states, Timestamp start, Timestamp end, TaskType taskType, Pageable pageable) {
+        return PaginationUtil.returnPaginatedBody((start == null && end == null) ? userTaskService.fetchTasksForUser(userId, states, taskType, pageable)
+                .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask())) :
+                userTaskService.fetchTasksForUser(userId, states, taskType, start, end, pageable)
+                        .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask())), pageable);
     }
 
 }

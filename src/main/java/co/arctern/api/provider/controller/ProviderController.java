@@ -1,6 +1,7 @@
 package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.TasksForProviderResponse;
 import co.arctern.api.provider.service.ProviderService;
@@ -109,10 +110,13 @@ public class ProviderController {
     @GetMapping("/task/filter")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<PaginatedResponse> fetchFilteredTasksForProvider(@RequestParam(value = "userId", required = false) Long userId,
-                                                                           @RequestParam("state") TaskState state,
+                                                                           @RequestParam("states") TaskState[] states,
+                                                                           @RequestParam(value = "start", required = false) Timestamp start,
+                                                                           @RequestParam(value = "type", required = false) TaskType type,
+                                                                           @RequestParam(value = "end", required = false) Timestamp end,
                                                                            Pageable pageable) {
         if (userId == null) userId = tokenService.fetchUserId();
-        return ResponseEntity.ok(providerService.fetchFilteredTasksForProvider(userId, state, pageable));
+        return ResponseEntity.ok(providerService.fetchFilteredTasksForProvider(userId, states, start, end, type, pageable));
     }
 
 }

@@ -253,19 +253,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<TasksForProvider> fetchCompletedTasksForUser(Long userId, Pageable pageable) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.COMPLETED, pageable)
+        return userTaskService.fetchTasksForUser(userId, new TaskState[]{TaskState.COMPLETED}, pageable)
                 .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()));
     }
 
     @Override
     public Page<TasksForProvider> fetchAssignedTasksForUser(Long userId, Pageable pageable) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.ASSIGNED, pageable)
+        return userTaskService.fetchTasksForUser(userId, new TaskState[]{TaskState.ASSIGNED}, pageable)
                 .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()));
     }
 
     @Override
     public List<TasksForProvider> fetchCancelledTasksForUser(Long userId, Pageable pageable) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.CANCELLED, pageable).stream()
+        return userTaskService.fetchTasksForUser(userId, new TaskState[]{TaskState.CANCELLED}, pageable).stream()
                 .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()))
                 .collect(Collectors.toList());
     }
@@ -417,10 +417,16 @@ public class TaskServiceImpl implements TaskService {
                                         List<Long> areaIds, TaskType taskType,
                                         Long orderId,
                                         String patientFilterValue,
+                                        Long providerId,
                                         Pageable pageable) {
         if (states == null) {
             states = new TaskState[]{TaskState.OPEN, TaskState.ASSIGNED, TaskState.STARTED, TaskState.COMPLETED,
                     TaskState.ACCEPTED, TaskState.CANCELLED};
+        }
+        if (providerId != null) {
+            return getPaginatedResponse((start != null && end != null) ?
+                    userTaskService.fetchTasksForUser(providerId, states, taskType, start, end, pageable).map(a -> a.getTask()) :
+                    userTaskService.fetchTasksForUser(providerId, states, taskType, pageable).map(a -> a.getTask()), pageable);
         }
         if (StringUtils.isEmpty(patientFilterValue)) {
             if (areaIds == null) {

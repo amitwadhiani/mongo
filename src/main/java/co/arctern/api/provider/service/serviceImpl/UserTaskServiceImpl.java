@@ -51,8 +51,18 @@ public class UserTaskServiceImpl implements UserTaskService {
     }
 
     @Override
-    public Page<UserTask> fetchTasksForUser(Long userId, TaskState state, Pageable pageable) {
-        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateOrderByTaskCreatedAtDesc(userId, state, pageable);
+    public Page<UserTask> fetchTasksForUser(Long userId, TaskState[] states, Pageable pageable) {
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateInOrderByTaskCreatedAtDesc(userId, states, pageable);
+    }
+
+    @Override
+    public Page<UserTask> fetchTasksForUser(Long userId, TaskState[] states, TaskType type, Pageable pageable) {
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateInAndTaskTypeOrderByTaskCreatedAtDesc(userId, states, type, pageable);
+    }
+
+    @Override
+    public Page<UserTask> fetchTasksForUser(Long userId, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateInAndTaskTypeAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThanOrderByTaskCreatedAtDesc(userId, states, type, start, end, pageable);
     }
 
     @Override
