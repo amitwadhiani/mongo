@@ -23,5 +23,7 @@ public interface AddressService extends MessageUtil {
      */
     Address saveAddress(TaskAssignDto dto);
 
+    Address fetchSourceAddress();
+
 
 }

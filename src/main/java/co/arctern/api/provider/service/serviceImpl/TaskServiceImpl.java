@@ -307,10 +307,6 @@ public class TaskServiceImpl implements TaskService {
         {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TASK_ID_MESSAGE.toString());
         });
-        /**
-         * to set source address Id of Warehouse / provider ( 3 in case of staging , change later / on prod.
-         */
-        dto.setSourceAddressId(1l);
         task.setIsPrepaid(dto.getIsPrepaid());
         task.setPatientPhone(dto.getPatientPhone());
         task.setPatientName(dto.getPatientName());
@@ -322,7 +318,7 @@ public class TaskServiceImpl implements TaskService {
         task.setIsActive(true);
         task.setExpectedArrivalTime(dto.getExpectedArrivalTime());
         task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
-        task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
+        task.setSourceAddress(addressService.fetchSourceAddress());
         task.setState(TaskState.OPEN);
         if (userId != null) task.setActiveUserId(userId);
         String paymentMode = dto.getPaymentMode();

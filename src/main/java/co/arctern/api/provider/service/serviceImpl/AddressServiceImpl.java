@@ -54,4 +54,9 @@ public class AddressServiceImpl implements AddressService {
             address.setArea(areaService.fetchById(dto.getAreaId()));
         return addressDao.save(address);
     }
+
+    @Override
+    public Address fetchSourceAddress() {
+        return addressDao.findByIsSourceAddressTrue().stream().findFirst().orElse(null);
+    }
 }
