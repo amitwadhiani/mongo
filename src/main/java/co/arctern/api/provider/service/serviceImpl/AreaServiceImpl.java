@@ -114,4 +114,12 @@ public class AreaServiceImpl implements AreaService {
         return areaDao.existsByPinCode(value);
     }
 
+    @Override
+    public Areas fetchArea(String pinCode) {
+        return projectionFactory.createProjection(Areas.class, areaDao.findByPinCode(pinCode).stream()
+                .findFirst()
+                .orElseThrow(() -> {
+                    return new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_PIN_CODE_MESSAGE.toString());
+                }));
+    }
 }

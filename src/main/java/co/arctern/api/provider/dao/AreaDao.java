@@ -56,4 +56,6 @@ public interface AreaDao extends PagingAndSortingRepository<Area, Long> {
     List<Area> findByNameContainingAndDeliveryStateTrue(String name);
 
     Boolean existsByPinCode(String pinCode);
+
+    List<Area> findByPinCode(String pinCode);
 }

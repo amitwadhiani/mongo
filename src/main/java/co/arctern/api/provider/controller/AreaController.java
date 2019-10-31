@@ -68,4 +68,11 @@ public class AreaController {
         return ResponseEntity.ok(areaService.pincodeExists(value));
     }
 
+    @GetMapping("/fetch/by-pincode")
+    @CrossOrigin
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Areas> fetchAreaByPinCode(@RequestParam("pinCode") String pinCode) {
+        return ResponseEntity.ok(areaService.fetchArea(pinCode));
+    }
+
 }

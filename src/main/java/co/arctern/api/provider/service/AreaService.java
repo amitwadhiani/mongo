@@ -49,4 +49,6 @@ public interface AreaService extends MessageUtil {
 
     public Boolean pincodeExists(String value);
 
+    public Areas fetchArea(String pinCode);
+
 }
