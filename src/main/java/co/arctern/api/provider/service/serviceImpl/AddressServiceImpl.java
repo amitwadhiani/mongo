@@ -27,10 +27,18 @@ public class AddressServiceImpl implements AddressService {
     @Override
     @SneakyThrows(Exception.class)
     public Address createOrFetchAddress(TaskAssignDto dto, Long addressId) {
-        if (addressId != null) return addressDao.findById(addressId).orElseThrow(() ->
-        {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ADDRESS_ID_MESSAGE.toString());
-        });
+        if (addressId != null) {
+            Address address = addressDao.findById(addressId).orElseThrow(() ->
+            {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ADDRESS_ID_MESSAGE.toString());
+            });
+            Long areaId = dto.getAreaId();
+            if (areaId != null) {
+                address.setArea(areaService.fetchById(areaId));
+                address = addressDao.save(address);
+            }
+            return address;
+        }
         return saveAddress(dto);
     }
 
@@ -50,8 +58,9 @@ public class AddressServiceImpl implements AddressService {
         address.setPinCode(dto.getPinCode());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
-        if (isSourceAddress != null && !isSourceAddress && dto.getAreaId() != null)
-            address.setArea(areaService.fetchById(dto.getAreaId()));
+        Long areaId = dto.getAreaId();
+        if (areaId != null)
+            address.setArea(areaService.fetchById(areaId));
         return addressDao.save(address);
     }
 
