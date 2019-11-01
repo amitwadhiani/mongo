@@ -29,6 +29,8 @@ public interface TasksForProvider {
 
     TaskType getType();
 
+    Long getDiagnosticOrderId();
+
     Boolean getCancellationRequested();
 
     String getPatientName();
