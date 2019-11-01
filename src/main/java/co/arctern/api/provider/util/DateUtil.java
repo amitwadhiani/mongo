@@ -59,7 +59,10 @@ public class DateUtil {
     }
 
     public static Timestamp convertGmtToIst(Timestamp time) {
-        return zonedDateTimeToTimestampConversion(time.toLocalDateTime().atZone(ZoneId.of("Asia/Kolkata")));
+        if (time != null) {
+            return zonedDateTimeToTimestampConversion(time.toLocalDateTime().atZone(ZoneId.of("Asia/Kolkata")));
+        }
+        return null;
     }
 
 }
