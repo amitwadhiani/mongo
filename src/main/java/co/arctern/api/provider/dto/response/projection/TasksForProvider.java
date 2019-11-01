@@ -28,6 +28,9 @@ public interface TasksForProvider {
 
     TaskType getType();
 
+    @Value("#{@areaServiceImpl.getCluster(target.getDestinationAddress())}")
+    ClustersWoArea getCluster();
+
     Long getDiagnosticOrderId();
 
     Boolean getCancellationRequested();

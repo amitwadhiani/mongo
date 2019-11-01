@@ -1,9 +1,12 @@
 package co.arctern.api.provider.service;
 
+import co.arctern.api.provider.domain.Address;
 import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.dto.response.projection.Addresses;
 import co.arctern.api.provider.dto.response.projection.Areas;
+import co.arctern.api.provider.dto.response.projection.ClustersWoArea;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,5 +53,8 @@ public interface AreaService extends MessageUtil {
     public Boolean pincodeExists(String value);
 
     public Areas fetchArea(String pinCode);
+
+    public ClustersWoArea getCluster(Address address);
+
 
 }

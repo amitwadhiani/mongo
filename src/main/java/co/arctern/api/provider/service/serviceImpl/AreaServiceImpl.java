@@ -2,11 +2,9 @@ package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dao.AreaDao;
 import co.arctern.api.provider.dao.UserAreaDao;
-import co.arctern.api.provider.domain.Area;
-import co.arctern.api.provider.domain.Role;
-import co.arctern.api.provider.domain.User;
-import co.arctern.api.provider.domain.UserArea;
+import co.arctern.api.provider.domain.*;
 import co.arctern.api.provider.dto.response.projection.Areas;
+import co.arctern.api.provider.dto.response.projection.ClustersWoArea;
 import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,5 +119,17 @@ public class AreaServiceImpl implements AreaService {
                 .orElseThrow(() -> {
                     return new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_PIN_CODE_MESSAGE.toString());
                 }));
+    }
+
+    @Override
+    public ClustersWoArea getCluster(Address address) {
+        if (address != null) {
+            Area area = address.getArea();
+            if (area != null) {
+                return projectionFactory.createProjection(ClustersWoArea.class, area);
+            }
+            return null;
+        }
+        return null;
     }
 }
