@@ -3,7 +3,7 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.dao.UserAreaDao;
 import co.arctern.api.provider.domain.UserArea;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.projection.Areas;
+import co.arctern.api.provider.dto.response.projection.ClustersWoArea;
 import co.arctern.api.provider.service.UserAreaService;
 import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +34,11 @@ public class UserAreaServiceImpl implements UserAreaService {
     }
 
     @Override
-    public List<Areas> fetchAreasForUser(List<UserArea> userAreas) {
-        return userAreas.parallelStream()
+    public List<ClustersWoArea> fetchAreasForUser(List<UserArea> userAreas) {
+        return (userAreas.parallelStream()
                 .filter(UserArea::getIsActive)
-                .map(userArea -> projectionFactory.createProjection(Areas.class, userArea.getArea())).collect(Collectors.toList());
+                .map(userArea -> projectionFactory.createProjection(ClustersWoArea.class, userArea.getArea().getCluster()))
+                .filter(PaginationUtil.distinctByKey(ClustersWoArea::getId)).collect(Collectors.toList()));
     }
 
 }

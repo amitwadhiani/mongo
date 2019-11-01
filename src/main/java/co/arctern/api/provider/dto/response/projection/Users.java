@@ -34,7 +34,7 @@ public interface Users {
     Integer getAge();
 
     @Value("#{@userAreaServiceImpl.fetchAreasForUser(target.getUserAreas())}")
-    List<Areas> getAreas();
+    List<ClustersWoArea> getClusters();
 
 
 }
