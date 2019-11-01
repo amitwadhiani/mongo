@@ -22,7 +22,6 @@ public interface TasksForProvider {
 
     String getSource();
 
-    @Value("#{@dateUtil.convertGmtToIst(target.getExpectedArrivalTime())}")
     Timestamp getExpectedArrivalTime();
 
     Timestamp getCreatedAt();
