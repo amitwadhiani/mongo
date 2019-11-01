@@ -17,7 +17,7 @@ public interface Users {
 
     String getName();
 
-    Boolean getAmountOwed();
+    Double getAmountOwed();
 
     String getUsername();
 
