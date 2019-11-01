@@ -71,6 +71,8 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskState(Long userId, TaskState state);
 
+    List<UserTask> findByIsActiveTrueAndUserIdAndTaskStateOrderByCreatedAtDesc(Long userId, TaskState state);
+
     Page<UserTask> findByIsActiveTrueAndUserIdInAndTaskType(List<Long> userIds, TaskType type, Pageable pageable);
 
     Page<UserTask> findByIsActiveTrueAndUserIdInAndTaskTypeAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(List<Long> userIds, TaskType type, Timestamp start, Timestamp end, Pageable pageable);

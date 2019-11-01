@@ -95,7 +95,7 @@ public class UserTaskServiceImpl implements UserTaskService {
 
     @Override
     public List<UserTask> fetchTasksForUser(Long userId, TaskState state) {
-        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskState(userId, state);
+        return userTaskDao.findByIsActiveTrueAndUserIdAndTaskStateOrderByCreatedAtDesc(userId, state);
     }
 
     @Override
