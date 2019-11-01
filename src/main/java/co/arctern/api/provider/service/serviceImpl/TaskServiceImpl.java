@@ -316,6 +316,7 @@ public class TaskServiceImpl implements TaskService {
         task.setSource(dto.getSource());
         task.setCancellationRequested(false);
         task.setIsActive(true);
+        task.setDiagnosticOrderId(dto.getDiagnosticOrderId());
         task.setExpectedArrivalTime(dto.getExpectedArrivalTime());
         task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
         task.setSourceAddress(addressService.fetchSourceAddress());
