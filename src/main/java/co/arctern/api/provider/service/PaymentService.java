@@ -29,4 +29,7 @@ public interface PaymentService extends MessageUtil {
     Payment patch(Task task);
 
     List<Payments> fetchSettleRequests(SettleState settleState);
+
+    Payment updateAmount(Task task, Double amount);
+
 }

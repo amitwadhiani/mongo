@@ -12,6 +12,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,18 @@ public class PaymentServiceImpl implements PaymentService {
             paymentResponse.add(projectionFactory.createProjection(Payments.class, paymentDao.save(a)));
         });
         return paymentResponse;
+    }
+
+
+    @Override
+    public Payment updateAmount(Task task, Double amount) {
+        List<Payment> payments = task.getPayments();
+        if (!CollectionUtils.isEmpty(payments)) {
+            Payment payment = payments.get(0);
+            payment.setAmount(amount);
+            return paymentDao.save(payment);
+        }
+        return null;
     }
 
 }

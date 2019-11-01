@@ -1,8 +1,6 @@
 package co.arctern.api.provider.controller;
 
-import co.arctern.api.provider.service.OtpService;
-import co.arctern.api.provider.service.RatingService;
-import co.arctern.api.provider.service.TokenService;
+import co.arctern.api.provider.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +17,20 @@ public class RatingController {
     private final OtpService otpService;
     private final RatingService ratingService;
     private final TokenService tokenService;
+    private final PaymentService paymentService;
+    private final TaskService taskService;
 
     @Autowired
     public RatingController(OtpService otpService,
                             RatingService ratingService,
-                            TokenService tokenService) {
+                            TokenService tokenService,
+                            PaymentService paymentService,
+                            TaskService taskService) {
         this.otpService = otpService;
         this.ratingService = ratingService;
         this.tokenService = tokenService;
+        this.paymentService = paymentService;
+        this.taskService = taskService;
     }
 
     /**
@@ -54,8 +58,10 @@ public class RatingController {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<String> saveRating(@RequestParam("taskId") Long taskId,
                                              @RequestParam(value = "otp", required = false) String otp,
-                                             @RequestParam(value = "userId", required = false) Long userId) {
+                                             @RequestParam(value = "userId", required = false) Long userId,
+                                             @RequestParam(value = "amount", required = false) Double amount) {
         if (userId == null) userId = tokenService.fetchUserId();
+        if (amount != null) paymentService.updateAmount(taskService.fetchTask(taskId), amount);
         return ResponseEntity.ok(ratingService.saveRating(taskId, userId, otp));
     }
 }
