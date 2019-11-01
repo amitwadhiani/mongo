@@ -50,6 +50,9 @@ public class Task extends CodeGeneratorUtil {
     @OneToMany(mappedBy = "task")
     private List<Payment> payments;
 
+    @Column
+    private Long diagnosticOrderId;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'OPEN'")
     private TaskState state;
