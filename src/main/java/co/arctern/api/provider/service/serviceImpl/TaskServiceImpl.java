@@ -296,7 +296,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public PaginatedResponse seeCancelRequests(Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(taskDao.findByCancellationRequestedTrue(pageable).map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
+        return PaginationUtil.returnPaginatedBody(taskDao.findByCancellationRequestedTrueOrderByLastModifiedAtDesc(pageable).map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
     }
 
 

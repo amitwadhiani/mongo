@@ -70,7 +70,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByCancellationRequestedTrue(Pageable pageable);
+    Page<Task> findByCancellationRequestedTrueOrderByLastModifiedAtDesc(Pageable pageable);
 
 
     /**
