@@ -112,7 +112,7 @@ public class ProviderController {
     public ResponseEntity<PaginatedResponse> fetchFilteredTasksForProvider(@RequestParam(value = "userId", required = false) Long userId,
                                                                            @RequestParam("states") TaskState[] states,
                                                                            @RequestParam(value = "start", required = false) Timestamp start,
-                                                                           @RequestParam(value = "type", required = false) TaskType type,
+                                                                           @RequestParam(value = "type", required = false, defaultValue = "SAMPLE_PICKUP") TaskType type,
                                                                            @RequestParam(value = "end", required = false) Timestamp end,
                                                                            Pageable pageable) {
         if (userId == null) userId = tokenService.fetchUserId();
