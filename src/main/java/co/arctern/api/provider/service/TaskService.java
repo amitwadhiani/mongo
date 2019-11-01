@@ -5,6 +5,7 @@ import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Payments;
+import co.arctern.api.provider.dto.response.projection.Reasons;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.util.MessageUtil;
@@ -419,5 +420,7 @@ public interface TaskService extends MessageUtil {
     public Double fetchUserOwedAmount(Long userId);
 
     public Users fetchProfileDetails(Long userId);
+
+    public List<Reasons> fetchReasons(Task task);
 
 }

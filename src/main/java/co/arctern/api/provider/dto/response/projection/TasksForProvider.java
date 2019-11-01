@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * tasks of a provider response body.
@@ -19,6 +20,9 @@ public interface TasksForProvider {
     TaskState getState();
 
     String getCode();
+
+    @Value("#{@taskServiceImpl.fetchReasons(target)}")
+    List<Reasons> getReasons();
 
     String getSource();
 

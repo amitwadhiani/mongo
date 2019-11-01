@@ -3,11 +3,13 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.constant.*;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
+import co.arctern.api.provider.domain.TaskReason;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Payments;
+import co.arctern.api.provider.dto.response.projection.Reasons;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.queue.Sender;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
@@ -512,6 +515,16 @@ public class TaskServiceImpl implements TaskService {
         User user = userService.fetchUser(userId);
         user.setAmountOwed(this.fetchUserOwedAmount(userId));
         return projectionFactory.createProjection(Users.class, user);
+    }
+
+    @Override
+    public List<Reasons> fetchReasons(Task task) {
+        List<TaskReason> taskReasons = task.getTaskReasons();
+        return (!CollectionUtils.isEmpty(taskReasons))
+                ? taskReasons
+                .stream()
+                .map(a -> projectionFactory.createProjection(Reasons.class, a.getReason()))
+                .collect(Collectors.toList()) : null;
     }
 
 
