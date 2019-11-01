@@ -513,7 +513,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Users fetchProfileDetails(Long userId) {
         User user = userService.fetchUser(userId);
-        user.setAmountOwed(this.fetchUserOwedAmount(userId));
+        user.setAmountOwed(Math.round(this.fetchUserOwedAmount(userId) * 100) / 100D);
         return projectionFactory.createProjection(Users.class, user);
     }
 
