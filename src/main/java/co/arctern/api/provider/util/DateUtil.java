@@ -1,13 +1,17 @@
 package co.arctern.api.provider.util;
 
+import org.springframework.stereotype.Service;
+
 import java.sql.Timestamp;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
  * date util for all date and time conversions and manipulations.
  */
-public interface DateUtil {
+@Service
+public class DateUtil {
 
     /**
      * fetch current timestamp.
@@ -52,6 +56,10 @@ public interface DateUtil {
      */
     public static Timestamp zonedDateTimeToTimestampConversion(ZonedDateTime value) {
         return Timestamp.valueOf(value.toLocalDateTime());
+    }
+
+    public static Timestamp convertGmtToIst(Timestamp time) {
+        return zonedDateTimeToTimestampConversion(time.toLocalDateTime().atZone(ZoneId.of("Asia/Kolkata")));
     }
 
 }
