@@ -22,6 +22,7 @@ public interface TasksForProvider {
 
     String getSource();
 
+    @Value("#{@}")
     Timestamp getExpectedArrivalTime();
 
     Timestamp getCreatedAt();
