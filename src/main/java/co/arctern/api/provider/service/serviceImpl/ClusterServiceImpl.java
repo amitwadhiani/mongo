@@ -91,7 +91,8 @@ public class ClusterServiceImpl implements ClusterService {
                     areaService.save(a);
                 });
             }
-            List<Area> areas = areaService.fetchAreas(pinCodes);
+            List<Area> areas = new ArrayList<>();
+            if (!CollectionUtils.isEmpty(pinCodes)) areas = areaService.fetchAreas(pinCodes);
             for (Area area : areas) {
                 if (area.getCluster() != null)
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
