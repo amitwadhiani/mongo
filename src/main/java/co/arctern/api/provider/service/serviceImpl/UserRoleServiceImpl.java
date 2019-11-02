@@ -34,14 +34,13 @@ public class UserRoleServiceImpl implements UserRoleService {
             userRoleDao.deleteAll(existingUserRoles);
         }
         List<Role> roles = roleDao.findByIdIn(roleIds);
-        roles
-                .forEach(role -> {
-                    UserRole userRole = new UserRole();
-                    userRole.setRole(role);
-                    userRole.setIsActive(true);
-                    userRole.setUser(user);
-                    userRoles.add(userRole);
-                });
+        roles.forEach(role -> {
+            UserRole userRole = new UserRole();
+            userRole.setRole(role);
+            userRole.setIsActive(true);
+            userRole.setUser(user);
+            userRoles.add(userRole);
+        });
         userRoleDao.saveAll(userRoles);
         return roles;
     }
