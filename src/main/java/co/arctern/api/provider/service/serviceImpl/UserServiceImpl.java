@@ -232,7 +232,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(userDao.findAll(pageable)
-                .map(a -> projectionFactory.createProjection(Users.class, a)), pageable);
+                .map(a -> {
+                    a.setAmountOwed(genericService.fetchUserOwedAmount(a.getId()));
+                    return projectionFactory.createProjection(Users.class, a);
+                }), pageable);
     }
 
     @Override
