@@ -45,10 +45,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment patch(Task task) {
+    public Payment patch(Task task, Long userId) {
         Payment payment = task.getPayments().get(0);
         payment.setState(PaymentState.PAID);
         payment.setSettleState(SettleState.PAYMENT_RECEIVED);
+        payment.setPaidBy(userId);
         return paymentDao.save(payment);
     }
 
