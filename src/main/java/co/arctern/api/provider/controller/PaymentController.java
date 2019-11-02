@@ -31,7 +31,7 @@ public class PaymentController {
     @CrossOrigin
     @PostMapping("/request")
     public ResponseEntity<List<Payments>> requestSettlement(@RequestParam(value = "settleState", required = false,
-            defaultValue = "PAYMENT_RECEIVED") SettleState settleState) {
+            defaultValue = "REQUESTED") SettleState settleState) {
         return ResponseEntity.ok(taskService.requestSettlement(tokenService.fetchUserId(), settleState));
     }
 

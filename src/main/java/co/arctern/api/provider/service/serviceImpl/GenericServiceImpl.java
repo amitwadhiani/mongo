@@ -32,7 +32,7 @@ public class GenericServiceImpl implements GenericService {
         List<Task> tasks = taskDao.findByActiveUserIdAndState(userId, TaskState.COMPLETED);
         List<Payments> payments = new ArrayList<>();
         tasks.stream().forEach(a -> {
-            payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(SettleState.REQUESTED))
+            payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(SettleState.PAYMENT_RECEIVED))
                     .map(c -> projectionFactory.createProjection(Payments.class, c)).collect(Collectors.toList()));
         });
         return payments.stream().mapToDouble(a -> a.getAmount()).sum();

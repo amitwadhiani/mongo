@@ -85,7 +85,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public List<Payment> fetchPaymentSettlementsForProvider(Long userId) {
-        return paymentDao.findBySettleStateAndPaidBy(SettleState.REQUESTED, userId);
+        /**
+         * to be changed to Settle state = REQUESTED later.
+         */
+        return paymentDao.findBySettleStateAndPaidBy(SettleState.PAYMENT_RECEIVED, userId);
     }
 
     @Override
