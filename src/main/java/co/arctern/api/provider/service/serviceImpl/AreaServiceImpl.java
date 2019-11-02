@@ -42,13 +42,10 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public void setAreasToUser(User user, List<Long> areaIds, List<Role> roles, Long clusterId) {
-        List<Area> areas;
+        List<Area> areas = new ArrayList<>();
         if (!roles.contains("ROLE_ADMIN")) {
-            if (roles.contains("ROLE_CLUSTER_MANAGER")) {
-                areas = areaDao.fetchActiveAreasByCluster(clusterId);
-            } else {
-                areas = areaDao.findByIdIn(areaIds);
-            }
+            if (clusterId != null) areas = areaDao.fetchActiveAreasByCluster(clusterId);
+            if (!CollectionUtils.isEmpty(areaIds)) areas = areaDao.findByIdIn(areaIds);
         } else {
             areas = areaDao.fetchActiveAreas();
         }
