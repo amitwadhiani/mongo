@@ -35,6 +35,6 @@ public class GenericServiceImpl implements GenericService {
             payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(SettleState.PAYMENT_RECEIVED))
                     .map(c -> projectionFactory.createProjection(Payments.class, c)).collect(Collectors.toList()));
         });
-        return payments.stream().mapToDouble(a -> a.getAmount()).sum();
+        return Math.round(payments.stream().mapToDouble(a -> a.getAmount()).sum()) * 100 / 100D;
     }
 }

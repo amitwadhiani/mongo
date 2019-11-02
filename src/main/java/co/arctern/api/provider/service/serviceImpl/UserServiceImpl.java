@@ -185,7 +185,7 @@ public class UserServiceImpl implements UserService {
         return PaginationUtil.returnPaginatedBody(
                 users.stream()
                         .map(user -> {
-                            user.setAmountOwed(Math.round(genericService.fetchUserOwedAmount(user.getId()) * 100) / 100D);
+                            user.setAmountOwed(genericService.fetchUserOwedAmount(user.getId()));
                             return projectionFactory.createProjection(Users.class, user);
                         }).collect(Collectors.toList()),
                 pageable.getPageNumber(),
