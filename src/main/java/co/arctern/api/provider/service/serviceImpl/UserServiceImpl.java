@@ -37,10 +37,10 @@ public class UserServiceImpl implements UserService {
     private final ProjectionFactory projectionFactory;
     private final OfferingService offeringService;
     private final AreaService areaService;
-
     private final UserRoleService userRoleService;
     private final TokenService tokenService;
     private final UserTaskService userTaskService;
+    private final GenericService genericService;
 
     @Autowired
     public UserServiceImpl(UserDao userDao,
@@ -49,7 +49,8 @@ public class UserServiceImpl implements UserService {
                            AreaService areaService,
                            UserRoleService userRoleService,
                            TokenService tokenService,
-                           UserTaskService userTaskService) {
+                           UserTaskService userTaskService,
+                           GenericService genericService) {
         this.userDao = userDao;
         this.projectionFactory = projectionFactory;
         this.offeringService = offeringService;
@@ -57,6 +58,7 @@ public class UserServiceImpl implements UserService {
         this.userRoleService = userRoleService;
         this.tokenService = tokenService;
         this.userTaskService = userTaskService;
+        this.genericService = genericService;
     }
 
     @Override
@@ -183,8 +185,10 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
         return PaginationUtil.returnPaginatedBody(
                 users.stream()
-                        .map(user -> projectionFactory.createProjection(Users.class, user))
-                        .collect(Collectors.toList()),
+                        .map(user -> {
+                            user.setAmountOwed(Math.round(genericService.fetchUserOwedAmount(user.getId()) * 100) / 100D);
+                            return projectionFactory.createProjection(Users.class, user);
+                        }).collect(Collectors.toList()),
                 pageable.getPageNumber(),
                 pageable.getPageSize(), users.size());
     }
