@@ -494,8 +494,10 @@ public class TaskServiceImpl implements TaskService {
         List<Payments> payments = new ArrayList<>();
         tasks.stream().forEach(a -> {
             payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(settleState))
-                    .map(c -> projectionFactory.createProjection(Payments.class, c))
-                    .collect(Collectors.toList()));
+                    .map(c -> {
+                        c.setPaidBy(userId);
+                        return projectionFactory.createProjection(Payments.class, paymentService.save(c));
+                    }).collect(Collectors.toList()));
         });
         return payments;
     }
@@ -507,7 +509,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Payments> settle(Long userId, SettleState settleState) {
-        return paymentService.fetchSettleRequests(settleState);
+        return paymentService.fetchSettleRequests(userId, settleState);
     }
 
     @Override
@@ -527,5 +529,9 @@ public class TaskServiceImpl implements TaskService {
                 .collect(Collectors.toList()) : null;
     }
 
+    @Override
+    public List<Payments> settleAmountForProvider(Long adminId, Long userId) {
+        return paymentService.settlePayments(adminId, paymentService.fetchPaymentSettlementsForProvider(userId), new ArrayList<>(), true);
+    }
 
 }

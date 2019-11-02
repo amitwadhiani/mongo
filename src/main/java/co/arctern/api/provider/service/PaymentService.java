@@ -28,8 +28,14 @@ public interface PaymentService extends MessageUtil {
      */
     Payment patch(Task task);
 
-    List<Payments> fetchSettleRequests(SettleState settleState);
+    List<Payments> fetchSettleRequests(Long userId, SettleState settleState);
 
     Payment updateAmount(Task task, Double amount);
+
+    List<Payments> settlePayments(Long userId, List<Payment> payments, List<Payments> paymentResponse, Boolean settleFlag);
+
+    List<Payment> fetchPaymentSettlementsForProvider(Long userId);
+
+    Payment save(Payment payment);
 
 }

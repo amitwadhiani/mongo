@@ -42,4 +42,10 @@ public class PaymentController {
         return ResponseEntity.ok(taskService.settle(tokenService.fetchUserId(), settleState));
     }
 
+    @CrossOrigin
+    @PostMapping("/settle")
+    public ResponseEntity<List<Payments>> settle(@RequestParam(value = "userId") Long userId) {
+        return ResponseEntity.ok(taskService.settleAmountForProvider(tokenService.fetchUserId(), userId));
+    }
+
 }

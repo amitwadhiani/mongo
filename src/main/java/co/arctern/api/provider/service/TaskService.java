@@ -417,6 +417,8 @@ public interface TaskService extends MessageUtil {
 
     public List<Payments> settle(Long userId, SettleState settleState);
 
+    public List<Payments> settleAmountForProvider(Long adminId, Long userId);
+
     public Double fetchUserOwedAmount(Long userId);
 
     public Users fetchProfileDetails(Long userId);

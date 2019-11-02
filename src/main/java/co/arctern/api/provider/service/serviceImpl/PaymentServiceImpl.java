@@ -53,13 +53,19 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public List<Payments> fetchSettleRequests(SettleState settleState) {
+    public List<Payments> fetchSettleRequests(Long userId, SettleState settleState) {
         List<Payment> payments = paymentDao.findBySettleState(settleState);
         List<Payments> paymentResponse = new ArrayList<>();
         Boolean settleFlag = (settleState.equals(SettleState.SETTLED)) ? true : false;
+        return settlePayments(userId, payments, paymentResponse, settleFlag);
+    }
+
+    @Override
+    public List<Payments> settlePayments(Long userId, List<Payment> payments, List<Payments> paymentResponse, Boolean settleFlag) {
         payments.stream().forEach(a -> {
             a.setIsSettled(settleFlag);
             a.setSettleState(SettleState.SETTLED);
+            a.setSettledBy(userId);
             paymentResponse.add(projectionFactory.createProjection(Payments.class, paymentDao.save(a)));
         });
         return paymentResponse;
@@ -75,6 +81,16 @@ public class PaymentServiceImpl implements PaymentService {
             return paymentDao.save(payment);
         }
         return null;
+    }
+
+    @Override
+    public List<Payment> fetchPaymentSettlementsForProvider(Long userId) {
+        return paymentDao.findBySettleStateAndPaidBy(SettleState.REQUESTED, userId);
+    }
+
+    @Override
+    public Payment save(Payment payment) {
+        return paymentDao.save(payment);
     }
 
 }

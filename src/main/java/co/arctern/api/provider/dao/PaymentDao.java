@@ -14,4 +14,6 @@ import java.util.List;
 public interface PaymentDao extends PagingAndSortingRepository<Payment, Long> {
 
     List<Payment> findBySettleState(SettleState settleState);
+
+    List<Payment> findBySettleStateAndPaidBy(SettleState settleState, Long paidBy);
 }
