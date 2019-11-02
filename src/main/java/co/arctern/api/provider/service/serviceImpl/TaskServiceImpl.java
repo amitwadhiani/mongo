@@ -490,7 +490,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Payments> requestSettlement(Long userId, SettleState settleState) {
-        List<Task> tasks = taskDao.findByActiveUserIdAndState(userId, TaskState.COMPLETED);
+        List<Task> tasks = fetchTasksForPayment(userId);
         List<Payments> payments = new ArrayList<>();
         tasks.stream().forEach(a -> {
             payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(settleState))
@@ -502,9 +502,24 @@ public class TaskServiceImpl implements TaskService {
         return payments;
     }
 
+    public List<Task> fetchTasksForPayment(Long userId) {
+        return taskDao.findByActiveUserIdAndState(userId, TaskState.COMPLETED);
+    }
+
+    @Override
+    public List<Payments> fetchPaymentsForUser(Long userId, SettleState settleState) {
+        List<Task> tasks = fetchTasksForPayment(userId);
+        List<Payments> payments = new ArrayList<>();
+        tasks.stream().forEach(a -> {
+            payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(settleState))
+                    .map(c -> projectionFactory.createProjection(Payments.class, c)).collect(Collectors.toList()));
+        });
+        return payments;
+    }
+
     @Override
     public Double fetchUserOwedAmount(Long userId) {
-        return this.requestSettlement(userId, SettleState.PAYMENT_RECEIVED).stream().mapToDouble(a -> a.getAmount()).sum();
+        return this.fetchPaymentsForUser(userId, SettleState.PAYMENT_RECEIVED).stream().mapToDouble(a -> a.getAmount()).sum();
     }
 
     @Override

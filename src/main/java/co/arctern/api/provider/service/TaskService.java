@@ -415,6 +415,8 @@ public interface TaskService extends MessageUtil {
 
     public List<Payments> requestSettlement(Long userId, SettleState settleState);
 
+    public List<Payments> fetchPaymentsForUser(Long userId, SettleState settleState);
+
     public List<Payments> settle(Long userId, SettleState settleState);
 
     public List<Payments> settleAmountForProvider(Long adminId, Long userId);
@@ -424,5 +426,9 @@ public interface TaskService extends MessageUtil {
     public Users fetchProfileDetails(Long userId);
 
     public List<Reasons> fetchReasons(Task task);
+
+    public List<Task> fetchTasksForPayment(Long userId);
+
+
 
 }
