@@ -5,6 +5,7 @@ package co.arctern.api.provider.constant;
  */
 public enum LoginState {
 
+    ATTEMPTED,
     LOGIN,
     LOGOUT
 }
