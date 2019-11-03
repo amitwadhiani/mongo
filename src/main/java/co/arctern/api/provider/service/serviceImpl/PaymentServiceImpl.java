@@ -8,12 +8,15 @@ import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.projection.Payments;
 import co.arctern.api.provider.service.PaymentService;
+import co.arctern.api.provider.service.PaymentStateFlowService;
+import co.arctern.api.provider.service.SettleStateFlowService;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +25,18 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentDao paymentDao;
     private final ProjectionFactory projectionFactory;
+    private final PaymentStateFlowService paymentStateFlowService;
+    private final SettleStateFlowService settleStateFlowService;
 
     @Autowired
     public PaymentServiceImpl(PaymentDao paymentDao,
-                              ProjectionFactory projectionFactory) {
+                              ProjectionFactory projectionFactory,
+                              PaymentStateFlowService paymentStateFlowService,
+                              SettleStateFlowService settleStateFlowService) {
         this.paymentDao = paymentDao;
         this.projectionFactory = projectionFactory;
+        this.paymentStateFlowService = paymentStateFlowService;
+        this.settleStateFlowService = settleStateFlowService;
     }
 
     @Override
@@ -37,20 +46,44 @@ public class PaymentServiceImpl implements PaymentService {
         Boolean isPrepaid = dto.getIsPrepaid();
         payment.setIsPrepaid(isPrepaid);
         payment.setMode(dto.getPaymentMode());
-        payment.setState(dto.getPaymentState());
+        PaymentState paymentState = dto.getPaymentState();
+        payment.setState(paymentState);
         payment.setTask(task);
-        if (BooleanUtils.isTrue(isPrepaid)) payment.setSettleState(SettleState.NOT_APPLICABLE);
+        if (BooleanUtils.isTrue(isPrepaid)) {
+            payment.setSettleState(SettleState.NOT_APPLICABLE);
+        }
         payment.setIsSettled(false);
-        return paymentDao.save(payment);
+        payment = paymentDao.save(payment);
+        if (BooleanUtils.isTrue(isPrepaid)) {
+            createSettleStateFlow(payment, SettleState.NOT_APPLICABLE);
+        } else {
+            createSettleStateFlow(payment, SettleState.PENDING);
+        }
+        createPaymentStateFlow(payment, paymentState, null);
+        return payment;
     }
 
     @Override
+    public void createPaymentStateFlow(Payment payment, PaymentState paymentState, Double amount) {
+        paymentStateFlowService.create(payment, paymentState, amount);
+    }
+
+    @Override
+    public void createSettleStateFlow(Payment payment, SettleState notApplicable) {
+        settleStateFlowService.create(payment, notApplicable);
+    }
+
+    @Override
+    @Transactional
     public Payment patch(Task task, Long userId) {
         Payment payment = task.getPayments().get(0);
         payment.setState(PaymentState.PAID);
         payment.setSettleState(SettleState.PAYMENT_RECEIVED);
         payment.setPaidBy(userId);
-        return paymentDao.save(payment);
+        payment = paymentDao.save(payment);
+        createSettleStateFlow(payment, SettleState.PAYMENT_RECEIVED);
+        createPaymentStateFlow(payment, PaymentState.PAID, null);
+        return payment;
     }
 
     @Override
@@ -62,24 +95,30 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional
     public List<Payments> settlePayments(Long userId, List<Payment> payments, List<Payments> paymentResponse, Boolean settleFlag) {
         payments.stream().forEach(a -> {
             a.setIsSettled(settleFlag);
             a.setSettleState(SettleState.SETTLED);
             a.setSettledBy(userId);
-            paymentResponse.add(projectionFactory.createProjection(Payments.class, paymentDao.save(a)));
+            a = paymentDao.save(a);
+            createSettleStateFlow(a, SettleState.SETTLED);
+            paymentResponse.add(projectionFactory.createProjection(Payments.class, a));
         });
         return paymentResponse;
     }
 
 
     @Override
+    @Transactional
     public Payment updateAmount(Task task, Double amount) {
         List<Payment> payments = task.getPayments();
         if (!CollectionUtils.isEmpty(payments)) {
             Payment payment = payments.get(0);
             payment.setAmount(amount);
-            return paymentDao.save(payment);
+            payment = paymentDao.save(payment);
+            createPaymentStateFlow(payment, payment.getState(), amount - payment.getAmount());
+            return payment;
         }
         return null;
     }

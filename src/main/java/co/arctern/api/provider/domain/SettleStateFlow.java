@@ -32,7 +32,7 @@ public class SettleStateFlow {
     private Payment payment;
 
     @Enumerated(EnumType.STRING)
-    private SettleState settleState;
+    private SettleState state;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

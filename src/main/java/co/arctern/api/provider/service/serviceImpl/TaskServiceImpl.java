@@ -304,6 +304,7 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
+    @Transactional
     public Task createTask(TaskAssignDto dto, Long userId) {
         Long taskId = dto.getTaskId();
         Task task = (taskId == null) ? new Task() : taskDao.findById(taskId).orElseThrow(() ->
@@ -489,6 +490,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public List<Payments> requestSettlement(Long userId, SettleState settleState) {
         List<Task> tasks = fetchTasksForPayment(userId);
         List<Payments> payments = new ArrayList<>();
@@ -496,7 +498,9 @@ public class TaskServiceImpl implements TaskService {
             payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(settleState))
                     .map(c -> {
                         c.setPaidBy(userId);
-                        return projectionFactory.createProjection(Payments.class, paymentService.save(c));
+                        c = paymentService.save(c);
+                        paymentService.createSettleStateFlow(c, SettleState.REQUESTED);
+                        return projectionFactory.createProjection(Payments.class, c);
                     }).collect(Collectors.toList()));
         });
         return payments;
@@ -545,6 +549,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public List<Payments> settleAmountForProvider(Long adminId, Long userId) {
         return paymentService.settlePayments(adminId, paymentService.fetchPaymentSettlementsForProvider(userId), new ArrayList<>(), true);
     }

@@ -38,6 +38,9 @@ public class PaymentStateFlow {
     @Version
     private Long version;
 
+    @Column
+    private Double amountAdded;
+
     public PaymentStateFlow(Long version) {
         this.version = version;
     }

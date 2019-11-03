@@ -1,5 +1,6 @@
 package co.arctern.api.provider.service;
 
+import co.arctern.api.provider.constant.PaymentState;
 import co.arctern.api.provider.constant.SettleState;
 import co.arctern.api.provider.domain.Payment;
 import co.arctern.api.provider.domain.Task;
@@ -26,7 +27,7 @@ public interface PaymentService extends MessageUtil {
      * @param task
      * @return
      */
-    Payment patch(Task task,Long userId);
+    Payment patch(Task task, Long userId);
 
     List<Payments> fetchSettleRequests(Long userId, SettleState settleState);
 
@@ -37,5 +38,9 @@ public interface PaymentService extends MessageUtil {
     List<Payment> fetchPaymentSettlementsForProvider(Long userId);
 
     Payment save(Payment payment);
+
+    public void createPaymentStateFlow(Payment payment, PaymentState paymentState, Double amount);
+
+    public void createSettleStateFlow(Payment payment, SettleState notApplicable);
 
 }
