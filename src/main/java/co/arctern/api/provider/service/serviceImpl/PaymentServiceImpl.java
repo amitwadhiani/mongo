@@ -49,9 +49,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentState paymentState = dto.getPaymentState();
         payment.setState(paymentState);
         payment.setTask(task);
-        if (BooleanUtils.isTrue(isPrepaid)) {
-            payment.setSettleState(SettleState.NOT_APPLICABLE);
-        }
+        payment.setSettleState((BooleanUtils.isTrue(isPrepaid)) ? SettleState.NOT_APPLICABLE : SettleState.PENDING);
         payment.setIsSettled(false);
         payment = paymentDao.save(payment);
         if (BooleanUtils.isTrue(isPrepaid)) {
