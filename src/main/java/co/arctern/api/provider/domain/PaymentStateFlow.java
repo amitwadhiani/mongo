@@ -1,7 +1,6 @@
 package co.arctern.api.provider.domain;
 
 import co.arctern.api.provider.constant.PaymentState;
-import co.arctern.api.provider.constant.SettleState;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,12 +9,11 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @Entity
-public class Payment {
+public class PaymentStateFlow {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,42 +28,19 @@ public class Payment {
     private Timestamp lastModifiedAt;
 
     @ManyToOne
-    @JsonBackReference("task-payment")
-    private Task task;
+    @JsonBackReference("payment-paymentStateFlow")
+    private Payment payment;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentState state;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
     private Long version;
 
-    @Column(nullable = false)
-    private Double amount;
-
-    @Enumerated(EnumType.STRING)
-    private SettleState settleState;
-
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PAID'")
-    @Enumerated(EnumType.STRING)
-    private PaymentState state;
-
-    private String mode;
-
-    @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
-    private Boolean isPrepaid;
-
-    @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
-    private Boolean isSettled;
-
-    private Long paidBy;
-
-    private Long settledBy;
-
-    @OneToMany(mappedBy = "payment")
-    private List<PaymentStateFlow> paymentStateFlows;
-
-    @OneToMany(mappedBy = "payment")
-    private List<SettleStateFlow> settleStateFlows;
-
-    public Payment(Long version) {
+    public PaymentStateFlow(Long version) {
         this.version = version;
     }
+
+
 }
