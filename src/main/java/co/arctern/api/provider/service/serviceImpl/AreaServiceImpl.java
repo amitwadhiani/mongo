@@ -120,10 +120,10 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public ClustersWoArea getCluster(Address address) {
-        if (address != null) {
-            Area area = address.getArea();
-            if (area != null) {
-                return projectionFactory.createProjection(ClustersWoArea.class, area);
+        if (address != null && address.getArea() != null && address.getArea().getCluster() != null) {
+            Cluster cluster = address.getArea().getCluster();
+            if (cluster != null) {
+                return projectionFactory.createProjection(ClustersWoArea.class, cluster);
             }
             return null;
         }
