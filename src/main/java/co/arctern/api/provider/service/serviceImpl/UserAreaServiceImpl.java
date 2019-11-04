@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +36,7 @@ public class UserAreaServiceImpl implements UserAreaService {
 
     @Override
     public List<ClustersWoArea> fetchAreasForUser(List<UserArea> userAreas) {
+        if (CollectionUtils.isEmpty(userAreas)) return null;
         return (userAreas.parallelStream()
                 .filter(UserArea::getIsActive)
                 .map(userArea -> projectionFactory.createProjection(ClustersWoArea.class, userArea.getArea().getCluster()))
