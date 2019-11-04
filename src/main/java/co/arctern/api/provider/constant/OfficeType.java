@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public enum OfficeType {
 
-    SO(" SUB_POST_OFFICE"),
+    SO("SUB_POST_OFFICE"),
     HO("HEAD_POST_OFFICE"),
     BO("BRANCH_POST_OFFICE");
 
