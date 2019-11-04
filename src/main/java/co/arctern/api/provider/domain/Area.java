@@ -60,7 +60,6 @@ public class Area {
     private String headOffice;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'GENERATED' ")
     private OfficeType officeType;
 
     @Column(nullable = true)
