@@ -32,6 +32,7 @@ public class AddressServiceImpl implements AddressService {
             {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ADDRESS_ID_MESSAGE.toString());
             });
+
             Long areaId = areaService.fetchArea(dto.getPinCode()).getId();
             if (areaId != null) {
                 address.setArea(areaService.fetchById(areaId));
@@ -58,7 +59,7 @@ public class AddressServiceImpl implements AddressService {
         address.setPinCode(dto.getPinCode());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
-        Long areaId = dto.getAreaId();
+        Long areaId = areaService.fetchArea(dto.getPinCode()).getId();
         if (areaId != null)
             address.setArea(areaService.fetchById(areaId));
         return addressDao.save(address);
@@ -66,5 +67,6 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Address fetchSourceAddress() {
-        return addressDao.findByIsSourceAddressTrue().stream().findFirst().orElse(null);  }
+        return addressDao.findByIsSourceAddressTrue().stream().findFirst().orElse(null);
+    }
 }
