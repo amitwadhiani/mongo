@@ -66,6 +66,5 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Address fetchSourceAddress() {
-        return addressDao.findByIsSourceAddressTrue().stream().findFirst().orElse(null);
-    }
+        return addressDao.findByIsSourceAddressTrue().stream().findFirst().orElse(null);  }
 }
