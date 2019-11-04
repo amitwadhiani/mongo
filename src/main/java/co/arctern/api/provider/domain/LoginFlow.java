@@ -29,7 +29,7 @@ public class LoginFlow {
     private Timestamp lastModifiedAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "tinyint(1) DEFAULT 1")
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'ATTEMPTED' ")
     private LoginState loginState;
 
     @ManyToOne
