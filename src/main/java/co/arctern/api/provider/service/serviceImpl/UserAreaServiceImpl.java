@@ -38,9 +38,10 @@ public class UserAreaServiceImpl implements UserAreaService {
     public List<ClustersWoArea> fetchAreasForUser(List<UserArea> userAreas) {
         if (CollectionUtils.isEmpty(userAreas)) return null;
         return (userAreas.parallelStream()
-                .filter(UserArea::getIsActive)
+                .filter(a -> a.getIsActive() && a.getArea().getCluster() != null)
                 .map(userArea -> projectionFactory.createProjection(ClustersWoArea.class, userArea.getArea().getCluster()))
-                .filter(PaginationUtil.distinctByKey(ClustersWoArea::getId)).collect(Collectors.toList()));
+                .filter(PaginationUtil.distinctByKey(ClustersWoArea::getId))
+                .collect(Collectors.toList()));
     }
 
 }
