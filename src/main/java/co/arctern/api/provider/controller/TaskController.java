@@ -63,16 +63,16 @@ public class TaskController {
     /**
      * assign tasks to user api.
      *
-     * @param taskId
+     * @param taskIds
      * @param userId
      * @return
      */
     @PostMapping("/assign")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<StringBuilder> assignTaskToUser(@RequestParam("taskId") Long taskId,
+    public ResponseEntity<StringBuilder> assignTaskToUser(@RequestParam("taskIds") List<Long> taskIds,
                                                           @RequestParam(value = "userId") Long userId) {
-        return ResponseEntity.ok(taskService.assignTask(taskId, userId));
+        return ResponseEntity.ok(taskService.assignTasks(taskIds, userId));
     }
 
     /**
@@ -104,12 +104,20 @@ public class TaskController {
         return ResponseEntity.ok(taskService.startTask(taskId, userId));
     }
 
+    /**
+     * accept or reject task api.
+     *
+     * @param state
+     * @param taskId
+     * @return
+     */
     @PostMapping("/accept-reject")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<StringBuilder> acceptOrRejectTask(@RequestParam(value = "state", required = false, defaultValue = "ACCEPTED") TaskStateFlowState state,
-                                                            @RequestParam(value = "taskId", required = false) Long taskId) {
-        return ResponseEntity.ok(taskService.acceptOrRejectAssignedTask(taskId, state));
+                                                            @RequestParam(value = "taskId", required = false) Long taskId,
+                                                            @RequestParam(value = "reasonIds", required = false) List<Long> reasonIds) {
+        return ResponseEntity.ok(taskService.acceptOrRejectAssignedTask(taskId, reasonIds, state));
     }
 
 
@@ -148,7 +156,7 @@ public class TaskController {
     }
 
     /**
-     * create new task api.
+     * create new task api. (called from order-api)
      *
      * @param dto
      * @return
@@ -161,6 +169,13 @@ public class TaskController {
         return ResponseEntity.ok(taskService.fetchProjectedResponseFromPost(dto));
     }
 
+    /**
+     * cancel tasks related to an order api. (called from order-api)
+     *
+     * @param taskIds
+     * @param userId
+     * @return
+     */
     @PostMapping("/cancel/all")
     @CrossOrigin
     @PreAuthorize("isAuthenticated()")

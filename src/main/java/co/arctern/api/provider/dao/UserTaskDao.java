@@ -1,6 +1,7 @@
 package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.UserTask;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,10 +23,14 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      * find active task for user .
      *
      * @param userId
-     * @param state
+     * @param states
      * @return
      */
-    Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateOrderByTaskCreatedAtDesc(Long userId, TaskState state, Pageable pageable);
+    Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateInOrderByTaskCreatedAtDesc(Long userId, TaskState[] states, Pageable pageable);
+
+    Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateInAndTaskTypeOrderByTaskCreatedAtDesc(Long userId, TaskState[] states, TaskType type, Pageable pageable);
+
+    Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateInAndTaskTypeAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThanOrderByTaskCreatedAtDesc(Long userId, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
      * find user_task for task_id.
@@ -36,7 +41,7 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
     UserTask findByIsActiveTrueAndTaskId(Long taskId);
 
     /**
-     * fetch users filtered by task state and within a time range.
+     * fetch userTasks filtered by task state and within a time range.
      *
      * @param userId
      * @param state
@@ -48,7 +53,7 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
                                                                                                                    Timestamp start, Timestamp end);
 
     /**
-     * fetch users through task state and greater than a time.
+     * fetch userTasks through task state and greater than a time.
      *
      * @param userId
      * @param state
@@ -57,10 +62,23 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskStateAndCreatedAtGreaterThanEqual(Long userId, TaskState state, Timestamp start);
 
+    /**
+     * fetch userTasks through userId and taskState.
+     *
+     * @param userId
+     * @param state
+     * @return
+     */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskState(Long userId, TaskState state);
 
+    List<UserTask> findByIsActiveTrueAndUserIdAndTaskStateOrderByCreatedAtDesc(Long userId, TaskState state);
+
+    Page<UserTask> findByIsActiveTrueAndUserIdInAndTaskType(List<Long> userIds, TaskType type, Pageable pageable);
+
+    Page<UserTask> findByIsActiveTrueAndUserIdInAndTaskTypeAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(List<Long> userIds, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
     /**
-     * fetch count of tasks for a user filtered by task creation time.
+     * fetch count of userTasks for a user filtered by task creation time.
      *
      * @param userId
      * @param state
@@ -72,7 +90,7 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
             Long userId, TaskState state, Timestamp start, Timestamp end);
 
     /**
-     * fetch tasks filtered by task states and within a time range.
+     * fetch userTasks filtered by task states and within a time range.
      *
      * @param states
      * @param start
@@ -85,6 +103,7 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
 
     /**
      * to fetch userTasks for cron.
+     *
      * @param createdAt
      * @param state
      * @return

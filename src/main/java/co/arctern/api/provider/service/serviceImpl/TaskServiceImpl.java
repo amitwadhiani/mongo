@@ -1,21 +1,22 @@
 package co.arctern.api.provider.service.serviceImpl;
 
-import co.arctern.api.provider.constant.OfferingType;
-import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.TaskStateFlowState;
-import co.arctern.api.provider.constant.TaskType;
+import co.arctern.api.provider.constant.*;
 import co.arctern.api.provider.dao.TaskDao;
-import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.Task;
+import co.arctern.api.provider.domain.TaskReason;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.Payments;
+import co.arctern.api.provider.dto.response.projection.Reasons;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
+import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.queue.Sender;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.DateUtil;
 import co.arctern.api.provider.util.PaginationUtil;
+import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
@@ -74,6 +76,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public List<Task> fetchTasks(List<Long> taskIds) {
+        return taskDao.findByIdIn(taskIds);
+    }
+
+    @Override
     public List<Task> fetchAllTasks(List<Long> taskIds) {
         return taskDao.findByIdIn(taskIds);
     }
@@ -82,7 +89,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
         Long userId = dto.getUserId();
-        Task task = createTask(dto);
+        Task task = createTask(dto, userId);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
@@ -91,14 +98,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskStateFlowState state) {
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, List<Long> reasonIds, TaskStateFlowState state) {
         Task task = fetchTask(taskId);
         Long userId = userTaskService.findActiveUserTask(taskId).getUser().getId();
         taskStateFlowService.createFlow(task, state, userId);
-        task.setState((state.equals(TaskStateFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.OPEN));
+        task.setState((state.equals(TaskStateFlowState.ACCEPTED) ? TaskState.ACCEPTED : TaskState.REJECTED));
         if (state.equals(TaskStateFlowState.REJECTED)) {
             userTaskService.markInactive(task);
-            taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
+            reasonService.assignReasons(task, reasonIds, TaskStateFlowState.REJECTED);
         }
         taskDao.save(task);
         return SUCCESS_MESSAGE;
@@ -115,20 +122,26 @@ public class TaskServiceImpl implements TaskService {
     /**
      * assign task to user.
      *
-     * @param taskId
+     * @param taskIds
      * @param userId
      * @return
      */
     @Override
     @Transactional
     @SneakyThrows
-    public StringBuilder assignTask(Long taskId, Long userId) {
-        Task task = this.fetchTask(taskId);
-        task.setState(TaskState.ASSIGNED);
-        task = taskDao.save(task);
-        userTaskService.markInactive(task);
-        userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
+    public StringBuilder assignTasks(List<Long> taskIds, Long userId) {
+        List<Task> tasks = this.fetchTasks(taskIds);
+        tasks.stream().forEach(task ->
+        {
+            task.setState(TaskState.ASSIGNED);
+            task.setActiveUserId(userId);
+        });
+        tasks = Lists.newArrayList(taskDao.saveAll(tasks));
+        tasks.stream().forEach(task -> {
+            userTaskService.markInactive(task);
+            userTaskService.createUserTask(userService.fetchUser(userId), task);
+            taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
+        });
         User user = userService.fetchUser(userId);
         sender.sendAdminAssignTaskNotification(user);
         return TASK_ASSIGNED_MESSAGE;
@@ -137,13 +150,15 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public void markInactiveAndReassignTask(Long userId, Task task) {
-        if (userTaskService.markInactive(task).longValue() == userId) {
+        Long taskUserId = userTaskService.markInactive(task);
+        if (taskUserId != null && taskUserId.longValue() == userId) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TASK_SAME_USER_MESSAGE.toString());
         }
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.REASSIGNED, userId);
         task.setState(TaskState.ASSIGNED);
         task.setCancellationRequested(false);
+        task.setActiveUserId(userId);
         taskDao.save(task);
     }
 
@@ -167,11 +182,10 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time) {
         Task task = fetchTask(taskId);
-        task.setState(TaskState.OPEN);
+        task.setState(TaskState.RESCHEDULED);
         task.setExpectedArrivalTime(time);
         userTaskService.markInactive(task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.RESCHEDULED, userId);
-        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskDao.save(task);
         return SUCCESS_MESSAGE;
     }
@@ -236,25 +250,25 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         task.setCancellationRequested(cancelRequest);
-        reasonService.assignReasons(task, reasonIds);
+        reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLED);
         return SUCCESS_MESSAGE;
     }
 
     @Override
     public Page<TasksForProvider> fetchCompletedTasksForUser(Long userId, Pageable pageable) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.COMPLETED, pageable)
+        return userTaskService.fetchTasksForUser(userId, new TaskState[]{TaskState.COMPLETED}, pageable)
                 .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()));
     }
 
     @Override
     public Page<TasksForProvider> fetchAssignedTasksForUser(Long userId, Pageable pageable) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.ASSIGNED, pageable)
+        return userTaskService.fetchTasksForUser(userId, new TaskState[]{TaskState.ASSIGNED}, pageable)
                 .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()));
     }
 
     @Override
     public List<TasksForProvider> fetchCancelledTasksForUser(Long userId, Pageable pageable) {
-        return userTaskService.fetchTasksForUser(userId, TaskState.CANCELLED, pageable).stream()
+        return userTaskService.fetchTasksForUser(userId, new TaskState[]{TaskState.CANCELLED}, pageable).stream()
                 .map(a -> projectionFactory.createProjection(TasksForProvider.class, a.getTask()))
                 .collect(Collectors.toList());
     }
@@ -266,8 +280,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Pageable pageable) {
-        return taskDao.findByDestinationAddressAreaIdIn(areaIds, pageable).map(
+    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType taskType, Pageable pageable) {
+        return taskDao.findByDestinationAddressAreaIdInAndType(areaIds, taskType, pageable).map(
                 a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }
 
@@ -278,40 +292,40 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.findByDestinationAddressAreaIdInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, start, end, pageable).map(
+    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType taskType, Timestamp start, Timestamp end, Pageable pageable) {
+        return taskDao.findByDestinationAddressAreaIdInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, taskType, start, end, pageable).map(
                 a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }
 
     @Override
     public PaginatedResponse seeCancelRequests(Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(taskDao.findByCancellationRequestedTrue(pageable).map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
+        return PaginationUtil.returnPaginatedBody(taskDao.findByCancellationRequestedTrueOrderByLastModifiedAtDesc(pageable).map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
     }
 
 
     @Override
-    public Task createTask(TaskAssignDto dto) {
+    @Transactional
+    public Task createTask(TaskAssignDto dto, Long userId) {
         Long taskId = dto.getTaskId();
         Task task = (taskId == null) ? new Task() : taskDao.findById(taskId).orElseThrow(() ->
         {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TASK_ID_MESSAGE.toString());
         });
-        /**
-         * to set source address Id of Warehouse / provider ( 3 in case of staging , change later / on prod.
-         */
-        dto.setSourceAddressId(1l);
         task.setIsPrepaid(dto.getIsPrepaid());
         task.setPatientPhone(dto.getPatientPhone());
         task.setPatientName(dto.getPatientName());
         task.setPatientId(dto.getPatientId());
         task.setType(dto.getType());
         task.setRefId(dto.getRefId());
+        task.setSource(dto.getSource());
         task.setCancellationRequested(false);
         task.setIsActive(true);
+        task.setDiagnosticOrderId(dto.getDiagnosticOrderId());
         task.setExpectedArrivalTime(dto.getExpectedArrivalTime());
         task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
-        task.setSourceAddress(addressService.createOrFetchAddress(dto, dto.getSourceAddressId()));
+        task.setSourceAddress(addressService.fetchSourceAddress());
         task.setState(TaskState.OPEN);
+        if (userId != null) task.setActiveUserId(userId);
         String paymentMode = dto.getPaymentMode();
         if (paymentMode == null || paymentMode.isEmpty()) dto.setPaymentMode("");
         task = taskDao.save(task);
@@ -323,7 +337,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto) {
-        return projectionFactory.createProjection(TasksForProvider.class, createTask(dto));
+        return projectionFactory.createProjection(TasksForProvider.class, createTask(dto, null));
     }
 
     @Override
@@ -404,10 +418,16 @@ public class TaskServiceImpl implements TaskService {
                                         List<Long> areaIds, TaskType taskType,
                                         Long orderId,
                                         String patientFilterValue,
+                                        Long providerId,
                                         Pageable pageable) {
         if (states == null) {
             states = new TaskState[]{TaskState.OPEN, TaskState.ASSIGNED, TaskState.STARTED, TaskState.COMPLETED,
                     TaskState.ACCEPTED, TaskState.CANCELLED};
+        }
+        if (providerId != null) {
+            return getPaginatedResponse((start != null && end != null) ?
+                    userTaskService.fetchTasksForUser(providerId, states, taskType, start, end, pageable).map(a -> a.getTask()) :
+                    userTaskService.fetchTasksForUser(providerId, states, taskType, pageable).map(a -> a.getTask()), pageable);
         }
         if (StringUtils.isEmpty(patientFilterValue)) {
             if (areaIds == null) {
@@ -444,15 +464,94 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
+    @Override
     public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable) {
         return PaginationUtil.returnPaginatedBody(tasks.map(task -> projectionFactory.createProjection(TasksForProvider.class, task)), pageable);
     }
 
+    @Override
     public List<Task> fetchTasksForCron() {
         return taskDao.findByIsActiveTrueAndCreatedAtLessThanEqualAndState(DateUtil.fetchTimestampFromCurrentTimestamp(20), TaskState.ASSIGNED);
     }
 
+    @Override
     public Iterable<Task> saveAll(List<Task> tasks) {
         return taskDao.saveAll(tasks);
     }
+
+    @Override
+    public Page<TasksForProvider> fetchTasksByProvider(List<Long> ids, TaskType type, Pageable pageable) {
+        return userTaskService.fetchTasksForProvider(ids, null, type, pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a));
+    }
+
+    @Override
+    public Page<TasksForProvider> fetchTasksByTypeAndProvider(List<Long> ids, TaskType type, Timestamp start, Timestamp end, Pageable pageable) {
+        return userTaskService.fetchTasksForProvider(ids, null, type, start, end, pageable).map(a -> projectionFactory.createProjection(TasksForProvider.class, a));
+    }
+
+    @Override
+    @Transactional
+    public List<Payments> requestSettlement(Long userId, SettleState settleState) {
+        List<Task> tasks = fetchTasksForPayment(userId);
+        List<Payments> payments = new ArrayList<>();
+        tasks.stream().forEach(a -> {
+            payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(settleState))
+                    .map(c -> {
+                        c.setPaidBy(userId);
+                        c = paymentService.save(c);
+                        paymentService.createSettleStateFlow(c, SettleState.REQUESTED);
+                        return projectionFactory.createProjection(Payments.class, c);
+                    }).collect(Collectors.toList()));
+        });
+        return payments;
+    }
+
+    public List<Task> fetchTasksForPayment(Long userId) {
+        return taskDao.fetchTasks(userId, TaskState.COMPLETED);
+    }
+
+    @Override
+    public List<Payments> fetchPaymentsForUser(Long userId, SettleState settleState) {
+        List<Task> tasks = fetchTasksForPayment(userId);
+        List<Payments> payments = new ArrayList<>();
+        tasks.stream().forEach(a -> {
+            payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(settleState))
+                    .map(c -> projectionFactory.createProjection(Payments.class, c)).collect(Collectors.toList()));
+        });
+        return payments;
+    }
+
+    @Override
+    public Double fetchUserOwedAmount(Long userId) {
+        return this.fetchPaymentsForUser(userId, SettleState.PAYMENT_RECEIVED).stream().mapToDouble(a -> a.getAmount()).sum();
+    }
+
+    @Override
+    public List<Payments> settle(Long userId, SettleState settleState) {
+        return paymentService.fetchSettleRequests(userId, settleState);
+    }
+
+    @Override
+    public Users fetchProfileDetails(Long userId) {
+        User user = userService.fetchUser(userId);
+        user.setAmountOwed(Math.round(this.fetchUserOwedAmount(userId) * 100) / 100D);
+        return projectionFactory.createProjection(Users.class, user);
+    }
+
+    @Override
+    public List<Reasons> fetchReasons(Task task) {
+        List<TaskReason> taskReasons = task.getTaskReasons();
+        return (!CollectionUtils.isEmpty(taskReasons))
+                ? taskReasons
+                .stream()
+                .map(a -> projectionFactory.createProjection(Reasons.class, a.getReason()))
+                .collect(Collectors.toList()) : null;
+    }
+
+    @Override
+    @Transactional
+    public List<Payments> settleAmountForProvider(Long adminId, Long userId) {
+        return paymentService.settlePayments(adminId, paymentService.fetchPaymentSettlementsForProvider(userId), new ArrayList<>(), true);
+    }
+
 }

@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 @NoArgsConstructor
 public class TasksForProviderResponse {
 
-    public Page<TasksForProvider> completedTasks;
-    public Page<TasksForProvider> assignedTasks;
+    private Page<TasksForProvider> completedTasks;
+    private Page<TasksForProvider> assignedTasks;
 
 }

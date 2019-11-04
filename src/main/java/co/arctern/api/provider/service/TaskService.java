@@ -1,13 +1,13 @@
 package co.arctern.api.provider.service;
 
-import co.arctern.api.provider.constant.OfferingType;
-import co.arctern.api.provider.constant.TaskState;
-import co.arctern.api.provider.constant.TaskStateFlowState;
-import co.arctern.api.provider.constant.TaskType;
+import co.arctern.api.provider.constant.*;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.Payments;
+import co.arctern.api.provider.dto.response.projection.Reasons;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
+import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +24,8 @@ public interface TaskService extends MessageUtil {
      * @return
      */
     public Task fetchTask(Long taskId);
+
+    public List<Task> fetchTasks(List<Long> taskIds);
 
     /**
      * create task and assign user to it .
@@ -45,11 +47,11 @@ public interface TaskService extends MessageUtil {
     /**
      * assign task to user.
      *
-     * @param taskId
+     * @param taskIds
      * @param userId
      * @return
      */
-    public StringBuilder assignTask(Long taskId, Long userId);
+    public StringBuilder assignTasks(List<Long> taskIds, Long userId);
 
     /**
      * cancel task and mark inactive -> By Admin.
@@ -77,10 +79,11 @@ public interface TaskService extends MessageUtil {
      * accept/reject assigned task -> By rider.
      *
      * @param taskId
+     * @param reasonIds
      * @param state
      * @return
      */
-    public StringBuilder acceptOrRejectAssignedTask(Long taskId, TaskStateFlowState state);
+    public StringBuilder acceptOrRejectAssignedTask(Long taskId, List<Long> reasonIds, TaskStateFlowState state);
 
     /**
      * fetch completed tasks for user.
@@ -150,7 +153,12 @@ public interface TaskService extends MessageUtil {
      * @param pageable
      * @return
      */
-    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Pageable pageable);
+    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType type, Pageable pageable);
+
+    public Page<TasksForProvider> fetchTasksByProvider(List<Long> ids, TaskType type, Pageable pageable);
+
+    public Page<TasksForProvider> fetchTasksByTypeAndProvider(List<Long> ids, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
 
     /**
      * fetch tasks by offering type within a time range.
@@ -172,7 +180,7 @@ public interface TaskService extends MessageUtil {
      * @param pageable
      * @return
      */
-    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
+    public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
      * see cancellation requests for Admin.
@@ -186,9 +194,10 @@ public interface TaskService extends MessageUtil {
      * create a new task .
      *
      * @param dto
+     * @param userId
      * @return
      */
-    public Task createTask(TaskAssignDto dto);
+    public Task createTask(TaskAssignDto dto, Long userId);
 
     /**
      * fetch projected response after save call (task) .
@@ -369,8 +378,16 @@ public interface TaskService extends MessageUtil {
                                         List<Long> areaIds, TaskType taskType,
                                         Long orderId,
                                         String patientFilterValue,
+                                        Long providerId,
                                         Pageable pageable);
 
+    /**
+     * fetch paginated response for other methods.
+     *
+     * @param tasks
+     * @param pageable
+     * @return
+     */
     public PaginatedResponse getPaginatedResponse(Page<Task> tasks, Pageable pageable);
 
     /**
@@ -388,6 +405,30 @@ public interface TaskService extends MessageUtil {
      */
     public Iterable<Task> saveAll(List<Task> tasks);
 
+    /**
+     * fetch list of all tasks.
+     *
+     * @param taskIds
+     * @return
+     */
     public List<Task> fetchAllTasks(List<Long> taskIds);
+
+    public List<Payments> requestSettlement(Long userId, SettleState settleState);
+
+    public List<Payments> fetchPaymentsForUser(Long userId, SettleState settleState);
+
+    public List<Payments> settle(Long userId, SettleState settleState);
+
+    public List<Payments> settleAmountForProvider(Long adminId, Long userId);
+
+    public Double fetchUserOwedAmount(Long userId);
+
+    public Users fetchProfileDetails(Long userId);
+
+    public List<Reasons> fetchReasons(Task task);
+
+    public List<Task> fetchTasksForPayment(Long userId);
+
+
 
 }

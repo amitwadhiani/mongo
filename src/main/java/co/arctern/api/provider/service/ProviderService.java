@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.TasksForProviderResponse;
 import co.arctern.api.provider.util.MessageUtil;
@@ -40,7 +41,7 @@ public interface ProviderService extends MessageUtil {
      * @param userId
      * @return
      */
-    PaginatedResponse fetchFilteredTasksForProvider(Long userId, TaskState state, Pageable pageable);
+    PaginatedResponse fetchFilteredTasksForProvider(Long userId, TaskState[] states, Timestamp start, Timestamp end, TaskType taskType, Pageable pageable);
 
     /**
      * fetch count of tasks by state for provider.

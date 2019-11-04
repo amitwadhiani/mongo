@@ -17,6 +17,8 @@ public interface Users {
 
     String getName();
 
+    Double getAmountOwed();
+
     String getUsername();
 
     Boolean getIsActive();
@@ -32,7 +34,6 @@ public interface Users {
     Integer getAge();
 
     @Value("#{@userAreaServiceImpl.fetchAreasForUser(target.getUserAreas())}")
-    List<Areas> getAreas();
-
+    List<ClustersWoArea> getClusters();
 
 }

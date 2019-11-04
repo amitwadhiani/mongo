@@ -1,9 +1,14 @@
 package co.arctern.api.provider.service;
 
+import co.arctern.api.provider.constant.PaymentState;
+import co.arctern.api.provider.constant.SettleState;
 import co.arctern.api.provider.domain.Payment;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.request.TaskAssignDto;
+import co.arctern.api.provider.dto.response.projection.Payments;
 import co.arctern.api.provider.util.MessageUtil;
+
+import java.util.List;
 
 public interface PaymentService extends MessageUtil {
 
@@ -22,5 +27,22 @@ public interface PaymentService extends MessageUtil {
      * @param task
      * @return
      */
-    Payment patch(Task task);
+    Payment patch(Task task, Long userId);
+
+    List<Payments> fetchSettleRequests(Long userId, SettleState settleState);
+
+    Payment updateAmount(Task task, Double amount);
+
+    List<Payments> settlePayments(Long userId, List<Payment> payments, List<Payments> paymentResponse, Boolean settleFlag);
+
+    List<Payment> fetchPaymentSettlementsForProvider(Long userId);
+
+    Payment save(Payment payment);
+
+    public void createPaymentStateFlow(Payment payment, PaymentState paymentState, Double amount);
+
+    public void createSettleStateFlow(Payment payment, SettleState notApplicable);
+
+    public Payment createPayment(Task task, TaskAssignDto dto, Boolean isPrepaid, PaymentState paymentState);
+
 }

@@ -1,5 +1,6 @@
 package co.arctern.api.provider.controller;
 
+import co.arctern.api.provider.dto.request.ReasonEditBody;
 import co.arctern.api.provider.service.ReasonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
@@ -22,6 +23,7 @@ public class ReasonController {
 
     /**
      * create new reasons api.
+     *
      * @param reasons
      * @return
      */
@@ -32,15 +34,23 @@ public class ReasonController {
         return ResponseEntity.ok(reasonService.create(reasons));
     }
 
+    @CrossOrigin
+    @PatchMapping("/edit")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<StringBuilder> editReasons(@RequestBody List<ReasonEditBody> bodies) {
+        return ResponseEntity.ok(reasonService.edit(bodies));
+    }
+
     /**
      * fetch all reasons api.
+     *
      * @return
      */
     @CrossOrigin
     @GetMapping("/fetch/all")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> fetchAllReasons() {
-        return ResponseEntity.ok(reasonService.fetchAll());
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
+    public ResponseEntity<?> fetchAllReasons(@RequestParam(value = "isAdmin", required = false, defaultValue = "true") Boolean isAdmin) {
+        return ResponseEntity.ok(reasonService.fetchAll(isAdmin));
     }
 
 }

@@ -63,6 +63,11 @@ public interface MessageUtil {
     StringBuilder INVALID_ADDRESS_ID_MESSAGE = new StringBuilder("Invalid address id.");
 
     /**
+     * invalid user id message.
+     */
+    StringBuilder INVALID_USER_ID_MESSAGE = new StringBuilder("Invalid user id.");
+
+    /**
      * user not found message.
      */
     StringBuilder USER_NOT_FOUND_MESSAGE = new StringBuilder("User not found .");
@@ -98,6 +103,11 @@ public interface MessageUtil {
     StringBuilder INVALID_AREA_ID_MESSAGE = new StringBuilder("Invalid area Id.");
 
     /**
+     * invalid cluster id message.
+     */
+    StringBuilder INVALID_CLUSTER_ID_MESSAGE = new StringBuilder("Invalid cluster Id.");
+
+    /**
      * rating entity already generated for task id message.
      */
     StringBuilder RATING_ALREADY_GENERATED_MESSAGE = new StringBuilder("OTP already generated for this task. Complete the task using OTP.");
@@ -131,5 +141,9 @@ public interface MessageUtil {
      * No active user exists for this task message.
      */
     StringBuilder NO_ACTIVE_USER_MESSAGE = new StringBuilder("No active user for this task.");
+
+    StringBuilder INVALID_PIN_CODE_MESSAGE = new StringBuilder("Invalid pinCode.");
+
+    StringBuilder AREA_ALREADY_ASSIGNED_TO_CLUSTER = new StringBuilder("PinCode already attached to a cluster.");
 
 }

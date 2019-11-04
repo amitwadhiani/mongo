@@ -66,6 +66,9 @@ public class User {
     @Column(nullable = true)
     private Integer age;
 
+    @Transient
+    private Double amountOwed;
+
     @Column(nullable = true)
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;

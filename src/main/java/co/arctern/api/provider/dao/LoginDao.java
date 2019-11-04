@@ -37,6 +37,14 @@ public interface LoginDao extends PagingAndSortingRepository<Login, Long> {
      */
     Optional<Login> findByUserIdAndStatusAndContact(Long userId, OTPState status, String contact);
 
+    /**
+     * fetch all logins for an user.
+     *
+     * @param userId
+     * @param status
+     * @param contact
+     * @return
+     */
     List<Login> findByUserIdAndStatusAndContactOrderByCreatedAtDesc(Long userId, OTPState status, String contact);
 
     /**

@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
+
 
 @Service
 public class RatingServiceImpl implements RatingService {
@@ -32,6 +34,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     @SneakyThrows(Exception.class)
+    @Transactional
     public String saveRating(Long taskId, Long userId, String otp) {
         Task task = taskService.fetchTask(taskId);
         Rating rating = task.getRating();
@@ -47,11 +50,12 @@ public class RatingServiceImpl implements RatingService {
         rating.setTask(task);
         ratingDao.save(rating);
         taskService.completeTask(taskId, userId);
-        paymentService.patch(task);
+        paymentService.patch(task, userId);
         return SUCCESS_MESSAGE.toString();
     }
 
     @Override
+    @Transactional
     public Rating createRating(Task task, String otpNo, String otpYes) {
         Rating rating = new Rating();
         rating.setOtpNo(otpNo);

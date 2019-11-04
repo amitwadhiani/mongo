@@ -1,15 +1,13 @@
 package co.arctern.api.provider.service.serviceImpl;
 
+import co.arctern.api.provider.constant.LoginState;
 import co.arctern.api.provider.constant.OTPState;
 import co.arctern.api.provider.constant.UserState;
 import co.arctern.api.provider.dao.LoginDao;
 import co.arctern.api.provider.domain.Login;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.eventhandler.LoginEventHandler;
-import co.arctern.api.provider.service.LoginService;
-import co.arctern.api.provider.service.OtpService;
-import co.arctern.api.provider.service.TokenService;
-import co.arctern.api.provider.service.UserService;
+import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.sms.SmsService;
 import co.arctern.api.provider.util.DateUtil;
 import lombok.SneakyThrows;
@@ -32,19 +30,22 @@ public class LoginServiceImpl implements LoginService {
     private final TokenService tokenService;
     private final UserService userService;
     private final SmsService smsService;
+    private final LoginFlowService loginFlowService;
 
     @Autowired
     public LoginServiceImpl(OtpService otpService,
                             LoginEventHandler loginEventHandler,
                             LoginDao loginDao,
                             TokenService tokenService,
-                            UserService userService, SmsService smsService) {
+                            UserService userService, SmsService smsService,
+                            LoginFlowService loginFlowService) {
         this.otpService = otpService;
         this.loginEventHandler = loginEventHandler;
         this.loginDao = loginDao;
         this.tokenService = tokenService;
         this.userService = userService;
         this.smsService = smsService;
+        this.loginFlowService = loginFlowService;
     }
 
     @SneakyThrows(Exception.class)
@@ -81,7 +82,8 @@ public class LoginServiceImpl implements LoginService {
         login.setStatus(OTPState.GENERATED);
         login.setGeneratedOTP(otp);
         login.setUserState(UserState.EXISTING);
-        loginDao.save(login);
+        login = loginDao.save(login);
+        loginFlowService.create(login, LoginState.ATTEMPTED);
     }
 
     @Override
@@ -94,7 +96,8 @@ public class LoginServiceImpl implements LoginService {
                 login.setStatus(OTPState.USED);
                 login.setLoginState(true);
                 OAuth2AccessToken oAuth2AccessToken = tokenService.retrieveToken(phone, otp);
-                loginDao.save(login);
+                login = loginDao.save(login);
+                loginFlowService.create(login, LoginState.LOGIN);
                 loginEventHandler.markLoggedInStateForUser(userService.fetchUserByPhone(phone), true);
                 userService.saveLastLoginTime(phone, login.getCreatedAt());
                 return oAuth2AccessToken;
@@ -113,7 +116,8 @@ public class LoginServiceImpl implements LoginService {
             Login login = logins.get(0);
             login.setLoginState(false);
             login.setLogoutTime(DateUtil.CURRENT_TIMESTAMP);
-            loginDao.save(login);
+            login = loginDao.save(login);
+            loginFlowService.create(login, LoginState.LOGOUT);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_LOGGED_IN_MESSAGE.toString());
         }

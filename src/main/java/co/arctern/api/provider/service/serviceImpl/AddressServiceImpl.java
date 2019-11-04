@@ -27,10 +27,18 @@ public class AddressServiceImpl implements AddressService {
     @Override
     @SneakyThrows(Exception.class)
     public Address createOrFetchAddress(TaskAssignDto dto, Long addressId) {
-        if (addressId != null) return addressDao.findById(addressId).orElseThrow(() ->
-        {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ADDRESS_ID_MESSAGE.toString());
-        });
+        if (addressId != null) {
+            Address address = addressDao.findById(addressId).orElseThrow(() ->
+            {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ADDRESS_ID_MESSAGE.toString());
+            });
+            Long areaId = areaService.fetchArea(dto.getPinCode()).getId();
+            if (areaId != null) {
+                address.setArea(areaService.fetchById(areaId));
+                address = addressDao.save(address);
+            }
+            return address;
+        }
         return saveAddress(dto);
     }
 
@@ -43,13 +51,20 @@ public class AddressServiceImpl implements AddressService {
         address.setLine(dto.getLine());
         address.setLatitude(dto.getLatitude());
         address.setLongitude(dto.getLongitude());
-        address.setIsSourceAddress((dto.getIsSourceAddress() == null) ? false : dto.getIsSourceAddress());
+        Boolean isSourceAddress = dto.getIsSourceAddress();
+        address.setIsSourceAddress((isSourceAddress == null) ? false : isSourceAddress);
         address.setLocality(dto.getLocality());
         address.setLandmark(dto.getLandmark());
         address.setPinCode(dto.getPinCode());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
-//        address.setArea(areaService.fetchById(dto.getAreaId()));
+        Long areaId = dto.getAreaId();
+        if (areaId != null)
+            address.setArea(areaService.fetchById(areaId));
         return addressDao.save(address);
     }
+
+    @Override
+    public Address fetchSourceAddress() {
+        return addressDao.findByIsSourceAddressTrue().stream().findFirst().orElse(null);  }
 }

@@ -12,4 +12,7 @@ public interface Reasons {
     Long getId();
 
     String getReason();
+
+    Boolean getIsActive();
+
 }

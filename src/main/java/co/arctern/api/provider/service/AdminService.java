@@ -1,6 +1,7 @@
 package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.constant.OfferingType;
+import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.TasksForProvider;
 import co.arctern.api.provider.util.MessageUtil;
@@ -41,12 +42,13 @@ public interface AdminService extends MessageUtil {
     /**
      * fetch tasks through areaIds and time range.
      *
-     * @param areaIds
+     * @param ids
+     * @param value
      * @param start
      * @param end
      * @param pageable
      * @return
      */
-    Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
+    Page<TasksForProvider> fetchTasksAndFilter(List<Long> ids, TaskType taskType, String value, Timestamp start, Timestamp end, Pageable pageable);
 
-}
+    }

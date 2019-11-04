@@ -2,12 +2,11 @@ package co.arctern.api.provider.service.serviceImpl;
 
 import co.arctern.api.provider.dao.AreaDao;
 import co.arctern.api.provider.dao.UserAreaDao;
-import co.arctern.api.provider.domain.Area;
-import co.arctern.api.provider.domain.User;
-import co.arctern.api.provider.domain.UserArea;
-import co.arctern.api.provider.dto.request.AreaRequestDto;
+import co.arctern.api.provider.domain.*;
 import co.arctern.api.provider.dto.response.projection.Areas;
+import co.arctern.api.provider.dto.response.projection.ClustersWoArea;
 import co.arctern.api.provider.service.AreaService;
+import co.arctern.api.provider.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,60 +16,52 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AreaServiceImpl implements AreaService {
 
     private final AreaDao areaDao;
     private final UserAreaDao userAreaDao;
+    private final RoleService roleService;
     private final ProjectionFactory projectionFactory;
 
     @Autowired
     public AreaServiceImpl(AreaDao areaDao,
                            UserAreaDao userAreaDao,
-                           ProjectionFactory projectionFactory) {
+                           ProjectionFactory projectionFactory,
+                           RoleService roleService
+    ) {
         this.areaDao = areaDao;
         this.userAreaDao = userAreaDao;
         this.projectionFactory = projectionFactory;
+        this.roleService = roleService;
     }
 
     @Override
-    public void setAreasToUser(User user, List<Long> areaIds) {
+    public void setAreasToUser(User user, List<Long> areaIds, List<Role> roles, Long clusterId) {
+        List<Area> areas = new ArrayList<>();
+        if (!roles.stream().map(a -> a.getRole()).collect(Collectors.toList()).contains("ROLE_ADMIN")) {
+            if (clusterId != null) areas = areaDao.fetchActiveAreasByCluster(clusterId);
+            if (!CollectionUtils.isEmpty(areaIds)) areas = areaDao.findByIdIn(areaIds);
+        } else {
+            areas = areaDao.fetchActiveAreas();
+        }
         List<UserArea> userAreas = new ArrayList<>();
         List<UserArea> existingUserAreas = user.getUserAreas();
         if (!CollectionUtils.isEmpty(existingUserAreas)) {
             userAreaDao.deleteAll(existingUserAreas);
         }
-        areaDao.findByIdIn(areaIds)
-                .forEach(a -> {
-                    UserArea userArea = new UserArea();
-                    userArea.setArea(a);
-                    userArea.setIsActive(true);
-                    userArea.setUser(user);
-                    userAreas.add(userArea);
-                });
-        userAreaDao.saveAll(userAreas);
-    }
-
-    @Override
-    @Transactional
-    public StringBuilder createAreas(List<AreaRequestDto> dtos) {
-        List<Area> areas = new ArrayList<>();
-        dtos.stream().forEach(dto ->
-        {
-            Area area = new Area();
-            area.setCluster(dto.getCluster());
-            area.setIsActive(true);
-            area.setLatitude(dto.getLatitude());
-            area.setLongitude(dto.getLongitude());
-            area.setPinCode(dto.getPinCode());
-            areas.add(area);
+        areas.forEach(a -> {
+            UserArea userArea = new UserArea();
+            userArea.setArea(a);
+            userArea.setIsActive(true);
+            userArea.setUser(user);
+            userAreas.add(userArea);
         });
-        areaDao.saveAll(areas);
-        return SUCCESS_MESSAGE;
+        userAreaDao.saveAll(userAreas);
     }
 
     @Override
@@ -85,4 +76,57 @@ public class AreaServiceImpl implements AreaService {
         });
     }
 
+    @Override
+    public List<Area> fetchAreas(List<String> pinCodes) {
+        return areaDao.findDistinctByPinCodeIn(pinCodes);
+    }
+
+    @Override
+    public void saveAll(List<Area> areas) {
+        areaDao.saveAll(areas);
+    }
+
+    @Override
+    public void save(Area area) {
+        areaDao.save(area);
+    }
+
+    @Override
+    public List<String> search(String value) {
+        List<Area> areas = ((value.matches(PIN_CODE_REGEXP)) ?
+                areaDao.findByPinCodeStartingWithAndDeliveryStateTrue(value) :
+                areaDao.findByNameContainingAndDeliveryStateTrue(value));
+        return areas.stream().collect(Collectors
+                .groupingBy(a -> a.getPinCode()))
+                .keySet()
+                .stream()
+                .map(a -> a)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Boolean pincodeExists(String value) {
+        return areaDao.existsByPinCode(value);
+    }
+
+    @Override
+    public Areas fetchArea(String pinCode) {
+        return projectionFactory.createProjection(Areas.class, areaDao.findByPinCode(pinCode).stream()
+                .findFirst()
+                .orElseThrow(() -> {
+                    return new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_PIN_CODE_MESSAGE.toString());
+                }));
+    }
+
+    @Override
+    public ClustersWoArea getCluster(Address address) {
+        if (address != null) {
+            Area area = address.getArea();
+            if (area != null) {
+                return projectionFactory.createProjection(ClustersWoArea.class, area);
+            }
+            return null;
+        }
+        return null;
+    }
 }

@@ -58,6 +58,12 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
     @PreAuthorize("permitAll()")
     Optional<User> findByPhone(String phone);
 
+    /**
+     * fetch active user through phone.
+     *
+     * @param phone
+     * @return
+     */
     Optional<User> findByPhoneAndIsActiveTrue(String phone);
 
     /**
@@ -92,5 +98,9 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
      * @return
      */
     Page<User> findByIsActiveTrue(Pageable pageable);
+
+    Page<User> findById(Long id, Pageable pageable);
+
+    Page<User> findByNameStartingWith(String name, Pageable pageable);
 
 }

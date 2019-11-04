@@ -59,7 +59,7 @@ spring:
     url: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_provider?useSSL=false&createDatabaseIfNotExist=true"
     slaveUrl: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_provider?useSSL=false&createDatabaseIfNotExist=true"
     username: "root"
-    password: "2q1I447joT"
+    password: "uoGsYp2WYR"
   sqs:
     consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/provider-consumer-updates-simple-staging"
     accessKey: "AKIA2YRBSIDHAXCGRJ6T"

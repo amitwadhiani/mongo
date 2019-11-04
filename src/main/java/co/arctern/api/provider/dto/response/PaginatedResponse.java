@@ -13,10 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 public class PaginatedResponse {
 
-    public List<?> content;
-    public Page<?> pageContent;
-    public Integer page;
-    public Integer size;
-    public Integer totalPages;
-    public Long totalElements;
+    private List<?> content;
+    private Page<?> pageContent;
+    private Integer page;
+    private Integer size;
+    private Integer totalPages;
+    private Long totalElements;
 }

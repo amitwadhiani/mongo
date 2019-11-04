@@ -37,5 +37,6 @@ public interface HomePageService {
                                                           Timestamp start, Timestamp end,
                                                           List<Long> areaIds, TaskType taskType, Long orderId,
                                                           String patientFilterValue,
+                                                          Long providerId,
                                                           Pageable pageable);
 }

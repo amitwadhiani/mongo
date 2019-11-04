@@ -11,8 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginEventHandler {
 
+    private final UserService userService;
+
     @Autowired
-    UserService userService;
+    public LoginEventHandler(UserService userService) {
+        this.userService = userService;
+    }
 
     public void markLoggedInStateForUser(User user, Boolean status) {
         user.setIsLoggedIn(status);

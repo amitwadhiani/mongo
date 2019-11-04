@@ -2,7 +2,7 @@ package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.domain.UserArea;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.projection.Areas;
+import co.arctern.api.provider.dto.response.projection.ClustersWoArea;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Pageable;
 
@@ -23,6 +23,6 @@ public interface UserAreaService extends MessageUtil {
      * @param userAreas
      * @return
      */
-    public List<Areas> fetchAreasForUser(List<UserArea> userAreas);
+    public List<ClustersWoArea> fetchAreasForUser(List<UserArea> userAreas);
 
 }

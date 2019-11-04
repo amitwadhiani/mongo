@@ -54,4 +54,10 @@ public class RoleServiceImpl implements RoleService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ROLE_ID_MESSAGE.toString());
         }));
     }
+
+    @Override
+    public List<Role> fetchRoleById(List<Long> ids) {
+        return roleDao.findByIdIn(ids);
+    }
+
 }

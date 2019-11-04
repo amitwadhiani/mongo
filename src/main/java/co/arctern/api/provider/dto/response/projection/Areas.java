@@ -13,5 +13,6 @@ public interface Areas {
 
     String getPinCode();
 
-    String getCluster();
+    ClustersWoArea getCluster();
+
 }

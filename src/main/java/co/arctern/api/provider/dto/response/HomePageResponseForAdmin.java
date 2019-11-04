@@ -10,21 +10,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HomePageResponseForAdmin {
 
-    PaginatedResponse tasks;
-    PaginatedResponse openTasks;
-    PaginatedResponse completedTasks;
-    PaginatedResponse pendingTasks;
-    PaginatedResponse acceptedTasks;
-    PaginatedResponse startedTasks;
-    PaginatedResponse cancelledTasks;
-    PaginatedResponse cancelRequests;
-    Long tasksCount;
-    Long openTasksCount;
-    Long acceptedTasksCount;
-    Long completedTasksCount;
-    Long pendingTasksCount;
-    Long cancelRequestsCount;
-    Long startedTasksCount;
-    Long cancelledTasksCount;
+    private PaginatedResponse tasks;
+    private PaginatedResponse openTasks;
+    private PaginatedResponse completedTasks;
+    private PaginatedResponse pendingTasks;
+    private PaginatedResponse acceptedTasks;
+    private PaginatedResponse startedTasks;
+    private PaginatedResponse cancelledTasks;
+    private PaginatedResponse cancelRequests;
+    private PaginatedResponse rejectedTasks;
+    private PaginatedResponse rescheduledTasks;
+    private Long tasksCount;
+    private Long openTasksCount;
+    private Long acceptedTasksCount;
+    private Long completedTasksCount;
+    private Long pendingTasksCount;
+    private Long cancelRequestsCount;
+    private Long startedTasksCount;
+    private Long cancelledTasksCount;
+    private Long rejectedTasksCount;
+    private Long rescheduledTasksCount;
 
 }

@@ -41,11 +41,17 @@ public class Task extends CodeGeneratorUtil {
     @Column(nullable = true)
     private Timestamp expectedArrivalTime;
 
+    @Column(nullable = true)
+    private String source;
+
     @OneToMany(mappedBy = "task")
     private List<TaskEvent> taskEvents;
 
     @OneToMany(mappedBy = "task")
     private List<Payment> payments;
+
+    @Column
+    private Long diagnosticOrderId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'OPEN'")
@@ -59,6 +65,8 @@ public class Task extends CodeGeneratorUtil {
 
     @OneToOne(mappedBy = "task")
     private Rating rating;
+
+    private Long activeUserId;
 
     /**
      * record of users working on/have worked upon a task.

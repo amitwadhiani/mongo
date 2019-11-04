@@ -49,6 +49,8 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      */
     Page<Task> findByDestinationAddressAreaIdIn(List<Long> areaIds, Pageable pageable);
 
+    Page<Task> findByDestinationAddressAreaIdInAndType(List<Long> areaIds, TaskType type, Pageable pageable);
+
     /**
      * fetch tasks for a particular area within a time range.
      *
@@ -60,13 +62,15 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      */
     Page<Task> findByDestinationAddressAreaIdInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
 
+    Page<Task> findByDestinationAddressAreaIdInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(List<Long> areaIds, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
     /**
      * fetch cancellation requested tasks.
      *
      * @param pageable
      * @return
      */
-    Page<Task> findByCancellationRequestedTrue(Pageable pageable);
+    Page<Task> findByCancellationRequestedTrueOrderByLastModifiedAtDesc(Pageable pageable);
 
 
     /**
@@ -350,6 +354,18 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      */
     public List<Task> findByIsActiveTrueAndCreatedAtLessThanEqualAndState(Timestamp start, TaskState state);
 
+    /**
+     * fetch tasks through ids.
+     *
+     * @param taskIds
+     * @return
+     */
     public List<Task> findByIdIn(List<Long> taskIds);
+
+    @Query("FROM Task task " +
+            "JOIN FETCH task.payments " +
+            "WHERE task.activeUserId = :userId " +
+            "AND task.state = :state ")
+    public List<Task> fetchTasks(Long userId, TaskState state);
 
 }

@@ -1,5 +1,6 @@
 package co.arctern.api.provider.domain;
 
+import co.arctern.api.provider.constant.TaskStateFlowState;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,9 @@ public class TaskReason {
     @ManyToOne
     @JsonBackReference("task-taskReason")
     private Task task;
+
+    @Enumerated(EnumType.STRING)
+    private TaskStateFlowState state;
 
     @ManyToOne
     @JsonBackReference("reason-taskReason")

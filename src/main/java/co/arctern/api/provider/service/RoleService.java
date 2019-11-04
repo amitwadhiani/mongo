@@ -11,6 +11,7 @@ public interface RoleService extends MessageUtil {
 
     /**
      * role creation.
+     *
      * @param dto
      * @return
      */
@@ -18,16 +19,25 @@ public interface RoleService extends MessageUtil {
 
     /**
      * fetch all roles.
+     *
      * @return
      */
     public List<Roles> fetchRoles();
 
     /**
      * fetch role through id.
+     *
      * @param id
      * @return
      */
     public Roles fetchRoleById(Long id);
 
+    /**
+     * fetch role through ids.
+     *
+     * @param ids
+     * @return
+     */
+    public List<Role> fetchRoleById(List<Long> ids);
 
 }
