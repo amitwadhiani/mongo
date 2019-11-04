@@ -24,18 +24,20 @@ public class OfferingController {
 
     /**
      * create new offering api.
+     *
      * @param dtos
      * @return
      */
     @CrossOrigin
     @PostMapping("/create")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> postOfferings(@RequestBody List<OfferingRequestDto> dtos) {
         return ResponseEntity.ok(offeringService.create(dtos));
     }
 
     /**
      * fetch all offerings api.
+     *
      * @return
      */
     @CrossOrigin
@@ -47,6 +49,7 @@ public class OfferingController {
 
     /**
      * fetch offering by id api.
+     *
      * @param id
      * @return
      */
