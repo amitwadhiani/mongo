@@ -366,6 +366,6 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "JOIN FETCH task.payments " +
             "WHERE task.activeUserId = :userId " +
             "AND task.state = :state ")
-    public List<Task> findByActiveUserIdAndState(Long userId, TaskState state);
+    public List<Task> fetchTasks(Long userId, TaskState state);
 
 }

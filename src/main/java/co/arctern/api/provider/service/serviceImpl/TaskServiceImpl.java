@@ -507,7 +507,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public List<Task> fetchTasksForPayment(Long userId) {
-        return taskDao.findByActiveUserIdAndState(userId, TaskState.COMPLETED);
+        return taskDao.fetchTasks(userId, TaskState.COMPLETED);
     }
 
     @Override

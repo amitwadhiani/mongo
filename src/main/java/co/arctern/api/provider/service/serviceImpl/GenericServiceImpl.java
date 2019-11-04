@@ -29,7 +29,7 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public Double fetchUserOwedAmount(Long userId) {
-        List<Task> tasks = taskDao.findByActiveUserIdAndState(userId, TaskState.COMPLETED);
+        List<Task> tasks = taskDao.fetchTasks(userId, TaskState.COMPLETED);
         List<Payments> payments = new ArrayList<>();
         tasks.stream().forEach(a -> {
             payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(SettleState.PAYMENT_RECEIVED))
