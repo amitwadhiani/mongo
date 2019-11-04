@@ -69,8 +69,17 @@ public class UserController {
     @GetMapping("/fetch/all")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<PaginatedResponse> fetchAll(@RequestParam(value = "taskType", required = false) TaskType taskType, Pageable pageable) {
-        return ResponseEntity.ok((taskType == null) ? userService.fetchAll(pageable) : userService.fetchAllByTaskType(taskType, pageable));
+    public ResponseEntity<PaginatedResponse> fetchAll(@RequestParam(value = "taskType", required = false) TaskType taskType,
+                                                      @RequestParam(value = "clusterId", required = false) Long clusterId
+            , Pageable pageable) {
+        return ResponseEntity.ok((clusterId != null) ?
+                ((taskType == null)
+                        ? userService.fetchAllByCluster(clusterId, pageable)
+                        : userService.fetchAllByTaskTypeAndCluster(taskType, clusterId, pageable))
+                : ((taskType == null)
+                ? userService.fetchAll(pageable)
+                : userService.fetchAllByTaskType(taskType, pageable))
+        );
     }
 
     /**

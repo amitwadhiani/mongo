@@ -6,6 +6,7 @@ import co.arctern.api.provider.domain.Cluster;
 import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.dto.request.ClusterRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.dto.response.projection.Clusters;
 import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.ClusterService;
@@ -132,6 +133,15 @@ public class ClusterServiceImpl implements ClusterService {
         });
         areaService.saveAll(areas);
         return SUCCESS_MESSAGE;
+    }
+
+    @Override
+    public List<Areas> fetchAreas(Long clusterId) {
+        return clusterDao.findById(clusterId)
+                .get()
+                .getAreas()
+                .stream().map(a -> projectionFactory.createProjection(Areas.class, a))
+                .collect(Collectors.toList());
     }
 
 

@@ -113,6 +113,10 @@ public interface UserService extends MessageUtil {
      */
     public PaginatedResponse fetchAll(Pageable pageable);
 
+    public PaginatedResponse fetchAllByTaskTypeAndCluster(TaskType type, Long clusterId, Pageable pageable);
+
+    public PaginatedResponse fetchAllByCluster(Long clusterId, Pageable pageable);
+
     public PaginatedResponse fetchAllByTaskType(TaskType taskType, Pageable pageable);
 
     /**

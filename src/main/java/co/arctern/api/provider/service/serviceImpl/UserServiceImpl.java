@@ -13,6 +13,7 @@ import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
     private final ProjectionFactory projectionFactory;
     private final OfferingService offeringService;
     private final AreaService areaService;
+    private final ClusterService clusterService;
     private final UserRoleService userRoleService;
     private final TokenService tokenService;
     private final UserTaskService userTaskService;
@@ -50,7 +52,8 @@ public class UserServiceImpl implements UserService {
                            UserRoleService userRoleService,
                            TokenService tokenService,
                            UserTaskService userTaskService,
-                           GenericService genericService) {
+                           GenericService genericService,
+                           ClusterService clusterService) {
         this.userDao = userDao;
         this.projectionFactory = projectionFactory;
         this.offeringService = offeringService;
@@ -59,6 +62,7 @@ public class UserServiceImpl implements UserService {
         this.tokenService = tokenService;
         this.userTaskService = userTaskService;
         this.genericService = genericService;
+        this.clusterService = clusterService;
     }
 
     @Override
@@ -247,5 +251,45 @@ public class UserServiceImpl implements UserService {
         return userDao.findByNameStartingWith(value, pageable)
                 .map(a -> projectionFactory.createProjection(Users.class, a));
     }
+
+    public PaginatedResponse fetchAllByTaskTypeAndCluster(TaskType type, Long clusterId, Pageable pageable) {
+        List<String> pinCodes = clusterService.fetchAreas(clusterId).stream().map(a -> a.getPinCode()).collect(Collectors.toList());
+        List<User> users = userDao.fetchActiveUsers().stream()
+                .filter(a -> !a.getUserRoles().stream()
+                        .anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN"))
+                        && a.getUserOfferings().stream().anyMatch(b -> b.getOffering().getType().toString().equalsIgnoreCase(type.toString()))
+                        && a.getUserAreas()
+                        .stream()
+                        .filter(b -> BooleanUtils.isTrue(b.getIsActive()))
+                        .anyMatch(b -> pinCodes.contains(b.getArea().getPinCode())))
+                .collect(Collectors.toList());
+        return PaginationUtil.returnPaginatedBody(
+                users.stream()
+                        .map(user -> {
+                            user.setAmountOwed(genericService.fetchUserOwedAmount(user.getId()));
+                            return projectionFactory.createProjection(Users.class, user);
+                        }).collect(Collectors.toList()),
+                pageable.getPageNumber(), pageable.getPageSize(), users.size());
+    }
+
+    public PaginatedResponse fetchAllByCluster(Long clusterId, Pageable pageable) {
+        List<String> pinCodes = clusterService.fetchAreas(clusterId).stream().map(a -> a.getPinCode()).collect(Collectors.toList());
+        List<User> users = userDao.fetchActiveUsers().stream()
+                .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN"))
+                        && user.getUserAreas()
+                        .stream()
+                        .filter(a -> BooleanUtils.isTrue(a.getIsActive()))
+                        .anyMatch(a -> pinCodes.contains(a.getArea().getPinCode())))
+                .collect(Collectors.toList());
+        return PaginationUtil.returnPaginatedBody(
+                users.stream()
+                        .map(user -> {
+                            user.setAmountOwed(genericService.fetchUserOwedAmount(user.getId()));
+                            return projectionFactory.createProjection(Users.class, user);
+                        }).collect(Collectors.toList()),
+                pageable.getPageNumber(),
+                pageable.getPageSize(), users.size());
+    }
+
 
 }
