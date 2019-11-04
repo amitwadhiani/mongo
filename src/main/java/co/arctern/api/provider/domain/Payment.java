@@ -47,6 +47,7 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentState state;
 
+    @Column
     private String mode;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)

@@ -32,7 +32,7 @@ public class AddressServiceImpl implements AddressService {
             {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_ADDRESS_ID_MESSAGE.toString());
             });
-            Long areaId = dto.getAreaId();
+            Long areaId = areaService.fetchArea(dto.getPinCode()).getId();
             if (areaId != null) {
                 address.setArea(areaService.fetchById(areaId));
                 address = addressDao.save(address);
