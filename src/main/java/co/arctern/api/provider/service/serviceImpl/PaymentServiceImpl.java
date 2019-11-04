@@ -41,23 +41,25 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment create(Task task, TaskAssignDto dto) {
+        Boolean isPrepaid = BooleanUtils.isTrue(dto.getIsPrepaid());
+        PaymentState paymentState = dto.getPaymentState();
+        Payment payment = this.createPayment(task, dto, isPrepaid, paymentState);
+        createSettleStateFlow(payment, isPrepaid ? SettleState.NOT_APPLICABLE : SettleState.PENDING);
+        createPaymentStateFlow(payment, paymentState, null);
+        return payment;
+    }
+
+    @Override
+    public Payment createPayment(Task task, TaskAssignDto dto, Boolean isPrepaid, PaymentState paymentState) {
         Payment payment = new Payment();
         payment.setAmount(dto.getAmount());
-        Boolean isPrepaid = dto.getIsPrepaid();
         payment.setIsPrepaid(isPrepaid);
         payment.setMode(dto.getPaymentMode());
-        PaymentState paymentState = dto.getPaymentState();
         payment.setState(paymentState);
         payment.setTask(task);
-        payment.setSettleState((BooleanUtils.isTrue(isPrepaid)) ? SettleState.NOT_APPLICABLE : SettleState.PENDING);
+        payment.setSettleState(isPrepaid ? SettleState.NOT_APPLICABLE : SettleState.PENDING);
         payment.setIsSettled(false);
         payment = paymentDao.save(payment);
-        if (BooleanUtils.isTrue(isPrepaid)) {
-            createSettleStateFlow(payment, SettleState.NOT_APPLICABLE);
-        } else {
-            createSettleStateFlow(payment, SettleState.PENDING);
-        }
-        createPaymentStateFlow(payment, paymentState, null);
         return payment;
     }
 
@@ -95,13 +97,13 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public List<Payments> settlePayments(Long userId, List<Payment> payments, List<Payments> paymentResponse, Boolean settleFlag) {
-        payments.stream().forEach(a -> {
-            a.setIsSettled(settleFlag);
-            a.setSettleState(SettleState.SETTLED);
-            a.setSettledBy(userId);
-            a = paymentDao.save(a);
-            createSettleStateFlow(a, SettleState.SETTLED);
-            paymentResponse.add(projectionFactory.createProjection(Payments.class, a));
+        payments.stream().forEach(payment -> {
+            payment.setIsSettled(settleFlag);
+            payment.setSettleState(SettleState.SETTLED);
+            payment.setSettledBy(userId);
+            payment = paymentDao.save(payment);
+            createSettleStateFlow(payment, SettleState.SETTLED);
+            paymentResponse.add(projectionFactory.createProjection(Payments.class, payment));
         });
         return paymentResponse;
     }
@@ -111,14 +113,13 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public Payment updateAmount(Task task, Double amount) {
         List<Payment> payments = task.getPayments();
-        if (!CollectionUtils.isEmpty(payments)) {
-            Payment payment = payments.get(0);
-            payment.setAmount(amount);
-            payment = paymentDao.save(payment);
-            createPaymentStateFlow(payment, payment.getState(), amount - payment.getAmount());
-            return payment;
-        }
-        return null;
+        if (CollectionUtils.isEmpty(payments)) return null;
+
+        Payment payment = payments.get(0);
+        payment.setAmount(amount);
+        payment = paymentDao.save(payment);
+        createPaymentStateFlow(payment, payment.getState(), amount - payment.getAmount());
+        return payment;
     }
 
     @Override

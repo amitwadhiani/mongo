@@ -43,4 +43,6 @@ public interface PaymentService extends MessageUtil {
 
     public void createSettleStateFlow(Payment payment, SettleState notApplicable);
 
+    public Payment createPayment(Task task, TaskAssignDto dto, Boolean isPrepaid, PaymentState paymentState);
+
 }

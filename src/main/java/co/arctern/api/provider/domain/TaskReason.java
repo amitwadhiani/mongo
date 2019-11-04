@@ -26,7 +26,6 @@ public class TaskReason {
     private Task task;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'SAMPLE_PICKUP'")
     private TaskStateFlowState state;
 
     @ManyToOne

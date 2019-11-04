@@ -66,8 +66,9 @@ public class ReasonServiceImpl implements ReasonService {
 
     @Override
     public List<Reasons> fetchAll(Boolean isAdmin) {
-        List<Reason> reasons = Lists.newArrayList(reasonDao.findAll());
-        if (!isAdmin) reasons = reasons.stream().filter(a -> a.getIsActive()).collect(Collectors.toList());
+        List<Reason> reasons = (isAdmin) ?
+                Lists.newArrayList(reasonDao.findAll())
+                : reasonDao.findByIsActiveTrue();
         return reasons.stream().map(reason -> projectionFactory.createProjection(Reasons.class, reason))
                 .collect(Collectors.toList());
     }

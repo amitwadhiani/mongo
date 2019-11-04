@@ -57,14 +57,7 @@ public class ClusterServiceImpl implements ClusterService {
                             .collect(Collectors.toList()));
                     return projectionFactory.createProjection(Clusters.class, a);
                 }).collect(Collectors.toList());
-        return PaginationUtil.returnPaginatedBody(clusterDao.findAll().stream().
-                map(a -> {
-                    a.setAreas(a.getAreas()
-                            .stream()
-                            .filter(PaginationUtil.distinctByKey(b -> b.getPinCode()))
-                            .collect(Collectors.toList()));
-                    return projectionFactory.createProjection(Clusters.class, a);
-                }).collect(Collectors.toList()), pageable.getPageNumber(), pageable.getPageSize(), clusters.size());
+        return PaginationUtil.returnPaginatedBody(clusters, pageable.getPageNumber(), pageable.getPageSize(), clusters.size());
     }
 
     @Override
@@ -76,24 +69,23 @@ public class ClusterServiceImpl implements ClusterService {
     @Transactional
     public StringBuilder createClusters(List<ClusterRequestDto> dtos) {
         List<Area> areasToSave = new ArrayList<>();
-        dtos.stream().forEach(dto -> {
+        for (ClusterRequestDto dto : dtos) {
             Cluster cluster = (dto.getClusterId() == null) ? new Cluster() : clusterDao.findById(dto.getClusterId()).get();
             if (dto.getIsActive() != null) cluster.setIsActive(dto.getIsActive());
             if (dto.getClusterName() != null) cluster.setName(dto.getClusterName());
-            List<String> pinCodes = dto.getPinCodes();
             cluster = clusterDao.save(cluster);
             /**
              * replace existing areas ( if there ) with new areas.
              */
             List<Area> existingAreas = cluster.getAreas();
             if (!CollectionUtils.isEmpty(existingAreas)) {
-                existingAreas.stream().forEach(a -> {
+                for (Area a : existingAreas) {
                     a.setCluster(null);
                     areaService.save(a);
-                });
+                }
             }
-            List<Area> areas = new ArrayList<>();
-            if (!CollectionUtils.isEmpty(pinCodes)) areas = areaService.fetchAreas(pinCodes);
+            List<Area> areas = (CollectionUtils.isEmpty(dto.getPinCodes())) ?
+                    new ArrayList<>() : areaService.fetchAreas(dto.getPinCodes());
             for (Area area : areas) {
                 if (area.getCluster() != null)
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
@@ -101,7 +93,7 @@ public class ClusterServiceImpl implements ClusterService {
                 area.setMeddoDeliveryState(true);
                 areasToSave.add(area);
             }
-        });
+        }
         if (!CollectionUtils.isEmpty(areasToSave)) areaService.saveAll(areasToSave);
         return SUCCESS_MESSAGE;
     }
