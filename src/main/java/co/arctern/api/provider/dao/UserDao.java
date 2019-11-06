@@ -104,6 +104,7 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
 
     Page<User> findByNameStartingWith(String name, Pageable pageable);
 
+    @Query("SELECT user FROM User user")
     Page<Users> fetchUsers(Pageable pageable);
 
 }
