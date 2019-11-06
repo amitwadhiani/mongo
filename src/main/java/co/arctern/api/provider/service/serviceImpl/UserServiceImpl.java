@@ -287,5 +287,13 @@ public class UserServiceImpl implements UserService {
                 pageable.getPageSize(), users.size());
     }
 
+    @Override
+    public StringBuilder activateOrDeactivateUser(Long userId, Boolean isActive) {
+        User user = this.fetchUser(userId);
+        user.setIsActive(isActive);
+        userDao.save(user);
+        return SUCCESS_MESSAGE;
+    }
+
 
 }

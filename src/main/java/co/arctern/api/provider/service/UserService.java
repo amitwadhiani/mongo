@@ -151,4 +151,6 @@ public interface UserService extends MessageUtil {
 
     public Page<Users> search(String value, Pageable pageable);
 
+    public StringBuilder activateOrDeactivateUser(Long userId, Boolean isActive);
+
 }
