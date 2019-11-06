@@ -1,6 +1,7 @@
 package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.dto.response.projection.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -102,5 +103,7 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
     Page<User> findById(Long id, Pageable pageable);
 
     Page<User> findByNameStartingWith(String name, Pageable pageable);
+
+    Page<Users> fetchUsers(Pageable pageable);
 
 }
