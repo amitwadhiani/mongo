@@ -235,11 +235,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PaginatedResponse fetchAllUsersByAdmin(Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(userDao.findAll(pageable)
-                .map(a -> {
-                    a.setAmountOwed(genericService.fetchUserOwedAmount(a.getId()));
-                    return projectionFactory.createProjection(Users.class, a);
-                }), pageable);
+        return PaginationUtil.returnPaginatedBody(userDao.fetchUsers(pageable), pageable);
     }
 
     @Override
@@ -289,6 +285,14 @@ public class UserServiceImpl implements UserService {
                         }).collect(Collectors.toList()),
                 pageable.getPageNumber(),
                 pageable.getPageSize(), users.size());
+    }
+
+    @Override
+    public StringBuilder activateOrDeactivateUser(Long userId, Boolean isActive) {
+        User user = this.fetchUser(userId);
+        user.setIsActive(isActive);
+        userDao.save(user);
+        return SUCCESS_MESSAGE;
     }
 
 

@@ -2,15 +2,13 @@ package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.constant.SettleState;
 import co.arctern.api.provider.dto.response.projection.Payments;
+import co.arctern.api.provider.service.GenericService;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,12 +18,15 @@ public class PaymentController {
 
     private final TaskService taskService;
     private final TokenService tokenService;
+    private final GenericService genericService;
 
     @Autowired
     public PaymentController(TaskService taskService,
-                             TokenService tokenService) {
+                             TokenService tokenService,
+                             GenericService genericService) {
         this.taskService = taskService;
         this.tokenService = tokenService;
+        this.genericService = genericService;
     }
 
     @CrossOrigin
@@ -47,5 +48,12 @@ public class PaymentController {
     public ResponseEntity<List<Payments>> settle(@RequestParam(value = "userId") Long userId) {
         return ResponseEntity.ok(taskService.settleAmountForProvider(tokenService.fetchUserId(), userId));
     }
+
+    @CrossOrigin
+    @GetMapping("/user/owed")
+    public ResponseEntity<Double> fetchUserOwedAmount(@RequestParam(value = "userId") Long userId) {
+        return ResponseEntity.ok(genericService.fetchUserOwedAmount(userId));
+    }
+
 
 }

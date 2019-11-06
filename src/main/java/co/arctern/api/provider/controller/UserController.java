@@ -109,4 +109,13 @@ public class UserController {
         return ResponseEntity.ok(taskService.fetchProfileDetails(tokenService.fetchUserId()));
     }
 
+    @PatchMapping("/activate")
+    @CrossOrigin
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<StringBuilder> activateOrDeactivateUser(@RequestParam("userId") Long userId,
+                                                          @RequestParam("isActive") Boolean isActive) {
+        return ResponseEntity.ok(userService.activateOrDeactivateUser(userId, isActive));
+    }
+
+
 }
