@@ -8,7 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -34,7 +34,7 @@ public class Cluster {
     private Timestamp lastModifiedAt;
 
     @OneToMany(mappedBy = "cluster")
-    private List<Area> areas;
+    private Set<Area> areas;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

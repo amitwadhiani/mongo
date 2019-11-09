@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -35,7 +35,7 @@ public class TimeslotGroup {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "timeSlotGroup")
-    private List<Timeslot> slots;
+    private Set<Timeslot> slots;
 
     Time start;
     Time end;

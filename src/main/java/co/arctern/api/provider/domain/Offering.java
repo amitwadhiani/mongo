@@ -8,7 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -37,7 +37,7 @@ public class Offering {
     private OfferingType type;
 
     @OneToMany(mappedBy = "offering")
-    List<UserOffering> userOfferings;
+    Set<UserOffering> userOfferings;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

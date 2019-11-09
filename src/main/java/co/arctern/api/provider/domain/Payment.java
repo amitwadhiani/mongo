@@ -10,7 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -61,10 +61,10 @@ public class Payment {
     private Long settledBy;
 
     @OneToMany(mappedBy = "payment")
-    private List<PaymentStateFlow> paymentStateFlows;
+    private Set<PaymentStateFlow> paymentStateFlows;
 
     @OneToMany(mappedBy = "payment")
-    private List<SettleStateFlow> settleStateFlows;
+    private Set<SettleStateFlow> settleStateFlows;
 
     public Payment(Long version) {
         this.version = version;

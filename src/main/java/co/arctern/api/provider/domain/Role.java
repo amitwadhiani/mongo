@@ -8,7 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Roles can be ROLE_ADMIN, ROLE_PROVIDER, ROLE_AREA_MANAGER
@@ -45,7 +45,7 @@ public class Role {
     private Long version;
 
     @OneToMany(mappedBy = "role")
-    List<UserRole> userRoles;
+    Set<UserRole> userRoles;
 
     public Role(Long version) {
         this.version = version;

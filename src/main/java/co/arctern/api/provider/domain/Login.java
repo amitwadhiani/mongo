@@ -11,7 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -63,7 +63,7 @@ public class Login {
     User user;
 
     @OneToMany(mappedBy = "login")
-    private List<LoginFlow> loginFlows;
+    private Set<LoginFlow> loginFlows;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

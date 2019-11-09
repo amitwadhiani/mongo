@@ -11,12 +11,14 @@ import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
 public class Address {
+
+    private  String xyz;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,7 +66,7 @@ public class Address {
     private String landmark;
 
     @OneToMany(mappedBy = "sourceAddress")
-    List<Task> tasksForSourceAddress;
+    Set<Task> tasksForSourceAddress;
 
     @CreatedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -75,7 +77,7 @@ public class Address {
     private Timestamp lastModifiedAt;
 
     @OneToMany(mappedBy = "destinationAddress")
-    List<Task> tasksForDestinationAddress;
+    Set<Task> tasksForDestinationAddress;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

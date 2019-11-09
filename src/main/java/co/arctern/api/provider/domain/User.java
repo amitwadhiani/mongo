@@ -11,7 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -86,16 +86,16 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<UserArea> userAreas;
+    private Set<UserArea> userAreas;
 
     @OneToMany(mappedBy = "user")
-    private List<UserOffering> userOfferings;
+    private Set<UserOffering> userOfferings;
 
     @OneToMany(mappedBy = "user")
-    private List<UserTask> userTasks;
+    private Set<UserTask> userTasks;
 
     @OneToMany(mappedBy = "user")
-    private List<UserRole> userRoles;
+    private Set<UserRole> userRoles;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

@@ -15,7 +15,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -45,10 +45,10 @@ public class Task extends CodeGeneratorUtil {
     private String source;
 
     @OneToMany(mappedBy = "task")
-    private List<TaskEvent> taskEvents;
+    private Set<TaskEvent> taskEvents;
 
     @OneToMany(mappedBy = "task")
-    private List<Payment> payments;
+    private Set<Payment> payments;
 
     @Column
     private Long diagnosticOrderId;
@@ -72,13 +72,13 @@ public class Task extends CodeGeneratorUtil {
      * record of users working on/have worked upon a task.
      */
     @OneToMany(mappedBy = "task")
-    private List<UserTask> userTasks;
+    private Set<UserTask> userTasks;
 
     /**
      * record of status flows for a task.
      */
     @OneToMany(mappedBy = "task")
-    private List<TaskStateFlow> taskStateFlows;
+    private Set<TaskStateFlow> taskStateFlows;
 
     /**
      * orderId linked with the item.
@@ -100,7 +100,7 @@ public class Task extends CodeGeneratorUtil {
     private Boolean cancellationRequested;
 
     @OneToMany(mappedBy = "task")
-    private List<TaskReason> taskReasons;
+    private Set<TaskReason> taskReasons;
 
     @Column
     private String patientName;

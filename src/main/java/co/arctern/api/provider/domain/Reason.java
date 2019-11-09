@@ -8,7 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -34,7 +34,7 @@ public class Reason {
     private String reason;
 
     @OneToMany(mappedBy = "reason")
-    private List<TaskReason> taskReasons;
+    private Set<TaskReason> taskReasons;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
