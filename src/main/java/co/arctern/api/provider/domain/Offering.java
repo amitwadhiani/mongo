@@ -37,7 +37,7 @@ public class Offering {
     private OfferingType type;
 
     @OneToMany(mappedBy = "offering")
-    Set<UserOffering> userOfferings;
+    List<UserOffering> userOfferings;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

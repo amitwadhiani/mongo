@@ -66,7 +66,7 @@ public class Address {
     private String landmark;
 
     @OneToMany(mappedBy = "sourceAddress")
-    Set<Task> tasksForSourceAddress;
+    List<Task> tasksForSourceAddress;
 
     @CreatedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -77,7 +77,7 @@ public class Address {
     private Timestamp lastModifiedAt;
 
     @OneToMany(mappedBy = "destinationAddress")
-    Set<Task> tasksForDestinationAddress;
+    List<Task> tasksForDestinationAddress;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

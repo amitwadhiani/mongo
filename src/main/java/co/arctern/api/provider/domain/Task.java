@@ -45,10 +45,10 @@ public class Task extends CodeGeneratorUtil {
     private String source;
 
     @OneToMany(mappedBy = "task")
-    private Set<TaskEvent> taskEvents;
+    private List<TaskEvent> taskEvents;
 
     @OneToMany(mappedBy = "task")
-    private Set<Payment> payments;
+    private List<Payment> payments;
 
     @Column
     private Long diagnosticOrderId;
@@ -72,13 +72,13 @@ public class Task extends CodeGeneratorUtil {
      * record of users working on/have worked upon a task.
      */
     @OneToMany(mappedBy = "task")
-    private Set<UserTask> userTasks;
+    private List<UserTask> userTasks;
 
     /**
      * record of status flows for a task.
      */
     @OneToMany(mappedBy = "task")
-    private Set<TaskStateFlow> taskStateFlows;
+    private List<TaskStateFlow> taskStateFlows;
 
     /**
      * orderId linked with the item.
@@ -100,7 +100,7 @@ public class Task extends CodeGeneratorUtil {
     private Boolean cancellationRequested;
 
     @OneToMany(mappedBy = "task")
-    private Set<TaskReason> taskReasons;
+    private List<TaskReason> taskReasons;
 
     @Column
     private String patientName;

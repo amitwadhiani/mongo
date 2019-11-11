@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -73,7 +74,7 @@ public class Area {
      * duplicate pinCodes' grouping.
      */
     @Transient
-    private Set<Long> ids;
+    private List<Long> ids;
 
     @Column(columnDefinition = "tinyint(1) DEFAULT 1", nullable = false)
     private Boolean isActive;
@@ -90,10 +91,10 @@ public class Area {
     private Timestamp lastModifiedAt;
 
     @OneToMany(mappedBy = "area")
-    private Set<UserArea> areaUsers;
+    private List<UserArea> areaUsers;
 
     @OneToMany(mappedBy = "area")
-    private Set<Address> addresses;
+    private List<Address> addresses;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

@@ -86,16 +86,16 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private Set<UserArea> userAreas;
+    private List<UserArea> userAreas;
 
     @OneToMany(mappedBy = "user")
-    private Set<UserOffering> userOfferings;
+    private List<UserOffering> userOfferings;
 
     @OneToMany(mappedBy = "user")
-    private Set<UserTask> userTasks;
+    private List<UserTask> userTasks;
 
     @OneToMany(mappedBy = "user")
-    private Set<UserRole> userRoles;
+    private List<UserRole> userRoles;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

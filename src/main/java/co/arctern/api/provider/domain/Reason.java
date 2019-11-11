@@ -34,7 +34,7 @@ public class Reason {
     private String reason;
 
     @OneToMany(mappedBy = "reason")
-    private Set<TaskReason> taskReasons;
+    private List<TaskReason> taskReasons;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

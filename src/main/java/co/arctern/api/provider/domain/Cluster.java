@@ -34,7 +34,7 @@ public class Cluster {
     private Timestamp lastModifiedAt;
 
     @OneToMany(mappedBy = "cluster")
-    private Set<Area> areas;
+    private List<Area> areas;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

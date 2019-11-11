@@ -45,7 +45,7 @@ public class Role {
     private Long version;
 
     @OneToMany(mappedBy = "role")
-    Set<UserRole> userRoles;
+    List<UserRole> userRoles;
 
     public Role(Long version) {
         this.version = version;

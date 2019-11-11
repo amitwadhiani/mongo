@@ -61,10 +61,10 @@ public class Payment {
     private Long settledBy;
 
     @OneToMany(mappedBy = "payment")
-    private Set<PaymentStateFlow> paymentStateFlows;
+    private List<PaymentStateFlow> paymentStateFlows;
 
     @OneToMany(mappedBy = "payment")
-    private Set<SettleStateFlow> settleStateFlows;
+    private List<SettleStateFlow> settleStateFlows;
 
     public Payment(Long version) {
         this.version = version;

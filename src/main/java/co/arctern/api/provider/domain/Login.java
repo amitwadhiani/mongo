@@ -63,7 +63,7 @@ public class Login {
     User user;
 
     @OneToMany(mappedBy = "login")
-    private Set<LoginFlow> loginFlows;
+    private List<LoginFlow> loginFlows;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version

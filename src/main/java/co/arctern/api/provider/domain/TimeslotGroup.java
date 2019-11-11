@@ -35,7 +35,7 @@ public class TimeslotGroup {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "timeSlotGroup")
-    private Set<Timeslot> slots;
+    private List<Timeslot> slots;
 
     Time start;
     Time end;
