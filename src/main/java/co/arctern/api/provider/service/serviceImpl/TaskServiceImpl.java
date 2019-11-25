@@ -321,7 +321,8 @@ public class TaskServiceImpl implements TaskService {
         task.setCancellationRequested(false);
         task.setIsActive(true);
         task.setDiagnosticOrderId(dto.getDiagnosticOrderId());
-        task.setExpectedArrivalTime(dto.getExpectedArrivalTime());
+        task.setExpectedArrivalTime((dto.getExpectedArrivalTime()) == null ?
+                new Timestamp(System.currentTimeMillis() + (12 * 60 * 60 * 1000)) : dto.getExpectedArrivalTime());
         task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
         task.setSourceAddress(addressService.fetchSourceAddress());
         task.setState(TaskState.OPEN);
@@ -367,7 +368,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, Timestamp start, Timestamp end, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, type, start, end, pageable);
+        return taskDao.findByIsActiveTrueAndStateInAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(states, type, start, end, pageable);
     }
 
     @Override
@@ -395,20 +396,20 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, Timestamp start, Timestamp end, Long orderId, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(states, orderId, type, start, end, pageable);
+        return taskDao.findByIsActiveTrueAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(states, orderId, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, Long refId, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
                 areaIds, states, refId, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
                 areaIds, type, states, start, end, pageable);
     }
 

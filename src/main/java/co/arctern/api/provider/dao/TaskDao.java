@@ -86,6 +86,9 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    Page<Task> findByIsActiveTrueAndStateInAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
+            TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
     /**
      * fetch tasks filtered by states and type.
      *
@@ -115,8 +118,8 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
             "AND task.state IN (:states) " +
-            "AND task.createdAt >= (:start) " +
-            "AND task.createdAt < (:end) " +
+            "AND task.expectedArrivalTime >= (:start) " +
+            "AND task.expectedArrivalTime < (:end) " +
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByAreaIdsAndPatientDetailsWithTime(@Param("areaIds") List<Long> areaIds, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
@@ -159,8 +162,8 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.type = (:type) " +
             "AND task.refId = (:refId) " +
             "AND task.state IN (:states) " +
-            "AND task.createdAt >= (:start) " +
-            "AND task.createdAt < (:end) " +
+            "AND task.expectedArrivalTime >= (:start) " +
+            "AND task.expectedArrivalTime < (:end) " +
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByAreaIdsAndPatientDetailsWithRefIdWithTime(@Param("areaIds") List<Long> areaIds, @Param("refId") Long refId, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
@@ -201,8 +204,8 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.state IN (:states) " +
             "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
-            "AND task.createdAt >= (:start) " +
-            "AND task.createdAt < (:end) " +
+            "AND task.expectedArrivalTime >= (:start) " +
+            "AND task.expectedArrivalTime < (:end) " +
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByPatientDetailsAndTime(@Param("states") TaskState[] states, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
@@ -241,8 +244,8 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
             "AND task.refId = (:refId) " +
-            "AND task.createdAt >= (:start) " +
-            "AND task.createdAt < (:end) " +
+            "AND task.expectedArrivalTime >= (:start) " +
+            "AND task.expectedArrivalTime < (:end) " +
             "ORDER BY task.createdAt DESC ")
     public Page<Task> filterByPatientDetailsWithRefIdWithTime(@Param("states") TaskState[] states, @Param("refId") Long refId, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
@@ -262,7 +265,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
             "AND task.refId = (:refId) " +
-            "ORDER BY task.createdAt DESC ")
+            "ORDER BY task.expectedArrivalTime DESC ")
     public Page<Task> filterByPatientDetailsWithRefId(@Param("states") TaskState[] states, @Param("refId") Long refId, @Param("value") String value, @Param("type") TaskType type, Pageable pageable);
 
     /**
@@ -277,6 +280,9 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @return
      */
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            List<Long> areaIds, TaskType type, TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
+
+    public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
             List<Long> areaIds, TaskType type, TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -306,6 +312,9 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
     Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
+            List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
     /**
      * filter tasks by areaIds, orderId, states and type.
      *
@@ -331,6 +340,9 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @return
      */
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            TaskState[] states, Long orderId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+
+    public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
             TaskState[] states, Long orderId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
