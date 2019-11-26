@@ -18,8 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Address {
 
-    private  String xyz;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
