@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
