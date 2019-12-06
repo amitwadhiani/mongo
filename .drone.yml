@@ -23,7 +23,7 @@ steps:
         - latest
         - tag-${DRONE_COMMIT_SHA:0:7}
     when:
-      branch: ['master', 'staging']
+      branch: ['master', 'staging', 'uat']
 
   - name: deploy
     image: quay.io/ipedrazas/drone-helm
@@ -57,6 +57,23 @@ steps:
       # debug: true
     when:
       branch: ['staging']
+
+  - name:  uat-deploy
+    image: quay.io/ipedrazas/drone-helm
+    environment:
+      API_SERVER: https://kubernetes.default.svc.cluster.local/
+      KUBERNETES_TOKEN:
+        from_secret: kubernetes_token
+    settings:
+      skip_tls_verify: true
+      chart: ./infra/provider-api-uat
+      release: provider-api-uat
+      tiller_ns: kube-system
+      values: image.tag=tag-${DRONE_COMMIT_SHA:0:7}
+      wait: true
+      # debug: true
+    when:
+      branch: ['uat']
 
   - name:  notification
     image: plugins/slack
