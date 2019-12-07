@@ -299,6 +299,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer fetchUserByPincode(String pincode) {
         Areas areas = areaService.fetchArea(pincode);
+        if(areas.getCluster()== null)
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No cluster found");
+        }
         List<String> pinCodes = clusterService.fetchAreas(areas.getCluster().getId()).stream().map(a -> a.getPinCode()).collect(Collectors.toList());
 
         List<User> users = userDao.fetchActiveUsers().stream()
