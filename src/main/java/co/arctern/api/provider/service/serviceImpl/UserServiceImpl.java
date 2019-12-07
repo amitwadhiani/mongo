@@ -3,10 +3,7 @@ package co.arctern.api.provider.service.serviceImpl;
 import co.arctern.api.provider.constant.Gender;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.UserDao;
-import co.arctern.api.provider.domain.Role;
-import co.arctern.api.provider.domain.User;
-import co.arctern.api.provider.domain.UserOffering;
-import co.arctern.api.provider.domain.UserTask;
+import co.arctern.api.provider.domain.*;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Areas;
@@ -298,21 +295,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer fetchUserByPincode(String pincode) {
-        Areas areas = areaService.fetchArea(pincode);
-        if(areas.getCluster()== null)
-        {
+        Area area = areaService.fetchByPincode(pincode);
+        if (area.getCluster() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No cluster found");
         }
-        List<String> pinCodes = clusterService.fetchAreas(areas.getCluster().getId()).stream().map(a -> a.getPinCode()).collect(Collectors.toList());
+        List<String> pinCodes = clusterService.fetchAreas(area.getCluster().getId()).stream().map(a -> a.getPinCode()).collect(Collectors.toList());
 
-        List<User> users = userDao.fetchActiveUsers().stream()
+        return (userDao.fetchActiveUsers().stream()
                 .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN"))
                         && user.getUserAreas()
                         .stream()
                         .filter(a -> BooleanUtils.isTrue(a.getIsActive()))
                         .anyMatch(a -> pinCodes.contains(a.getArea().getPinCode())))
-                .collect(Collectors.toList());
-        Integer providerInCluster = users.size();
-        return providerInCluster;
+                .collect(Collectors.toList())).size();
     }
 }

@@ -53,6 +53,8 @@ public interface AreaService extends MessageUtil {
 
     public Areas fetchArea(String pinCode);
 
+    public Area fetchByPincode(String pinCode);
+
     public ClustersWoArea getCluster(Address address);
 
 

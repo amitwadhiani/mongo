@@ -118,7 +118,7 @@ public class UserController {
         return ResponseEntity.ok(userService.activateOrDeactivateUser(userId, isActive));
     }
 
-    @GetMapping("/fetch/user-by-pincode")
+    @GetMapping("/fetch/by-pincode")
     @CrossOrigin
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Integer> fetchUserByPincode(@RequestParam("pinCode") String pinCode) {
