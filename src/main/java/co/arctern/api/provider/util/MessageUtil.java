@@ -146,4 +146,6 @@ public interface MessageUtil {
 
     StringBuilder AREA_ALREADY_ASSIGNED_TO_CLUSTER = new StringBuilder("PinCode already attached to a cluster.");
 
+    StringBuilder NO_CLUSTER_FOUND = new StringBuilder("No cluster found");
+
 }

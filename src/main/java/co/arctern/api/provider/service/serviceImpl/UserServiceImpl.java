@@ -8,6 +8,7 @@ import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
+import co.arctern.api.provider.util.MessageUtil;
 import co.arctern.api.provider.util.PaginationUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.BooleanUtils;
@@ -296,7 +297,7 @@ public class UserServiceImpl implements UserService {
     public Integer fetchUserByPincode(String pincode) {
         Area area = areaService.fetchByPincode(pincode);
         if (area.getCluster() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No cluster found");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MessageUtil.NO_CLUSTER_FOUND.toString());
         }
         List<String> pinCodes = clusterService.fetchAreas(area.getCluster().getId()).stream().map(a -> a.getPinCode()).collect(Collectors.toList());
 
