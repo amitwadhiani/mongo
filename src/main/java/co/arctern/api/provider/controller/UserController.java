@@ -3,6 +3,7 @@ package co.arctern.api.provider.controller;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.TokenService;
@@ -115,6 +116,13 @@ public class UserController {
     public ResponseEntity<StringBuilder> activateOrDeactivateUser(@RequestParam("userId") Long userId,
                                                           @RequestParam("isActive") Boolean isActive) {
         return ResponseEntity.ok(userService.activateOrDeactivateUser(userId, isActive));
+    }
+
+    @GetMapping("/fetch/user-by-pincode")
+    @CrossOrigin
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Integer> fetchUserByPincode(@RequestParam("pinCode") String pinCode) {
+        return ResponseEntity.ok(userService.fetchUserByPincode(pinCode));
     }
 
 

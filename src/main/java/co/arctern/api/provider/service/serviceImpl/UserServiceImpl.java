@@ -9,6 +9,7 @@ import co.arctern.api.provider.domain.UserOffering;
 import co.arctern.api.provider.domain.UserTask;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
@@ -295,5 +296,19 @@ public class UserServiceImpl implements UserService {
         return SUCCESS_MESSAGE;
     }
 
+    @Override
+    public Integer fetchUserByPincode(String pincode) {
+        Areas areas = areaService.fetchArea(pincode);
+        List<String> pinCodes = clusterService.fetchAreas(areas.getCluster().getId()).stream().map(a -> a.getPinCode()).collect(Collectors.toList());
 
+        List<User> users = userDao.fetchActiveUsers().stream()
+                .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN"))
+                        && user.getUserAreas()
+                        .stream()
+                        .filter(a -> BooleanUtils.isTrue(a.getIsActive()))
+                        .anyMatch(a -> pinCodes.contains(a.getArea().getPinCode())))
+                .collect(Collectors.toList());
+        Integer providerInCluster = users.size();
+        return providerInCluster;
+    }
 }

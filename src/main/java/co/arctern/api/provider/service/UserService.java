@@ -153,4 +153,6 @@ public interface UserService extends MessageUtil {
 
     public StringBuilder activateOrDeactivateUser(Long userId, Boolean isActive);
 
+    public Integer fetchUserByPincode (String pincode);
+
 }
