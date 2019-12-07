@@ -297,7 +297,7 @@ public class UserServiceImpl implements UserService {
     public Integer fetchUserByPincode(String pincode) {
         Area area = areaService.fetchByPincode(pincode);
         if (area.getCluster() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MessageUtil.NO_CLUSTER_FOUND.toString());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NO_CLUSTER_FOUND.toString());
         }
         List<String> pinCodes = clusterService.fetchAreas(area.getCluster().getId()).stream().map(a -> a.getPinCode()).collect(Collectors.toList());
 
