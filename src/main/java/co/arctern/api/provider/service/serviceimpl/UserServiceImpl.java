@@ -1,4 +1,4 @@
-package co.arctern.api.provider.service.serviceImpl;
+package co.arctern.api.provider.service.serviceimpl;
 
 import co.arctern.api.provider.constant.Gender;
 import co.arctern.api.provider.constant.TaskType;
@@ -8,7 +8,6 @@ import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
-import co.arctern.api.provider.util.MessageUtil;
 import co.arctern.api.provider.util.PaginationUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.BooleanUtils;

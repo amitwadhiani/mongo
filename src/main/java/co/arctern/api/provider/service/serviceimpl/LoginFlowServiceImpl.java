@@ -1,4 +1,4 @@
-package co.arctern.api.provider.service.serviceImpl;
+package co.arctern.api.provider.service.serviceimpl;
 
 import co.arctern.api.provider.constant.LoginState;
 import co.arctern.api.provider.dao.LoginFlowDao;
