@@ -56,10 +56,10 @@ spring:
     jcache:
       config: "classpath:ehcache/staging.xml"
   datasource:
-    url: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_provider?useSSL=false&createDatabaseIfNotExist=true"
-    slaveUrl: "jdbc:mysql://percona-percona.default.svc.cluster.local:3306/staging_arctern_provider?useSSL=false&createDatabaseIfNotExist=true"
-    username: "root"
-    password: "uoGsYp2WYR"
+    url: "jdbc:mysql://meddo-db.mysql.database.azure.com:3306/arctern_provider_uat?useSSL=true&useTimezone=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
+    slaveUrl: "jdbc:mysql://meddo-slave.mysql.database.azure.com:3306/arctern_provider_uat?useSSL=true&useTimezone=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
+    username: "provider_service@meddo-db"
+    password: "Qu3AjY4qnzerbJnc"
   sqs:
     consumerKey: "https://sqs.ap-south-1.amazonaws.com/739878518990/provider-consumer-updates-simple-staging"
     accessKey: "AKIA2YRBSIDHAXCGRJ6T"
@@ -90,9 +90,9 @@ spring:
   emr:
     apiUrl: "http://emr-api-uat.default.svc.cluster.local"
   auth:
-    apiUrl: "http://auth-api-staging-traefik.default.svc.cluster.local/oauth/token"
+    apiUrl: "http://auth-api-traefik.default.svc.cluster.local/oauth/token"
     username: "admin"
     password: "admin@1c"
-    authorization: "Basic TFJMNlpDRXQ1QWc3d2hhYTpMd3BycmpkTHpNYzl6U3E0WFk0aldDejNoTldZTVZWNg=="
+    authorization: "Basic dGVzdGp3dGNsaWVudGlkOlhZN2ttem9OemwxMDA="
 jvmOpts: "-XX:+UnlockExperimentalVMOptions -XX:+PrintFlagsFinal -Xms1g -Xmx2g -javaagent:/newrelic/newrelic.jar -Dnewrelic.environment=staging"
 ssl_cert_arn: arn:aws:acm:ap-south-1:739878518990:certificate/e69f73e9-67c7-461c-8d5e-ebe226d3cdda
