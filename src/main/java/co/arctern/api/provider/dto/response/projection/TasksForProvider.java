@@ -28,6 +28,10 @@ public interface TasksForProvider {
 
     Timestamp getExpectedArrivalTime();
 
+    Timestamp getStartTime();
+
+    Timestamp getEndTime();
+
     Timestamp getCreatedAt();
 
     TaskType getType();

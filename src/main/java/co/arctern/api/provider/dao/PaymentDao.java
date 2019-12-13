@@ -13,7 +13,20 @@ import java.util.List;
 @Repository
 public interface PaymentDao extends PagingAndSortingRepository<Payment, Long> {
 
+    /**
+     * fetch payments by settleState
+     *
+     * @param settleState
+     * @return
+     */
     List<Payment> findBySettleState(SettleState settleState);
 
+    /**
+     * fetch payments by settleState and paidBy (userId).
+     *
+     * @param settleState
+     * @param paidBy
+     * @return
+     */
     List<Payment> findBySettleStateAndPaidBy(SettleState settleState, Long paidBy);
 }

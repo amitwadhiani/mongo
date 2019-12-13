@@ -19,5 +19,9 @@ public interface ReasonDao extends PagingAndSortingRepository<Reason, Long> {
      */
     List<Reason> findByIdIn(List<Long> reasonIds);
 
+    /**
+     * fetch all active reasons.
+     * @return
+     */
     List<Reason> findByIsActiveTrue();
 }

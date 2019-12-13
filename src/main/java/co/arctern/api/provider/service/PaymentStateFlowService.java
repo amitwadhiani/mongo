@@ -7,5 +7,13 @@ import co.arctern.api.provider.util.MessageUtil;
 
 public interface PaymentStateFlowService extends MessageUtil {
 
+    /**
+     * create PaymentStateFlow.
+     *
+     * @param payment
+     * @param state
+     * @param amount
+     * @return
+     */
     PaymentStateFlow create(Payment payment, PaymentState state, Double amount);
 }

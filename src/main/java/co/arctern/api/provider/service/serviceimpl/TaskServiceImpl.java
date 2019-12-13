@@ -1,4 +1,4 @@
-package co.arctern.api.provider.service.serviceImpl;
+package co.arctern.api.provider.service.serviceimpl;
 
 import co.arctern.api.provider.constant.*;
 import co.arctern.api.provider.dao.TaskDao;
@@ -326,6 +326,8 @@ public class TaskServiceImpl implements TaskService {
         task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
         task.setSourceAddress(addressService.fetchSourceAddress());
         task.setState(TaskState.OPEN);
+        task.setStartTime(dto.getStartTime());
+        task.setEndTime(dto.getEndTime());
         if (userId != null) task.setActiveUserId(userId);
         String paymentMode = dto.getPaymentMode();
         if (paymentMode == null || paymentMode.isEmpty()) dto.setPaymentMode("");

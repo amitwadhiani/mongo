@@ -36,6 +36,16 @@ public class TaskAssignDto {
     private Timestamp expectedArrivalTime;
 
     /**
+     * eta (start) for task.
+     */
+    private Timestamp startTime;
+
+    /**
+     * eta (end) for task.
+     */
+    private Timestamp endTime;
+
+    /**
      * address related detail.
      */
     private String addressName;

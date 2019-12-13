@@ -100,10 +100,30 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
      */
     Page<User> findByIsActiveTrue(Pageable pageable);
 
+    /**
+     * fetch users by id.
+     *
+     * @param id
+     * @param pageable
+     * @return
+     */
     Page<User> findById(Long id, Pageable pageable);
 
+    /**
+     * users name (starts with) search.
+     *
+     * @param name
+     * @param pageable
+     * @return
+     */
     Page<User> findByNameStartingWith(String name, Pageable pageable);
 
+    /**
+     * fetch users (paginated).
+     *
+     * @param pageable
+     * @return
+     */
     @Query("SELECT user FROM User user")
     Page<Users> fetchUsers(Pageable pageable);
 

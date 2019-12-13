@@ -7,5 +7,12 @@ import co.arctern.api.provider.util.MessageUtil;
 
 public interface SettleStateFlowService extends MessageUtil {
 
+    /**
+     * create SettleStateFlow.
+     *
+     * @param payment
+     * @param state
+     * @return
+     */
     public SettleStateFlow create(Payment payment, SettleState state);
 }

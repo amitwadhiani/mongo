@@ -2,6 +2,9 @@ package co.arctern.api.provider.constant;
 
 import lombok.Getter;
 
+/**
+ * Office types for area storage (via pinCodes).
+ */
 public enum OfficeType {
 
     SO("SUB_POST_OFFICE"),
