@@ -14,7 +14,16 @@ import java.util.List;
 @Repository
 public interface ClusterDao extends PagingAndSortingRepository<Cluster, Long> {
 
+    /**
+     * fetch active clusters.
+     * @param pageable
+     * @return
+     */
     Page<Cluster> findByIsActiveTrue(Pageable pageable);
 
+    /**
+     * fetch all clusters.
+     * @return
+     */
     List<Cluster> findAll();
 }

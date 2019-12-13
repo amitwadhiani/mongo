@@ -38,12 +38,52 @@ public interface UserTaskService extends MessageUtil {
      */
     public Page<UserTask> fetchTasksForUser(Long userId, TaskState[] states, Pageable pageable);
 
+    /**
+     * fetch tasks for a provider.
+     *
+     * @param userId
+     * @param states
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<UserTask> fetchTasksForUser(Long userId, TaskState[] states, TaskType type, Pageable pageable);
 
+    /**
+     * fetch tasks within a given time interval.
+     *
+     * @param userId
+     * @param states
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     public Page<UserTask> fetchTasksForUser(Long userId, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
+    /**
+     * fetch tasks for user.
+     *
+     * @param ids
+     * @param state
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<UserTask> fetchTasksForProvider(List<Long> ids, TaskState state, TaskType type, Pageable pageable);
 
+    /**
+     * fetch tasks.
+     *
+     * @param ids
+     * @param state
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     public Page<UserTask> fetchTasksForProvider(List<Long> ids, TaskState state, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -103,6 +143,12 @@ public interface UserTaskService extends MessageUtil {
      */
     public List<UserTask> fetchUserTasksForCron();
 
+    /**
+     * find active user for a task.
+     *
+     * @param taskId
+     * @return
+     */
     public User findActiveUserFromUserTask(Long taskId);
 
 }

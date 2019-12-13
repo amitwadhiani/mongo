@@ -34,7 +34,15 @@ public class TaskAssignDto {
     private String paymentMode;
     private Double amount;
     private Timestamp expectedArrivalTime;
+
+    /**
+     * eta (start) for task.
+     */
     private Timestamp startTime;
+
+    /**
+     * eta (end) for task.
+     */
     private Timestamp endTime;
 
     /**

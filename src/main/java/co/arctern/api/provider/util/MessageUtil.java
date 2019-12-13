@@ -142,10 +142,19 @@ public interface MessageUtil {
      */
     StringBuilder NO_ACTIVE_USER_MESSAGE = new StringBuilder("No active user for this task.");
 
+    /**
+     * Invalid pinCode message.
+     */
     StringBuilder INVALID_PIN_CODE_MESSAGE = new StringBuilder("Invalid pinCode.");
 
+    /**
+     * Area already assigned to a cluster message.
+     */
     StringBuilder AREA_ALREADY_ASSIGNED_TO_CLUSTER = new StringBuilder("PinCode already attached to a cluster.");
 
+    /**
+     * No cluster found message.
+     */
     StringBuilder NO_CLUSTER_FOUND = new StringBuilder("No cluster found");
 
 }

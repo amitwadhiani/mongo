@@ -7,6 +7,13 @@ import co.arctern.api.provider.util.MessageUtil;
 
 public interface LoginFlowService extends MessageUtil {
 
+    /**
+     * create loginFlow.
+     *
+     * @param login
+     * @param state
+     * @return
+     */
     public LoginFlow create(Login login, LoginState state);
 
 }
