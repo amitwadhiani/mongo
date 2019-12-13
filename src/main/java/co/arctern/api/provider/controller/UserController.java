@@ -95,6 +95,13 @@ public class UserController {
         return ResponseEntity.ok(userService.fetchDetails(taskId));
     }
 
+    /**
+     * search user api.
+     *
+     * @param value
+     * @param pageable
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/search")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -102,6 +109,11 @@ public class UserController {
         return ResponseEntity.ok(userService.search(value, pageable));
     }
 
+    /**
+     * fetch user profile api.
+     *
+     * @return
+     */
     @GetMapping("/profile")
     @CrossOrigin
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
@@ -109,14 +121,27 @@ public class UserController {
         return ResponseEntity.ok(taskService.fetchProfileDetails(tokenService.fetchUserId()));
     }
 
+    /**
+     * activate/deactivate user api.
+     *
+     * @param userId
+     * @param isActive
+     * @return
+     */
     @PatchMapping("/activate")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> activateOrDeactivateUser(@RequestParam("userId") Long userId,
-                                                          @RequestParam("isActive") Boolean isActive) {
+                                                                  @RequestParam("isActive") Boolean isActive) {
         return ResponseEntity.ok(userService.activateOrDeactivateUser(userId, isActive));
     }
 
+    /**
+     * fetch user by pinCode api.
+     *
+     * @param pinCode
+     * @return
+     */
     @GetMapping("/fetch/by-pincode")
     @CrossOrigin
     @PreAuthorize("isAuthenticated()")
