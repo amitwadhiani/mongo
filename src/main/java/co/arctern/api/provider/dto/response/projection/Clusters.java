@@ -5,6 +5,9 @@ import org.springframework.data.rest.core.config.Projection;
 
 import java.util.List;
 
+/**
+ * clusters response body.
+ */
 @Projection(types = {Cluster.class})
 public interface Clusters {
 

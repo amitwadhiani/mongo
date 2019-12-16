@@ -54,6 +54,12 @@ public class AreaController {
         return ResponseEntity.ok(areaService.fetchAreas(pageable));
     }
 
+    /**
+     * search areas by pinCode api.
+     *
+     * @param value
+     * @return
+     */
     @GetMapping("/search")
     @CrossOrigin
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -61,6 +67,11 @@ public class AreaController {
         return ResponseEntity.ok(areaService.search(value));
     }
 
+    /**
+     * exists by pinCode api.
+     * @param value
+     * @return
+     */
     @GetMapping("/exists")
     @CrossOrigin
     @PreAuthorize("isAuthenticated()")
@@ -68,6 +79,11 @@ public class AreaController {
         return ResponseEntity.ok(areaService.pincodeExists(value));
     }
 
+    /**
+     * fetch area by pinCode api.
+     * @param pinCode
+     * @return
+     */
     @GetMapping("/fetch/by-pincode")
     @CrossOrigin
     @PreAuthorize("isAuthenticated()")

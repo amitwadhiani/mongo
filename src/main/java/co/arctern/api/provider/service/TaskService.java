@@ -25,6 +25,12 @@ public interface TaskService extends MessageUtil {
      */
     public Task fetchTask(Long taskId);
 
+    /**
+     * fetch tasks by taskIds.
+     *
+     * @param taskIds
+     * @return
+     */
     public List<Task> fetchTasks(List<Long> taskIds);
 
     /**
@@ -63,6 +69,13 @@ public interface TaskService extends MessageUtil {
      */
     public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId);
 
+    /**
+     * cancel all tasks for a user.
+     *
+     * @param taskIds
+     * @param userId
+     * @return
+     */
     public StringBuilder cancelAllTasks(List<Long> taskIds, Long userId);
 
     /**
@@ -155,8 +168,26 @@ public interface TaskService extends MessageUtil {
      */
     public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType type, Pageable pageable);
 
+    /**
+     * fetch tasks by type and ids.
+     *
+     * @param ids
+     * @param type
+     * @param pageable
+     * @return
+     */
     public Page<TasksForProvider> fetchTasksByProvider(List<Long> ids, TaskType type, Pageable pageable);
 
+    /**
+     * fetch tasks by type and ids in a given date range.
+     *
+     * @param ids
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     public Page<TasksForProvider> fetchTasksByTypeAndProvider(List<Long> ids, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
 
@@ -413,22 +444,73 @@ public interface TaskService extends MessageUtil {
      */
     public List<Task> fetchAllTasks(List<Long> taskIds);
 
+    /**
+     * request settlement ( by a user ).
+     *
+     * @param userId
+     * @param settleState
+     * @return
+     */
     public List<Payments> requestSettlement(Long userId, SettleState settleState);
 
+    /**
+     * fetch payments for user.
+     *
+     * @param userId
+     * @param settleState
+     * @return
+     */
     public List<Payments> fetchPaymentsForUser(Long userId, SettleState settleState);
 
+    /**
+     * settle amount.
+     *
+     * @param userId
+     * @param settleState
+     * @return
+     */
     public List<Payments> settle(Long userId, SettleState settleState);
 
+    /**
+     * settle amount (by admin).
+     *
+     * @param adminId
+     * @param userId
+     * @return
+     */
     public List<Payments> settleAmountForProvider(Long adminId, Long userId);
 
+    /**
+     * fetch user owed amount.
+     *
+     * @param userId
+     * @return
+     */
     public Double fetchUserOwedAmount(Long userId);
 
+    /**
+     * fetch profile details by userId.
+     *
+     * @param userId
+     * @return
+     */
     public Users fetchProfileDetails(Long userId);
 
+    /**
+     * fetch reasons for a task.
+     *
+     * @param task
+     * @return
+     */
     public List<Reasons> fetchReasons(Task task);
 
+    /**
+     * fetch tasks for payment (for a user).
+     *
+     * @param userId
+     * @return
+     */
     public List<Task> fetchTasksForPayment(Long userId);
-
 
 
 }

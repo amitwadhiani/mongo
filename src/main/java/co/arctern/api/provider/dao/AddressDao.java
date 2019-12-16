@@ -12,5 +12,9 @@ import java.util.List;
 @Repository
 public interface AddressDao extends PagingAndSortingRepository<Address, Long> {
 
+    /**
+     * fetch source addresses.
+     * @return
+     */
     List<Address> findByIsSourceAddressTrue();
 }

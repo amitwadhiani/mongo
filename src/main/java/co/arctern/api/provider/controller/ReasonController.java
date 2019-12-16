@@ -34,6 +34,11 @@ public class ReasonController {
         return ResponseEntity.ok(reasonService.create(reasons));
     }
 
+    /**
+     * edit reason api.
+     * @param bodies
+     * @return
+     */
     @CrossOrigin
     @PatchMapping("/edit")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")

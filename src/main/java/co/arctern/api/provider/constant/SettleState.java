@@ -1,5 +1,8 @@
 package co.arctern.api.provider.constant;
 
+/**
+ * Payment settle states.
+ */
 public enum SettleState {
 
     NOT_APPLICABLE,

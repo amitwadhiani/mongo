@@ -4,6 +4,7 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.response.HomePageResponse;
 import co.arctern.api.provider.dto.response.HomePageResponseForAdmin;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.sql.Timestamp;
@@ -39,4 +40,17 @@ public interface HomePageService {
                                                           String patientFilterValue,
                                                           Long providerId,
                                                           Pageable pageable);
+
+    /**
+     * set count for admin homepage response body.
+     *
+     * @param adminResponse
+     * @param startedTasks
+     * @param acceptedTasks
+     * @param rejectedTasks
+     * @param rescheduledTasks
+     * @return
+     */
+    public HomePageResponseForAdmin setCount(HomePageResponseForAdmin adminResponse, PaginatedResponse startedTasks, PaginatedResponse acceptedTasks, PaginatedResponse rejectedTasks, PaginatedResponse rescheduledTasks);
+
 }

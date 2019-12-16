@@ -28,8 +28,28 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      */
     Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateInOrderByTaskCreatedAtDesc(Long userId, TaskState[] states, Pageable pageable);
 
+    /**
+     * fetch active userTasks by userId, states and type.
+     *
+     * @param userId
+     * @param states
+     * @param type
+     * @param pageable
+     * @return
+     */
     Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateInAndTaskTypeOrderByTaskCreatedAtDesc(Long userId, TaskState[] states, TaskType type, Pageable pageable);
 
+    /**
+     * fetch active userTasks by userId, states and type within a given date range.
+     *
+     * @param userId
+     * @param states
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     Page<UserTask> findByIsActiveTrueAndUserIdAndTaskStateInAndTaskTypeAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThanOrderByTaskCreatedAtDesc(Long userId, TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -71,10 +91,35 @@ public interface UserTaskDao extends PagingAndSortingRepository<UserTask, Long> 
      */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskState(Long userId, TaskState state);
 
+    /**
+     * fetch ordered active userTasks by state and userId.
+     *
+     * @param userId
+     * @param state
+     * @return
+     */
     List<UserTask> findByIsActiveTrueAndUserIdAndTaskStateOrderByCreatedAtDesc(Long userId, TaskState state);
 
+    /**
+     * fetch active userTasks by userId and type.
+     *
+     * @param userIds
+     * @param type
+     * @param pageable
+     * @return
+     */
     Page<UserTask> findByIsActiveTrueAndUserIdInAndTaskType(List<Long> userIds, TaskType type, Pageable pageable);
 
+    /**
+     * fetch active userTasks by userId, taskType within a given date range.
+     *
+     * @param userIds
+     * @param type
+     * @param start
+     * @param end
+     * @param pageable
+     * @return
+     */
     Page<UserTask> findByIsActiveTrueAndUserIdInAndTaskTypeAndTaskCreatedAtGreaterThanEqualAndTaskCreatedAtLessThan(List<Long> userIds, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**

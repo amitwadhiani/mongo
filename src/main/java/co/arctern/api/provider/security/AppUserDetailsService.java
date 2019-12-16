@@ -2,7 +2,6 @@ package co.arctern.api.provider.security;
 
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Setting details in the User security model through user entity

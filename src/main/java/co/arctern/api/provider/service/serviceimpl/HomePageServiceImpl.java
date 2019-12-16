@@ -1,4 +1,4 @@
-package co.arctern.api.provider.service.serviceImpl;
+package co.arctern.api.provider.service.serviceimpl;
 
 import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.constant.TaskType;
@@ -73,6 +73,10 @@ public class HomePageServiceImpl implements HomePageService {
         PaginatedResponse rejectedTasks = taskService.fetchTasks(new TaskState[]{TaskState.REJECTED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
         adminResponse.setRejectedTasks(acceptedTasks);
         PaginatedResponse rescheduledTasks = taskService.fetchTasks(new TaskState[]{TaskState.RESCHEDULED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
+        return this.setCount(adminResponse, startedTasks, acceptedTasks, rejectedTasks, rescheduledTasks);
+    }
+
+    public HomePageResponseForAdmin setCount(HomePageResponseForAdmin adminResponse, PaginatedResponse startedTasks, PaginatedResponse acceptedTasks, PaginatedResponse rejectedTasks, PaginatedResponse rescheduledTasks) {
         adminResponse.setRescheduledTasks(acceptedTasks);
         adminResponse.setAcceptedTasksCount(acceptedTasks.getTotalElements());
         adminResponse.setRejectedTasksCount(rejectedTasks.getTotalElements());

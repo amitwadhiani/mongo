@@ -42,6 +42,12 @@ public class Task extends CodeGeneratorUtil {
     private Timestamp expectedArrivalTime;
 
     @Column(nullable = true)
+    private Timestamp startTime;
+
+    @Column(nullable = true)
+    private Timestamp endTime;
+
+    @Column(nullable = true)
     private String source;
 
     @OneToMany(mappedBy = "task")
