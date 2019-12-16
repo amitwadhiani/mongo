@@ -202,7 +202,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId) {
+    public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         if (isCancelled) {
             UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
@@ -214,7 +214,8 @@ public class TaskServiceImpl implements TaskService {
                     (activeUserTask == null) ? null : activeUserTask.getUser().getId());
             task.setState(TaskState.CANCELLED);
             task.setCancellationRequested(false);
-            taskDao.save(task);
+            task = taskDao.save(task);
+            reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLED);
             return TASK_CANCEL_MESSAGE;
         } else {
             /**
@@ -250,7 +251,7 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         task.setCancellationRequested(cancelRequest);
-        reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLED);
+        reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLATION_REQUESTED);
         return SUCCESS_MESSAGE;
     }
 

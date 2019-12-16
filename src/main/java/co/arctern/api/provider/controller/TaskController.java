@@ -134,9 +134,10 @@ public class TaskController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> cancelTask(@RequestParam(value = "isCancelled", defaultValue = "true", required = false) Boolean isCancelled,
                                                     @RequestParam("taskId") Long taskId,
-                                                    @RequestParam(value = "userId", required = false) Long userId) {
+                                                    @RequestParam(value = "userId", required = false) Long userId,
+                                                    @RequestParam("reasonIds") List<Long> reasonIds) {
         if (userId == null) userId = tokenService.fetchUserId();
-        return ResponseEntity.ok(taskService.cancelTask(isCancelled, taskId, userId));
+        return ResponseEntity.ok(taskService.cancelTask(isCancelled, taskId, userId, reasonIds));
     }
 
     /**

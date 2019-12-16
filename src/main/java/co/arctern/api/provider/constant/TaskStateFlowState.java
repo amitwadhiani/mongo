@@ -16,5 +16,6 @@ public enum TaskStateFlowState {
     OUT_FOR_PICKUP,
     OUT_FOR_DELIVERY,
     CANCELLED,
+    CANCELLATION_REQUESTED,
     COMPLETED
 }

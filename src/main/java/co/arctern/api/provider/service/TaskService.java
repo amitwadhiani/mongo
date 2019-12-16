@@ -67,7 +67,7 @@ public interface TaskService extends MessageUtil {
      * @param userId
      * @return
      */
-    public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId);
+    public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId, List<Long> reasonIds);
 
     /**
      * cancel all tasks for a user.
