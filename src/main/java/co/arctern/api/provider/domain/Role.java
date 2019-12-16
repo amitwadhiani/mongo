@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * Roles can be ROLE_ADMIN, ROLE_PROVIDER, ROLE_AREA_MANAGER
+ * Roles can be ROLE_ADMIN, ROLE_USER, ROLE_CLUSTER_MANAGER
  */
 @Entity
 @Data

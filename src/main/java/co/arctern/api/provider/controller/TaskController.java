@@ -83,7 +83,7 @@ public class TaskController {
      */
     @PostMapping("/reschedule")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<StringBuilder> rescheduleTask(@RequestBody RescheduleRequestBody request) {
         return ResponseEntity.ok(taskService.rescheduleTask(request.getTaskId(), request.getUserId(), request.getTime()));
     }
