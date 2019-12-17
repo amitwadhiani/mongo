@@ -15,4 +15,6 @@ public class RescheduleRequestBody {
     private Long taskId;
     private Long userId;
     private Timestamp time;
+    private Timestamp startTime;
+    private Timestamp endTime;
 }

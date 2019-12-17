@@ -148,7 +148,7 @@ public interface TaskService extends MessageUtil {
      * @param time
      * @return
      */
-    public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time);
+    public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time, Timestamp start, Timestamp end);
 
     /**
      * fetch tasks by their offering type.

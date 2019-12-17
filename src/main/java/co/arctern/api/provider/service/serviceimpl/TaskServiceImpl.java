@@ -180,10 +180,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time) {
+    public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time, Timestamp start, Timestamp end) {
         Task task = fetchTask(taskId);
         task.setState(TaskState.RESCHEDULED);
         task.setExpectedArrivalTime(time);
+        task.setStartTime(start);
+        task.setEndTime(end);
         userTaskService.markInactive(task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.RESCHEDULED, userId);
         taskDao.save(task);
