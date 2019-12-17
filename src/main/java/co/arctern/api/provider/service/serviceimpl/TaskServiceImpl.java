@@ -184,6 +184,9 @@ public class TaskServiceImpl implements TaskService {
         Task task = fetchTask(taskId);
         task.setState(TaskState.RESCHEDULED);
         task.setExpectedArrivalTime(time);
+        /**
+         * changed to start time and end time (in place of eta).
+         */
         task.setStartTime(start);
         task.setEndTime(end);
         userTaskService.markInactive(task);
