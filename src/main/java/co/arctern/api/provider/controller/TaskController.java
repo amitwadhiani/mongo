@@ -40,7 +40,7 @@ public class TaskController {
      */
     @PostMapping("/create-assign")
     @CrossOrigin
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> assignTaskToUser(@RequestBody TaskAssignDto dto) {
         return ResponseEntity.ok(taskService.createTaskAndAssignUser(dto));
     }
@@ -54,7 +54,7 @@ public class TaskController {
      */
     @PostMapping("/reassign")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> reassignTaskToUser(@RequestParam("taskId") Long taskId,
                                                             @RequestParam(value = "userId") Long userId) {
         return ResponseEntity.ok(taskService.reassignTask(taskId, userId));
@@ -69,7 +69,7 @@ public class TaskController {
      */
     @PostMapping("/assign")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> assignTaskToUser(@RequestParam("taskIds") List<Long> taskIds,
                                                           @RequestParam(value = "userId") Long userId) {
         return ResponseEntity.ok(taskService.assignTasks(taskIds, userId));
@@ -83,7 +83,7 @@ public class TaskController {
      */
     @PostMapping("/reschedule")
     @CrossOrigin
-    @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> rescheduleTask(@RequestBody RescheduleRequestBody request) {
         return ResponseEntity.ok(taskService.rescheduleTask(request.getTaskId(), request.getUserId(), request.getTime()));
     }
@@ -131,7 +131,7 @@ public class TaskController {
      */
     @PostMapping("/cancel")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> cancelTask(@RequestParam(value = "isCancelled", defaultValue = "true", required = false) Boolean isCancelled,
                                                     @RequestParam("taskId") Long taskId,
                                                     @RequestParam(value = "userId", required = false) Long userId,

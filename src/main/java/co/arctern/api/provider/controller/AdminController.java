@@ -55,7 +55,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/provider/by-area")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<PaginatedResponse> fetchProvidersByArea(@RequestParam("areaIds") List<Long> areaIds, Pageable pageable) {
         return ResponseEntity.ok(adminService.fetchProvidersByArea(areaIds, pageable));
     }
@@ -66,7 +66,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/task/group-by")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Page<TasksForProvider>> fetchTasksByArea(@RequestParam("ids") List<Long> ids,
                                                                    @RequestParam(value = "value", required = false, defaultValue = "provider") String value,
                                                                    @RequestParam(value = "start", required = false) Timestamp start,
@@ -81,7 +81,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/provider/by-offering")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<PaginatedResponse> fetchProvidersByOffering(@RequestParam("offeringIds") List<Long> offeringIds, Pageable pageable) {
         return ResponseEntity.ok(adminService.fetchProvidersByOffering(offeringIds, pageable));
     }
@@ -91,7 +91,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/task/by-offering")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Page<TasksForProvider>> fetchTasksByOffering(@RequestParam("type") OfferingType type,
                                                                        @RequestParam("start") Timestamp start,
                                                                        @RequestParam("end") Timestamp end,
@@ -104,7 +104,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/user/state")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> markUserStatus(@RequestParam("state") Boolean state,
                                                         @RequestParam(value = "userId", required = false) Long userId) {
         if (userId == null) userId = tokenService.fetchUserId();
@@ -116,7 +116,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/task/cancel-requests")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<PaginatedResponse> seeCancelRequests(Pageable pageable) {
         return ResponseEntity.ok(taskService.seeCancelRequests(pageable));
     }
@@ -132,7 +132,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/home")
-    @PreAuthorize(("hasAuthority('ROLE_ADMIN')"))
+    @PreAuthorize(("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')"))
     public ResponseEntity<?> fetchHomepage(@RequestParam(value = "states", required = false) TaskState[] states,
                                            @RequestParam(value = "areaIds", required = false) List<Long> areaIds,
                                            @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
@@ -159,7 +159,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/user")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<PaginatedResponse> fetchActiveUsers(Pageable pageable) {
         return ResponseEntity.ok(userService.fetchAllUsersByAdmin(pageable));
     }
@@ -169,7 +169,7 @@ public class AdminController {
      */
     @CrossOrigin
     @GetMapping("/user/all")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<PaginatedResponse> fetchAllUsers(Pageable pageable) {
         return ResponseEntity.ok(userService.fetchAllUsersByAdmin(pageable));
     }

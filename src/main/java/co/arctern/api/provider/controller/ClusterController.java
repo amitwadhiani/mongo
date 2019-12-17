@@ -32,7 +32,7 @@ public class ClusterController {
      */
     @PostMapping("/create")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> createClusters(@RequestBody List<ClusterRequestDto> dtos) {
         return ResponseEntity.ok(clusterService.createClusters(dtos));
     }
@@ -44,7 +44,7 @@ public class ClusterController {
      */
     @GetMapping("/fetch-all")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<PaginatedResponse> fetchClusters(Pageable pageable) {
         return ResponseEntity.ok(clusterService.fetchAll(pageable));
     }
@@ -56,7 +56,7 @@ public class ClusterController {
      */
     @GetMapping("/fetch/{id}")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Clusters> fetchClusters(@PathVariable("id") Long id) {
         return ResponseEntity.ok(clusterService.fetch(id));
     }

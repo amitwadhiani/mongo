@@ -65,7 +65,7 @@ public class LoginController {
      * @throws Exception
      */
     @PostMapping("/log-out")
-    @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> logOut(@RequestParam(value = "userId", required = false) Long userId) {
         if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(loginService.logOut(userId));

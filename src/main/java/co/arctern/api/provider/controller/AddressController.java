@@ -30,7 +30,7 @@ public class AddressController {
      */
     @CrossOrigin
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Address> postAddress(@RequestBody TaskAssignDto dto) {
         return ResponseEntity.ok(addressService.saveAddress(dto));
     }
