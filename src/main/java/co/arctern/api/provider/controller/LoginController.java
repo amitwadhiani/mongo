@@ -33,7 +33,6 @@ public class LoginController {
      *
      * @param phone
      * @return
-     * @throws Exception
      */
     @PostMapping("/generate-otp")
     public ResponseEntity<StringBuilder> generateOTP(@RequestParam("phone") String phone,
@@ -47,7 +46,6 @@ public class LoginController {
      * @param phone
      * @param otp
      * @return
-     * @throws Exception
      */
     @PostMapping("/verify-otp")
     public ResponseEntity<OAuth2AccessToken> verifyOTP(@RequestParam("phone") String phone,
@@ -62,7 +60,6 @@ public class LoginController {
      * @param userId
      * @param
      * @return
-     * @throws Exception
      */
     @PostMapping("/log-out")
     @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
