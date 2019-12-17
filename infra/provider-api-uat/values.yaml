@@ -54,7 +54,7 @@ spring:
     apiSecret: "CGIiWhg4n1x8JqRSE4cSZJ72"
   cache:
     jcache:
-      config: "classpath:ehcache/staging.xml"
+      config: "classpath:ehcache/uat.xml"
   datasource:
     url: "jdbc:mysql://meddo-db.mysql.database.azure.com:3306/arctern_provider_uat?useSSL=true&useTimezone=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
     slaveUrl: "jdbc:mysql://meddo-slave.mysql.database.azure.com:3306/arctern_provider_uat?useSSL=true&useTimezone=true&useLegacyDatetimeCode=false&serverTimezone=UTC"
@@ -81,16 +81,16 @@ spring:
       providerDiagnosticLabQueueName: "provider-uat-diagnostic-updates-simple"
       diagnosticproviderQueueName: "diagnostic-provider-uat-updates-simple"
   security:
-    signingKey: '4vvL2EefcZbBvUnJ'
-    encodingStrength: 512
-    securityRealm: 'Auth Staging'
+    signingKey: MaYzkSjmkzPC57L
+    encodingStrength: 256
+    securityRealm: Spring Boot JWT Example Realm
     jwt:
-      clientId: "LRL6ZCEt5Ag7whaa"
-      clientSecret: "LwprrjdLzMc9zSq4XY4jWCz3hNWYMVV6"
+      clientId: "testjwtclientid"
+      clientSecret: "XY7kmzoNzl100"
   emr:
     apiUrl: "http://emr-api-uat.default.svc.cluster.local"
   auth:
-    apiUrl: "http://auth-api-traefik.default.svc.cluster.local/oauth/token"
+    apiUrl: "http://auth-api-uat-traefik.default.svc.cluster.local/oauth/token"
     username: "admin"
     password: "admin@1c"
     authorization: "Basic dGVzdGp3dGNsaWVudGlkOlhZN2ttem9OemwxMDA="
