@@ -3,6 +3,7 @@ package co.arctern.api.provider.controller;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.UsersForPatientApp;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.TokenService;
@@ -147,6 +148,19 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Integer> fetchUserByPincode(@RequestParam("pinCode") String pinCode) {
         return ResponseEntity.ok(userService.fetchUserByPincode(pinCode));
+    }
+
+    /**
+     * fetch user by task id.
+     *
+     * @param taskId
+     * @return
+     */
+    @GetMapping("/fetch/by-task")
+    @CrossOrigin
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UsersForPatientApp> fetchUserByTaskId(@RequestParam("taskId") Long taskId) {
+        return ResponseEntity.ok(userService.fetchUserByTaskId(taskId));
     }
 
 
