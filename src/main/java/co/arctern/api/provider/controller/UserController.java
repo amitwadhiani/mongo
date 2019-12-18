@@ -44,7 +44,7 @@ public class UserController {
      */
     @PostMapping("/create")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> createNewUser(@RequestBody UserRequestDto dto) {
         return ResponseEntity.ok(userService.createUser(dto));
     }
@@ -57,7 +57,7 @@ public class UserController {
      */
     @PatchMapping("/update")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> updateUser(@RequestBody UserRequestDto dto) {
         return ResponseEntity.ok(userService.updateUser(dto));
     }
@@ -69,7 +69,7 @@ public class UserController {
      */
     @GetMapping("/fetch/all")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<PaginatedResponse> fetchAll(@RequestParam(value = "taskType", required = false) TaskType taskType,
                                                       @RequestParam(value = "clusterId", required = false) Long clusterId
             , Pageable pageable) {
@@ -91,7 +91,7 @@ public class UserController {
      */
     @GetMapping("/task/detail")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Users> fetchDetails(@RequestParam("taskId") Long taskId) {
         return ResponseEntity.ok(userService.fetchDetails(taskId));
     }
@@ -105,7 +105,7 @@ public class UserController {
      */
     @CrossOrigin
     @GetMapping("/search")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Page<Users>> search(@RequestParam("value") String value, Pageable pageable) {
         return ResponseEntity.ok(userService.search(value, pageable));
     }
@@ -117,7 +117,7 @@ public class UserController {
      */
     @GetMapping("/profile")
     @CrossOrigin
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Users> fetchProfileDetails() {
         return ResponseEntity.ok(taskService.fetchProfileDetails(tokenService.fetchUserId()));
     }
@@ -131,7 +131,7 @@ public class UserController {
      */
     @PatchMapping("/activate")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> activateOrDeactivateUser(@RequestParam("userId") Long userId,
                                                                   @RequestParam("isActive") Boolean isActive) {
         return ResponseEntity.ok(userService.activateOrDeactivateUser(userId, isActive));

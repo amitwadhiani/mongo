@@ -4,6 +4,7 @@ import co.arctern.api.provider.domain.Role;
 import co.arctern.api.provider.dto.request.RoleRequestDto;
 import co.arctern.api.provider.dto.response.projection.Roles;
 import co.arctern.api.provider.service.RoleService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class RoleController {
      */
     @PostMapping("/create")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Role> createNewRole(@RequestBody RoleRequestDto dto) {
         return ResponseEntity.ok(roleService.createRole(dto));
     }
@@ -43,9 +44,9 @@ public class RoleController {
      * fetch all roles api.
      * @return
      */
-    @PostMapping("/fetch/all")
+    @GetMapping("/fetch/all")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<List<Roles>> fetchAllRoles() {
         return ResponseEntity.ok(roleService.fetchRoles());
     }
@@ -55,9 +56,9 @@ public class RoleController {
      * @param id
      * @return
      */
-    @PostMapping("/fetch/{id}")
+    @GetMapping("/fetch/{id}")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Roles> fetchRoleById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(roleService.fetchRoleById(id));
     }
