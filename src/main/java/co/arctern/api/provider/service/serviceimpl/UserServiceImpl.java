@@ -6,7 +6,7 @@ import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.*;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.projection.UserResponseForPatientApp;
+import co.arctern.api.provider.dto.response.projection.UsersForPatientApp;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
@@ -311,11 +311,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseForPatientApp fetchUserByTaskId(Long taskId) {
+    public UsersForPatientApp fetchUserByTaskId(Long taskId) {
         UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
         if (activeUserTask == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NO_ACTIVE_USER_MESSAGE.toString());
+            return new UsersForPatientApp() {
+                @Override
+                public String getName() {
+                    return "";
+                }
+
+                @Override
+                public String getPhone() {
+                    return "";
+                }
+            };
         }
-        return projectionFactory.createProjection(UserResponseForPatientApp.class, activeUserTask.getUser());
+        return projectionFactory.createProjection(UsersForPatientApp.class, activeUserTask.getUser());
     }
 }
