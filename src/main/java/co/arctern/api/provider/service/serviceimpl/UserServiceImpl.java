@@ -314,17 +314,7 @@ public class UserServiceImpl implements UserService {
     public UsersForPatientApp fetchUserByTaskId(Long taskId) {
         UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
         if (activeUserTask == null) {
-            return new UsersForPatientApp() {
-                @Override
-                public String getName() {
-                    return "";
-                }
-
-                @Override
-                public String getPhone() {
-                    return "";
-                }
-            };
+            return null;
         }
         return projectionFactory.createProjection(UsersForPatientApp.class, activeUserTask.getUser());
     }
