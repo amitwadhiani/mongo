@@ -4,7 +4,7 @@ import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.UserResponseForPatientApp;
+import co.arctern.api.provider.dto.response.projection.UserResponseForPatientApp;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
