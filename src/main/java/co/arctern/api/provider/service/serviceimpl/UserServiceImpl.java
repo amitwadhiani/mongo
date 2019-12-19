@@ -5,8 +5,9 @@ import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.*;
 import co.arctern.api.provider.dto.request.UserRequestDto;
+import co.arctern.api.provider.dto.request.UserRequestForPatientAppDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.projection.UsersForPatientApp;
+import co.arctern.api.provider.dto.response.UserResponseForPatientAppDto;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
@@ -25,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -311,11 +313,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UsersForPatientApp fetchUserByTaskId(Long taskId) {
-        UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
-        if (activeUserTask == null) {
-            return null;
-        }
-        return projectionFactory.createProjection(UsersForPatientApp.class, activeUserTask.getUser());
+    public List<UserResponseForPatientAppDto> fetchUserByTaskId(List<UserRequestForPatientAppDto> userRequestForPatientAppDtoList) {
+        List<UserResponseForPatientAppDto> userResponseForPatientAppDtoList = new ArrayList<>();
+
+        userRequestForPatientAppDtoList.stream().forEach(userRequestForPatientAppDto ->
+        {
+            UserResponseForPatientAppDto userResponseForPatientAppDto = new UserResponseForPatientAppDto();
+            UserTask activeUserTask = userTaskService.findActiveUserTask(userRequestForPatientAppDto.getTaskId());
+            if (activeUserTask != null) {
+
+                userResponseForPatientAppDto.setOrderItemid(userRequestForPatientAppDto.getOrderItemId());
+                userResponseForPatientAppDto.setName(activeUserTask.getUser().getName());
+                userResponseForPatientAppDto.setPhone(activeUserTask.getUser().getPhone());
+                userResponseForPatientAppDtoList.add(userResponseForPatientAppDto);
+            }
+        });
+        return userResponseForPatientAppDtoList;
     }
 }
