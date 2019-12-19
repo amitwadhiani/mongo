@@ -46,7 +46,6 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Address saveAddress(TaskAssignDto dto) {
         Address address = new Address();
-        address.setCity(dto.getCity());
         address.setName(dto.getAddressName());
         address.setHouseNumber(dto.getHouseNumber());
         address.setLine(dto.getLine());
@@ -56,6 +55,7 @@ public class AddressServiceImpl implements AddressService {
         address.setIsSourceAddress((isSourceAddress == null) ? false : isSourceAddress);
         address.setLocality(dto.getLocality());
         address.setLandmark(dto.getLandmark());
+        address.setName(dto.getAddressName());
         address.setPinCode(dto.getPinCode());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
