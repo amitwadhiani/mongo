@@ -2,10 +2,9 @@ package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.dto.request.ProviderRequestForOrderItemDto;
 import co.arctern.api.provider.dto.request.UserRequestDto;
-import co.arctern.api.provider.dto.request.UserRequestForPatientAppDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.UserResponseForPatientAppDto;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.util.MessageUtil;
 import org.springframework.data.domain.Page;
@@ -205,6 +204,6 @@ public interface UserService extends MessageUtil {
      */
     public Integer fetchUserByPincode(String pincode);
 
-    public List<UserResponseForPatientAppDto> fetchUserByTaskId(List<UserRequestForPatientAppDto> userRequestForPatientAppDtoList);
+    public List<ProviderRequestForOrderItemDto> fetchUserByTaskId(List<ProviderRequestForOrderItemDto> dtos);
 
 }
