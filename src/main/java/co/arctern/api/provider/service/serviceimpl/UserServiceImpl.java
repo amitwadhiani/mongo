@@ -6,6 +6,7 @@ import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.*;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
+import co.arctern.api.provider.dto.response.projection.UsersForPatientApp;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
@@ -307,5 +308,14 @@ public class UserServiceImpl implements UserService {
                         .filter(a -> BooleanUtils.isTrue(a.getIsActive()))
                         .anyMatch(a -> pinCodes.contains(a.getArea().getPinCode())))
                 .collect(Collectors.toList())).size();
+    }
+
+    @Override
+    public UsersForPatientApp fetchUserByTaskId(Long taskId) {
+        UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
+        if (activeUserTask == null) {
+            return null;
+        }
+        return projectionFactory.createProjection(UsersForPatientApp.class, activeUserTask.getUser());
     }
 }
