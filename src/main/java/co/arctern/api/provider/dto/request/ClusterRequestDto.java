@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * cluster create/edit dto.
+ */
 @Data
 @NoArgsConstructor
 public class ClusterRequestDto {

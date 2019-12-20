@@ -111,7 +111,7 @@
 			<className>com.sample.SampleString</className>
 			<!-- Instruments all methods in the class whose return type is ResultSet -->
 			<method>
-				<returnType>com.example.ResultList</returnType>
+				<returnType>com.example.ResultSet</returnType>
 			</method>
 		</pointcut>
 

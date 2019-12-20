@@ -96,6 +96,12 @@ public interface UserService extends MessageUtil {
      */
     public StringBuilder createUser(UserRequestDto dto);
 
+    /**
+     * update user profile.
+     *
+     * @param dto
+     * @return
+     */
     public StringBuilder updateUser(UserRequestDto dto);
 
     /**
@@ -113,10 +119,32 @@ public interface UserService extends MessageUtil {
      */
     public PaginatedResponse fetchAll(Pageable pageable);
 
+    /**
+     * fetch providers by type and cluster.
+     *
+     * @param type
+     * @param clusterId
+     * @param pageable
+     * @return
+     */
     public PaginatedResponse fetchAllByTaskTypeAndCluster(TaskType type, Long clusterId, Pageable pageable);
 
+    /**
+     * fetch providers by cluster.
+     *
+     * @param clusterId
+     * @param pageable
+     * @return
+     */
     public PaginatedResponse fetchAllByCluster(Long clusterId, Pageable pageable);
 
+    /**
+     * fetch all providers by taskType.
+     *
+     * @param taskType
+     * @param pageable
+     * @return
+     */
     public PaginatedResponse fetchAllByTaskType(TaskType taskType, Pageable pageable);
 
     /**
@@ -149,8 +177,30 @@ public interface UserService extends MessageUtil {
      */
     public Page<User> fetchUsersByOffering(List<Long> offeringIds, Pageable pageable);
 
+    /**
+     * search users.
+     *
+     * @param value
+     * @param pageable
+     * @return
+     */
     public Page<Users> search(String value, Pageable pageable);
 
+    /**
+     * activate/deactivate provider.
+     *
+     * @param userId
+     * @param isActive
+     * @return
+     */
     public StringBuilder activateOrDeactivateUser(Long userId, Boolean isActive);
+
+    /**
+     * fetch providers by pinCode.
+     *
+     * @param pincode
+     * @return
+     */
+    public Integer fetchUserByPincode(String pincode);
 
 }

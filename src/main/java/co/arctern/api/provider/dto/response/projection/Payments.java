@@ -5,6 +5,9 @@ import co.arctern.api.provider.constant.SettleState;
 import co.arctern.api.provider.domain.Payment;
 import org.springframework.data.rest.core.config.Projection;
 
+/**
+ * Payment response body.
+ */
 @Projection(types = Payment.class)
 public interface Payments {
 
