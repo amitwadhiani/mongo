@@ -1,9 +1,9 @@
 package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.constant.TaskType;
+import co.arctern.api.provider.dto.request.ProviderRequestForOrderItemDto;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.projection.UsersForPatientApp;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.TokenService;
@@ -15,6 +15,8 @@ import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * apis for user creation.
@@ -151,17 +153,15 @@ public class UserController {
     }
 
     /**
-     * fetch user by task id.
+     * fetch users by task ids ( order-items ).
      *
-     * @param taskId
+     * @param dtos
      * @return
      */
     @GetMapping("/fetch/by-task")
     @CrossOrigin
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<UsersForPatientApp> fetchUserByTaskId(@RequestParam("taskId") Long taskId) {
-        return ResponseEntity.ok(userService.fetchUserByTaskId(taskId));
+    public ResponseEntity<List<ProviderRequestForOrderItemDto>> fetchUserByTaskId(@RequestBody List<ProviderRequestForOrderItemDto> dtos) {
+        return ResponseEntity.ok(userService.fetchUserByTaskId(dtos));
     }
-
-
 }

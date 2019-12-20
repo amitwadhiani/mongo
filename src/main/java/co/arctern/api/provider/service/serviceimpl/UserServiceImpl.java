@@ -4,9 +4,9 @@ import co.arctern.api.provider.constant.Gender;
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.*;
+import co.arctern.api.provider.dto.request.ProviderRequestForOrderItemDto;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.projection.UsersForPatientApp;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
@@ -297,7 +297,7 @@ public class UserServiceImpl implements UserService {
     public Integer fetchUserByPincode(String pincode) {
         Area area = areaService.fetchByPincode(pincode);
         if (area.getCluster() == null) {
-           return 0;
+            return 0;
         }
         List<String> pinCodes = clusterService.fetchAreas(area.getCluster().getId()).stream().map(a -> a.getPinCode()).collect(Collectors.toList());
 
@@ -311,11 +311,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UsersForPatientApp fetchUserByTaskId(Long taskId) {
-        UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
-        if (activeUserTask == null) {
-            return null;
-        }
-        return projectionFactory.createProjection(UsersForPatientApp.class, activeUserTask.getUser());
+    public List<ProviderRequestForOrderItemDto> fetchUserByTaskId(List<ProviderRequestForOrderItemDto> dtos) {
+        dtos.stream().forEach(dto ->
+        {
+            UserTask activeUserTask = userTaskService.findActiveUserTask(dto.getTaskId());
+            if (activeUserTask != null) {
+                dto.setOrderItemId(dto.getOrderItemId());
+                dto.setTaskId(dto.getTaskId());
+                dto.setProviderName(activeUserTask.getUser().getName());
+                dto.setProviderPhone(activeUserTask.getUser().getPhone());
+            }
+        });
+        return dtos;
     }
 }
