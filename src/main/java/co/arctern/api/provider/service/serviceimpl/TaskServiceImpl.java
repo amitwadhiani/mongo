@@ -210,6 +210,9 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         if (isCancelled) {
+            if (task.getState().equals(TaskState.CANCELLED)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,TASK_ALREADY_CANCELLED_MESSAGE.toString());
+            }
             UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
 
             /**
@@ -220,7 +223,8 @@ public class TaskServiceImpl implements TaskService {
             task.setState(TaskState.CANCELLED);
             task.setCancellationRequested(false);
             task = taskDao.save(task);
-            reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLED);
+            if (!CollectionUtils.isEmpty(reasonIds))
+                reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLED);
             return TASK_CANCEL_MESSAGE;
         } else {
             /**

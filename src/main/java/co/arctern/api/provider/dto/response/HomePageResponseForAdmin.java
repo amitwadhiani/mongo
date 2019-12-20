@@ -11,15 +11,6 @@ import lombok.NoArgsConstructor;
 public class HomePageResponseForAdmin {
 
     private PaginatedResponse tasks;
-    private PaginatedResponse openTasks;
-    private PaginatedResponse completedTasks;
-    private PaginatedResponse pendingTasks;
-    private PaginatedResponse acceptedTasks;
-    private PaginatedResponse startedTasks;
-    private PaginatedResponse cancelledTasks;
-    private PaginatedResponse cancelRequests;
-    private PaginatedResponse rejectedTasks;
-    private PaginatedResponse rescheduledTasks;
     private Long tasksCount;
     private Long openTasksCount;
     private Long acceptedTasksCount;

@@ -43,14 +43,20 @@ public interface HomePageService {
 
     /**
      * set count for admin homepage response body.
-     *
      * @param adminResponse
+     * @param allTasks
      * @param startedTasks
      * @param acceptedTasks
      * @param rejectedTasks
      * @param rescheduledTasks
+     * @param openTasks
+     * @param pendingTasks
+     * @param cancelledTasks
+     * @param completedTasks
      * @return
      */
-    public HomePageResponseForAdmin setCount(HomePageResponseForAdmin adminResponse, PaginatedResponse startedTasks, PaginatedResponse acceptedTasks, PaginatedResponse rejectedTasks, PaginatedResponse rescheduledTasks);
-
-}
+    public HomePageResponseForAdmin setCount(HomePageResponseForAdmin adminResponse, PaginatedResponse allTasks, PaginatedResponse startedTasks, PaginatedResponse acceptedTasks, PaginatedResponse rejectedTasks, PaginatedResponse rescheduledTasks,
+                                             PaginatedResponse openTasks, PaginatedResponse pendingTasks,
+                                             PaginatedResponse cancelledTasks,
+                                             PaginatedResponse completedTasks);
+    }
