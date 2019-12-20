@@ -123,6 +123,11 @@ public interface MessageUtil {
     StringBuilder TASK_ALREADY_STARTED_MESSAGE = new StringBuilder("Task has already been started.");
 
     /**
+     * Task already started message.
+     */
+    StringBuilder TASK_ALREADY_CANCELLED_MESSAGE = new StringBuilder("Task has already been cancelled.");
+
+    /**
      * User already exists message by username.
      */
     StringBuilder USERNAME_ALREADY_EXISTS_MESSAGE = new StringBuilder("User with this username already exists. ");

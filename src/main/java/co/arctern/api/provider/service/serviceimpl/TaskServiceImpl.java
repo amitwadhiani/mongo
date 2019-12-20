@@ -210,6 +210,9 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         if (isCancelled) {
+            if (task.getState().equals(TaskState.CANCELLED)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,TASK_ALREADY_CANCELLED_MESSAGE.toString());
+            }
             UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
 
             /**
