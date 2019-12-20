@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -51,6 +52,8 @@ public class ReasonServiceImpl implements ReasonService {
     @Override
     public StringBuilder assignReasons(Task task, List<Long> reasonIds, TaskStateFlowState state) {
         List<TaskReason> taskReasons = new ArrayList<>();
+        List<TaskReason> existingTaskReasons = task.getTaskReasons();
+        reasonIds.removeAll(existingTaskReasons.stream().map(a -> a.getReason().getId()).collect(Collectors.toList()));
         reasonDao.findByIdIn(reasonIds).stream().forEach(reason ->
         {
             TaskReason taskReason = new TaskReason();

@@ -220,7 +220,8 @@ public class TaskServiceImpl implements TaskService {
             task.setState(TaskState.CANCELLED);
             task.setCancellationRequested(false);
             task = taskDao.save(task);
-            reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLED);
+            if (!CollectionUtils.isEmpty(reasonIds))
+                reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLED);
             return TASK_CANCEL_MESSAGE;
         } else {
             /**
