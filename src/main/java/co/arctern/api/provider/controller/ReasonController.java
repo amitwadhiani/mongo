@@ -29,7 +29,7 @@ public class ReasonController {
      */
     @CrossOrigin
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> createReasons(@RequestBody List<String> reasons) {
         return ResponseEntity.ok(reasonService.create(reasons));
     }
@@ -41,7 +41,7 @@ public class ReasonController {
      */
     @CrossOrigin
     @PatchMapping("/edit")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> editReasons(@RequestBody List<ReasonEditBody> bodies) {
         return ResponseEntity.ok(reasonService.edit(bodies));
     }
@@ -53,7 +53,7 @@ public class ReasonController {
      */
     @CrossOrigin
     @GetMapping("/fetch/all")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<?> fetchAllReasons(@RequestParam(value = "isAdmin", required = false, defaultValue = "true") Boolean isAdmin) {
         return ResponseEntity.ok(reasonService.fetchAll(isAdmin));
     }

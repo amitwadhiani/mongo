@@ -72,7 +72,10 @@ public class ClusterServiceImpl implements ClusterService {
         for (ClusterRequestDto dto : dtos) {
             Cluster cluster = (dto.getClusterId() == null) ? new Cluster() : clusterDao.findById(dto.getClusterId()).get();
             if (dto.getIsActive() != null) cluster.setIsActive(dto.getIsActive());
-            if (dto.getClusterName() != null) cluster.setName(dto.getClusterName());
+            if (dto.getClusterName() != null) {
+                if (dto.getClusterName().isBlank()) continue;
+                cluster.setName(dto.getClusterName());
+            }
             cluster = clusterDao.save(cluster);
             /**
              * replace existing areas ( if there ) with new areas.

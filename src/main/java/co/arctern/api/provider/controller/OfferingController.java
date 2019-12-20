@@ -30,7 +30,7 @@ public class OfferingController {
      */
     @CrossOrigin
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> postOfferings(@RequestBody List<OfferingRequestDto> dtos) {
         return ResponseEntity.ok(offeringService.create(dtos));
     }
@@ -42,7 +42,7 @@ public class OfferingController {
      */
     @CrossOrigin
     @GetMapping("/fetch/all")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<List<Offerings>> fetchAllOfferings() {
         return ResponseEntity.ok(offeringService.fetchAll());
     }
@@ -55,7 +55,7 @@ public class OfferingController {
      */
     @CrossOrigin
     @GetMapping("/fetch/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Offerings> fetchOfferingById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(offeringService.fetchById(id));
     }

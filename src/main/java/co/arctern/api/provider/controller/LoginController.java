@@ -33,12 +33,10 @@ public class LoginController {
      *
      * @param phone
      * @return
-     * @throws Exception
      */
     @PostMapping("/generate-otp")
     public ResponseEntity<StringBuilder> generateOTP(@RequestParam("phone") String phone,
-                                                     @RequestParam(value = "isAdmin", required = false, defaultValue = "false") Boolean isAdmin)
-            throws Exception {
+                                                     @RequestParam(value = "isAdmin", required = false, defaultValue = "false") Boolean isAdmin) {
         return ResponseEntity.ok(loginService.generateOTP(phone, isAdmin));
     }
 
@@ -48,12 +46,10 @@ public class LoginController {
      * @param phone
      * @param otp
      * @return
-     * @throws Exception
      */
     @PostMapping("/verify-otp")
     public ResponseEntity<OAuth2AccessToken> verifyOTP(@RequestParam("phone") String phone,
-                                                       @RequestParam("otp") String otp)
-            throws Exception {
+                                                       @RequestParam("otp") String otp) {
         return ResponseEntity.ok(loginService.verifyOTP(phone, otp));
 
     }
@@ -64,15 +60,12 @@ public class LoginController {
      * @param userId
      * @param
      * @return
-     * @throws Exception
      */
     @PostMapping("/log-out")
-    @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN')")
-    public ResponseEntity<StringBuilder> logOut(@RequestParam(value = "userId", required = false) Long userId)
-            throws Exception {
+    @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
+    public ResponseEntity<StringBuilder> logOut(@RequestParam(value = "userId", required = false) Long userId) {
         if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(loginService.logOut(userId));
 
     }
-
 }

@@ -17,6 +17,7 @@ public class User extends org.springframework.security.core.userdetails.User {
     private String email;
     private Long id;
     private String roles;
+    private Long clusterId;
 
     public User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);

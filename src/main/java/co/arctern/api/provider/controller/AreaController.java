@@ -36,7 +36,7 @@ public class AreaController {
      */
     @PostMapping("/create")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> createAreas(@RequestBody List<AreaRequestDto> dtos) {
         return ResponseEntity.ok(clusterService.createAreas(dtos));
     }
@@ -49,7 +49,7 @@ public class AreaController {
      */
     @GetMapping("/fetch-all")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Page<Areas>> fetchAreas(Pageable pageable) {
         return ResponseEntity.ok(areaService.fetchAreas(pageable));
     }
@@ -62,7 +62,7 @@ public class AreaController {
      */
     @GetMapping("/search")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<List<String>> search(@RequestParam("value") String value) {
         return ResponseEntity.ok(areaService.search(value));
     }
