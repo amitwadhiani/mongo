@@ -71,7 +71,6 @@ public class HomePageServiceImpl implements HomePageService {
                                              PaginatedResponse cancelledTasks,
                                              PaginatedResponse completedTasks) {
         adminResponse.setTasks(allTasks);
-        adminResponse.setRescheduledTasks(acceptedTasks);
         adminResponse.setAcceptedTasksCount(acceptedTasks.getTotalElements());
         adminResponse.setRejectedTasksCount(rejectedTasks.getTotalElements());
         adminResponse.setRescheduledTasksCount(rescheduledTasks.getTotalElements());
