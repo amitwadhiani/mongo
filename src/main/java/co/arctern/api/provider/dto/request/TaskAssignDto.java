@@ -62,5 +62,6 @@ public class TaskAssignDto {
     private String pinCode;
     private String patientId;
     private String state;
+    private String specialInstructions;
 
 }

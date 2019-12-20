@@ -49,13 +49,13 @@ public class AddressServiceImpl implements AddressService {
         address.setName(dto.getAddressName());
         address.setHouseNumber(dto.getHouseNumber());
         address.setLine(dto.getLine());
+        address.setSpecialInstructions(dto.getSpecialInstructions());
         address.setLatitude(dto.getLatitude());
         address.setLongitude(dto.getLongitude());
         Boolean isSourceAddress = dto.getIsSourceAddress();
         address.setIsSourceAddress((isSourceAddress == null) ? false : isSourceAddress);
         address.setLocality(dto.getLocality());
         address.setLandmark(dto.getLandmark());
-        address.setName(dto.getAddressName());
         address.setPinCode(dto.getPinCode());
         address.setCity(dto.getCity());
         address.setState(dto.getState());
