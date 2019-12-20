@@ -5,9 +5,8 @@ import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.*;
 import co.arctern.api.provider.dto.request.UserRequestDto;
-import co.arctern.api.provider.dto.request.UserRequestForPatientAppDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.UserResponseForPatientAppDto;
+import co.arctern.api.provider.dto.response.UsersForPatientAppDto;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
@@ -313,21 +312,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponseForPatientAppDto> fetchUserByTaskId(List<UserRequestForPatientAppDto> userRequestForPatientAppDtoList) {
-        List<UserResponseForPatientAppDto> userResponseForPatientAppDtoList = new ArrayList<>();
+    public List<UsersForPatientAppDto> fetchUserByTaskId(List<UsersForPatientAppDto> usersForPatientAppDtoList) {
 
-        userRequestForPatientAppDtoList.stream().forEach(userRequestForPatientAppDto ->
+        usersForPatientAppDtoList.stream().forEach(usersForPatientAppDto ->
         {
-            UserResponseForPatientAppDto userResponseForPatientAppDto = new UserResponseForPatientAppDto();
-            UserTask activeUserTask = userTaskService.findActiveUserTask(userRequestForPatientAppDto.getTaskId());
+            UserTask activeUserTask = userTaskService.findActiveUserTask(usersForPatientAppDto.getTaskId());
             if (activeUserTask != null) {
-
-                userResponseForPatientAppDto.setOrderItemid(userRequestForPatientAppDto.getOrderItemId());
-                userResponseForPatientAppDto.setName(activeUserTask.getUser().getName());
-                userResponseForPatientAppDto.setPhone(activeUserTask.getUser().getPhone());
-                userResponseForPatientAppDtoList.add(userResponseForPatientAppDto);
+                usersForPatientAppDto.setName(activeUserTask.getUser().getName());
+                usersForPatientAppDto.setPhone(activeUserTask.getUser().getPhone());
             }
         });
-        return userResponseForPatientAppDtoList;
+        return usersForPatientAppDtoList;
     }
 }

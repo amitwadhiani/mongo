@@ -2,9 +2,8 @@ package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.dto.request.UserRequestDto;
-import co.arctern.api.provider.dto.request.UserRequestForPatientAppDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
-import co.arctern.api.provider.dto.response.UserResponseForPatientAppDto;
+import co.arctern.api.provider.dto.response.UsersForPatientAppDto;
 import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.TokenService;
@@ -156,13 +155,13 @@ public class UserController {
     /**
      * fetch user by task id.
      *
-     * @param userRequestForPatientAppDtoList
+     * @param usersForPatientAppDtoList
      * @return
      */
     @GetMapping("/fetch/by-task")
     @CrossOrigin
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<UserResponseForPatientAppDto>> fetchUserByTaskId(@RequestBody List<UserRequestForPatientAppDto> userRequestForPatientAppDtoList) {
-        return ResponseEntity.ok(userService.fetchUserByTaskId(userRequestForPatientAppDtoList));
+    public ResponseEntity<List<UsersForPatientAppDto>> fetchUserByTaskId(@RequestBody List<UsersForPatientAppDto> usersForPatientAppDtoList) {
+        return ResponseEntity.ok(userService.fetchUserByTaskId(usersForPatientAppDtoList));
     }
 }
