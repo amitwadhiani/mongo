@@ -3,8 +3,6 @@ package co.arctern.api.provider.dto.request;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 /**
  * dto for provider and order-item mapping.
  */
