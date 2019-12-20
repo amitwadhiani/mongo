@@ -61,6 +61,9 @@ public class Address {
     private String addressTag;
 
     @Column
+    private String specialInstructions;
+
+    @Column
     private String landmark;
 
     @OneToMany(mappedBy = "sourceAddress")

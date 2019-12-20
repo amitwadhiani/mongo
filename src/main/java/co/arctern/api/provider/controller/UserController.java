@@ -1,6 +1,7 @@
 package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.constant.TaskType;
+import co.arctern.api.provider.dto.request.ProviderRequestForOrderItemDto;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
@@ -14,6 +15,8 @@ import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * apis for user creation.
@@ -43,7 +46,7 @@ public class UserController {
      */
     @PostMapping("/create")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> createNewUser(@RequestBody UserRequestDto dto) {
         return ResponseEntity.ok(userService.createUser(dto));
     }
@@ -56,7 +59,7 @@ public class UserController {
      */
     @PatchMapping("/update")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> updateUser(@RequestBody UserRequestDto dto) {
         return ResponseEntity.ok(userService.updateUser(dto));
     }
@@ -68,7 +71,7 @@ public class UserController {
      */
     @GetMapping("/fetch/all")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<PaginatedResponse> fetchAll(@RequestParam(value = "taskType", required = false) TaskType taskType,
                                                       @RequestParam(value = "clusterId", required = false) Long clusterId
             , Pageable pageable) {
@@ -90,7 +93,7 @@ public class UserController {
      */
     @GetMapping("/task/detail")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Users> fetchDetails(@RequestParam("taskId") Long taskId) {
         return ResponseEntity.ok(userService.fetchDetails(taskId));
     }
@@ -104,7 +107,7 @@ public class UserController {
      */
     @CrossOrigin
     @GetMapping("/search")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Page<Users>> search(@RequestParam("value") String value, Pageable pageable) {
         return ResponseEntity.ok(userService.search(value, pageable));
     }
@@ -116,7 +119,7 @@ public class UserController {
      */
     @GetMapping("/profile")
     @CrossOrigin
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Users> fetchProfileDetails() {
         return ResponseEntity.ok(taskService.fetchProfileDetails(tokenService.fetchUserId()));
     }
@@ -130,7 +133,7 @@ public class UserController {
      */
     @PatchMapping("/activate")
     @CrossOrigin
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> activateOrDeactivateUser(@RequestParam("userId") Long userId,
                                                                   @RequestParam("isActive") Boolean isActive) {
         return ResponseEntity.ok(userService.activateOrDeactivateUser(userId, isActive));
@@ -149,5 +152,16 @@ public class UserController {
         return ResponseEntity.ok(userService.fetchUserByPincode(pinCode));
     }
 
-
+    /**
+     * fetch users by task ids ( order-items ).
+     *
+     * @param dtos
+     * @return
+     */
+    @GetMapping("/fetch/by-task")
+    @CrossOrigin
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<ProviderRequestForOrderItemDto>> fetchUserByTaskId(@RequestBody List<ProviderRequestForOrderItemDto> dtos) {
+        return ResponseEntity.ok(userService.fetchUserByTaskId(dtos));
+    }
 }
