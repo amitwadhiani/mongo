@@ -58,6 +58,14 @@ public interface AreaDao extends PagingAndSortingRepository<Area, Long> {
     List<Area> fetchActiveAreasByCluster(@Param("clusterId") Long clusterId);
 
     /**
+     * fetch active areas.
+     *
+     * @return
+     */
+    @Query("FROM Area a WHERE (a.isActive =1 AND a.cluster.id IN :clusterIds ) ")
+    List<Area> fetchActiveAreasByClusters(@Param("clusterIds") List<Long> clusterIds);
+
+    /**
      * pinCode deliverable areas' search.
      *
      * @param pinCode
