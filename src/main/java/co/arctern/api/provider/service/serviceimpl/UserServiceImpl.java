@@ -156,8 +156,8 @@ public class UserServiceImpl implements UserService {
         user = userDao.save(user);
         List<Role> roles = (!org.springframework.util.CollectionUtils.isEmpty(roleIds)) ?
                 userRoleService.createUserRoles(user, roleIds) : user.getUserRoles().stream().map(a -> a.getRole()).collect(Collectors.toList());
-        Long clusterId = dto.getClusterId();
-        areaService.setAreasToUser(user, areaIds, roles, clusterId);
+        List<Long> clusterIds = dto.getClusterIds();
+        areaService.setAreasToUser(user, areaIds, roles, clusterIds);
         if (!CollectionUtils.isEmpty(offeringIds)) offeringService.setOfferingsToUser(user, offeringIds);
         return SUCCESS_MESSAGE;
     }

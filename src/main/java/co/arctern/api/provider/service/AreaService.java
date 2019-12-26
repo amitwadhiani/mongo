@@ -26,7 +26,7 @@ public interface AreaService extends MessageUtil {
      * @param areaIds
      * @param roles
      */
-    public void setAreasToUser(User user, List<Long> areaIds, List<Role> roles, Long clusterId);
+    public void setAreasToUser(User user, List<Long> areaIds, List<Role> roles, List<Long> clusterIds);
 
     /**
      * fetch all areas.
