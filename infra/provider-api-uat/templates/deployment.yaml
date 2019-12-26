@@ -80,6 +80,8 @@ spec:
               value: {{default "10" .Values.spring.meddo.wallet.discountPercentage | quote}}
             - name: SPRING_RABBITMQ_ORDER_NOTIFICATION_QUEUE_NAME
               value: {{default "order-uat-notification-updates-simple" .Values.spring.rabbitmq.notification.queueOrderName}}
+            - name: SENTRY_DSN
+              value: {{default "http://d276d97122df427faaad676d013165bc@sentry-local.default.svc.cluster.local:9000/36" .Values.spring.sentryDsn | quote}}
           livenessProbe:
             httpGet:
               path: /actuator/health
