@@ -33,6 +33,8 @@ public interface Addresses {
 
     Double getLongitude();
 
+    String getLandmark();
+
     String getSpecialInstructions();
 
 }
