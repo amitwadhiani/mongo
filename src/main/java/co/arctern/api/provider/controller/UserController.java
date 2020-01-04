@@ -158,7 +158,7 @@ public class UserController {
      * @param dtos
      * @return
      */
-    @GetMapping("/fetch/by-task")
+    @PostMapping("/fetch/by-task")
     @CrossOrigin
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ProviderRequestForOrderItemDto>> fetchUserByTaskId(@RequestBody List<ProviderRequestForOrderItemDto> dtos) {
