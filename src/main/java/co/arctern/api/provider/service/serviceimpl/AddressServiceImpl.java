@@ -46,10 +46,10 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Address saveAddress(TaskAssignDto dto) {
         Address address = new Address();
-        address.setCity(dto.getCity());
         address.setName(dto.getAddressName());
         address.setHouseNumber(dto.getHouseNumber());
         address.setLine(dto.getLine());
+        address.setSpecialInstructions(dto.getSpecialInstructions());
         address.setLatitude(dto.getLatitude());
         address.setLongitude(dto.getLongitude());
         Boolean isSourceAddress = dto.getIsSourceAddress();

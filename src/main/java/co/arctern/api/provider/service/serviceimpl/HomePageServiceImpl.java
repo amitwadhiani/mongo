@@ -52,36 +52,33 @@ public class HomePageServiceImpl implements HomePageService {
                                                           Pageable pageable) {
         HomePageResponseForAdmin adminResponse = new HomePageResponseForAdmin();
         PaginatedResponse allTasks = taskService.fetchTasks(states, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
-        adminResponse.setTasks(allTasks);
-        adminResponse.setTasksCount(allTasks.getTotalElements());
-        PaginatedResponse cancelledTasks = taskService.fetchTasks(new TaskState[]{TaskState.CANCELLED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
-        adminResponse.setCancelledTasks(cancelledTasks);
-        adminResponse.setCancelledTasksCount(cancelledTasks.getTotalElements());
-        PaginatedResponse completedTasks = taskService.fetchTasks(new TaskState[]{TaskState.COMPLETED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
-        adminResponse.setCompletedTasks(completedTasks);
-        adminResponse.setCompletedTasksCount(completedTasks.getTotalElements());
-        PaginatedResponse openTasks = taskService.fetchTasks(new TaskState[]{TaskState.OPEN}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
-        adminResponse.setOpenTasks(openTasks);
-        adminResponse.setOpenTasksCount(openTasks.getTotalElements());
-        PaginatedResponse pendingTasks = taskService.fetchTasks(new TaskState[]{TaskState.ASSIGNED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
-        adminResponse.setPendingTasks(pendingTasks);
-        adminResponse.setPendingTasksCount(pendingTasks.getTotalElements());
-        PaginatedResponse startedTasks = taskService.fetchTasks(new TaskState[]{TaskState.STARTED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
-        adminResponse.setStartedTasks(startedTasks);
-        PaginatedResponse acceptedTasks = taskService.fetchTasks(new TaskState[]{TaskState.ACCEPTED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
-        adminResponse.setAcceptedTasks(acceptedTasks);
-        PaginatedResponse rejectedTasks = taskService.fetchTasks(new TaskState[]{TaskState.REJECTED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
-        adminResponse.setRejectedTasks(acceptedTasks);
-        PaginatedResponse rescheduledTasks = taskService.fetchTasks(new TaskState[]{TaskState.RESCHEDULED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable);
-        return this.setCount(adminResponse, startedTasks, acceptedTasks, rejectedTasks, rescheduledTasks);
+        return this.setCount(adminResponse,
+                allTasks,
+                taskService.fetchTasks(new TaskState[]{TaskState.STARTED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable),
+                taskService.fetchTasks(new TaskState[]{TaskState.ACCEPTED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable),
+                taskService.fetchTasks(new TaskState[]{TaskState.REJECTED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable),
+                taskService.fetchTasks(new TaskState[]{TaskState.RESCHEDULED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable),
+                taskService.fetchTasks(new TaskState[]{TaskState.OPEN}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable),
+                taskService.fetchTasks(new TaskState[]{TaskState.ASSIGNED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable),
+                taskService.fetchTasks(new TaskState[]{TaskState.CANCELLED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable),
+                taskService.fetchTasks(new TaskState[]{TaskState.COMPLETED}, start, end, areaIds, taskType, orderId, patientFilterValue, providerId, pageable)
+        );
     }
 
-    public HomePageResponseForAdmin setCount(HomePageResponseForAdmin adminResponse, PaginatedResponse startedTasks, PaginatedResponse acceptedTasks, PaginatedResponse rejectedTasks, PaginatedResponse rescheduledTasks) {
-        adminResponse.setRescheduledTasks(acceptedTasks);
+    @Override
+    public HomePageResponseForAdmin setCount(HomePageResponseForAdmin adminResponse, PaginatedResponse allTasks, PaginatedResponse startedTasks, PaginatedResponse acceptedTasks, PaginatedResponse rejectedTasks, PaginatedResponse rescheduledTasks,
+                                             PaginatedResponse openTasks, PaginatedResponse pendingTasks,
+                                             PaginatedResponse cancelledTasks,
+                                             PaginatedResponse completedTasks) {
+        adminResponse.setTasks(allTasks);
         adminResponse.setAcceptedTasksCount(acceptedTasks.getTotalElements());
         adminResponse.setRejectedTasksCount(rejectedTasks.getTotalElements());
         adminResponse.setRescheduledTasksCount(rescheduledTasks.getTotalElements());
         adminResponse.setStartedTasksCount(startedTasks.getTotalElements());
+        adminResponse.setOpenTasksCount(openTasks.getTotalElements());
+        adminResponse.setPendingTasksCount(pendingTasks.getTotalElements());
+        adminResponse.setCancelledTasksCount(cancelledTasks.getTotalElements());
+        adminResponse.setCompletedTasksCount(completedTasks.getTotalElements());
         return adminResponse;
     }
 }

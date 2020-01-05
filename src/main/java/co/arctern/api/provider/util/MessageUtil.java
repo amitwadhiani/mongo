@@ -98,6 +98,11 @@ public interface MessageUtil {
     StringBuilder ONLY_ADMIN_LOGIN_ALLOWED_MESSAGE = new StringBuilder("Only Admin login allowed.");
 
     /**
+     * only admin login allowed message.
+     */
+    StringBuilder ONLY_ADMIN_CM_LOGIN_ALLOWED_MESSAGE = new StringBuilder("Only Admin/Cluster Manager login allowed.");
+
+    /**
      * invalid area id message.
      */
     StringBuilder INVALID_AREA_ID_MESSAGE = new StringBuilder("Invalid area Id.");
@@ -116,6 +121,11 @@ public interface MessageUtil {
      * Task already started message.
      */
     StringBuilder TASK_ALREADY_STARTED_MESSAGE = new StringBuilder("Task has already been started.");
+
+    /**
+     * Task already started message.
+     */
+    StringBuilder TASK_ALREADY_CANCELLED_MESSAGE = new StringBuilder("Task has already been cancelled.");
 
     /**
      * User already exists message by username.

@@ -2,6 +2,7 @@ package co.arctern.api.provider.service;
 
 import co.arctern.api.provider.constant.TaskType;
 import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.dto.request.ProviderRequestForOrderItemDto;
 import co.arctern.api.provider.dto.request.UserRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Users;
@@ -202,5 +203,7 @@ public interface UserService extends MessageUtil {
      * @return
      */
     public Integer fetchUserByPincode(String pincode);
+
+    public List<ProviderRequestForOrderItemDto> fetchUserByTaskId(List<ProviderRequestForOrderItemDto> dtos);
 
 }

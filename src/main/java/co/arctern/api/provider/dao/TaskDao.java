@@ -38,7 +38,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(OfferingType type, Timestamp start, Timestamp end, Pageable pageable);
+    Page<Task> findByTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThanOrderByExpectedArrivalTime(OfferingType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
      * fetch tasks for a particular area.
@@ -47,7 +47,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByDestinationAddressAreaIdIn(List<Long> areaIds, Pageable pageable);
+    Page<Task> findByDestinationAddressAreaIdInOrderByExpectedArrivalTime(List<Long> areaIds, Pageable pageable);
 
     /**
      * fetch tasks by destination address ids and taskType.
@@ -57,7 +57,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByDestinationAddressAreaIdInAndType(List<Long> areaIds, TaskType type, Pageable pageable);
+    Page<Task> findByDestinationAddressAreaIdInAndTypeOrderByExpectedArrivalTime(List<Long> areaIds, TaskType type, Pageable pageable);
 
     /**
      * fetch tasks for a particular area within a time range.
@@ -68,7 +68,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByDestinationAddressAreaIdInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
+    Page<Task> findByDestinationAddressAreaIdInAndCreatedAtGreaterThanEqualAndCreatedAtLessThanOrderByExpectedArrivalTime(List<Long> areaIds, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
      * fetch by destination area ids and taskType within a date range.
@@ -80,7 +80,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByDestinationAddressAreaIdInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(List<Long> areaIds, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
+    Page<Task> findByDestinationAddressAreaIdInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThanOrderByExpectedArrivalTime(List<Long> areaIds, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
      * fetch cancellation requested tasks.
@@ -101,7 +101,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+    Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThanOrderByExpectedArrivalTime(
             TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -114,7 +114,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByIsActiveTrueAndStateInAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
+    Page<Task> findByIsActiveTrueAndStateInAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThanOrderByExpectedArrivalTime(
             TaskState[] states, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -125,7 +125,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByIsActiveTrueAndStateInAndTypeOrderByCreatedAtDesc(
+    Page<Task> findByIsActiveTrueAndStateInAndTypeOrderByExpectedArrivalTime(
             TaskState[] states, TaskType type, Pageable pageable);
 
     /**
@@ -148,7 +148,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.state IN (:states) " +
             "AND task.expectedArrivalTime >= (:start) " +
             "AND task.expectedArrivalTime < (:end) " +
-            "ORDER BY task.createdAt DESC ")
+            "ORDER BY task.expectedArrivalTime ASC ")
     public Page<Task> filterByAreaIdsAndPatientDetailsWithTime(@Param("areaIds") List<Long> areaIds, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
     /**
@@ -167,7 +167,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
             "AND task.state IN (:states) " +
-            "ORDER BY task.createdAt DESC ")
+            "ORDER BY task.expectedArrivalTime ASC ")
     public Page<Task> filterByAreaIdsAndPatientDetails(@Param("areaIds") List<Long> areaIds, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, Pageable pageable);
 
     /**
@@ -192,7 +192,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.state IN (:states) " +
             "AND task.expectedArrivalTime >= (:start) " +
             "AND task.expectedArrivalTime < (:end) " +
-            "ORDER BY task.createdAt DESC ")
+            "ORDER BY task.expectedArrivalTime ASC ")
     public Page<Task> filterByAreaIdsAndPatientDetailsWithRefIdWithTime(@Param("areaIds") List<Long> areaIds, @Param("refId") Long refId, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
     /**
@@ -213,7 +213,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.type = (:type) " +
             "AND task.refId = (:refId) " +
             "AND task.state IN (:states) " +
-            "ORDER BY task.createdAt DESC ")
+            "ORDER BY task.expectedArrivalTime ASC ")
     public Page<Task> filterByAreaIdsAndPatientDetailsWithRefId(@Param("areaIds") List<Long> areaIds, @Param("refId") Long refId, @Param("states") TaskState[] states, @Param("type") TaskType type, @Param("value") String value, Pageable pageable);
 
     /**
@@ -234,7 +234,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.type = (:type) " +
             "AND task.expectedArrivalTime >= (:start) " +
             "AND task.expectedArrivalTime < (:end) " +
-            "ORDER BY task.createdAt DESC ")
+            "ORDER BY task.expectedArrivalTime ASC ")
     public Page<Task> filterByPatientDetailsAndTime(@Param("states") TaskState[] states, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
     /**
@@ -251,7 +251,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.state IN (:states) " +
             "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
-            "ORDER BY task.createdAt DESC ")
+            "ORDER BY task.expectedArrivalTime ASC ")
     public Page<Task> filterByPatientDetails(@Param("states") TaskState[] states, @Param("value") String value, @Param("type") TaskType type, Pageable pageable);
 
     /**
@@ -274,7 +274,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.refId = (:refId) " +
             "AND task.expectedArrivalTime >= (:start) " +
             "AND task.expectedArrivalTime < (:end) " +
-            "ORDER BY task.createdAt DESC ")
+            "ORDER BY task.expectedArrivalTime ASC ")
     public Page<Task> filterByPatientDetailsWithRefIdWithTime(@Param("states") TaskState[] states, @Param("refId") Long refId, @Param("value") String value, @Param("type") TaskType type, @Param("start") Timestamp start, @Param("end") Timestamp end, Pageable pageable);
 
     /**
@@ -293,7 +293,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND (task.patientName LIKE CONCAT('%',:value,'%') OR task.patientPhone = (:value) OR task.patientId = (:value)) " +
             "AND task.type = (:type) " +
             "AND task.refId = (:refId) " +
-            "ORDER BY task.expectedArrivalTime DESC ")
+            "ORDER BY task.expectedArrivalTime ASC ")
     public Page<Task> filterByPatientDetailsWithRefId(@Param("states") TaskState[] states, @Param("refId") Long refId, @Param("value") String value, @Param("type") TaskType type, Pageable pageable);
 
     /**
@@ -307,7 +307,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+    public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndCreatedAtGreaterThanEqualAndCreatedAtLessThanOrderByExpectedArrivalTime(
             List<Long> areaIds, TaskType type, TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -321,7 +321,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
+    public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThanOrderByExpectedArrivalTime(
             List<Long> areaIds, TaskType type, TaskState[] states, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -333,7 +333,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInOrderByCreatedAtDesc(
+    public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInOrderByExpectedArrivalTime(
             List<Long> areaIds, TaskState[] states, TaskType type, Pageable pageable);
 
     /**
@@ -348,7 +348,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+    Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThanOrderByExpectedArrivalTime(
             List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -363,7 +363,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
+    Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThanOrderByExpectedArrivalTime(
             List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -376,7 +376,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(
+    Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeOrderByExpectedArrivalTime(
             List<Long> areaIds, TaskState[] states, Long refId, TaskType type, Pageable pageable);
 
     /**
@@ -390,7 +390,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+    public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThanOrderByExpectedArrivalTime(
             TaskState[] states, Long orderId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -404,7 +404,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
+    public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThanOrderByExpectedArrivalTime(
             TaskState[] states, Long orderId, TaskType type, Timestamp start, Timestamp end, Pageable pageable);
 
     /**
@@ -416,7 +416,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param pageable
      * @return
      */
-    public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeOrderByCreatedAtDesc(
+    public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeOrderByExpectedArrivalTime(
             TaskState[] states, Long orderId, TaskType type, Pageable pageable);
 
     /**
@@ -426,7 +426,7 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @param state
      * @return
      */
-    public List<Task> findByIsActiveTrueAndCreatedAtLessThanEqualAndState(Timestamp start, TaskState state);
+    public List<Task> findByIsActiveTrueAndCreatedAtLessThanEqualAndStateOrderByExpectedArrivalTime(Timestamp start, TaskState state);
 
     /**
      * fetch tasks through ids.

@@ -66,7 +66,7 @@ public class PaymentController {
      */
     @CrossOrigin
     @PostMapping("/settle")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<List<Payments>> settle(@RequestParam(value = "userId") Long userId) {
         return ResponseEntity.ok(taskService.settleAmountForProvider(tokenService.fetchUserId(), userId));
     }
@@ -79,7 +79,7 @@ public class PaymentController {
      */
     @CrossOrigin
     @GetMapping("/user/owed")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Double> fetchUserOwedAmount(@RequestParam(value = "userId") Long userId) {
         return ResponseEntity.ok(genericService.fetchUserOwedAmount(userId));
     }

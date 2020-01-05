@@ -54,9 +54,11 @@ public class LoginServiceImpl implements LoginService {
     public StringBuilder generateOTP(String phone, Boolean isAdmin) {
         if (isAdmin) {
             if (userService.fetchUser(phone).getUserRoles().stream()
-                    .filter(a -> a.getRole().getRole().equalsIgnoreCase("ROLE_ADMIN"))
-                    .findAny().isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ONLY_ADMIN_LOGIN_ALLOWED_MESSAGE.toString());
+                    .filter(a -> a.getRole().getRole()
+                            .matches("(?i)ROLE_ADMIN|ROLE_CLUSTER_MANAGER"))
+                    .findAny()
+                    .isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ONLY_ADMIN_CM_LOGIN_ALLOWED_MESSAGE.toString());
             }
             return generateOTPForLogin(phone);
         }

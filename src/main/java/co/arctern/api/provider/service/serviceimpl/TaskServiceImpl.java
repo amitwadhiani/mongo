@@ -180,10 +180,15 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time) {
+    public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time, Timestamp start, Timestamp end) {
         Task task = fetchTask(taskId);
         task.setState(TaskState.RESCHEDULED);
         task.setExpectedArrivalTime(time);
+        /**
+         * changed to start time and end time (in place of eta).
+         */
+        task.setStartTime(start);
+        task.setEndTime(end);
         userTaskService.markInactive(task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.RESCHEDULED, userId);
         taskDao.save(task);
@@ -202,9 +207,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId) {
+    public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         if (isCancelled) {
+            if (task.getState().equals(TaskState.CANCELLED)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,TASK_ALREADY_CANCELLED_MESSAGE.toString());
+            }
             UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
 
             /**
@@ -214,7 +222,9 @@ public class TaskServiceImpl implements TaskService {
                     (activeUserTask == null) ? null : activeUserTask.getUser().getId());
             task.setState(TaskState.CANCELLED);
             task.setCancellationRequested(false);
-            taskDao.save(task);
+            task = taskDao.save(task);
+            if (!CollectionUtils.isEmpty(reasonIds))
+                reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLED);
             return TASK_CANCEL_MESSAGE;
         } else {
             /**
@@ -250,7 +260,7 @@ public class TaskServiceImpl implements TaskService {
     public StringBuilder requestCancellation(Boolean cancelRequest, Long taskId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         task.setCancellationRequested(cancelRequest);
-        reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLED);
+        reasonService.assignReasons(task, reasonIds, TaskStateFlowState.CANCELLATION_REQUESTED);
         return SUCCESS_MESSAGE;
     }
 
@@ -281,19 +291,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType taskType, Pageable pageable) {
-        return taskDao.findByDestinationAddressAreaIdInAndType(areaIds, taskType, pageable).map(
+        return taskDao.findByDestinationAddressAreaIdInAndTypeOrderByExpectedArrivalTime(areaIds, taskType, pageable).map(
                 a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }
 
     @Override
     public Page<TasksForProvider> fetchTasksByType(OfferingType type, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.findByTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(type, start, end, pageable).map(
+        return taskDao.findByTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThanOrderByExpectedArrivalTime(type, start, end, pageable).map(
                 a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }
 
     @Override
     public Page<TasksForProvider> fetchTasksByArea(List<Long> areaIds, TaskType taskType, Timestamp start, Timestamp end, Pageable pageable) {
-        return taskDao.findByDestinationAddressAreaIdInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(areaIds, taskType, start, end, pageable).map(
+        return taskDao.findByDestinationAddressAreaIdInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThanOrderByExpectedArrivalTime(areaIds, taskType, start, end, pageable).map(
                 a -> projectionFactory.createProjection(TasksForProvider.class, a));
     }
 
@@ -370,7 +380,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Page<Task> findByIsActiveTrueAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, Timestamp start, Timestamp end, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(states, type, start, end, pageable);
+        return taskDao.findByIsActiveTrueAndStateInAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThanOrderByExpectedArrivalTime(states, type, start, end, pageable);
     }
 
     @Override
@@ -398,20 +408,20 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Page<Task> findByIsActiveTrueAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             TaskState[] states, Timestamp start, Timestamp end, Long orderId, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(states, orderId, type, start, end, pageable);
+        return taskDao.findByIsActiveTrueAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThanOrderByExpectedArrivalTime(states, orderId, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, Long refId, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
+        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndRefIdAndTypeAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThanOrderByExpectedArrivalTime(
                 areaIds, states, refId, type, start, end, pageable);
     }
 
     @Override
     public Page<Task> findByIsActiveTrueAndDestinationAddressAreaIdInAndStateInAndTypeAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             List<Long> areaIds, Timestamp start, Timestamp end, TaskState[] states, TaskType type, Pageable pageable) {
-        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThan(
+        return taskDao.findByIsActiveTrueAndDestinationAddressAreaIdInAndTypeAndStateInAndExpectedArrivalTimeGreaterThanEqualAndExpectedArrivalTimeLessThanOrderByExpectedArrivalTime(
                 areaIds, type, states, start, end, pageable);
     }
 
@@ -474,7 +484,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> fetchTasksForCron() {
-        return taskDao.findByIsActiveTrueAndCreatedAtLessThanEqualAndState(DateUtil.fetchTimestampFromCurrentTimestamp(20), TaskState.ASSIGNED);
+        return taskDao.findByIsActiveTrueAndCreatedAtLessThanEqualAndStateOrderByExpectedArrivalTime(DateUtil.fetchTimestampFromCurrentTimestamp(20), TaskState.ASSIGNED);
     }
 
     @Override
