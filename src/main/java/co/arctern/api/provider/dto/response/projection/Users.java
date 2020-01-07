@@ -18,7 +18,7 @@ public interface Users {
 
     String getName();
 
-    @Value("#{@genericService.fetchUserOwedAmount(target.id)}")
+    @Value("#{@genericServiceImpl.fetchUserOwedAmount(target.id)}")
     Double getAmountOwed();
 
     String getUsername();
