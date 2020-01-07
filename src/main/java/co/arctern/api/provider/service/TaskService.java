@@ -514,5 +514,7 @@ public interface TaskService extends MessageUtil {
      */
     public List<Task> fetchTasksForPayment(Long userId);
 
+    public StringBuilder createTaskFromAnotherTask(TaskAssignDto dto, Long userId);
 
-}
+
+    }
