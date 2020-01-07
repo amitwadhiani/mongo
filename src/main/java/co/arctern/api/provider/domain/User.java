@@ -88,6 +88,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<UserCluster> userClusters;
 
+    @OneToMany
+    private List<UserArea> userAreas;
+
     @OneToMany(mappedBy = "user")
     private List<UserOffering> userOfferings;
 

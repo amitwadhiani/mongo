@@ -2,6 +2,7 @@ package co.arctern.api.provider.service.serviceimpl;
 
 import co.arctern.api.provider.constant.Gender;
 import co.arctern.api.provider.constant.TaskType;
+import co.arctern.api.provider.dao.UserClusterDao;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.*;
 import co.arctern.api.provider.dto.request.ProviderRequestForOrderItemDto;
@@ -25,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +43,7 @@ public class UserServiceImpl implements UserService {
     private final TokenService tokenService;
     private final UserTaskService userTaskService;
     private final GenericService genericService;
+    private final UserClusterDao userClusterDao;
 
     @Autowired
     public UserServiceImpl(UserDao userDao,
@@ -51,7 +54,8 @@ public class UserServiceImpl implements UserService {
                            TokenService tokenService,
                            UserTaskService userTaskService,
                            GenericService genericService,
-                           ClusterService clusterService) {
+                           ClusterService clusterService,
+                           UserClusterDao userClusterDao) {
         this.userDao = userDao;
         this.projectionFactory = projectionFactory;
         this.offeringService = offeringService;
@@ -61,6 +65,7 @@ public class UserServiceImpl implements UserService {
         this.userTaskService = userTaskService;
         this.genericService = genericService;
         this.clusterService = clusterService;
+        this.userClusterDao = userClusterDao;
     }
 
     @Override
@@ -157,7 +162,7 @@ public class UserServiceImpl implements UserService {
         List<Role> roles = (!org.springframework.util.CollectionUtils.isEmpty(roleIds)) ?
                 userRoleService.createUserRoles(user, roleIds) : user.getUserRoles().stream().map(a -> a.getRole()).collect(Collectors.toList());
         List<Long> clusterIds = dto.getClusterIds();
-        areaService.setAreasToUser(user, areaIds, roles, clusterIds);
+        areaService.setAreasToUser(user, roles, clusterIds);
         if (!CollectionUtils.isEmpty(offeringIds)) offeringService.setOfferingsToUser(user, offeringIds);
         return SUCCESS_MESSAGE;
     }
@@ -323,5 +328,23 @@ public class UserServiceImpl implements UserService {
             }
         });
         return dtos;
+    }
+
+    @Override
+    @Transactional
+    public StringBuilder replaceAreasWithClusters() {
+        List<User> all = userDao.findAll();
+        List<UserCluster> userClusters = new ArrayList<>();
+        all.stream().filter(a -> !CollectionUtils.isEmpty(a.getUserAreas())
+                && a.getUserAreas().stream().allMatch(b -> b.getArea().getCluster() != null)).map(a -> {
+            UserArea userArea = a.getUserAreas().get(0);
+            UserCluster userCluster = new UserCluster();
+            userCluster.setUser(a);
+            userCluster.setCluster(userArea.getArea().getCluster());
+            userClusters.add(userCluster);
+            return a;
+        });
+        userClusterDao.saveAll(userClusters);
+        return SUCCESS_MESSAGE;
     }
 }

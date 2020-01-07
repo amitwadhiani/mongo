@@ -105,5 +105,4 @@ public interface AreaService extends MessageUtil {
      */
     public ClustersWoArea getCluster(Address address);
 
-
 }

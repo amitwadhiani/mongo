@@ -206,4 +206,5 @@ public interface UserService extends MessageUtil {
 
     public List<ProviderRequestForOrderItemDto> fetchUserByTaskId(List<ProviderRequestForOrderItemDto> dtos);
 
+    public StringBuilder replaceAreasWithClusters();
 }

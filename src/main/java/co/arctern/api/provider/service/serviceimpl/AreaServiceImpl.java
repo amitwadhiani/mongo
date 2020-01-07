@@ -141,4 +141,5 @@ public class AreaServiceImpl implements AreaService {
                     return new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_PIN_CODE_MESSAGE.toString());
                 }));
     }
+
 }
