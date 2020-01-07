@@ -252,10 +252,10 @@ public class UserServiceImpl implements UserService {
                 .filter(a -> !a.getUserRoles().stream()
                         .anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN"))
                         && a.getUserOfferings().stream().anyMatch(b -> b.getOffering().getType().toString().equalsIgnoreCase(type.toString()))
-                        && a.getUserAreas()
+                        && a.getUserClusters()
                         .stream()
                         .filter(b -> BooleanUtils.isTrue(b.getIsActive()))
-                        .anyMatch(b -> pinCodes.contains(b.getArea().getPinCode())))
+                        .anyMatch(b -> pinCodes.contains(b.getCluster().getAreas().stream().map(c -> c.getPinCode()))))
                 .collect(Collectors.toList());
         return PaginationUtil.returnPaginatedBody(
                 users.stream()
@@ -270,10 +270,10 @@ public class UserServiceImpl implements UserService {
         List<String> pinCodes = clusterService.fetchAreas(clusterId).stream().map(a -> a.getPinCode()).collect(Collectors.toList());
         List<User> users = userDao.fetchActiveUsers().stream()
                 .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN"))
-                        && user.getUserAreas()
+                        && user.getUserClusters()
                         .stream()
                         .filter(a -> BooleanUtils.isTrue(a.getIsActive()))
-                        .anyMatch(a -> pinCodes.contains(a.getArea().getPinCode())))
+                        .anyMatch(a -> pinCodes.contains(a.getCluster().getAreas().stream().map(c -> c.getPinCode()))))
                 .collect(Collectors.toList());
         return PaginationUtil.returnPaginatedBody(
                 users.stream()
@@ -303,10 +303,10 @@ public class UserServiceImpl implements UserService {
 
         return (userDao.fetchActiveUsers().stream()
                 .filter(user -> !user.getUserRoles().stream().anyMatch(userRole -> userRole.getRole().getRole().equals("ROLE_ADMIN"))
-                        && user.getUserAreas()
+                        && user.getUserClusters()
                         .stream()
                         .filter(a -> BooleanUtils.isTrue(a.getIsActive()))
-                        .anyMatch(a -> pinCodes.contains(a.getArea().getPinCode())))
+                        .anyMatch(a -> pinCodes.contains(a.getCluster().getAreas().stream().map(c -> c.getPinCode()))))
                 .collect(Collectors.toList())).size();
     }
 

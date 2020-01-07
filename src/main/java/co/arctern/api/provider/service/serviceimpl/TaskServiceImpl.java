@@ -93,6 +93,7 @@ public class TaskServiceImpl implements TaskService {
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
         return TASK_ASSIGNED_MESSAGE;
     }
 

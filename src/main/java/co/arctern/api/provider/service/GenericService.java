@@ -1,5 +1,9 @@
 package co.arctern.api.provider.service;
 
+import co.arctern.api.provider.dto.response.projection.PaymentsForUser;
+
+import java.util.List;
+
 public interface GenericService {
 
     /**
@@ -9,5 +13,7 @@ public interface GenericService {
      * @return
      */
     public Double fetchUserOwedAmount(Long userId);
+
+    List<PaymentsForUser> fetchPaymentInfo(Long userId);
 
 }

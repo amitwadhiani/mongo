@@ -2,7 +2,7 @@ package co.arctern.api.provider.security;
 
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.User;
-import co.arctern.api.provider.domain.UserArea;
+import co.arctern.api.provider.domain.UserCluster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -41,12 +41,12 @@ public class AppUserDetailsService implements UserDetailsService {
         userDetails.setEmail(user.getEmail());
         userDetails.setUsername(user.getUsername());
         userDetails.setPhone(user.getPhone());
-        List<UserArea> userAreas = user.getUserAreas().stream().filter(a -> a.getArea().getCluster() != null).collect(Collectors.toList());
+        List<UserCluster> userClusters = user.getUserClusters();
         /**
          * given that only one clusterId allowed per CLUSTER_MANAGER
          */
-        if (!CollectionUtils.isEmpty(userAreas)) {
-            userDetails.setClusterId(userAreas.get(0).getArea().getCluster().getId());
+        if (!CollectionUtils.isEmpty(userClusters)) {
+            userDetails.setClusterIds(userClusters.stream().map(a->a.getCluster().getId()).collect(Collectors.toList()));
         }
         return userDetails;
     }

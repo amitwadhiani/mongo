@@ -1,6 +1,6 @@
 package co.arctern.api.provider.service;
 
-import co.arctern.api.provider.domain.UserArea;
+import co.arctern.api.provider.domain.UserCluster;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.ClustersWoArea;
 import co.arctern.api.provider.util.MessageUtil;
@@ -11,18 +11,18 @@ import java.util.List;
 public interface UserAreaService extends MessageUtil {
 
     /**
-     * @param areaIds
+     * @param clusterIds
      * @param pageable
      * @return
      */
-    PaginatedResponse fetchUsersByArea(List<Long> areaIds, Pageable pageable);
+    PaginatedResponse fetchUsersByArea(List<Long> clusterIds, Pageable pageable);
 
     /**
      * fetch areas associated with the user.
      *
-     * @param userAreas
+     * @param userClusters
      * @return
      */
-    public List<ClustersWoArea> fetchAreasForUser(List<UserArea> userAreas);
+    public List<ClustersWoArea> fetchAreasForUser(List<UserCluster> userClusters);
 
 }

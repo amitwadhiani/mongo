@@ -51,13 +51,13 @@ public class AdminController {
     }
 
     /**
-     * view providers for admin's / particular areas api.
+     * view providers for admin's / particular clusters api.
      */
     @CrossOrigin
     @GetMapping("/provider/by-area")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
-    public ResponseEntity<PaginatedResponse> fetchProvidersByArea(@RequestParam("areaIds") List<Long> areaIds, Pageable pageable) {
-        return ResponseEntity.ok(adminService.fetchProvidersByArea(areaIds, pageable));
+    public ResponseEntity<PaginatedResponse> fetchProvidersByArea(@RequestParam("clusterIds") List<Long> clusterIds, Pageable pageable) {
+        return ResponseEntity.ok(adminService.fetchProvidersByArea(clusterIds, pageable));
     }
 
 

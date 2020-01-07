@@ -13,20 +13,20 @@ import java.sql.Timestamp;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "area_id", "isActive"})})
-public class UserArea {
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "cluster_id", "isActive"})})
+public class UserCluster {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JsonBackReference("user-userArea")
+    @JsonBackReference("user-userCluster")
     private User user;
 
     @ManyToOne
-    @JsonBackReference("area-userArea")
-    private Area area;
+    @JsonBackReference("cluster-userCluster")
+    private Cluster cluster;
 
     @LastModifiedDate
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
@@ -45,7 +45,7 @@ public class UserArea {
     @JsonIgnore
     private Long version;
 
-    public UserArea(Long version) {
+    public UserCluster(Long version) {
         this.version = version;
     }
 
