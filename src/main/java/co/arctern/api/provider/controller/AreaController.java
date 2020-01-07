@@ -91,4 +91,5 @@ public class AreaController {
         return ResponseEntity.ok(areaService.fetchArea(pinCode));
     }
 
+
 }

@@ -2,6 +2,7 @@ package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.constant.SettleState;
 import co.arctern.api.provider.dto.response.projection.Payments;
+import co.arctern.api.provider.dto.response.projection.PaymentsForUser;
 import co.arctern.api.provider.service.GenericService;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.TokenService;
@@ -82,6 +83,13 @@ public class PaymentController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<Double> fetchUserOwedAmount(@RequestParam(value = "userId") Long userId) {
         return ResponseEntity.ok(genericService.fetchUserOwedAmount(userId));
+    }
+
+    @CrossOrigin
+    @GetMapping("/info")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
+    public ResponseEntity<List<PaymentsForUser>> fetchPaymentInfo(@RequestParam(value = "userId") Long userId) {
+        return ResponseEntity.ok(genericService.fetchPaymentInfo(userId));
     }
 
 

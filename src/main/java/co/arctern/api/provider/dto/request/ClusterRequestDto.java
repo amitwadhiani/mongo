@@ -18,4 +18,5 @@ public class ClusterRequestDto {
     private List<AreaRequestDto> areas;
     private List<Long> areaIds;
     private List<String> pinCodes;
+    private Boolean isEdit;
 }

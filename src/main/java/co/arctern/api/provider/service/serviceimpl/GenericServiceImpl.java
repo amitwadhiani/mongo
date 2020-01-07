@@ -5,6 +5,7 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.dto.response.projection.Payments;
+import co.arctern.api.provider.dto.response.projection.PaymentsForUser;
 import co.arctern.api.provider.service.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.projection.ProjectionFactory;
@@ -29,12 +30,23 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public Double fetchUserOwedAmount(Long userId) {
+        return Math.round(this.getPaymentsForUser(userId).stream().mapToDouble(a -> a.getAmount()).sum()) * 100 / 100D;
+    }
+
+    public List<Payments> getPaymentsForUser(Long userId) {
         List<Task> tasks = taskDao.fetchTasks(userId, TaskState.COMPLETED);
         List<Payments> payments = new ArrayList<>();
         tasks.stream().forEach(a -> {
             payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(SettleState.PAYMENT_RECEIVED))
                     .map(c -> projectionFactory.createProjection(Payments.class, c)).collect(Collectors.toList()));
         });
-        return Math.round(payments.stream().mapToDouble(a -> a.getAmount()).sum()) * 100 / 100D;
+        return payments;
+    }
+
+    @Override
+    public List<PaymentsForUser> fetchPaymentInfo(Long userId) {
+        return this.getPaymentsForUser(userId).stream().map(a ->
+                projectionFactory.createProjection(PaymentsForUser.class, a))
+                .collect(Collectors.toList());
     }
 }

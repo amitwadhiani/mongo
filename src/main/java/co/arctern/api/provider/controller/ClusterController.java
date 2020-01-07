@@ -25,7 +25,7 @@ public class ClusterController {
     }
 
     /**
-     * create new areas api.
+     * create new clusters api.
      *
      * @param dtos
      * @return

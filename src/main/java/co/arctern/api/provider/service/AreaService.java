@@ -23,10 +23,9 @@ public interface AreaService extends MessageUtil {
      * assign areas to user.
      *
      * @param user
-     * @param areaIds
      * @param roles
      */
-    public void setAreasToUser(User user, List<Long> areaIds, List<Role> roles, List<Long> clusterIds);
+    public void setAreasToUser(User user, List<Role> roles, List<Long> clusterIds);
 
     /**
      * fetch all areas.
@@ -105,6 +104,5 @@ public interface AreaService extends MessageUtil {
      * @return
      */
     public ClustersWoArea getCluster(Address address);
-
 
 }

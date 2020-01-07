@@ -93,6 +93,7 @@ public class TaskServiceImpl implements TaskService {
         userTaskService.createUserTask(userService.fetchUser(userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
         return TASK_ASSIGNED_MESSAGE;
     }
 
@@ -211,7 +212,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = this.fetchTask(taskId);
         if (isCancelled) {
             if (task.getState().equals(TaskState.CANCELLED)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,TASK_ALREADY_CANCELLED_MESSAGE.toString());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TASK_ALREADY_CANCELLED_MESSAGE.toString());
             }
             UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
 
@@ -565,6 +566,39 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public List<Payments> settleAmountForProvider(Long adminId, Long userId) {
         return paymentService.settlePayments(adminId, paymentService.fetchPaymentSettlementsForProvider(userId), new ArrayList<>(), true);
+    }
+
+    @Override
+    @Transactional
+    public StringBuilder createTaskFromAnotherTask(TaskAssignDto dto, Long userId) {
+        Task oldTask = taskDao.findById(dto.getTaskId()).orElseThrow(() ->
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TASK_ID_MESSAGE.toString());
+        });
+        Task task = new Task();
+        task.setIsPrepaid(false);
+        task.setPatientId(oldTask.getPatientId());
+        task.setType(oldTask.getType());
+        task.setPatientName(oldTask.getPatientName());
+        task.setPatientPhone(oldTask.getPatientPhone());
+        task.setSource(oldTask.getSource());
+        task.setCancellationRequested(false);
+        task.setState(TaskState.OPEN);
+        task.setRefId(dto.getRefId());
+        task.setDestinationAddress(addressService.createOrFetchAddress(dto, oldTask.getDestinationAddress().getId()));
+        task.setIsActive(true);
+        task.setDiagnosticOrderId(dto.getDiagnosticOrderId());
+        task.setExpectedArrivalTime((dto.getExpectedArrivalTime()) == null ?
+                new Timestamp(System.currentTimeMillis() + (12 * 60 * 60 * 1000)) : dto.getExpectedArrivalTime());
+        task.setEndTime(dto.getEndTime());
+        task.setStartTime(dto.getStartTime());
+        task.setSourceAddress(addressService.fetchSourceAddress());
+        if (dto.getPaymentMode() == null || dto.getPaymentMode().isEmpty()) dto.setPaymentMode("");
+        if (userId != null) task.setActiveUserId(userId);
+        task = taskDao.save(task);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, null);
+        paymentService.create(task, dto);
+        return SUCCESS_MESSAGE;
     }
 
 }

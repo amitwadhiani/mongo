@@ -81,20 +81,22 @@ public class ClusterServiceImpl implements ClusterService {
              * replace existing areas ( if there ) with new areas.
              */
             List<Area> existingAreas = cluster.getAreas();
-            if (!CollectionUtils.isEmpty(existingAreas)) {
-                for (Area a : existingAreas) {
-                    a.setCluster(null);
-                    areaService.save(a);
+            if (dto.getIsEdit() == null || dto.getIsEdit()) {
+                if (!CollectionUtils.isEmpty(existingAreas)) {
+                    for (Area a : existingAreas) {
+                        a.setCluster(null);
+                        areaService.save(a);
+                    }
                 }
-            }
-            List<Area> areas = (CollectionUtils.isEmpty(dto.getPinCodes())) ?
-                    new ArrayList<>() : areaService.fetchAreas(dto.getPinCodes());
-            for (Area area : areas) {
-                if (area.getCluster() != null)
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
-                area.setCluster(cluster);
-                area.setMeddoDeliveryState(true);
-                areasToSave.add(area);
+                List<Area> areas = (CollectionUtils.isEmpty(dto.getPinCodes())) ?
+                        new ArrayList<>() : areaService.fetchAreas(dto.getPinCodes());
+                for (Area area : areas) {
+                    if (area.getCluster() != null)
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
+                    area.setCluster(cluster);
+                    area.setMeddoDeliveryState(true);
+                    areasToSave.add(area);
+                }
             }
         }
         if (!CollectionUtils.isEmpty(areasToSave)) areaService.saveAll(areasToSave);
