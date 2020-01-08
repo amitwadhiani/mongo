@@ -78,7 +78,7 @@ public class ClusterServiceImpl implements ClusterService {
         return genericService.fetchUser(id)
                 .getUserClusters()
                 .stream()
-                .map(a -> projectionFactory.createProjection(ClustersWoArea.class, a))
+                .map(a -> projectionFactory.createProjection(ClustersWoArea.class, a.getCluster()))
                 .collect(Collectors.toList());
     }
 

@@ -70,7 +70,7 @@ public class ClusterController {
     @GetMapping("/fetch/by-provider/{id}")
     @CrossOrigin
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
-    public ResponseEntity<List<ClustersWoArea>> fetchClustersForProvider(@PathVariable("id") Long id) {
+    public ResponseEntity<List<ClustersWoArea>> fetchClustersForProvider(@PathVariable(name = "id") Long id) {
         return ResponseEntity.ok(clusterService.fetchClustersForProvider(id));
     }
 

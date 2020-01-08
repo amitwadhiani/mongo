@@ -25,4 +25,4 @@ public interface GenericService extends MessageUtil {
 
     public User fetchUser(Long userId);
 
-    }
+}
