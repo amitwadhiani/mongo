@@ -18,7 +18,7 @@ public interface Users {
 
     String getName();
 
-//    @Value("#{@genericServiceImpl.fetchUserOwedAmount(target.id)}")
+    @Value("#{@genericServiceImpl.fetchUserOwedAmount(target.id)}")
     Double getAmountOwed();
 
     String getUsername();
@@ -35,6 +35,6 @@ public interface Users {
 
     Integer getAge();
 
-    List<UserCluster> getUserClusters();
+    List<UserClusters> getUserClusters();
 
 }
