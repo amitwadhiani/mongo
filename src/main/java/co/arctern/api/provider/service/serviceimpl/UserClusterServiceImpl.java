@@ -4,6 +4,7 @@ import co.arctern.api.provider.dao.ClusterDao;
 import co.arctern.api.provider.dao.UserClusterDao;
 import co.arctern.api.provider.domain.UserCluster;
 import co.arctern.api.provider.service.AreaService;
+import co.arctern.api.provider.service.GenericService;
 import co.arctern.api.provider.service.UserClusterService;
 import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +19,14 @@ public class UserClusterServiceImpl implements UserClusterService {
 
     private final ClusterDao clusterDao;
     private final ProjectionFactory projectionFactory;
-    private final UserService userService;
     private final UserClusterDao userClusterDao;
-
 
     @Autowired
     public UserClusterServiceImpl(ClusterDao clusterDao,
                                   ProjectionFactory projectionFactory,
-                                  AreaService areaService,
-                                  UserService userService,
                                   UserClusterDao userClusterDao) {
         this.clusterDao = clusterDao;
         this.projectionFactory = projectionFactory;
-        this.userService = userService;
         this.userClusterDao = userClusterDao;
     }
 
