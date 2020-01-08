@@ -6,10 +6,14 @@ import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.dao.UserDao;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Payments;
 import co.arctern.api.provider.dto.response.projection.PaymentsForUser;
 import co.arctern.api.provider.service.GenericService;
+import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.projection.ProjectionFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -52,19 +56,19 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public List<PaymentsForUser> getPaymentsForUser(Long userId) {
-        List<Task> tasks = taskDao.fetchTasks(userId, TaskState.COMPLETED);
+    public PaginatedResponse getPaymentsForUser(Long userId, Pageable pageable) {
+        Page<Task> tasks = taskDao.fetchTasksForUser(userId, TaskState.COMPLETED, pageable);
         List<PaymentsForUser> payments = new ArrayList<>();
         tasks.stream().forEach(a -> {
             payments.addAll(a.getPayments().stream()
                     .map(c -> projectionFactory.createProjection(PaymentsForUser.class, c)).collect(Collectors.toList()));
         });
-        return payments;
+        return PaginationUtil.returnPaginatedBody(payments, pageable.getPageNumber(), pageable.getPageSize(), (int) tasks.getTotalElements());
     }
 
     @Override
-    public List<PaymentsForUser> fetchPaymentInfo(Long userId) {
-        return this.getPaymentsForUser(userId);
+    public PaginatedResponse fetchPaymentInfo(Long userId, Pageable pageable) {
+        return this.getPaymentsForUser(userId, pageable);
     }
 
     @Override
