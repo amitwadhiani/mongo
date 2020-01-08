@@ -52,21 +52,19 @@ public class GenericServiceImpl implements GenericService {
     }
 
     @Override
-    public List<Payments> getPaymentsForUser(Long userId) {
+    public List<PaymentsForUser> getPaymentsForUser(Long userId) {
         List<Task> tasks = taskDao.fetchTasks(userId, TaskState.COMPLETED);
-        List<Payments> payments = new ArrayList<>();
+        List<PaymentsForUser> payments = new ArrayList<>();
         tasks.stream().forEach(a -> {
             payments.addAll(a.getPayments().stream()
-                    .map(c -> projectionFactory.createProjection(Payments.class, c)).collect(Collectors.toList()));
+                    .map(c -> projectionFactory.createProjection(PaymentsForUser.class, c)).collect(Collectors.toList()));
         });
         return payments;
     }
 
     @Override
     public List<PaymentsForUser> fetchPaymentInfo(Long userId) {
-        return this.getPaymentsForUser(userId).stream().map(a ->
-                projectionFactory.createProjection(PaymentsForUser.class, a))
-                .collect(Collectors.toList());
+        return this.getPaymentsForUser(userId);
     }
 
     @Override

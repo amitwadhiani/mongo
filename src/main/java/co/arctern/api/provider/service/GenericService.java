@@ -19,7 +19,7 @@ public interface GenericService extends MessageUtil {
 
     List<PaymentsForUser> fetchPaymentInfo(Long userId);
 
-    public List<Payments> getPaymentsForUser(Long userId);
+    public List<PaymentsForUser> getPaymentsForUser(Long userId);
 
     public List<Payments> getReceivedPaymentsForUser(Long userId);
 
