@@ -449,4 +449,19 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
             "AND task.state = :state ")
     public List<Task> fetchTasks(Long userId, TaskState state);
 
+    /**
+     * fetch tasks by userId and state.
+     *
+     * @param userId
+     * @param state
+     * @param pageable
+     * @return
+     */
+    @Query("FROM Task task " +
+            "JOIN FETCH task.payments " +
+            "WHERE task.activeUserId = :userId " +
+            "AND task.state = :state " +
+            "ORDER BY task.expectedArrivalTime DESC ")
+    public Page<Task> fetchTasksForUser(Long userId, TaskState state, Pageable pageable);
+
 }

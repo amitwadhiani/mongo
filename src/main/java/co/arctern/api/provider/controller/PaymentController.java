@@ -1,12 +1,13 @@
 package co.arctern.api.provider.controller;
 
 import co.arctern.api.provider.constant.SettleState;
+import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Payments;
-import co.arctern.api.provider.dto.response.projection.PaymentsForUser;
 import co.arctern.api.provider.service.GenericService;
 import co.arctern.api.provider.service.TaskService;
 import co.arctern.api.provider.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -88,8 +89,9 @@ public class PaymentController {
     @CrossOrigin
     @GetMapping("/info")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
-    public ResponseEntity<List<PaymentsForUser>> fetchPaymentInfo(@RequestParam(value = "userId") Long userId) {
-        return ResponseEntity.ok(genericService.fetchPaymentInfo(userId));
+    public ResponseEntity<PaginatedResponse> fetchPaymentInfo(@RequestParam(value = "userId") Long userId,
+                                                              Pageable pageable) {
+        return ResponseEntity.ok(genericService.fetchPaymentInfo(userId, pageable));
     }
 
 
