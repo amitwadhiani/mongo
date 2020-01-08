@@ -11,10 +11,7 @@ import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.dto.response.projection.Clusters;
 import co.arctern.api.provider.dto.response.projection.ClustersWoArea;
-import co.arctern.api.provider.service.AreaService;
-import co.arctern.api.provider.service.ClusterService;
-import co.arctern.api.provider.service.UserClusterService;
-import co.arctern.api.provider.service.UserService;
+import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -35,19 +32,19 @@ public class ClusterServiceImpl implements ClusterService {
     private final ClusterDao clusterDao;
     private final ProjectionFactory projectionFactory;
     private final AreaService areaService;
-    private final UserService userService;
+    private final GenericService genericService;
     private final UserClusterService userClusterService;
 
     @Autowired
     public ClusterServiceImpl(ClusterDao clusterDao,
                               ProjectionFactory projectionFactory,
                               AreaService areaService,
-                              UserService userService,
+                              GenericService genericService,
                               UserClusterService userClusterService) {
         this.clusterDao = clusterDao;
         this.areaService = areaService;
         this.projectionFactory = projectionFactory;
-        this.userService = userService;
+        this.genericService = genericService;
         this.userClusterService = userClusterService;
     }
 
@@ -78,7 +75,7 @@ public class ClusterServiceImpl implements ClusterService {
 
     @Override
     public List<ClustersWoArea> fetchClustersForProvider(Long id) {
-        return userService.fetchUser(id)
+        return genericService.fetchUser(id)
                 .getUserClusters()
                 .stream()
                 .map(a -> projectionFactory.createProjection(ClustersWoArea.class, a))
@@ -164,7 +161,7 @@ public class ClusterServiceImpl implements ClusterService {
     @Override
     public StringBuilder editClustersForProvider(Long userId, List<Long> ids) {
         List<Cluster> clusters = clusterDao.findByIdIn(ids);
-        User user = userService.fetchUser(userId);
+        User user = genericService.fetchUser(userId);
         List<UserCluster> newUserClusters = new ArrayList<>();
         List<UserCluster> oldUserClusters = user.getUserClusters();
         if (!CollectionUtils.isEmpty(oldUserClusters)) userClusterService.deleteAll(oldUserClusters);
@@ -178,6 +175,5 @@ public class ClusterServiceImpl implements ClusterService {
         if (!CollectionUtils.isEmpty(newUserClusters)) userClusterService.saveAll(newUserClusters);
         return SUCCESS_MESSAGE;
     }
-
 
 }

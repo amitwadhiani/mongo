@@ -1,11 +1,13 @@
 package co.arctern.api.provider.service;
 
+import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.response.projection.Payments;
 import co.arctern.api.provider.dto.response.projection.PaymentsForUser;
+import co.arctern.api.provider.util.MessageUtil;
 
 import java.util.List;
 
-public interface GenericService {
+public interface GenericService extends MessageUtil {
 
     /**
      * fetch amount owed by user.
@@ -21,4 +23,6 @@ public interface GenericService {
 
     public List<Payments> getReceivedPaymentsForUser(Long userId);
 
-}
+    public User fetchUser(Long userId);
+
+    }
