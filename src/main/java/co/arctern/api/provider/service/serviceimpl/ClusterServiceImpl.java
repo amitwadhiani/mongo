@@ -170,6 +170,7 @@ public class ClusterServiceImpl implements ClusterService {
             UserCluster userCluster = new UserCluster();
             userCluster.setCluster(a);
             userCluster.setUser(user);
+            userCluster.setIsActive(true);
             newUserClusters.add(userCluster);
         });
         if (!CollectionUtils.isEmpty(newUserClusters)) userClusterService.saveAll(newUserClusters);
