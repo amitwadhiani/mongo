@@ -174,14 +174,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void saveLastLoginTime(String phone, Timestamp loginTime) {
-        User user = userDao.findByPhone(phone).orElseThrow(() -> {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    USER_NOT_FOUND_MESSAGE.toString());
-        });
+    public User saveLastLoginTime(User user, Timestamp loginTime) {
         user.setLastLoginTime(loginTime);
         user.setIsLoggedIn(true);
-        userDao.save(user);
+        return userDao.save(user);
     }
 
     @Override

@@ -108,10 +108,10 @@ public interface UserService extends MessageUtil {
     /**
      * save last login time based on login.
      *
-     * @param phone
+     * @param user
      * @param loginTime
      */
-    public void saveLastLoginTime(String phone, Timestamp loginTime);
+    public User saveLastLoginTime(User user, Timestamp loginTime);
 
     /**
      * fetch all users who don't have admin role.
