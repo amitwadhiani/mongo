@@ -30,14 +30,26 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public Double fetchUserOwedAmount(Long userId) {
-        return Math.round(this.getPaymentsForUser(userId).stream().mapToDouble(a -> a.getAmount()).sum()) * 100 / 100D;
+        return Math.round(this.getReceivedPaymentsForUser(userId).stream().mapToDouble(a -> a.getAmount()).sum()) * 100 / 100D;
     }
 
-    public List<Payments> getPaymentsForUser(Long userId) {
+    @Override
+    public List<Payments> getReceivedPaymentsForUser(Long userId) {
         List<Task> tasks = taskDao.fetchTasks(userId, TaskState.COMPLETED);
         List<Payments> payments = new ArrayList<>();
         tasks.stream().forEach(a -> {
             payments.addAll(a.getPayments().stream().filter(b -> b.getSettleState().equals(SettleState.PAYMENT_RECEIVED))
+                    .map(c -> projectionFactory.createProjection(Payments.class, c)).collect(Collectors.toList()));
+        });
+        return payments;
+    }
+
+    @Override
+    public List<Payments> getPaymentsForUser(Long userId) {
+        List<Task> tasks = taskDao.fetchTasks(userId, TaskState.COMPLETED);
+        List<Payments> payments = new ArrayList<>();
+        tasks.stream().forEach(a -> {
+            payments.addAll(a.getPayments().stream()
                     .map(c -> projectionFactory.createProjection(Payments.class, c)).collect(Collectors.toList()));
         });
         return payments;
