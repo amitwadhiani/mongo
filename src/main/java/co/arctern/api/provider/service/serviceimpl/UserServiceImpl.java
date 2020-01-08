@@ -341,6 +341,7 @@ public class UserServiceImpl implements UserService {
             UserCluster userCluster = new UserCluster();
             userCluster.setUser(a);
             userCluster.setCluster(userArea.getArea().getCluster());
+            userCluster.setIsActive(true);
             userClusters.add(userCluster);
             return a;
         });
