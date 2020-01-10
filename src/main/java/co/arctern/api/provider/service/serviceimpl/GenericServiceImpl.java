@@ -71,6 +71,7 @@ public class GenericServiceImpl implements GenericService {
         return this.getPaymentsForUser(userId, pageable);
     }
 
+
     @Override
     public User fetchUser(Long userId) {
         return userDao.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_FOUND_MESSAGE.toString()));
