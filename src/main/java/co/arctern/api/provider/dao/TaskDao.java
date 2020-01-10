@@ -458,7 +458,6 @@ public interface TaskDao extends PagingAndSortingRepository<Task, Long> {
      * @return
      */
     @Query("FROM Task task " +
-            "JOIN FETCH task.payments " +
             "WHERE task.activeUserId = :userId " +
             "AND task.state = :state " +
             "ORDER BY task.expectedArrivalTime DESC ")
