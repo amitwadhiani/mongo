@@ -63,7 +63,7 @@ public class GenericServiceImpl implements GenericService {
     @Override
     public PaginatedResponse getPaymentsForUser(Long userId, Pageable pageable) {
         Page<Payment> payments = paymentDao.fetchPaymentsForUser(userId, TaskState.COMPLETED, pageable);
-        return PaginationUtil.returnPaginatedBody(payments.stream().map(c -> projectionFactory.createProjection(PaymentsForUser.class, c)).collect(Collectors.toList()), pageable.getPageNumber(), pageable.getPageSize(), (int) payments.getTotalElements());
+        return PaginationUtil.returnPaginatedBody(payments, pageable);
     }
 
     @Override
