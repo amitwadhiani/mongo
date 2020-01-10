@@ -1,7 +1,12 @@
 package co.arctern.api.provider.dao;
 
 import co.arctern.api.provider.constant.SettleState;
+import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.domain.Payment;
+import co.arctern.api.provider.domain.Task;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -29,4 +34,12 @@ public interface PaymentDao extends PagingAndSortingRepository<Payment, Long> {
      * @return
      */
     List<Payment> findBySettleStateAndPaidBy(SettleState settleState, Long paidBy);
+
+    @Query("FROM Payment payment " +
+            "LEFT JOIN FETCH Task task " +
+            "WHERE task.activeUserId = :userId " +
+            "AND task.state = :state " +
+            "ORDER BY task.expectedArrivalTime DESC ")
+    public Page<Payment> fetchPaymentsForUser(Long userId, TaskState state, Pageable pageable);
+
 }
