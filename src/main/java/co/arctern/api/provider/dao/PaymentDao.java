@@ -36,10 +36,9 @@ public interface PaymentDao extends PagingAndSortingRepository<Payment, Long> {
     List<Payment> findBySettleStateAndPaidBy(SettleState settleState, Long paidBy);
 
     @Query("FROM Payment payment " +
-            "LEFT JOIN FETCH Task task " +
-            "WHERE task.activeUserId = :userId " +
-            "AND task.state = :state " +
-            "ORDER BY task.expectedArrivalTime DESC ")
+            "WHERE payment.task.activeUserId = :userId " +
+            "AND payment.task.state = :state " +
+            "ORDER BY payment.createdAt DESC ")
     public Page<Payment> fetchPaymentsForUser(Long userId, TaskState state, Pageable pageable);
 
 }
