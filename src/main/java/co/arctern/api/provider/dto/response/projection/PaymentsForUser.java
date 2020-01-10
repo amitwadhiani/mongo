@@ -21,6 +21,9 @@ public interface PaymentsForUser {
 
     Timestamp getCreatedAt();
 
+    @Value("#{target.task.id}")
+    Long getTaskId();
+
     @Value("#{target.task.patientName}")
     String getPatientName();
 

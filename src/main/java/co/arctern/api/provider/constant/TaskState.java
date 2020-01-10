@@ -7,6 +7,7 @@ public enum TaskState {
 
     OPEN,
     ASSIGNED,
+    AUTO_ASSIGNED,
     RESCHEDULED,
     ACCEPTED,
     REJECTED,
