@@ -63,7 +63,7 @@ public class GenericServiceImpl implements GenericService {
             payments.addAll(a.getPayments().stream()
                     .map(c -> projectionFactory.createProjection(PaymentsForUser.class, c)).collect(Collectors.toList()));
         });
-        return PaginationUtil.returnPaginatedBody(payments, pageable.getPageNumber(), pageable.getPageSize(), (int) tasks.getTotalElements());
+        return PaginationUtil.returnPaginatedBody(payments, pageable.getPageNumber(), pageable.getPageSize(), payments.size());
     }
 
     @Override
