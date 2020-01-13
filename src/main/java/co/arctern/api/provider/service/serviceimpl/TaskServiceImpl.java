@@ -97,6 +97,7 @@ public class TaskServiceImpl implements TaskService {
         return TASK_ASSIGNED_MESSAGE;
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StringBuilder acceptOrRejectAssignedTask(Long taskId, List<Long> reasonIds, TaskStateFlowState state) {
@@ -109,6 +110,7 @@ public class TaskServiceImpl implements TaskService {
             reasonService.assignReasons(task, reasonIds, TaskStateFlowState.REJECTED);
         }
         taskDao.save(task);
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.RESCHEDULED, Long.valueOf(task.getPatientId()));
         return SUCCESS_MESSAGE;
     }
 
@@ -163,6 +165,7 @@ public class TaskServiceImpl implements TaskService {
         taskDao.save(task);
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StringBuilder startTask(Long taskId, Long userId) {
@@ -176,9 +179,12 @@ public class TaskServiceImpl implements TaskService {
         task.setState(TaskState.STARTED);
         taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
         taskDao.save(task);
+        User user = userService.fetchUser(userId);
+        sender.sendTaskStateChangeNotification(user,TaskState.STARTED, Long.valueOf(task.getPatientId()));
         return SUCCESS_MESSAGE;
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time, Timestamp start, Timestamp end) {
@@ -193,9 +199,11 @@ public class TaskServiceImpl implements TaskService {
         userTaskService.markInactive(task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.RESCHEDULED, userId);
         taskDao.save(task);
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.RESCHEDULED, Long.valueOf(task.getPatientId()));
         return SUCCESS_MESSAGE;
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StringBuilder completeTask(Long taskId, Long userId) {
@@ -203,9 +211,11 @@ public class TaskServiceImpl implements TaskService {
         task.setState(TaskState.COMPLETED);
         taskStateFlowService.createFlow(task, TaskStateFlowState.COMPLETED, userId);
         taskDao.save(task);
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.COMPLETED, Long.valueOf(task.getPatientId()));
         return SUCCESS_MESSAGE;
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId, List<Long> reasonIds) {
@@ -232,6 +242,7 @@ public class TaskServiceImpl implements TaskService {
              * reassign
              */
             markInactiveAndReassignTask(userId, task);
+            sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.CANCELLED, Long.valueOf(task.getPatientId()));
             return TASK_REASSIGN_MESSAGE;
         }
     }
