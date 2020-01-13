@@ -179,8 +179,7 @@ public class TaskServiceImpl implements TaskService {
         task.setState(TaskState.STARTED);
         taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
         taskDao.save(task);
-        User user = userService.fetchUser(userId);
-        sender.sendTaskStateChangeNotification(user,TaskState.STARTED, Long.valueOf(task.getPatientId()));
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.STARTED, Long.valueOf(task.getPatientId()));
         return SUCCESS_MESSAGE;
     }
 
