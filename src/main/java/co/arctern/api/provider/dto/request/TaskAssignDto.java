@@ -64,4 +64,6 @@ public class TaskAssignDto {
     private String state;
     private String specialInstructions;
 
+    private Boolean fromExistingTask;
+
 }

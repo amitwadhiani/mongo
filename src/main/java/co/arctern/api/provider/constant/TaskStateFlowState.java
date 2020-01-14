@@ -7,6 +7,8 @@ public enum TaskStateFlowState {
 
     OPEN,
     ASSIGNED,
+    AUTO_ASSIGNED,
+    AUTO_STARTED,
     ACCEPTED,
     RESCHEDULED,
     REJECTED,
