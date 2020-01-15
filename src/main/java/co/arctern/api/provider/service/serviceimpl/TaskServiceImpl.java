@@ -137,19 +137,18 @@ public class TaskServiceImpl implements TaskService {
     @SneakyThrows
     public StringBuilder assignTasks(List<Long> taskIds, Long userId) {
         List<Task> tasks = this.fetchTasks(taskIds);
-        tasks.stream().forEach(task ->
-        {
+        for (Task task : tasks) {
             task.setState(TaskState.ASSIGNED);
             task.setActiveUserId(userId);
-        });
+            sender.sendAdminAssignTaskNotification(userService.fetchUser(userId),
+                    Long.valueOf(task.getPatientId()), task.getId());
+        }
         tasks = Lists.newArrayList(taskDao.saveAll(tasks));
         tasks.stream().forEach(task -> {
             userTaskService.markInactive(task);
             userTaskService.createUserTask(userService.fetchUser(userId), task);
             taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
         });
-        User user = userService.fetchUser(userId);
-        sender.sendAdminAssignTaskNotification(user);
         return TASK_ASSIGNED_MESSAGE;
     }
 
