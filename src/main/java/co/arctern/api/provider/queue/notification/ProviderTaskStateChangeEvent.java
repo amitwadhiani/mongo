@@ -46,6 +46,5 @@ public class ProviderTaskStateChangeEvent implements Serializable {
 
         if (taskState.equals(TaskState.COMPLETED))
             this.messageQueueState = "PROVIDER_COMPLETED_TASK";
-
     }
 }
