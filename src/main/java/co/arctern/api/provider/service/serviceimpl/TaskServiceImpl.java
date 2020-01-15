@@ -44,6 +44,7 @@ public class TaskServiceImpl implements TaskService {
     private final AddressService addressService;
     private final PaymentService paymentService;
     private final ReasonService reasonService;
+    private final TokenService tokenService;
     private final ProjectionFactory projectionFactory;
     private final Sender sender;
 
@@ -56,6 +57,7 @@ public class TaskServiceImpl implements TaskService {
                            PaymentService paymentService,
                            ReasonService reasonService,
                            ProjectionFactory projectionFactory,
+                           TokenService tokenService,
                            Sender sender) {
         this.taskDao = taskDao;
         this.userTaskService = userTaskService;
@@ -64,6 +66,7 @@ public class TaskServiceImpl implements TaskService {
         this.addressService = addressService;
         this.paymentService = paymentService;
         this.reasonService = reasonService;
+        this.tokenService = tokenService;
         this.projectionFactory = projectionFactory;
         this.sender = sender;
     }
@@ -91,7 +94,7 @@ public class TaskServiceImpl implements TaskService {
         Long userId = dto.getUserId();
         Task task = createTask(dto, userId);
         userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, tokenService.fetchUserId());
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
         return TASK_ASSIGNED_MESSAGE;
@@ -361,7 +364,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto) {
-        return projectionFactory.createProjection(TasksForProvider.class, createTask(dto, null));
+        return projectionFactory.createProjection(TasksForProvider.class, (dto.getFromExistingTask() == null || !dto.getFromExistingTask())
+                ? this.createTask(dto, null)
+                : this.createTaskAndAssignUser(dto));
     }
 
     @Override

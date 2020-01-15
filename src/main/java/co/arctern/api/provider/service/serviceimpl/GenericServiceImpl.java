@@ -2,8 +2,10 @@ package co.arctern.api.provider.service.serviceimpl;
 
 import co.arctern.api.provider.constant.SettleState;
 import co.arctern.api.provider.constant.TaskState;
+import co.arctern.api.provider.dao.PaymentDao;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.dao.UserDao;
+import co.arctern.api.provider.domain.Payment;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
@@ -28,14 +30,17 @@ public class GenericServiceImpl implements GenericService {
 
     private final TaskDao taskDao;
     private final UserDao userDao;
+    private final PaymentDao paymentDao;
     private final ProjectionFactory projectionFactory;
 
     @Autowired
     public GenericServiceImpl(TaskDao taskDao,
                               UserDao userDao,
+                              PaymentDao paymentDao,
                               ProjectionFactory projectionFactory) {
         this.taskDao = taskDao;
         this.userDao = userDao;
+        this.paymentDao = paymentDao;
         this.projectionFactory = projectionFactory;
     }
 
@@ -57,13 +62,8 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public PaginatedResponse getPaymentsForUser(Long userId, Pageable pageable) {
-        Page<Task> tasks = taskDao.fetchTasksForUser(userId, TaskState.COMPLETED, pageable);
-        List<PaymentsForUser> payments = new ArrayList<>();
-        tasks.stream().forEach(a -> {
-            payments.addAll(a.getPayments().stream()
-                    .map(c -> projectionFactory.createProjection(PaymentsForUser.class, c)).collect(Collectors.toList()));
-        });
-        return PaginationUtil.returnPaginatedBody(payments, pageable.getPageNumber(), pageable.getPageSize(), (int) tasks.getTotalElements());
+        Page<Payment> payments = paymentDao.fetchPaymentsForUser(userId, TaskState.COMPLETED, pageable);
+        return PaginationUtil.returnPaginatedBody(payments, pageable);
     }
 
     @Override
