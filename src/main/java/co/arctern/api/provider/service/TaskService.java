@@ -39,7 +39,7 @@ public interface TaskService extends MessageUtil {
      * @param dto
      * @return
      */
-    public StringBuilder createTaskAndAssignUser(TaskAssignDto dto);
+    public Task createTaskAndAssignUser(TaskAssignDto dto);
 
     /**
      * reassign task to new user.
