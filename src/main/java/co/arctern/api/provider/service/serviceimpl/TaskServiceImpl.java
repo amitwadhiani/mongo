@@ -95,7 +95,7 @@ public class TaskServiceImpl implements TaskService {
         User user = userService.fetchUser(userId);
         Task task = createTask(dto, userId);
         userTaskService.createUserTask((user), task);
-        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, tokenService.fetchUserId());
+        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
         return TASK_ASSIGNED_MESSAGE;
@@ -365,8 +365,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto) {
         return projectionFactory.createProjection(TasksForProvider.class, (dto.getFromExistingTask() == null || !dto.getFromExistingTask())
-                ? this.createTask(dto, tokenService.fetchUserId())
-                : this.createTaskAndAssignUser(dto));
+                ? this.createTaskAndAssignUser(dto)
+                : this.createTask(dto, tokenService.fetchUserId()));
     }
 
     @Override
