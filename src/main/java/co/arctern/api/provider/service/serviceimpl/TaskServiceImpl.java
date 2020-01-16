@@ -365,8 +365,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto) {
         return projectionFactory.createProjection(TasksForProvider.class, (dto.getFromExistingTask() == null || !dto.getFromExistingTask())
-                ? this.createTaskAndAssignUser(dto)
-                : this.createTask(dto, tokenService.fetchUserId()));
+                ? this.createTask(dto, tokenService.fetchUserId())
+                : this.createTaskAndAssignUser(dto));
     }
 
     @Override
