@@ -91,9 +91,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
-        Long userId = dto.getUserId();
+        Long userId = userService.fetchUser(userId);
         Task task = createTask(dto, userId);
-        userTaskService.createUserTask(userService.fetchUser(userId), task);
+        userTaskService.createUserTask((userId), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, tokenService.fetchUserId());
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
