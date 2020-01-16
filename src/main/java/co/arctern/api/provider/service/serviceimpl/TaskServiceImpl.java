@@ -44,6 +44,7 @@ public class TaskServiceImpl implements TaskService {
     private final AddressService addressService;
     private final PaymentService paymentService;
     private final ReasonService reasonService;
+    private final TokenService tokenService;
     private final ProjectionFactory projectionFactory;
     private final Sender sender;
 
@@ -56,6 +57,7 @@ public class TaskServiceImpl implements TaskService {
                            PaymentService paymentService,
                            ReasonService reasonService,
                            ProjectionFactory projectionFactory,
+                           TokenService tokenService,
                            Sender sender) {
         this.taskDao = taskDao;
         this.userTaskService = userTaskService;
@@ -64,6 +66,7 @@ public class TaskServiceImpl implements TaskService {
         this.addressService = addressService;
         this.paymentService = paymentService;
         this.reasonService = reasonService;
+        this.tokenService = tokenService;
         this.projectionFactory = projectionFactory;
         this.sender = sender;
     }
@@ -87,15 +90,18 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
-        Long userId = dto.getUserId();
+    public Task createTaskAndAssignUser(TaskAssignDto dto) {
+        Long userId = tokenService.fetchUserId();
+        User user = userService.fetchUser(userId);
         Task task = createTask(dto, userId);
-        userTaskService.createUserTask(userService.fetchUser(userId), task);
+        userTaskService.createUserTask((user), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
-        return TASK_ASSIGNED_MESSAGE;
+        taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
+        return task;
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StringBuilder acceptOrRejectAssignedTask(Long taskId, List<Long> reasonIds, TaskStateFlowState state) {
@@ -108,6 +114,7 @@ public class TaskServiceImpl implements TaskService {
             reasonService.assignReasons(task, reasonIds, TaskStateFlowState.REJECTED);
         }
         taskDao.save(task);
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.RESCHEDULED, Long.valueOf(task.getPatientId()));
         return SUCCESS_MESSAGE;
     }
 
@@ -131,19 +138,18 @@ public class TaskServiceImpl implements TaskService {
     @SneakyThrows
     public StringBuilder assignTasks(List<Long> taskIds, Long userId) {
         List<Task> tasks = this.fetchTasks(taskIds);
-        tasks.stream().forEach(task ->
-        {
+        for (Task task : tasks) {
             task.setState(TaskState.ASSIGNED);
             task.setActiveUserId(userId);
-        });
+            sender.sendAdminAssignTaskNotification(userService.fetchUser(userId),
+                    Long.valueOf(task.getPatientId()), task.getId());
+        }
         tasks = Lists.newArrayList(taskDao.saveAll(tasks));
         tasks.stream().forEach(task -> {
             userTaskService.markInactive(task);
             userTaskService.createUserTask(userService.fetchUser(userId), task);
             taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
         });
-        User user = userService.fetchUser(userId);
-        sender.sendAdminAssignTaskNotification(user);
         return TASK_ASSIGNED_MESSAGE;
     }
 
@@ -162,6 +168,7 @@ public class TaskServiceImpl implements TaskService {
         taskDao.save(task);
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StringBuilder startTask(Long taskId, Long userId) {
@@ -175,9 +182,11 @@ public class TaskServiceImpl implements TaskService {
         task.setState(TaskState.STARTED);
         taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
         taskDao.save(task);
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.STARTED, Long.valueOf(task.getPatientId()));
         return SUCCESS_MESSAGE;
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StringBuilder rescheduleTask(Long taskId, Long userId, Timestamp time, Timestamp start, Timestamp end) {
@@ -192,9 +201,11 @@ public class TaskServiceImpl implements TaskService {
         userTaskService.markInactive(task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.RESCHEDULED, userId);
         taskDao.save(task);
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.RESCHEDULED, Long.valueOf(task.getPatientId()));
         return SUCCESS_MESSAGE;
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StringBuilder completeTask(Long taskId, Long userId) {
@@ -202,16 +213,18 @@ public class TaskServiceImpl implements TaskService {
         task.setState(TaskState.COMPLETED);
         taskStateFlowService.createFlow(task, TaskStateFlowState.COMPLETED, userId);
         taskDao.save(task);
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.COMPLETED, Long.valueOf(task.getPatientId()));
         return SUCCESS_MESSAGE;
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StringBuilder cancelTask(Boolean isCancelled, Long taskId, Long userId, List<Long> reasonIds) {
         Task task = this.fetchTask(taskId);
         if (isCancelled) {
             if (task.getState().equals(TaskState.CANCELLED)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,TASK_ALREADY_CANCELLED_MESSAGE.toString());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TASK_ALREADY_CANCELLED_MESSAGE.toString());
             }
             UserTask activeUserTask = userTaskService.findActiveUserTask(taskId);
 
@@ -231,6 +244,7 @@ public class TaskServiceImpl implements TaskService {
              * reassign
              */
             markInactiveAndReassignTask(userId, task);
+            sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.CANCELLED, Long.valueOf(task.getPatientId()));
             return TASK_REASSIGN_MESSAGE;
         }
     }
@@ -350,7 +364,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto) {
-        return projectionFactory.createProjection(TasksForProvider.class, createTask(dto, null));
+        return projectionFactory.createProjection(TasksForProvider.class, (dto.getFromExistingTask() == null || !dto.getFromExistingTask())
+                ? this.createTask(dto, tokenService.fetchUserId())
+                : this.createTaskAndAssignUser(dto));
     }
 
     @Override
@@ -565,6 +581,39 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public List<Payments> settleAmountForProvider(Long adminId, Long userId) {
         return paymentService.settlePayments(adminId, paymentService.fetchPaymentSettlementsForProvider(userId), new ArrayList<>(), true);
+    }
+
+    @Override
+    @Transactional
+    public StringBuilder createTaskFromAnotherTask(TaskAssignDto dto, Long userId) {
+        Task oldTask = taskDao.findById(dto.getTaskId()).orElseThrow(() ->
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_TASK_ID_MESSAGE.toString());
+        });
+        Task task = new Task();
+        task.setIsPrepaid(false);
+        task.setPatientId(oldTask.getPatientId());
+        task.setType(oldTask.getType());
+        task.setPatientName(oldTask.getPatientName());
+        task.setPatientPhone(oldTask.getPatientPhone());
+        task.setSource(oldTask.getSource());
+        task.setCancellationRequested(false);
+        task.setState(TaskState.OPEN);
+        task.setRefId(dto.getRefId());
+        task.setDestinationAddress(addressService.createOrFetchAddress(dto, oldTask.getDestinationAddress().getId()));
+        task.setIsActive(true);
+        task.setDiagnosticOrderId(dto.getDiagnosticOrderId());
+        task.setExpectedArrivalTime((dto.getExpectedArrivalTime()) == null ?
+                new Timestamp(System.currentTimeMillis() + (12 * 60 * 60 * 1000)) : dto.getExpectedArrivalTime());
+        task.setEndTime(dto.getEndTime());
+        task.setStartTime(dto.getStartTime());
+        task.setSourceAddress(addressService.fetchSourceAddress());
+        if (dto.getPaymentMode() == null || dto.getPaymentMode().isEmpty()) dto.setPaymentMode("");
+        if (userId != null) task.setActiveUserId(userId);
+        task = taskDao.save(task);
+        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, null);
+        paymentService.create(task, dto);
+        return SUCCESS_MESSAGE;
     }
 
 }
