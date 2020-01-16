@@ -91,7 +91,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
-        Long userId = dto.getUserId();
+        Long userId = tokenService.fetchUserId();
         User user = userService.fetchUser(userId);
         Task task = createTask(dto, userId);
         userTaskService.createUserTask((user), task);
