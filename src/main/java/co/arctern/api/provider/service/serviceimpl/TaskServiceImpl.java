@@ -95,7 +95,6 @@ public class TaskServiceImpl implements TaskService {
         User user = userService.fetchUser(userId);
         Task task = createTask(dto, userId);
         userTaskService.createUserTask((user), task);
-        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
         return task;
