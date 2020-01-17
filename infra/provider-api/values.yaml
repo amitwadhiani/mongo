@@ -115,5 +115,6 @@ spring:
     password: "admin@1c"
     authorization: "Basic dGVzdGp3dGNsaWVudGlkOlhZN2ttem9OemwxMDA="
 
-jvmOpts: "-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:+PrintFlagsFinal -Xms512m -Xmx5g -javaagent:/newrelic/newrelic.jar -Dnewrelic.environment=production"
+jvmOpts: "-XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:+PrintFlagsFinal -Xms512m -Xmx5g"
+#jvmOpts: -javaagent:/newrelic/newrelic.jar -Dnewrelic.environment=production
 ssl_cert_arn: arn:aws:acm:ap-south-1:739878518990:certificate/e69f73e9-67c7-461c-8d5e-ebe226d3cdda
