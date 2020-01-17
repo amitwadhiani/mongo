@@ -49,6 +49,7 @@ public class AddressServiceImpl implements AddressService {
         address.setName(dto.getAddressName());
         address.setHouseNumber(dto.getHouseNumber());
         address.setLine(dto.getLine());
+        address.setFullAddress(dto.getFullAddress());
         address.setSpecialInstructions(dto.getSpecialInstructions());
         address.setLatitude(dto.getLatitude());
         address.setLongitude(dto.getLongitude());
