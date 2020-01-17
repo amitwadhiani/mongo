@@ -230,7 +230,7 @@ public interface TaskService extends MessageUtil {
      * @param userId
      * @return
      */
-    public Task createTask(TaskAssignDto dto, Long userId);
+    public Task createTask(TaskAssignDto dto, Long userId,TaskState state);
 
     /**
      * fetch projected response after save call (task) .
