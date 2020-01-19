@@ -28,7 +28,7 @@ public class Rating {
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp lastModifiedAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "task_id")
     @JsonBackReference("task-rating")
     private Task task;

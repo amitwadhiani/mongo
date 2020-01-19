@@ -9,6 +9,7 @@ import co.arctern.api.provider.util.OTPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
@@ -33,7 +34,7 @@ public class OtpServiceImpl implements OtpService {
     @Override
     public StringBuilder generateOTPForRating(Long taskId) {
         Task task = taskService.fetchTask(taskId);
-        if (task.getRating() != null) {
+        if (!CollectionUtils.isEmpty(task.getRatings())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RATING_ALREADY_GENERATED_MESSAGE.toString());
         }
         String otpYes = this.getOtpString();
