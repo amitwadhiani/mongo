@@ -37,7 +37,7 @@ public class RatingServiceImpl implements RatingService {
     @Transactional
     public String saveRating(Long taskId, Long userId, String otp) {
         Task task = taskService.fetchTask(taskId);
-        Rating rating = task.getRating();
+        Rating rating = task.getRatings().get(0);
         if (!StringUtils.isEmpty(otp)) {
             if (otp.equals(rating.getOtpNo())) {
                 rating.setIsSatisfied(false);
