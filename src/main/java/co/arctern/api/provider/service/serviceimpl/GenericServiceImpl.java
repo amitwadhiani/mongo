@@ -5,7 +5,6 @@ import co.arctern.api.provider.constant.TaskState;
 import co.arctern.api.provider.dao.PaymentDao;
 import co.arctern.api.provider.dao.TaskDao;
 import co.arctern.api.provider.dao.UserDao;
-import co.arctern.api.provider.domain.Payment;
 import co.arctern.api.provider.domain.Task;
 import co.arctern.api.provider.domain.User;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
@@ -62,7 +61,7 @@ public class GenericServiceImpl implements GenericService {
 
     @Override
     public PaginatedResponse getPaymentsForUser(Long userId, Pageable pageable) {
-        Page<Payment> payments = paymentDao.fetchPaymentsForUser(userId, TaskState.COMPLETED, pageable);
+        Page<PaymentsForUser> payments = paymentDao.fetchPaymentsForUser(userId, TaskState.COMPLETED, pageable).map(a -> projectionFactory.createProjection(PaymentsForUser.class, a));
         return PaginationUtil.returnPaginatedBody(payments, pageable);
     }
 
