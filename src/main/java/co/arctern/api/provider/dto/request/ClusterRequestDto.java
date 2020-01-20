@@ -18,4 +18,12 @@ public class ClusterRequestDto {
     private List<AreaRequestDto> areas;
     private List<Long> areaIds;
     private List<String> pinCodes;
+    private Boolean isEdit;
+
+    /**
+     * for provider's cluster edit
+     */
+    private Long userId;
+    private List<Long> ids;
+
 }

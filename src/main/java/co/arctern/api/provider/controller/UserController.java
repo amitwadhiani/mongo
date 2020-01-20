@@ -164,4 +164,11 @@ public class UserController {
     public ResponseEntity<List<ProviderRequestForOrderItemDto>> fetchUserByTaskId(@RequestBody List<ProviderRequestForOrderItemDto> dtos) {
         return ResponseEntity.ok(userService.fetchUserByTaskId(dtos));
     }
+
+    @PostMapping("/post/by-pincode")
+    @CrossOrigin
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<StringBuilder> replaceAreasWithClusters() {
+        return ResponseEntity.ok(userService.replaceAreasWithClusters());
+    }
 }

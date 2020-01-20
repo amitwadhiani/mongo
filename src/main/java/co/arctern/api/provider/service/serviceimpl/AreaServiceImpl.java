@@ -1,7 +1,8 @@
 package co.arctern.api.provider.service.serviceimpl;
 
 import co.arctern.api.provider.dao.AreaDao;
-import co.arctern.api.provider.dao.UserAreaDao;
+import co.arctern.api.provider.dao.ClusterDao;
+import co.arctern.api.provider.dao.UserClusterDao;
 import co.arctern.api.provider.domain.*;
 import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.dto.response.projection.ClustersWoArea;
@@ -24,44 +25,46 @@ import java.util.stream.Collectors;
 public class AreaServiceImpl implements AreaService {
 
     private final AreaDao areaDao;
-    private final UserAreaDao userAreaDao;
+    private final ClusterDao clusterDao;
+    private final UserClusterDao userClusterDao;
     private final RoleService roleService;
     private final ProjectionFactory projectionFactory;
 
     @Autowired
     public AreaServiceImpl(AreaDao areaDao,
-                           UserAreaDao userAreaDao,
+                           ClusterDao clusterDao,
+                           UserClusterDao userClusterDao,
                            ProjectionFactory projectionFactory,
                            RoleService roleService
     ) {
         this.areaDao = areaDao;
-        this.userAreaDao = userAreaDao;
+        this.clusterDao=clusterDao;
+        this.userClusterDao = userClusterDao;
         this.projectionFactory = projectionFactory;
         this.roleService = roleService;
     }
 
     @Override
-    public void setAreasToUser(User user, List<Long> areaIds, List<Role> roles, Long clusterId) {
-        List<Area> areas = new ArrayList<>();
+    public void setAreasToUser(User user, List<Role> roles, List<Long> clusterIds) {
+        List<Cluster> clusters = new ArrayList<>();
         if (!roles.stream().map(a -> a.getRole()).collect(Collectors.toList()).contains("ROLE_ADMIN")) {
-            if (clusterId != null) areas = areaDao.fetchActiveAreasByCluster(clusterId);
-            if (!CollectionUtils.isEmpty(areaIds)) areas = areaDao.findByIdIn(areaIds);
+            if (!CollectionUtils.isEmpty(clusterIds)) clusters = clusterDao.findByIdIn(clusterIds);
         } else {
-            areas = areaDao.fetchActiveAreas();
+            clusters = clusterDao.fetchActiveClusters();
         }
-        List<UserArea> userAreas = new ArrayList<>();
-        List<UserArea> existingUserAreas = user.getUserAreas();
-        if (!CollectionUtils.isEmpty(existingUserAreas)) {
-            userAreaDao.deleteAll(existingUserAreas);
+        List<UserCluster> userClusters = new ArrayList<>();
+        List<UserCluster> existingUserClusters = user.getUserClusters();
+        if (!CollectionUtils.isEmpty(existingUserClusters)) {
+            userClusterDao.deleteAll(existingUserClusters);
         }
-        areas.forEach(a -> {
-            UserArea userArea = new UserArea();
-            userArea.setArea(a);
-            userArea.setIsActive(true);
-            userArea.setUser(user);
-            userAreas.add(userArea);
+        clusters.forEach(a -> {
+            UserCluster userCluster = new UserCluster();
+            userCluster.setCluster(a);
+            userCluster.setIsActive(true);
+            userCluster.setUser(user);
+            userClusters.add(userCluster);
         });
-        userAreaDao.saveAll(userAreas);
+        userClusterDao.saveAll(userClusters);
     }
 
     @Override
@@ -138,4 +141,5 @@ public class AreaServiceImpl implements AreaService {
                     return new ResponseStatusException(HttpStatus.BAD_REQUEST, INVALID_PIN_CODE_MESSAGE.toString());
                 }));
     }
+
 }

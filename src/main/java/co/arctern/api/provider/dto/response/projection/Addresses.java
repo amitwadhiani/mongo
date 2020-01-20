@@ -37,4 +37,6 @@ public interface Addresses {
 
     String getSpecialInstructions();
 
+    String getFullAddress();
+
 }

@@ -46,6 +46,7 @@ tolerations: []
 affinity: {}
 
 spring:
+  sentryDsn: "http://d276d97122df427faaad676d013165bc@sentry-local.default.svc.cluster.local:9000/36"
   meddo:
     wallet:
       discountPercentage: 10

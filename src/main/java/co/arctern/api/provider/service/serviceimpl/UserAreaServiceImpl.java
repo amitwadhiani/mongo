@@ -1,7 +1,7 @@
 package co.arctern.api.provider.service.serviceimpl;
 
-import co.arctern.api.provider.dao.UserAreaDao;
-import co.arctern.api.provider.domain.UserArea;
+import co.arctern.api.provider.dao.UserClusterDao;
+import co.arctern.api.provider.domain.UserCluster;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.ClustersWoArea;
 import co.arctern.api.provider.service.UserAreaService;
@@ -18,28 +18,28 @@ import java.util.stream.Collectors;
 @Service
 public class UserAreaServiceImpl implements UserAreaService {
 
-    private final UserAreaDao userAreaDao;
+    private final UserClusterDao userClusterDao;
     private final ProjectionFactory projectionFactory;
 
     @Autowired
-    public UserAreaServiceImpl(UserAreaDao userAreaDao,
+    public UserAreaServiceImpl(UserClusterDao userClusterDao,
                                ProjectionFactory projectionFactory) {
-        this.userAreaDao = userAreaDao;
+        this.userClusterDao = userClusterDao;
         this.projectionFactory = projectionFactory;
     }
 
     @Override
     public PaginatedResponse fetchUsersByArea(List<Long> areaIds, Pageable pageable) {
-        return PaginationUtil.returnPaginatedBody(userAreaDao.findByAreaIdInAndIsActiveTrue(areaIds, pageable).map(
-                UserArea::getUser), pageable);
+        return PaginationUtil.returnPaginatedBody(userClusterDao.findByClusterIdInAndIsActiveTrue(areaIds, pageable).map(
+                UserCluster::getUser), pageable);
     }
 
     @Override
-    public List<ClustersWoArea> fetchAreasForUser(List<UserArea> userAreas) {
-        if (CollectionUtils.isEmpty(userAreas)) return null;
-        return (userAreas.parallelStream()
-                .filter(a -> a.getIsActive() && a.getArea().getCluster() != null)
-                .map(userArea -> projectionFactory.createProjection(ClustersWoArea.class, userArea.getArea().getCluster()))
+    public List<ClustersWoArea> fetchAreasForUser(List<UserCluster> userClusters) {
+        if (CollectionUtils.isEmpty(userClusters)) return null;
+        return (userClusters.parallelStream()
+                .filter(a -> a.getIsActive() && a.getCluster() != null)
+                .map(userCluster -> projectionFactory.createProjection(ClustersWoArea.class, userCluster.getCluster()))
                 .filter(PaginationUtil.distinctByKey(ClustersWoArea::getId))
                 .collect(Collectors.toList()));
     }
