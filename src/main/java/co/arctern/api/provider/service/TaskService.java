@@ -39,7 +39,7 @@ public interface TaskService extends MessageUtil {
      * @param dto
      * @return
      */
-    public StringBuilder createTaskAndAssignUser(TaskAssignDto dto);
+    public Task createTaskAndAssignUser(TaskAssignDto dto);
 
     /**
      * reassign task to new user.
@@ -230,7 +230,7 @@ public interface TaskService extends MessageUtil {
      * @param userId
      * @return
      */
-    public Task createTask(TaskAssignDto dto, Long userId);
+    public Task createTask(TaskAssignDto dto, Long userId,TaskState state);
 
     /**
      * fetch projected response after save call (task) .
@@ -514,5 +514,7 @@ public interface TaskService extends MessageUtil {
      */
     public List<Task> fetchTasksForPayment(Long userId);
 
+    public StringBuilder createTaskFromAnotherTask(TaskAssignDto dto, Long userId);
 
-}
+
+    }

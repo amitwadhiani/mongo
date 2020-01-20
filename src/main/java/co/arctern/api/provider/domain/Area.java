@@ -90,9 +90,6 @@ public class Area {
     private Timestamp lastModifiedAt;
 
     @OneToMany(mappedBy = "area")
-    private List<UserArea> areaUsers;
-
-    @OneToMany(mappedBy = "area")
     private List<Address> addresses;
 
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")

@@ -45,7 +45,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentState paymentState = dto.getPaymentState();
         Payment payment = this.createPayment(task, dto, isPrepaid, paymentState);
         createSettleStateFlow(payment, isPrepaid ? SettleState.NOT_APPLICABLE : SettleState.PENDING);
-        createPaymentStateFlow(payment, paymentState, null);
+        createPaymentStateFlow(payment, paymentState, dto.getAmount());
         return payment;
     }
 
@@ -77,6 +77,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public Payment patch(Task task, Long userId) {
         Payment payment = task.getPayments().get(0);
+        if (task.getState().equals(PaymentState.PAID)) return payment;
         payment.setState(PaymentState.PAID);
         payment.setSettleState(SettleState.PAYMENT_RECEIVED);
         payment.setPaidBy(userId);

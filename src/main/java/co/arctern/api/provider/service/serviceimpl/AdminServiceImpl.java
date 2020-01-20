@@ -34,8 +34,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public PaginatedResponse fetchProvidersByArea(List<Long> areaIds, Pageable pageable) {
-        return userAreaService.fetchUsersByArea(areaIds, pageable);
+    public PaginatedResponse fetchProvidersByArea(List<Long> clusterIds, Pageable pageable) {
+        return userAreaService.fetchUsersByArea(clusterIds, pageable);
     }
 
     @Override

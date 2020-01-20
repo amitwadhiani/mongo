@@ -30,7 +30,7 @@ public class UserRequestDto {
     private List<Long> roleIds;
     private List<Long> areaIds;
     private List<Long> offeringIds;
-    private Long clusterId;
+    private List<Long> clusterIds;
 
     public void toUserRequestDto(User user) {
         BeanUtils.copyProperties(user, this);

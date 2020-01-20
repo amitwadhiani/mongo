@@ -31,6 +31,7 @@ public class LoginServiceImpl implements LoginService {
     private final UserService userService;
     private final SmsService smsService;
     private final LoginFlowService loginFlowService;
+    private final DateUtil dateUtil;
 
     @Autowired
     public LoginServiceImpl(OtpService otpService,
@@ -38,7 +39,8 @@ public class LoginServiceImpl implements LoginService {
                             LoginDao loginDao,
                             TokenService tokenService,
                             UserService userService, SmsService smsService,
-                            LoginFlowService loginFlowService) {
+                            LoginFlowService loginFlowService,
+                            DateUtil dateUtil) {
         this.otpService = otpService;
         this.loginEventHandler = loginEventHandler;
         this.loginDao = loginDao;
@@ -46,6 +48,7 @@ public class LoginServiceImpl implements LoginService {
         this.userService = userService;
         this.smsService = smsService;
         this.loginFlowService = loginFlowService;
+        this.dateUtil = dateUtil;
     }
 
     @SneakyThrows(Exception.class)
@@ -100,8 +103,7 @@ public class LoginServiceImpl implements LoginService {
                 OAuth2AccessToken oAuth2AccessToken = tokenService.retrieveToken(phone, otp);
                 login = loginDao.save(login);
                 loginFlowService.create(login, LoginState.LOGIN);
-                loginEventHandler.markLoggedInStateForUser(userService.fetchUserByPhone(phone), true);
-                userService.saveLastLoginTime(phone, login.getCreatedAt());
+                loginEventHandler.markLoggedInStateForUser(userService.fetchUserByPhone(phone), true, login.getCreatedAt());
                 return oAuth2AccessToken;
             } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, EXPIRED_OTP_MESSAGE.toString());
@@ -117,13 +119,13 @@ public class LoginServiceImpl implements LoginService {
         if (!CollectionUtils.isEmpty(logins)) {
             Login login = logins.get(0);
             login.setLoginState(false);
-            login.setLogoutTime(DateUtil.CURRENT_TIMESTAMP);
+            login.setLogoutTime(dateUtil.CURRENT_TIMESTAMP);
             login = loginDao.save(login);
             loginFlowService.create(login, LoginState.LOGOUT);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, USER_NOT_LOGGED_IN_MESSAGE.toString());
         }
-        loginEventHandler.markLoggedInStateForUser(user, false);
+        loginEventHandler.markLoggedInStateForUser(user, false, dateUtil.CURRENT_TIMESTAMP);
         return SUCCESS_MESSAGE;
     }
 }

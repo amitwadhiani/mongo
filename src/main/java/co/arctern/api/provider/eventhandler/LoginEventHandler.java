@@ -5,6 +5,8 @@ import co.arctern.api.provider.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 /**
  * handler for changes in user entity after login/logout .
  */
@@ -18,8 +20,10 @@ public class LoginEventHandler {
         this.userService = userService;
     }
 
-    public void markLoggedInStateForUser(User user, Boolean status) {
+    public void markLoggedInStateForUser(User user, Boolean status, Timestamp lastLoginTime) {
         user.setIsLoggedIn(status);
+        user.setLastLoginTime(lastLoginTime);
+        user.setIsLoggedIn(true);
         userService.save(user);
     }
 }

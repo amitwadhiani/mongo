@@ -17,11 +17,15 @@ public class ProviderAssignTaskEvent implements Serializable {
     private Long providerId;
     private String providerName;
     private String messageQueueState;
+    private Long patientId;
+    private Long providerTaskId;
 
-    public ProviderAssignTaskEvent(User user) {
+    public ProviderAssignTaskEvent(User user, Long patientId, Long providerTaskId) {
         this.providerPhone = user.getPhone();
         this.providerId = user.getId();
         this.providerName = user.getName();
         this.messageQueueState = "ADMIN_ASSIGN_TASK";
+        this.patientId = patientId;
+        this.providerTaskId = providerTaskId;
     }
 }
