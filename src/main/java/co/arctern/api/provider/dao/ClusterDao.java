@@ -30,8 +30,19 @@ public interface ClusterDao extends PagingAndSortingRepository<Cluster, Long> {
      */
     List<Cluster> findAll();
 
+    /**
+     * fetch active clusters.
+     *
+     * @return
+     */
     @Query("FROM Cluster cluster WHERE cluster.isActive = 1 ")
     List<Cluster> fetchActiveClusters();
 
+    /**
+     * fetch clusters by ids.
+     *
+     * @param clusterIds
+     * @return
+     */
     List<Cluster> findByIdIn(List<Long> clusterIds);
 }

@@ -165,6 +165,12 @@ public class UserController {
         return ResponseEntity.ok(userService.fetchUserByTaskId(dtos));
     }
 
+    /**
+     * one time call to replace area-user mapping with user-cluster (structure changes).
+     * WARNING: only for one time use
+     *
+     * @return
+     */
     @PostMapping("/post/by-pincode")
     @CrossOrigin
     @PreAuthorize("isAuthenticated()")

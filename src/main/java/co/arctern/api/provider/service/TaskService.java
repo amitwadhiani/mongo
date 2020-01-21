@@ -230,7 +230,7 @@ public interface TaskService extends MessageUtil {
      * @param userId
      * @return
      */
-    public Task createTask(TaskAssignDto dto, Long userId,TaskState state);
+    public Task createTask(TaskAssignDto dto, Long userId, TaskState state);
 
     /**
      * fetch projected response after save call (task) .
@@ -514,7 +514,14 @@ public interface TaskService extends MessageUtil {
      */
     public List<Task> fetchTasksForPayment(Long userId);
 
+    /**
+     * create task by replicating details from another task.
+     *
+     * @param dto
+     * @param userId
+     * @return
+     */
     public StringBuilder createTaskFromAnotherTask(TaskAssignDto dto, Long userId);
 
 
-    }
+}

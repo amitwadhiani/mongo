@@ -18,12 +18,38 @@ public interface GenericService extends MessageUtil {
      */
     public Double fetchUserOwedAmount(Long userId);
 
+    /**
+     * fetch paginated payment-info based on userId.
+     *
+     * @param userId
+     * @param pageable
+     * @return
+     */
     PaginatedResponse fetchPaymentInfo(Long userId, Pageable pageable);
 
+    /**
+     * fetch paginated payment-info based on userId (from repo ) .
+     *
+     * @param userId
+     * @param pageable
+     * @return
+     */
     public PaginatedResponse getPaymentsForUser(Long userId, Pageable pageable);
 
+    /**
+     * fetch payments received by user.
+     *
+     * @param userId
+     * @return
+     */
     public List<Payments> getReceivedPaymentsForUser(Long userId);
 
+    /**
+     * fetch user by id.
+     *
+     * @param userId
+     * @return
+     */
     public User fetchUser(Long userId);
 
 }
