@@ -197,7 +197,7 @@ public class TaskServiceImpl implements TaskService {
          */
         task.setStartTime(start);
         task.setEndTime(end);
-        userTaskService.markInactive(task);
+        userId = userTaskService.markInactive(task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.RESCHEDULED, userId);
         taskDao.save(task);
         sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.RESCHEDULED, Long.valueOf(task.getPatientId()));
