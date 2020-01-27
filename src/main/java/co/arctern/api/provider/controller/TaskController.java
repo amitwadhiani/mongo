@@ -87,7 +87,7 @@ public class TaskController {
     public ResponseEntity<StringBuilder> rescheduleTask(@RequestBody RescheduleRequestBody request) {
         Long userId = request.getUserId();
         if (userId == null) userId = tokenService.fetchUserId();
-        return ResponseEntity.ok(taskService.rescheduleTask(request.getTaskId(), null, request.getTime(), request.getStartTime(), request.getEndTime()));
+        return ResponseEntity.ok(taskService.rescheduleTask(request.getTaskId(), userId, request.getTime(), request.getStartTime(), request.getEndTime()));
     }
 
     /**
