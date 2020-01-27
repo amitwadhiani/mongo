@@ -85,8 +85,8 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAnyAuthority('ROLE_USER','ROLE_ADMIN','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> rescheduleTask(@RequestBody RescheduleRequestBody request) {
-//        Long userId = request.getUserId();
-//        if (userId == null) userId = tokenService.fetchUserId();
+        Long userId = request.getUserId();
+        if (userId == null) userId = tokenService.fetchUserId();
         return ResponseEntity.ok(taskService.rescheduleTask(request.getTaskId(), null, request.getTime(), request.getStartTime(), request.getEndTime()));
     }
 
