@@ -1,6 +1,6 @@
 package co.arctern.api.provider.dao;
 
-import co.arctern.api.provider.domain.UserArea;
+import co.arctern.api.provider.domain.UserCluster;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -12,20 +12,20 @@ import java.util.List;
  * UserArea entity repository layer
  */
 @Repository
-public interface UserAreaDao extends PagingAndSortingRepository<UserArea, Long> {
+public interface UserClusterDao extends PagingAndSortingRepository<UserCluster, Long> {
 
     /**
      * fetch users active in given areas.
-     * @param areaIds
+     * @param clusterIds
      * @param pageable
      * @return
      */
-    Page<UserArea> findByAreaIdInAndIsActiveTrue(List<Long> areaIds, Pageable pageable);
+    Page<UserCluster> findByClusterIdInAndIsActiveTrue(List<Long> clusterIds, Pageable pageable);
 
     /**
-     *  fetch active userAreas.
+     *  fetch active userClusters.
      * @param pageable
      * @return
      */
-    Page<UserArea> findByIsActiveTrue(Pageable pageable);
+    Page<UserCluster> findByIsActiveTrue(Pageable pageable);
 }

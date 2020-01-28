@@ -49,6 +49,7 @@ public class TaskAssignDto {
      * address related detail.
      */
     private String addressName;
+    private String fullAddress;
     private Long destAddressId;
     private Double latitude;
     private Boolean isSourceAddress;
@@ -63,5 +64,7 @@ public class TaskAssignDto {
     private String patientId;
     private String state;
     private String specialInstructions;
+
+    private Boolean fromExistingTask;
 
 }

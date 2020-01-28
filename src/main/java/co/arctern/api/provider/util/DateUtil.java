@@ -16,7 +16,7 @@ public class DateUtil {
     /**
      * fetch current timestamp.
      */
-    public static Timestamp CURRENT_TIMESTAMP = new Timestamp(new Date(System.currentTimeMillis()).getTime());
+    public Timestamp CURRENT_TIMESTAMP = new Timestamp(new Date().getTime());
 
     /**
      * fetch current timestamp from zonedDateTime.

@@ -45,7 +45,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentState paymentState = dto.getPaymentState();
         Payment payment = this.createPayment(task, dto, isPrepaid, paymentState);
         createSettleStateFlow(payment, isPrepaid ? SettleState.NOT_APPLICABLE : SettleState.PENDING);
-        createPaymentStateFlow(payment, paymentState, null);
+        createPaymentStateFlow(payment, paymentState, dto.getAmount());
         return payment;
     }
 

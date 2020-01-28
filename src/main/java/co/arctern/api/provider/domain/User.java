@@ -86,6 +86,9 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
+    private List<UserCluster> userClusters;
+
+    @OneToMany
     private List<UserArea> userAreas;
 
     @OneToMany(mappedBy = "user")

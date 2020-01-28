@@ -66,6 +66,7 @@ bootRun {
 
 
 dependencies {
+    compile('io.sentry:sentry-spring:1.7.27')
     compile('org.springframework.boot:spring-boot-starter')
     compile('co.arctern.api:internal-api:0.0.99-RELEASE')
     runtime('mysql:mysql-connector-java:8.0.15')

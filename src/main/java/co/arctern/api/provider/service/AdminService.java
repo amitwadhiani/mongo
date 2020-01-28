@@ -16,10 +16,10 @@ public interface AdminService extends MessageUtil {
     /**
      * fetch providers through areaIds
      *
-     * @param areaIds
+     * @param clusterIds
      * @return
      */
-    PaginatedResponse fetchProvidersByArea(List<Long> areaIds, Pageable pageable);
+    PaginatedResponse fetchProvidersByArea(List<Long> clusterIds, Pageable pageable);
 
     /**
      * fetch providers through offeringIds

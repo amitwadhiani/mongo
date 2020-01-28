@@ -42,7 +42,7 @@ public class TaskController {
     @CrossOrigin
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
     public ResponseEntity<StringBuilder> assignTaskToUser(@RequestBody TaskAssignDto dto) {
-        return ResponseEntity.ok(taskService.createTaskAndAssignUser(dto));
+        return ResponseEntity.ok(taskService.createTaskFromAnotherTask(dto, tokenService.fetchUserId()));
     }
 
     /**

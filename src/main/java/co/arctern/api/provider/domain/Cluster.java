@@ -36,6 +36,9 @@ public class Cluster {
     @OneToMany(mappedBy = "cluster")
     private List<Area> areas;
 
+    @OneToMany(mappedBy = "cluster")
+    private List<UserCluster> clusterUsers;
+
     @Column(nullable = false, columnDefinition = "bigint(20) DEFAULT 1")
     @Version
     @JsonIgnore
