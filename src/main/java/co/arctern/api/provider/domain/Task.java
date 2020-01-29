@@ -69,8 +69,8 @@ public class Task extends CodeGeneratorUtil {
 
     private Boolean isPrepaid;
 
-    @OneToOne(mappedBy = "task")
-    private Rating rating;
+    @OneToMany(mappedBy = "task")
+    private List<Rating> ratings;
 
     private Long activeUserId;
 

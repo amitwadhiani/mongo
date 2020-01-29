@@ -77,6 +77,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public Payment patch(Task task, Long userId) {
         Payment payment = task.getPayments().get(0);
+        if (payment.getState().equals(PaymentState.PAID)) return payment;
         payment.setState(PaymentState.PAID);
         payment.setSettleState(SettleState.PAYMENT_RECEIVED);
         payment.setPaidBy(userId);

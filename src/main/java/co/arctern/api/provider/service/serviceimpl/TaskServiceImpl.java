@@ -90,14 +90,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public StringBuilder createTaskAndAssignUser(TaskAssignDto dto) {
-        Long userId = dto.getUserId();
-        Task task = createTask(dto, userId);
-        userTaskService.createUserTask(userService.fetchUser(userId), task);
-        taskStateFlowService.createFlow(task, TaskStateFlowState.OPEN, tokenService.fetchUserId());
+    public Task createTaskAndAssignUser(TaskAssignDto dto) {
+        Long userId = tokenService.fetchUserId();
+        User user = userService.fetchUser(userId);
+        Task task = createTask(dto, userId, TaskState.STARTED);
+        userTaskService.createUserTask((user), task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.ASSIGNED, userId);
         taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
-        return TASK_ASSIGNED_MESSAGE;
+        return task;
     }
 
     @SneakyThrows
@@ -328,7 +328,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public Task createTask(TaskAssignDto dto, Long userId) {
+    public Task createTask(TaskAssignDto dto, Long userId, TaskState state) {
         Long taskId = dto.getTaskId();
         Task task = (taskId == null) ? new Task() : taskDao.findById(taskId).orElseThrow(() ->
         {
@@ -348,7 +348,7 @@ public class TaskServiceImpl implements TaskService {
                 new Timestamp(System.currentTimeMillis() + (12 * 60 * 60 * 1000)) : dto.getExpectedArrivalTime());
         task.setDestinationAddress(addressService.createOrFetchAddress(dto, dto.getDestAddressId()));
         task.setSourceAddress(addressService.fetchSourceAddress());
-        task.setState(TaskState.OPEN);
+        task.setState(state);
         task.setStartTime(dto.getStartTime());
         task.setEndTime(dto.getEndTime());
         if (userId != null) task.setActiveUserId(userId);
@@ -364,7 +364,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TasksForProvider fetchProjectedResponseFromPost(TaskAssignDto dto) {
         return projectionFactory.createProjection(TasksForProvider.class, (dto.getFromExistingTask() == null || !dto.getFromExistingTask())
-                ? this.createTask(dto, null)
+                ? this.createTask(dto, tokenService.fetchUserId(), TaskState.OPEN)
                 : this.createTaskAndAssignUser(dto));
     }
 

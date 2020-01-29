@@ -86,6 +86,13 @@ public class PaymentController {
         return ResponseEntity.ok(genericService.fetchUserOwedAmount(userId));
     }
 
+    /**
+     * fetch payment/settlement-history/info for a particular user.
+     *
+     * @param userId
+     * @param pageable
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/info")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_CLUSTER_MANAGER')")
