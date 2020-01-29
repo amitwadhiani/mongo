@@ -41,8 +41,8 @@ public class Sender {
         this.rabbitTemplate.convertAndSend(orderNotificationQueueName, object);
     }
 
-    public void sendTaskStateChangeNotification(User user, TaskState taskState, Long patientId) throws JsonProcessingException {
-        String object = new ObjectMapper().writeValueAsString(new ProviderTaskStateChangeEvent(user, taskState, patientId));
+    public void sendTaskStateChangeNotification(User user, TaskState taskState, Long patientId, Long providerTaskId) throws JsonProcessingException {
+        String object = new ObjectMapper().writeValueAsString(new ProviderTaskStateChangeEvent(user, taskState, patientId, providerTaskId ));
         log.info("Sending message for task state change : " + object);
         this.rabbitTemplate.convertAndSend(orderNotificationQueueName, object);
     }

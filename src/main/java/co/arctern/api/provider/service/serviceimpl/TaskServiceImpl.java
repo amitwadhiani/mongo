@@ -113,7 +113,7 @@ public class TaskServiceImpl implements TaskService {
             reasonService.assignReasons(task, reasonIds, TaskStateFlowState.REJECTED);
         }
         taskDao.save(task);
-        sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.RESCHEDULED, Long.valueOf(task.getPatientId()));
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.RESCHEDULED, Long.valueOf(task.getPatientId()),taskId);
         return SUCCESS_MESSAGE;
     }
 
@@ -181,7 +181,7 @@ public class TaskServiceImpl implements TaskService {
         task.setState(TaskState.STARTED);
         taskStateFlowService.createFlow(task, TaskStateFlowState.STARTED, userId);
         taskDao.save(task);
-        sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.STARTED, Long.valueOf(task.getPatientId()));
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.STARTED, Long.valueOf(task.getPatientId()), taskId);
         return SUCCESS_MESSAGE;
     }
 
@@ -200,7 +200,7 @@ public class TaskServiceImpl implements TaskService {
         userTaskService.markInactive(task);
         taskStateFlowService.createFlow(task, TaskStateFlowState.RESCHEDULED, userId);
         taskDao.save(task);
-        sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.RESCHEDULED, Long.valueOf(task.getPatientId()));
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.RESCHEDULED, Long.valueOf(task.getPatientId()), taskId);
         return SUCCESS_MESSAGE;
     }
 
@@ -212,7 +212,7 @@ public class TaskServiceImpl implements TaskService {
         task.setState(TaskState.COMPLETED);
         taskStateFlowService.createFlow(task, TaskStateFlowState.COMPLETED, userId);
         taskDao.save(task);
-        sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.COMPLETED, Long.valueOf(task.getPatientId()));
+        sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.COMPLETED, Long.valueOf(task.getPatientId()), taskId);
         return SUCCESS_MESSAGE;
     }
 
@@ -243,7 +243,7 @@ public class TaskServiceImpl implements TaskService {
              * reassign
              */
             markInactiveAndReassignTask(userId, task);
-            sender.sendTaskStateChangeNotification(userService.fetchUser(userId), TaskState.CANCELLED, Long.valueOf(task.getPatientId()));
+            sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.CANCELLED, Long.valueOf(task.getPatientId()), taskId);
             return TASK_REASSIGN_MESSAGE;
         }
     }

@@ -19,12 +19,14 @@ public class ProviderTaskStateChangeEvent implements Serializable {
     private String providerName;
     private String messageQueueState;
     private Long patientId;
+    private Long providerTaskId;
 
-    public ProviderTaskStateChangeEvent(User user, TaskState taskState, Long patientId) {
+    public ProviderTaskStateChangeEvent(User user, TaskState taskState, Long patientId, Long providerTaskId) {
         this.providerPhone = user.getPhone();
         this.providerId = user.getId();
         this.providerName = user.getName();
         this.patientId = patientId;
+        this.providerTaskId = providerTaskId;
 
         if (taskState.equals(TaskState.ASSIGNED))
             this.messageQueueState = "ADMIN_ASSIGN_TASK";
