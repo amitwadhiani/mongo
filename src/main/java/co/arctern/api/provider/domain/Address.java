@@ -25,6 +25,9 @@ public class Address {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = true, columnDefinition = "TEXT")
+    private String fullAddress;
+
     @ManyToOne
     @JsonBackReference("area-address")
     private Area area;

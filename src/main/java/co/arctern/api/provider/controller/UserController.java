@@ -164,4 +164,17 @@ public class UserController {
     public ResponseEntity<List<ProviderRequestForOrderItemDto>> fetchUserByTaskId(@RequestBody List<ProviderRequestForOrderItemDto> dtos) {
         return ResponseEntity.ok(userService.fetchUserByTaskId(dtos));
     }
+
+    /**
+     * one time call to replace area-user mapping with user-cluster (structure changes).
+     * WARNING: only for one time use
+     *
+     * @return
+     */
+    @PostMapping("/post/by-pincode")
+    @CrossOrigin
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<StringBuilder> replaceAreasWithClusters() {
+        return ResponseEntity.ok(userService.replaceAreasWithClusters());
+    }
 }

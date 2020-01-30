@@ -3,13 +3,18 @@ package co.arctern.api.provider.service.serviceimpl;
 import co.arctern.api.provider.dao.ClusterDao;
 import co.arctern.api.provider.domain.Area;
 import co.arctern.api.provider.domain.Cluster;
+import co.arctern.api.provider.domain.User;
+import co.arctern.api.provider.domain.UserCluster;
 import co.arctern.api.provider.dto.request.AreaRequestDto;
 import co.arctern.api.provider.dto.request.ClusterRequestDto;
 import co.arctern.api.provider.dto.response.PaginatedResponse;
 import co.arctern.api.provider.dto.response.projection.Areas;
 import co.arctern.api.provider.dto.response.projection.Clusters;
+import co.arctern.api.provider.dto.response.projection.ClustersWoArea;
 import co.arctern.api.provider.service.AreaService;
 import co.arctern.api.provider.service.ClusterService;
+import co.arctern.api.provider.service.GenericService;
+import co.arctern.api.provider.service.UserClusterService;
 import co.arctern.api.provider.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -30,14 +35,20 @@ public class ClusterServiceImpl implements ClusterService {
     private final ClusterDao clusterDao;
     private final ProjectionFactory projectionFactory;
     private final AreaService areaService;
+    private final GenericService genericService;
+    private final UserClusterService userClusterService;
 
     @Autowired
     public ClusterServiceImpl(ClusterDao clusterDao,
                               ProjectionFactory projectionFactory,
-                              AreaService areaService) {
+                              AreaService areaService,
+                              GenericService genericService,
+                              UserClusterService userClusterService) {
         this.clusterDao = clusterDao;
         this.areaService = areaService;
         this.projectionFactory = projectionFactory;
+        this.genericService = genericService;
+        this.userClusterService = userClusterService;
     }
 
     @Override
@@ -66,6 +77,15 @@ public class ClusterServiceImpl implements ClusterService {
     }
 
     @Override
+    public List<ClustersWoArea> fetchClustersForProvider(Long id) {
+        return genericService.fetchUser(id)
+                .getUserClusters()
+                .stream()
+                .map(a -> projectionFactory.createProjection(ClustersWoArea.class, a.getCluster()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional
     public StringBuilder createClusters(List<ClusterRequestDto> dtos) {
         List<Area> areasToSave = new ArrayList<>();
@@ -81,20 +101,22 @@ public class ClusterServiceImpl implements ClusterService {
              * replace existing areas ( if there ) with new areas.
              */
             List<Area> existingAreas = cluster.getAreas();
-            if (!CollectionUtils.isEmpty(existingAreas)) {
-                for (Area a : existingAreas) {
-                    a.setCluster(null);
-                    areaService.save(a);
+            if (dto.getIsEdit() == null || dto.getIsEdit()) {
+                if (!CollectionUtils.isEmpty(existingAreas)) {
+                    for (Area a : existingAreas) {
+                        a.setCluster(null);
+                        areaService.save(a);
+                    }
                 }
-            }
-            List<Area> areas = (CollectionUtils.isEmpty(dto.getPinCodes())) ?
-                    new ArrayList<>() : areaService.fetchAreas(dto.getPinCodes());
-            for (Area area : areas) {
-                if (area.getCluster() != null)
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
-                area.setCluster(cluster);
-                area.setMeddoDeliveryState(true);
-                areasToSave.add(area);
+                List<Area> areas = (CollectionUtils.isEmpty(dto.getPinCodes())) ?
+                        new ArrayList<>() : areaService.fetchAreas(dto.getPinCodes());
+                for (Area area : areas) {
+                    if (area.getCluster() != null)
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, AREA_ALREADY_ASSIGNED_TO_CLUSTER.toString());
+                    area.setCluster(cluster);
+                    area.setMeddoDeliveryState(true);
+                    areasToSave.add(area);
+                }
             }
         }
         if (!CollectionUtils.isEmpty(areasToSave)) areaService.saveAll(areasToSave);
@@ -139,5 +161,23 @@ public class ClusterServiceImpl implements ClusterService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public StringBuilder editClustersForProvider(Long userId, List<Long> ids) {
+        List<Cluster> clusters = clusterDao.findByIdIn(ids);
+        User user = genericService.fetchUser(userId);
+        List<UserCluster> newUserClusters = new ArrayList<>();
+        List<UserCluster> oldUserClusters = user.getUserClusters();
+        if (!CollectionUtils.isEmpty(oldUserClusters)) userClusterService.deleteAll(oldUserClusters);
+        clusters.stream().forEach(a ->
+        {
+            UserCluster userCluster = new UserCluster();
+            userCluster.setCluster(a);
+            userCluster.setUser(user);
+            userCluster.setIsActive(true);
+            newUserClusters.add(userCluster);
+        });
+        if (!CollectionUtils.isEmpty(newUserClusters)) userClusterService.saveAll(newUserClusters);
+        return SUCCESS_MESSAGE;
+    }
 
 }
