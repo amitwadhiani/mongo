@@ -113,7 +113,6 @@ public class TaskServiceImpl implements TaskService {
             reasonService.assignReasons(task, reasonIds, TaskStateFlowState.REJECTED);
         }
         taskDao.save(task);
-        sender.sendTaskStateChangeNotification(userService.fetchUser(userId),TaskState.RESCHEDULED, Long.valueOf(task.getPatientId()),taskId);
         return SUCCESS_MESSAGE;
     }
 
