@@ -12,7 +12,6 @@ import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -332,6 +331,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public StringBuilder replaceAreasWithClusters() {
+        log.info("Hit");
         List<User> all = userDao.findAll();
         List<UserCluster> userClusters = new ArrayList<>();
         all.stream().filter(a -> !CollectionUtils.isEmpty(a.getUserAreas())).map(a -> {
