@@ -331,9 +331,9 @@ public class UserServiceImpl implements UserService {
     public StringBuilder replaceAreasWithClusters() {
         List<User> all = userDao.findAll();
         List<UserCluster> userClusters = new ArrayList<>();
-        all.stream().filter(a -> !CollectionUtils.isEmpty(a.getUserAreas())
-                && a.getUserAreas().stream().allMatch(b -> b.getArea().getCluster() != null)).map(a -> {
-            UserArea userArea = a.getUserAreas().get(0);
+        all.stream().filter(a -> !CollectionUtils.isEmpty(a.getUserAreas())).map(a -> {
+            List<UserArea> userAreas = a.getUserAreas().stream().filter(b -> b.getArea().getCluster() != null).collect(Collectors.toList());
+            UserArea userArea = userAreas.get(0);
             UserCluster userCluster = new UserCluster();
             userCluster.setUser(a);
             userCluster.setCluster(userArea.getArea().getCluster());
