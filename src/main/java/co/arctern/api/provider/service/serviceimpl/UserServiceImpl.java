@@ -12,6 +12,8 @@ import co.arctern.api.provider.dto.response.projection.Users;
 import co.arctern.api.provider.service.*;
 import co.arctern.api.provider.util.PaginationUtil;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +34,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
@@ -333,6 +336,7 @@ public class UserServiceImpl implements UserService {
         List<UserCluster> userClusters = new ArrayList<>();
         all.stream().filter(a -> !CollectionUtils.isEmpty(a.getUserAreas())).map(a -> {
             List<UserArea> userAreas = a.getUserAreas().stream().filter(b -> b.getArea().getCluster() != null).collect(Collectors.toList());
+            log.info(userAreas.toString());
             UserArea userArea = userAreas.get(0);
             UserCluster userCluster = new UserCluster();
             userCluster.setUser(a);
