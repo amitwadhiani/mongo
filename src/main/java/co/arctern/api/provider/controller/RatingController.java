@@ -59,9 +59,10 @@ public class RatingController {
     public ResponseEntity<String> saveRating(@RequestParam("taskId") Long taskId,
                                              @RequestParam(value = "otp", required = false) String otp,
                                              @RequestParam(value = "userId", required = false) Long userId,
-                                             @RequestParam(value = "amount", required = false) Double amount) {
+                                             @RequestParam(value = "amount", required = false) Double amount,
+                                             @RequestParam(value = "mode", required = false) String mode) {
         if (userId == null) userId = tokenService.fetchUserId();
         if (amount != null) paymentService.updateAmount(taskService.fetchTask(taskId), amount);
-        return ResponseEntity.ok(ratingService.saveRating(taskId, userId, otp));
+        return ResponseEntity.ok(ratingService.saveRating(taskId, userId, otp, mode));
     }
 }

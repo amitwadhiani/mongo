@@ -13,7 +13,7 @@ public interface RatingService extends MessageUtil {
      * @param otp
      * @return
      */
-    public String saveRating(Long taskId, Long userId, String otp);
+    public String saveRating(Long taskId, Long userId, String otp, String mode);
 
     /**
      * creating rating object for a task.

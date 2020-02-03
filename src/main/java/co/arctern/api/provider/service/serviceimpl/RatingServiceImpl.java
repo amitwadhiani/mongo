@@ -35,7 +35,7 @@ public class RatingServiceImpl implements RatingService {
     @Override
     @SneakyThrows(Exception.class)
     @Transactional
-    public String saveRating(Long taskId, Long userId, String otp) {
+    public String saveRating(Long taskId, Long userId, String otp, String mode) {
         Task task = taskService.fetchTask(taskId);
         Rating rating = task.getRatings().get(0);
         if (!StringUtils.isEmpty(otp)) {
@@ -50,7 +50,7 @@ public class RatingServiceImpl implements RatingService {
         rating.setTask(task);
         ratingDao.save(rating);
         taskService.completeTask(taskId, userId);
-        paymentService.patch(task, userId);
+        paymentService.patch(task, userId, mode);
         return SUCCESS_MESSAGE.toString();
     }
 
