@@ -75,12 +75,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public Payment patch(Task task, Long userId) {
+    public Payment patch(Task task, Long userId, String mode) {
         Payment payment = task.getPayments().get(0);
         if (payment.getState().equals(PaymentState.PAID)) return payment;
         payment.setState(PaymentState.PAID);
         payment.setSettleState(SettleState.PAYMENT_RECEIVED);
         payment.setPaidBy(userId);
+        payment.setMode(mode);
         payment = paymentDao.save(payment);
         createSettleStateFlow(payment, SettleState.PAYMENT_RECEIVED);
         createPaymentStateFlow(payment, PaymentState.PAID, null);

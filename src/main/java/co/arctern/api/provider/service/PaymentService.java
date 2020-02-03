@@ -27,7 +27,7 @@ public interface PaymentService extends MessageUtil {
      * @param task
      * @return
      */
-    Payment patch(Task task, Long userId);
+    Payment patch(Task task, Long userId, String mode);
 
     /**
      * fetch payments ( settle requests ).
