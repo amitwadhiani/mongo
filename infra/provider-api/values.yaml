@@ -67,6 +67,7 @@ autoscaling:
 
 
 spring:
+  sentryDsn: "http://1cfcfb6434234995afadb7a473b646c6@sentry-local.default.svc.cluster.local:9000/26"
   meddo:
     wallet:
       discountPercentage: 10

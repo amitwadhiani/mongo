@@ -28,6 +28,8 @@ spec:
               containerPort: 8097
               protocol: TCP
           env:
+            - name: SENTRY_DSN
+              value: {{default "http://1cfcfb6434234995afadb7a473b646c6@sentry.local.meddo.in/26" .Values.spring.sentryDsn | quote}}
             - name: SPRING_DATASOURCE_URL
               value: {{default "jdbc:mysql://meddo.ciqusgcofpad.ap-south-1.rds.amazonaws.com:3306/arctern_provider?useSSL=false" .Values.spring.datasource.url}}
             - name: SPRING_SLAVE_DATASOURCE_URL
